@@ -12,4 +12,3 @@ else:
 sp = spotipy.Spotify()
 track = sp.track(urn)
 pprint.pprint(track)
-
