@@ -19,12 +19,10 @@ after_success:
   - coverage report
   - coveralls
   - pip install pep8 pyflakes
-  - pep8 PIL/*.py
-  - pyflakes PIL/*.py
+  - pep8 *.py tests/*.py
+  - pyflakes *.py tests/*.py
 
 matrix:
   allow_failures:
-    - python: 2.6
     - python: 3.2
     - python: 3.4
-    - python: pypy
