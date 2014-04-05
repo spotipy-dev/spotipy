@@ -1,9 +1,7 @@
 # -*- coding: latin-1 -*-
 import spotipy
 import unittest
-import pprint
 
-import logging
 
 class TestSpotipy(unittest.TestCase):
 
@@ -14,7 +12,7 @@ class TestSpotipy(unittest.TestCase):
     pinkerton_urn = 'spotify:album:04xe676vyiTeYNXw15o9jT'
     weezer_urn = 'spotify:artist:3jOstUTkEu2JkjvRdBA5Gu'
     pablo_honey_urn = 'spotify:album:6AZv3m27uyRxi8KyJSfUxL'
-    radiohead_urn =  'spotify:artist:4Z8W4fKeB5YxbusRsdQVPb'
+    radiohead_urn = 'spotify:artist:4Z8W4fKeB5YxbusRsdQVPb'
 
     bad_id = 'BAD_ID'
 
@@ -23,7 +21,7 @@ class TestSpotipy(unittest.TestCase):
 
     def test_artist_urn(self):
         artist = self.spotify.artist(self.radiohead_urn)
-        self.assertTrue(artist['name'] ==  u'Radiohead')
+        self.assertTrue(artist['name'] == u'Radiohead')
 
     def test_artists(self):
         results = self.spotify.artists([self.weezer_urn, self.radiohead_urn])
@@ -32,7 +30,7 @@ class TestSpotipy(unittest.TestCase):
 
     def test_album_urn(self):
         album = self.spotify.album(self.pinkerton_urn)
-        self.assertTrue(album['name'] ==  u'Pinkerton')
+        self.assertTrue(album['name'] == u'Pinkerton')
 
     def test_albums(self):
         results = self.spotify.albums([self.pinkerton_urn, self.pablo_honey_urn])
@@ -41,15 +39,15 @@ class TestSpotipy(unittest.TestCase):
 
     def test_track_urn(self):
         track = self.spotify.track(self.creep_urn)
-        self.assertTrue(track['name'] ==  u'Creep')
+        self.assertTrue(track['name'] == u'Creep')
 
     def test_track_id(self):
         track = self.spotify.track(self.creep_id)
-        self.assertTrue(track['name'] ==  u'Creep')
+        self.assertTrue(track['name'] == u'Creep')
 
     def test_track_url(self):
         track = self.spotify.track(self.creep_url)
-        self.assertTrue(track['name'] ==  u'Creep')
+        self.assertTrue(track['name'] == u'Creep')
 
     def test_tracks(self):
         results = self.spotify.tracks([self.creep_url, self.el_scorcho_urn])
@@ -84,5 +82,6 @@ class TestSpotipy(unittest.TestCase):
             self.assertTrue(False)
         except spotipy.SpotifyException:
             self.assertTrue(True)
+
 if __name__ == '__main__':
     unittest.main()
