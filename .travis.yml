@@ -8,6 +8,9 @@ python:
   - 3.4
   - pypy
 
+install:
+  - pip install coveralls
+
 script:
   - python setup.py install
   - coverage run --source=spotipy.py tests/tests.py
