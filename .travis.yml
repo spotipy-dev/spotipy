@@ -13,7 +13,7 @@ install:
 
 script:
   - python setup.py install
-  - coverage run --source=spotipy.py tests/tests.py
+  - coverage run --include=*spotipy* tests/tests.py
 
 after_success:
   - coverage report
