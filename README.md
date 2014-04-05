@@ -7,11 +7,7 @@ Spotipy is a thin client library for the Spotify Web API .
 
 ## Installation
 If you already have [Python](http://www.python.org/) and [pip](http://www.pip-installer.org/) on your system you can install
-the library simply by running:
-
-    pip install spotipy
-    
-Or you can download the distribution, unpack it and install in the usual fashion:
+the library simply by downloading the distribution, unpack it and install in the usual fashion:
 
     python setup.py install
 
