@@ -1,0 +1,29 @@
+language: python
+
+python:
+  - 2.6
+  - 2.7
+  - 3.2
+  - 3.3
+  - 3.4
+  - pypy
+
+install:
+  - pip install coveralls
+
+script:
+  - python setup.py install
+  - coverage run --include=*spotipy* tests/tests.py
+  - for file in examples/*.py; do python $file; done
+
+after_success:
+  - coverage report
+  - coveralls
+  - pip install pep8 pyflakes
+  - pep8 *.py tests/*.py
+  - pyflakes *.py tests/*.py
+
+matrix:
+  allow_failures:
+    - python: 3.2
+    - python: 3.4

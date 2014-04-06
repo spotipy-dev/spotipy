@@ -1,20 +1,19 @@
 import requests
-import os
-import time
-import datetime
-import json
-import logging
 
-''' A simple and thin python library for the Spotify Web API
+''' A simple and thin Python library for the Spotify Web API
 '''
+
 
 class SpotifyException(Exception):
     def __init__(self, http_status, code, msg):
         self.http_status = http_status
         self.code = code
         self.msg = msg
+
     def __str__(self):
-        return u'http status: {0}, code:{1} - {2}'.format(self.http_status, self.code, self.msg)
+        return u'http status: {0}, code:{1} - {2}'.format(
+            self.http_status, self.code, self.msg)
+
 
 class Spotify(object):
     def __init__(self):
@@ -30,17 +29,16 @@ class Spotify(object):
             raise SpotifyException(r.status_code, -1, u'the requested resource could not be found')
         return r.json()
 
-
-    def get(self, method, args = None, **kwargs):
+    def get(self, method, args=None, **kwargs):
         if args:
             kwargs.update(args)
         return self._internal_call('GET', method, kwargs)
 
     def _error(self, msg):
-        print('ERROR - ' + msg);
+        print('ERROR - ' + msg)
 
     def _warn(self, msg):
-        print('warning:' + msg);
+        print('warning:' + msg)
 
     def track(self, track_id):
         ''' returns a single track given the track's ID, URN or URL
@@ -83,7 +81,6 @@ class Spotify(object):
 
         tlist = [self._get_id('album', a) for a in albums]
         return self.get('albums/?ids=' + ','.join(tlist))
-
 
     def search(self, q, limit=10, offset=0, type='track'):
         ''' searches for an item
