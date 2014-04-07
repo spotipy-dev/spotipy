@@ -1,3 +1,4 @@
+from __future__ import print_function
 import requests
 
 ''' A simple and thin Python library for the Spotify Web API
@@ -23,10 +24,8 @@ class Spotify(object):
         url = self.prefix + method
         args = dict(params=params)
         r = requests.request(verb, url, **args)
-        if r.status_code >= 400 and r.status_code < 500:
-            self._error(u'ERROR {0} {1}'.format(r.status_code, r.url))
         if r.status_code != 200:
-            raise SpotifyException(r.status_code, -1, u'the requested resource could not be found')
+            raise SpotifyException(r.status_code, -1, u'the requested resource could not be found: ' + r.url)
         return r.json()
 
     def get(self, method, args=None, **kwargs):
@@ -34,11 +33,8 @@ class Spotify(object):
             kwargs.update(args)
         return self._internal_call('GET', method, kwargs)
 
-    def _error(self, msg):
-        print('ERROR - ' + msg)
-
     def _warn(self, msg):
-        print('warning:' + msg)
+        print('warning:' + msg, file=sys.stderr)
 
     def track(self, track_id):
         ''' returns a single track given the track's ID, URN or URL
@@ -60,6 +56,12 @@ class Spotify(object):
 
         trid = self._get_id('artist', artist_id)
         return self.get('artists/' + trid)
+
+    def artist_albums(self, artist_id, album_type=None, limit=20, offset=0):
+        ''' Get Spotify catalog information about an artist’s albums
+        '''
+        trid = self._get_id('artist', artist_id)
+        return self.get('artists/' + trid + '/albums', album_type=album_type, limit=limit, offset=offset)
 
     def artists(self, artists):
         ''' returns a list of artists given the artist IDs, URNs, or URLs
