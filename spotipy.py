@@ -1,4 +1,7 @@
+# coding: utf-8
+
 from __future__ import print_function
+import base64
 import requests
 
 ''' A simple and thin Python library for the Spotify Web API
@@ -17,13 +20,25 @@ class SpotifyException(Exception):
 
 
 class Spotify(object):
-    def __init__(self):
+    
+    auth = None
+    
+    def __init__(self, auth=None):
         self.prefix = 'https://api.spotify.com/v1/'
+        self.auth = auth
+
+    def auth_headers(self):
+        if self.auth:
+            return {'Authorization': 'Bearer {0}'.format(self.auth)}
+        else:
+            return None
 
     def _internal_call(self, verb, method, params):
         url = self.prefix + method
         args = dict(params=params)
-        r = requests.request(verb, url, **args)
+        headers = self.auth_headers()
+        print(headers)
+        r = requests.request(verb, url, headers=headers, **args)
         if r.status_code != 200:
             raise SpotifyException(r.status_code, -1, u'the requested resource could not be found: ' + r.url)
         return r.json()
@@ -93,6 +108,21 @@ class Spotify(object):
         ''' Gets basic profile information about a Spotify User
         '''
         return self.get('users/' + user_id)
+    
+    def user_playlists(self, user):
+        ''' Gets playlists of a user
+        '''
+        return self.get("users/%s/playlists" % user)
+
+    def user_playlist(self, user, playlist_id):
+        ''' Gets playlist of a user
+        '''
+        return self.get("users/%s/playlists/%s" % (user, playlist_id))
+    
+    def me(self):
+        ''' returns info about me
+        '''
+        return self.get('me/')
 
     def _get_id(self, type, id):
         fields = id.split(':')
