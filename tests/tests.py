@@ -1,6 +1,7 @@
 # -*- coding: latin-1 -*-
 import spotipy
 import unittest
+import pprint
 
 
 class TestSpotipy(unittest.TestCase):
@@ -32,6 +33,10 @@ class TestSpotipy(unittest.TestCase):
         album = self.spotify.album(self.pinkerton_urn)
         self.assertTrue(album['name'] == u'Pinkerton')
 
+    def test_album_tracks(self):
+        results = self.spotify.album_tracks(self.pinkerton_urn)
+        self.assertTrue(len(results['items']) == 10)
+
     def test_albums(self):
         results = self.spotify.albums([self.pinkerton_urn, self.pablo_honey_urn])
         self.assertTrue('albums' in results)
@@ -54,6 +59,11 @@ class TestSpotipy(unittest.TestCase):
         self.assertTrue('tracks' in results)
         self.assertTrue(len(results['tracks']) == 2)
 
+    def test_artist_top_tracks(self):
+        results = self.spotify.artist_top_tracks(self.weezer_urn)
+        self.assertTrue('tracks' in results)
+        self.assertTrue(len(results['tracks']) == 10)
+
     def test_artist_search(self):
         results = self.spotify.search(q='weezer', type='artist')
         self.assertTrue('artists' in results)
@@ -62,9 +72,15 @@ class TestSpotipy(unittest.TestCase):
 
     def test_artist_albums(self):
         results = self.spotify.artist_albums(self.weezer_urn)
-        self.assertTrue('albums' in results)
-        self.assertTrue(len(results['albums']) > 0)
-        self.assertTrue(results['albums'][0]['artists'][0]['name'] == 'Weezer')
+        self.assertTrue('items' in results)
+        self.assertTrue(len(results['items']) > 0)
+
+        found = False
+        for album in results['items']:
+            if album['name'] == 'Hurley':
+                found = True
+
+        self.assertTrue(found)
 
     def test_album_search(self):
         results = self.spotify.search(q='weezer pinkerton', type='album')
@@ -80,7 +96,7 @@ class TestSpotipy(unittest.TestCase):
 
     def test_user(self):
         user = self.spotify.user(user_id='plamere')
-        self.assertTrue(user['username'] == 'plamere')
+        self.assertTrue(user['uri'] == 'spotify:user:plamere')
 
     def test_track_bad_id(self):
         try:

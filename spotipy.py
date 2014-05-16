@@ -7,7 +7,6 @@ import requests
 ''' A simple and thin Python library for the Spotify Web API
 '''
 
-
 class SpotifyException(Exception):
     def __init__(self, http_status, code, msg):
         self.http_status = http_status
@@ -20,28 +19,51 @@ class SpotifyException(Exception):
 
 
 class Spotify(object):
-    
-    auth = None
+    '''
+        Example usage:
+
+            import spotipy
+
+            urn = 'spotify:artist:3jOstUTkEu2JkjvRdBA5Gu'
+            sp = spotipy.Spotify()
+
+            sp.trace = True # turn on tracing
+
+            artist = sp.artist(urn)
+            print(artist)
+
+            user = sp.user('plamere')
+            print(user)
+    '''
+
+    trace = False
+    _auth = None
     
     def __init__(self, auth=None):
         self.prefix = 'https://api.spotify.com/v1/'
-        self.auth = auth
+        self._auth = auth
 
-    def auth_headers(self):
-        if self.auth:
-            return {'Authorization': 'Bearer {0}'.format(self.auth)}
+    def _auth_headers(self):
+        if self._auth:
+            return {'Authorization': 'Bearer {0}'.format(self._auth)}
         else:
             return None
 
     def _internal_call(self, verb, method, params):
         url = self.prefix + method
         args = dict(params=params)
-        headers = self.auth_headers()
-        print(headers)
+        headers = self._auth_headers()
         r = requests.request(verb, url, headers=headers, **args)
+        if self.trace:
+            print()
+            print(verb, r.url)
         if r.status_code != 200:
             raise SpotifyException(r.status_code, -1, u'the requested resource could not be found: ' + r.url)
-        return r.json()
+        results = r.json()
+        if self.trace:
+            print('RESP', results)
+            print()
+        return results
 
     def get(self, method, args=None, **kwargs):
         if args:
@@ -72,11 +94,6 @@ class Spotify(object):
         trid = self._get_id('artist', artist_id)
         return self.get('artists/' + trid)
 
-    def artist_albums(self, artist_id, album_type=None, limit=20, offset=0):
-        ''' Get Spotify catalog information about an artist’s albums
-        '''
-        trid = self._get_id('artist', artist_id)
-        return self.get('artists/' + trid + '/albums', album_type=album_type, limit=limit, offset=offset)
 
     def artists(self, artists):
         ''' returns a list of artists given the artist IDs, URNs, or URLs
@@ -85,12 +102,33 @@ class Spotify(object):
         tlist = [self._get_id('artist', a) for a in artists]
         return self.get('artists/?ids=' + ','.join(tlist))
 
+    def artist_albums(self, artist_id, album_type=None, limit=20, offset=0):
+        ''' Get Spotify catalog information about an artist’s albums
+        '''
+
+        trid = self._get_id('artist', artist_id)
+        return self.get('artists/' + trid + '/albums', album_type=album_type, limit=limit, offset=offset)
+
+    def artist_top_tracks(self, artist_id, country='US'):
+        ''' Get Spotify catalog information about an artist’s top 10 tracks by country.
+        '''
+
+        trid = self._get_id('artist', artist_id)
+        return self.get('artists/' + trid + '/top-tracks', country=country)
+
     def album(self, album_id):
         ''' returns a single album given the album's ID, URN or URL
         '''
 
         trid = self._get_id('album', album_id)
         return self.get('albums/' + trid)
+
+    def album_tracks(self, album_id):
+        ''' Get Spotify catalog information about an album’s tracks
+        '''
+
+        trid = self._get_id('album', album_id)
+        return self.get('albums/' + trid + '/tracks/')
 
     def albums(self, albums):
         ''' returns a list of albums given the album IDs, URNs, or URLs

@@ -47,6 +47,8 @@ A full set of examples can be found in the [Spotipy examples directory](https://
  - albums - gets info for a set of albums 
  - artist - gets info for an artist
  - artists - gets info for a set of artists
+ - artist_albums - gets info about an artist's albums
+ - artist_top_tracks - gets info about an artist's top tracks
  - user - gets profile info for a user
  - search - searches for artists, albums or tracks
 
@@ -68,4 +70,5 @@ at [paul@echonest.com](mailto:paul@echonest.com). Or just send me a pull request
 ## Version
 
 - 1.0 - 04/05/2014 - Initial release
+- 1.1 - 05/16/2014 - Adapt to web API changes. Early auth support.
 
