@@ -67,8 +67,8 @@ class TestSpotipy(unittest.TestCase):
     def test_artist_search(self):
         results = self.spotify.search(q='weezer', type='artist')
         self.assertTrue('artists' in results)
-        self.assertTrue(len(results['artists']) > 0)
-        self.assertTrue(results['artists'][0]['name'] == 'Weezer')
+        self.assertTrue(len(results['artists']['items']) > 0)
+        self.assertTrue(results['artists']['items'][0]['name'] == 'Weezer')
 
     def test_artist_albums(self):
         results = self.spotify.artist_albums(self.weezer_urn)
@@ -85,14 +85,14 @@ class TestSpotipy(unittest.TestCase):
     def test_album_search(self):
         results = self.spotify.search(q='weezer pinkerton', type='album')
         self.assertTrue('albums' in results)
-        self.assertTrue(len(results['albums']) > 0)
-        self.assertTrue(results['albums'][0]['name'] == 'Pinkerton')
+        self.assertTrue(len(results['albums']['items']) > 0)
+        self.assertTrue(results['albums']['items'][0]['name'] == 'Pinkerton')
 
     def test_track_search(self):
         results = self.spotify.search(q='el scorcho weezer', type='track')
         self.assertTrue('tracks' in results)
-        self.assertTrue(len(results['tracks']) > 0)
-        self.assertTrue(results['tracks'][0]['name'] == 'El Scorcho')
+        self.assertTrue(len(results['tracks']['items']) > 0)
+        self.assertTrue(results['tracks']['items'][0]['name'] == 'El Scorcho')
 
     def test_user(self):
         user = self.spotify.user(user_id='plamere')
