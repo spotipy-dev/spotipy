@@ -9,4 +9,4 @@ setup(
     author_email="paul@echonest.com",
     url='http://github.com/plamere/spotipy',
     install_requires=['requests>=1.0', ],
-    py_modules=['spotipy'],)
+    py_modules=['spotipy', 'spotify_oauth2'],)

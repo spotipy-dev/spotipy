@@ -2,22 +2,27 @@
 
 import pprint
 import sys
+import os
 
 import spotipy
-import oauth2
+import spotipy.oauth2 as oauth2
 
 if len(sys.argv) > 1:
     username = sys.argv[1]
 else:
-	print "Whoops, need your username!"
-	print "usage: python user_playlists.py [username]"
+    print "Whoops, need your username!"
+    print "usage: python user_playlists.py [username]"
     sys.exit()
 
 # Create these via developer.spotify.com/my-applications
 
-client_id = ''
-client_secret = ''
-redirect_uri = ''
+client_id = os.getenv('CLIENT_ID')
+client_secret = os.getenv('CLIENT_SECRET')
+redirect_uri = os.getenv('REDIRECT_URI')
+
+print 'client_id', client_id
+print 'client_secret', client_secret
+print 'redirect_uri', redirect_uri
 
 # Oauth flow
 sp_oauth = oauth2.SpotifyOAuth(client_id, client_secret, redirect_uri)

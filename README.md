@@ -16,10 +16,6 @@ the library simply by downloading the distribution, unpack it and install in the
 
 - [Requests](https://github.com/kennethreitz/requests) - spotipy requires the requests package to be installed
 
-## Limitations
-This version of the library does not support user authentication
-
-
 
 ## Quick Start
 To get started:
@@ -51,6 +47,7 @@ A full set of examples can be found in the [Spotipy examples directory](https://
  - artist_top_tracks - gets info about an artist's top tracks
  - user - gets profile info for a user
  - search - searches for artists, albums or tracks
+ - simple oauth flow
 
 Refer to the [Spotify API documentation](https://developer.spotify.com/spotify-web-api/) for details on the methods and parameters.
 
@@ -61,7 +58,6 @@ Methods that take item IDs (such as the track, album and artist methods) accept 
         - 3HfB5hBU0dmBt8T0iCmH42
 
 
-
 ## Reporting Issues
 
 If you have suggestions, bugs or other issues specific to this library, file them [here](https://github.com/plamere/spotipy/issues) or contact me
@@ -69,6 +65,7 @@ at [paul@echonest.com](mailto:paul@echonest.com). Or just send me a pull request
 
 ## Version
 
+- 1.1 - 04/05/2014 - Initial release
 - 1.0 - 04/05/2014 - Initial release
-- 1.1 - 05/16/2014 - Adapt to web API changes. Early auth support.
+- 1.1 - 05/18/2014 - Repackaged for saner imports
 

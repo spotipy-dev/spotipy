@@ -1,8 +1,11 @@
 # coding: utf-8
 
 from __future__ import print_function
+
 import base64
 import requests
+
+__all__ = ['oauth2']
 
 ''' A simple and thin Python library for the Spotify Web API
 '''
