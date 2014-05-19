@@ -53,7 +53,10 @@ class Spotify(object):
             return None
 
     def _internal_call(self, verb, method, params):
-        url = self.prefix + method
+        if not method.startswith('http'):
+            url = self.prefix + method
+        else:
+            url = method
         args = dict(params=params)
         headers = self._auth_headers()
         r = requests.request(verb, url, headers=headers, **args)
@@ -73,6 +76,22 @@ class Spotify(object):
             kwargs.update(args)
         return self._internal_call('GET', method, kwargs)
 
+    def next(self, result):
+        ''' returns the next result given a result
+        '''
+        if result['next']:
+            return self.get(result['next'])
+        else:
+            return None
+
+    def previous(self, result):
+        ''' returns the previous result given a result
+        '''
+        if result['previous']:
+            return self.get(result['previous'])
+        else:
+            return None
+            
     def _warn(self, msg):
         print('warning:' + msg, file=sys.stderr)
 
