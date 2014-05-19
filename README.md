@@ -65,7 +65,6 @@ at [paul@echonest.com](mailto:paul@echonest.com). Or just send me a pull request
 
 ## Version
 
-- 1.1 - 04/05/2014 - Initial release
 - 1.0 - 04/05/2014 - Initial release
 - 1.1 - 05/18/2014 - Repackaged for saner imports
 
