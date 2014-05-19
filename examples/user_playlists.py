@@ -3,6 +3,7 @@
 import pprint
 import sys
 import os
+import subprocess
 
 import spotipy
 import spotipy.oauth2 as oauth2
@@ -27,7 +28,12 @@ print 'redirect_uri', redirect_uri
 # Oauth flow
 sp_oauth = oauth2.SpotifyOAuth(client_id, client_secret, redirect_uri)
 auth_url = sp_oauth.get_authorize_url()
-print "Please navigate here: %s" % auth_url
+try:
+    subprocess.call(["open", auth_url])
+    print "Opening %s in your browser" % auth_url
+except:
+    print "Please navigate here: %s" % auth_url
+
 response = raw_input("The URL you were redirected to: ")
 code = sp_oauth.parse_response_code(response)
 access_token = sp_oauth.get_access_token(code)
