@@ -124,12 +124,12 @@ class Spotify(object):
         tlist = [self._get_id('artist', a) for a in artists]
         return self.get('artists/?ids=' + ','.join(tlist))
 
-    def artist_albums(self, artist_id, album_type=None, limit=20, offset=0):
+    def artist_albums(self, artist_id, album_type=None, country=None, limit=20, offset=0):
         ''' Get Spotify catalog information about an artist’s albums
         '''
 
         trid = self._get_id('artist', artist_id)
-        return self.get('artists/' + trid + '/albums', album_type=album_type, limit=limit, offset=offset)
+        return self.get('artists/' + trid + '/albums', album_type=album_type, country=country, limit=limit, offset=offset)
 
     def artist_top_tracks(self, artist_id, country='US'):
         ''' Get Spotify catalog information about an artist’s top 10 tracks by country.
