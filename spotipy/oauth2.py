@@ -63,7 +63,10 @@ class SpotifyOAuth(object):
         return "%s?%s" % (self.OAUTH_AUTHORIZE_URL, urlparams)
 
     def parse_response_code(self, response):
-        return response.split("?code=")[1].split("&")[0]
+        try:
+            return response.split("?code=")[1].split("&")[0]
+        except IndexError:
+            return None
 
     def get_access_token(self, code):
         payload = {'redirect_uri': self.redirect_uri,
@@ -97,7 +100,8 @@ class SpotifyOAuth(object):
             raise SpotifyOauthError(response.reason)
         token_info = response.json()
         token_info['expires_at'] = int(time.time()) + token_info['expires_in']
-        token_info['refresh_token'] = refresh_token
+        if not 'refresh_token' in token_info:
+            token_info['refresh_token'] = refresh_token
         self.save_token_info(token_info)
         return token_info
 
