@@ -11,6 +11,14 @@ the library simply by downloading the distribution, unpack it and install in the
 
     python setup.py install
 
+You can also install it using a popular package manager with 
+
+  `pip install SpotipyWebAPI`
+
+or
+
+  `easy_install SpotipyWebAPI`
+
 
 ## Dependencies
 
