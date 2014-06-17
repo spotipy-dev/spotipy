@@ -1,2 +1,2 @@
-python setup.py sdist upload
+sudo python setup.py sdist upload
 

@@ -5,7 +5,7 @@ import os
 import subprocess
 import spotipy.oauth2 as oauth2
 
-def prompt_for_user_token(username):
+def prompt_for_user_token(username, scope):
     ''' prompts the user to login if necessary and returns
         the user token suitable for use with the spotipy.Spotify 
         constructor
@@ -15,7 +15,8 @@ def prompt_for_user_token(username):
     client_secret = os.getenv('CLIENT_SECRET', 'YOUR_CLIENT_SECRET')
     redirect_uri = os.getenv('REDIRECT_URI', 'YOUR_REDIRECT_URI')
 
-    sp_oauth = oauth2.SpotifyOAuth(client_id, client_secret, redirect_uri, cache_path=username)
+    sp_oauth = oauth2.SpotifyOAuth(client_id, client_secret, redirect_uri, 
+        scope=scope, cache_path=username)
 
     # try to get a valid token for this user, from the cache,
     # if not in the cache, the create a new (this will send

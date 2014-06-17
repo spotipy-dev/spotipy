@@ -65,7 +65,7 @@ class Spotify(object):
         if self.trace:
             print()
             print(verb, r.url)
-        if r.status_code != 200:
+        if not (r.status_code >= 200 and r.status_code < 300):
             raise SpotifyException(r.status_code, -1, u'the requested resource could not be found: ' + r.url)
         results = r.json()
         if self.trace:
@@ -86,7 +86,6 @@ class Spotify(object):
             url = method
         headers = self._auth_headers()
         headers['Content-Type'] = 'application/json'
-        print('headers', headers)
         if payload:
             r = requests.post(url, headers=headers, data=json.dumps(payload), **args)
         else:
@@ -95,13 +94,16 @@ class Spotify(object):
             print()
             print("POST", r.url)
             print("DATA", json.dumps(payload))
-        if r.status_code != 200:
+        if not (r.status_code >= 200 and r.status_code < 300):
             raise SpotifyException(r.status_code, -1, u'the requested resource could not be found: ' + r.url)
-        results = r.json()
-        if self.trace:
-            print('RESP', results)
-            print()
-        return results
+        try:
+            results = r.json()
+            if self.trace:
+                print('RESP', results)
+                print()
+            return results
+        except json.decoder.JSONDecodeError:
+            return None
 
     def next(self, result):
         ''' returns the next result given a result
@@ -212,15 +214,11 @@ class Spotify(object):
         data = {'name':name, 'public':True }
         return self.post("users/%s/playlists" % (user,), payload = data)
 
-    def user_playlist_add_tracks(self, user, playlist_id, uris, position=None):
+    def user_playlist_add_tracks(self, user, playlist_id, tracks, position=None):
         ''' Adds tracks to a playlist
         '''
-        data = {'uris':uris}
-        uri_param = ','.join(uris)
-        #return self.post("users/%s/playlists/%s/tracks" % (user,playlist_id), payload = data)
-        #return self.post("users/%s/playlists/%s/tracks" % (user,playlist_id), payload = data, position=position)
-        #return self.post("users/%s/playlists/%s/tracks" % (user,playlist_id), uris=uri_param, position=position)
-        return self.post("users/%s/playlists/%s/tracks" % (user,playlist_id), uris=uri_param)
+        return self.post("users/%s/playlists/%s/tracks" % (user,playlist_id), 
+             payload = tracks, position=position)
     
     def me(self):
         ''' returns info about me
