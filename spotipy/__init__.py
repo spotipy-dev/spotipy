@@ -6,6 +6,7 @@ import base64
 import requests
 import simplejson as json
 
+
 __all__ = ['oauth2']
 
 ''' A simple and thin Python library for the Spotify Web API

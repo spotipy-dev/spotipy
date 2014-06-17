@@ -8,6 +8,6 @@ setup(
     author="@plamere",
     author_email="paul@echonest.com",
     url='http://github.com/plamere/spotipy',
-    install_requires=['requests>=1.0', ],
+    install_requires=['requests>=1.0', 'simplejson>=3.5.2'],
     license='LICENSE.txt',
     py_modules=['spotipy', 'spotipy.oauth2'],)
