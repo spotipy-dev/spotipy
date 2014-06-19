@@ -86,7 +86,7 @@ class TestSpotipy(unittest.TestCase):
         results = self.spotify.search(q='weezer pinkerton', type='album')
         self.assertTrue('albums' in results)
         self.assertTrue(len(results['albums']['items']) > 0)
-        self.assertTrue(results['albums']['items'][0]['name'] == 'Pinkerton')
+        self.assertTrue(results['albums']['items'][0]['name'].find('Pinkerton') >= 0)
 
     def test_track_search(self):
         results = self.spotify.search(q='el scorcho weezer', type='track')

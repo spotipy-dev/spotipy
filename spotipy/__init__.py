@@ -4,7 +4,7 @@ from __future__ import print_function
 
 import base64
 import requests
-import simplejson as json
+import json
 
 
 __all__ = ['oauth2']

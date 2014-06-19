@@ -2,7 +2,7 @@ import base64
 import urllib
 import requests
 import os
-import simplejson as json
+import json
 import time
 
 class SpotifyOauthError(Exception):

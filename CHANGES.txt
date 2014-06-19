@@ -1,2 +1,3 @@
-v<version>, <date> -- Initial release.
+v1.40, June 12, 2014 -- Initial public release.
+v1.42, June 19, 2014 -- Removed dependency on simplejson
 
