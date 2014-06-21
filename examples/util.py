@@ -5,7 +5,7 @@ import os
 import subprocess
 import spotipy.oauth2 as oauth2
 
-def prompt_for_user_token(username, scope):
+def prompt_for_user_token(username, scope=None):
     ''' prompts the user to login if necessary and returns
         the user token suitable for use with the spotipy.Spotify 
         constructor

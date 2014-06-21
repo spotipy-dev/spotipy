@@ -203,7 +203,7 @@ class Spotify(object):
         '''
         return self.get("users/%s/playlists" % user)
 
-    def user_playlist(self, user, playlist_id, fields=None):
+    def user_playlist(self, user, playlist_id = None, fields=None):
         ''' Gets playlist of a user
         '''
         if playlist_id == None:
