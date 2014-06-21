@@ -59,7 +59,7 @@ A full set of examples can be found in the [Spotipy examples directory](https://
   - **track(self, track_id)** - returns a single track given the track's ID, URN or URL
   - **tracks(self, tracks)** - returns a list of tracks given the track IDs, URNs, or URLs
   - **user(self, user_id)** - Gets basic profile information about a Spotify User
-  - **user_playlist(self, user, playlist_id, fields=None)** - Gets playlist of a user
+  - **user_playlist(self, user, playlist_id=None, fields=None)** - Gets playlist of a user
   - **user_playlist_add_tracks(self, user, playlist_id, tracks, position=None)** - Adds tracks to a playlist
   - **user_playlist_create(self, user, name, public=True)** - Creates a playlist for a user
   - **user_playlists(self, user)** -      Gets playlists of a user
@@ -83,4 +83,5 @@ at [paul@echonest.com](mailto:paul@echonest.com). Or just send me a pull request
 - 1.0 - 04/05/2014 - Initial release
 - 1.1 - 05/18/2014 - Repackaged for saner imports
 - 1.4.1 - 06/17/2014 - Updates to match released API
+- 1.4.2 - 06/21/2014 - Added support for retrieving starred playlists
 
