@@ -5,10 +5,10 @@ import sys
 import pprint
 
 if len(sys.argv) > 1:
-    str = sys.argv[1]
+    search_str = sys.argv[1]
 else:
-    str = 'Radiohead'
+    search_str = 'Radiohead'
 
 sp = spotipy.Spotify()
-result = sp.search(str)
+result = sp.search(search_str)
 pprint.pprint(result)
