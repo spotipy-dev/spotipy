@@ -102,7 +102,7 @@ class Spotify(object):
                 print('RESP', results)
                 print()
             return results
-        except json.decoder.JSONDecodeError:
+        except ValueError:
             return None
 
     def next(self, result):
