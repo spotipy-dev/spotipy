@@ -167,6 +167,13 @@ class Spotify(object):
         trid = self._get_id('artist', artist_id)
         return self.get('artists/' + trid + '/top-tracks', country=country)
 
+    def artist_related_artists(self, artist_id):
+        ''' Get Spotify catalog information about artists similar to an identified artist. Similarity is based
+            on analysis of the Spotify community’s listening history.
+        '''
+        trid = self._get_id('artist', artist_id)
+        return self.get('artists/' + trid + '/related-artists')
+
     def album(self, album_id):
         ''' returns a single album given the album's ID, URN or URL
         '''

@@ -85,3 +85,9 @@ at [paul@echonest.com](mailto:paul@echonest.com). Or just send me a pull request
 - 1.4.1 - 06/17/2014 - Updates to match released API
 - 1.4.2 - 06/21/2014 - Added support for retrieving starred playlists
 
+ - v1.40, June 12, 2014 -- Initial public release.
+ - v1.42, June 19, 2014 -- Removed dependency on simplejson
+ - v1.43, June 27, 2014 -- Fixed JSON handling issue
+ - v1.44, July 3, 2014 -- Added show_tracks.py example
+ - v1.45, July 7, 2014 -- Support for related artists endpoint. Don't used cache auth codes when scope changes
+
