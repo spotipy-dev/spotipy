@@ -17,10 +17,9 @@ try:
     uri = result['artists']['items'][0]['uri']
 
     related = sp.artist_related_artists(uri)
-    print 'related artists for', name
+    print 'Related artists for', name
     for artist in related['artists']:
         print '  ', artist['name']
 except:
-    raise
     print "usage show_related.py [artist-name]"
 
