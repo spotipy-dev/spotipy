@@ -51,6 +51,7 @@ A full set of examples can be found in the [Spotipy examples directory](https://
   - **artist(self, artist_id)** - returns a single artist given the artist's ID, URN or URL
   - **artist_albums(self, artist_id, album_type=None, country=None, limit=20, offset=0)** -      Get Spotify catalog information about an artist’s albums
   - **artist_top_tracks(self, artist_id, country='US')** - Get Spotify catalog information about an artist’s top 10 tracks by country.
+  - **artist_related_artists(self, artist_id)** - Get Spotify catalog information about artists similar to an identified artist. Similarity is based on analysis of the Spotify community’s listening history.
   - **artists(self, artists)** - returns a list of artists given the artist IDs, URNs, or URLs
   - **me(self)** - returns info about me
   - **next(self, result)** - returns the next result given a result
