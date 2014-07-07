@@ -3,6 +3,7 @@
 
 import os
 import subprocess
+import sys
 import spotipy.oauth2 as oauth2
 
 def prompt_for_user_token(username, scope=None):
@@ -14,6 +15,20 @@ def prompt_for_user_token(username, scope=None):
     client_id = os.getenv('CLIENT_ID', 'YOUR_CLIENT_ID')
     client_secret = os.getenv('CLIENT_SECRET', 'YOUR_CLIENT_SECRET')
     redirect_uri = os.getenv('REDIRECT_URI', 'YOUR_REDIRECT_URI')
+
+
+    if client_id == 'YOUR_CLIENT_ID':
+        print '''
+            You need to set your Spotify API credentials. You can do this by
+            setting environment variables like so:
+
+            export CLIENT_ID='your-spotify-client-id'
+            export CLIENT_SECRET='your-spotify-client-secret'
+            export REDIRECT_URI='your-app-redirect-url'
+
+            Get your credentials at https://developer.spotify.com/my-applications
+        '''
+        sys.exit(1)
 
     sp_oauth = oauth2.SpotifyOAuth(client_id, client_secret, redirect_uri, 
         scope=scope, cache_path=username)

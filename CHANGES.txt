@@ -1,4 +1,6 @@
 v1.40, June 12, 2014 -- Initial public release.
 v1.42, June 19, 2014 -- Removed dependency on simplejson
 v1.43, June 27, 2014 -- Fixed JSON handling issue
+v1.44, July 3, 2014 -- Added show_tracks.py exampole
+v1.45, July 7, 2014 -- Don't used cache auth codes when scope changes
 

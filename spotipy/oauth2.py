@@ -22,8 +22,8 @@ class SpotifyOAuth(object):
         self.client_secret = client_secret
         self.redirect_uri = redirect_uri
         self.state=state
-        self.scope=scope
         self.cache_path = cache_path
+        self.scope=self.normalize_scope(scope)
    
     def get_cached_token(self):
         token_info = None
@@ -33,8 +33,14 @@ class SpotifyOAuth(object):
                 token_info_string = f.read()
                 f.close()
                 token_info = json.loads(token_info_string)
+
+                # if scopes don't match, then bail
+                if 'scope' not in token_info or self.scope != token_info['scope']:
+                    return None
+
                 if self.is_token_expired(token_info):
                     new_token_info = self.refresh_access_token(token_info['refresh_token'])
+
             except IOError:
                 pass
         return token_info
@@ -86,8 +92,17 @@ class SpotifyOAuth(object):
             raise SpotifyOauthError(response.reason)
         token_info = response.json()
         token_info['expires_at'] = int(time.time()) + token_info['expires_in']
+        token_info['scope'] = self.scope
         self.save_token_info(token_info)
         return token_info
+
+    def normalize_scope(self, scope):
+        if scope:
+            scopes = scope.split()
+            scopes.sort()
+            return ' '.join(scopes)
+        else:
+            return None
 
     def refresh_access_token(self, refresh_token):
         payload = { 'refresh_token': refresh_token,
