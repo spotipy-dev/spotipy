@@ -16,7 +16,7 @@ else:
     print "Usage: %s username playlist_id track_id ..." % (sys.argv[0],)
     sys.exit()
 
-scope = 'playlist-modify'
+scope = 'playlist-modify-public'
 token = util.prompt_for_user_token(username, scope)
 
 if token:
