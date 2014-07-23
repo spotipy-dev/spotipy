@@ -64,6 +64,10 @@ A full set of examples can be found in the [Spotipy examples directory](https://
   - **user_playlist_add_tracks(self, user, playlist_id, tracks, position=None)** - Adds tracks to a playlist
   - **user_playlist_create(self, user, name, public=True)** - Creates a playlist for a user
   - **user_playlists(self, user)** -      Gets playlists of a user
+  - **current_user(self)** -  Get detailed profile information about the current user.
+  - **current_user_saved_tracks(self, limit=20, offset=0)** -  Gets a list of the tracks saved in the current authorized user's "Your Music" library
+  - **current_user_saved_tracks_delete(self, limit=20, offset=0)** - Remove tracks from the current authorized user's "Your Music" library
+  - **current_user_saved_tracks_add(self, limit=20, offset=0)** - Add tracks to the current authorized user's "Your Music" library
 
 Refer to the [Spotify API documentation](https://developer.spotify.com/spotify-web-api/) for details on the methods and parameters.
 

@@ -67,11 +67,14 @@ class Spotify(object):
             print(verb, r.url)
         if not (r.status_code >= 200 and r.status_code < 300):
             raise SpotifyException(r.status_code, -1, u'the requested resource could not be found: ' + r.url)
-        results = r.json()
-        if self.trace:
-            print('RESP', results)
-            print()
-        return results
+        if len(r.text) > 0:
+            results = r.json()
+            if self.trace:
+                print('RESP', results)
+                print()
+            return results
+        else:
+            return {}
 
     def get(self, method, args=None, **kwargs):
         if args:
