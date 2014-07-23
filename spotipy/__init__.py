@@ -78,6 +78,16 @@ class Spotify(object):
             kwargs.update(args)
         return self._internal_call('GET', method, kwargs)
 
+    def delete(self, method, args=None, **kwargs):
+        if args:
+            kwargs.update(args)
+        return self._internal_call('DELETE', method, kwargs)
+
+    def put(self, method, args=None, **kwargs):
+        if args:
+            kwargs.update(args)
+        return self._internal_call('PUT', method, kwargs)
+
     def post(self, method, payload=None, **kwargs):
         args = dict(params=kwargs)
         if not method.startswith('http'):
@@ -230,9 +240,34 @@ class Spotify(object):
              payload = tracks, position=position)
     
     def me(self):
-        ''' returns info about me
+        ''' Get detailed profile information about the current user.
         '''
         return self.get('me/')
+
+    def current_user(self):
+        ''' Get detailed profile information about the current user.
+        '''
+        return self.me()
+
+    def current_user_saved_tracks(self, limit=20, offset=0):
+        ''' Gets a list of the tracks saved in the current authorized user's
+            "Your Music" library
+        '''
+        return self.get('me/tracks', limit=limit, offset=offset)
+
+    def current_user_saved_tracks_delete(self, ids=[]):
+        ''' Remove one or more tracks from the current user’s 
+            “Your Music” library.
+        '''
+        tlist = [self._get_id('track', t) for t in ids]
+        return self.delete('me/tracks/?ids=' + ','.join(tlist))
+
+    def current_user_saved_tracks_add(self, ids=[]):
+        ''' Add one or more tracks to the current user’s 
+            “Your Music” library.
+        '''
+        tlist = [self._get_id('track', t) for t in ids]
+        return self.put('me/tracks/?ids=' + ','.join(tlist))
 
     def _get_id(self, type, id):
         fields = id.split(':')
