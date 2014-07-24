@@ -272,6 +272,13 @@ class Spotify(object):
         tlist = [self._get_id('track', t) for t in ids]
         return self.put('me/tracks/?ids=' + ','.join(tlist))
 
+    def current_user_saved_tracks_contains(self, ids=[]):
+        ''' Check if one or more tracks is already saved in
+            the current Spotify user’s “Your Music” library.
+        '''
+        tlist = [self._get_id('track', t) for t in ids]
+        return self.get('me/tracks/contains?ids=' + ','.join(tlist))
+
     def _get_id(self, type, id):
         fields = id.split(':')
         if len(fields) == 3:
