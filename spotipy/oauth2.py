@@ -39,7 +39,7 @@ class SpotifyOAuth(object):
                     return None
 
                 if self.is_token_expired(token_info):
-                    new_token_info = self.refresh_access_token(token_info['refresh_token'])
+                    token_info = self.refresh_access_token(token_info['refresh_token'])
 
             except IOError:
                 pass
@@ -91,8 +91,7 @@ class SpotifyOAuth(object):
         if response.status_code is not 200:
             raise SpotifyOauthError(response.reason)
         token_info = response.json()
-        token_info['expires_at'] = int(time.time()) + token_info['expires_in']
-        token_info['scope'] = self.scope
+        token_info = self._add_custom_values_to_token_info(token_info)
         self.save_token_info(token_info)
         return token_info
 
@@ -114,9 +113,18 @@ class SpotifyOAuth(object):
         if response.status_code is not 200:
             raise SpotifyOauthError(response.reason)
         token_info = response.json()
-        token_info['expires_at'] = int(time.time()) + token_info['expires_in']
+        token_info = self._add_custom_values_to_token_info(token_info)
         if not 'refresh_token' in token_info:
             token_info['refresh_token'] = refresh_token
         self.save_token_info(token_info)
+        return token_info
+
+    def _add_custom_values_to_token_info(self, token_info):
+        ''' 
+        Store some values that aren't directly provided by a Web API
+        response.
+        '''
+        token_info['expires_at'] = int(time.time()) + token_info['expires_in']
+        token_info['scope'] = self.scope
         return token_info
 
