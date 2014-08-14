@@ -6,9 +6,8 @@ import os
 import subprocess
 
 import spotipy
-
-import util
 import spotipy.oauth2 as oauth2
+import spotipy.util as util
 
 
 def show_tracks(results):
