@@ -2,15 +2,16 @@
 
 from __future__ import print_function
 
-import base64
 import requests
 import json
-
+import sys
 
 __all__ = ['oauth2']
 
-''' A simple and thin Python library for the Spotify Web API
 '''
+A simple and thin Python library for the Spotify Web API
+'''
+
 
 class SpotifyException(Exception):
     def __init__(self, http_status, code, msg):
@@ -43,7 +44,7 @@ class Spotify(object):
 
     trace = False
     _auth = None
-    
+
     def __init__(self, auth=None):
         self.prefix = 'https://api.spotify.com/v1/'
         self._auth = auth
@@ -66,7 +67,11 @@ class Spotify(object):
             print()
             print(verb, r.url)
         if not (r.status_code >= 200 and r.status_code < 300):
-            raise SpotifyException(r.status_code, -1, u'the requested resource could not be found: ' + r.url)
+            raise SpotifyException(
+                r.status_code,
+                -1,
+                u'the requested resource could not be found: ' + r.url
+            )
         if len(r.text) > 0:
             results = r.json()
             if self.trace:
@@ -133,7 +138,7 @@ class Spotify(object):
             return self.get(result['previous'])
         else:
             return None
-            
+
     def _warn(self, msg):
         print('warning:' + msg, file=sys.stderr)
 
@@ -158,7 +163,6 @@ class Spotify(object):
         trid = self._get_id('artist', artist_id)
         return self.get('artists/' + trid)
 
-
     def artists(self, artists):
         ''' returns a list of artists given the artist IDs, URNs, or URLs
         '''
@@ -166,23 +170,35 @@ class Spotify(object):
         tlist = [self._get_id('artist', a) for a in artists]
         return self.get('artists/?ids=' + ','.join(tlist))
 
-    def artist_albums(self, artist_id, album_type=None, country=None, limit=20, offset=0):
+    def artist_albums(
+        self, artist_id, album_type=None, country=None, limit=20, offset=0
+    ):
         ''' Get Spotify catalog information about an artist’s albums
         '''
 
         trid = self._get_id('artist', artist_id)
-        return self.get('artists/' + trid + '/albums', album_type=album_type, country=country, limit=limit, offset=offset)
+        return self.get(
+            'artists/' + trid + '/albums',
+            album_type=album_type,
+            country=country,
+            limit=limit,
+            offset=offset
+        )
 
     def artist_top_tracks(self, artist_id, country='US'):
-        ''' Get Spotify catalog information about an artist’s top 10 tracks by country.
+        '''
+        Get Spotify catalog information about an artist’s top 10 tracks
+        by country.
         '''
 
         trid = self._get_id('artist', artist_id)
         return self.get('artists/' + trid + '/top-tracks', country=country)
 
     def artist_related_artists(self, artist_id):
-        ''' Get Spotify catalog information about artists similar to an identified artist. Similarity is based
-            on analysis of the Spotify community’s listening history.
+        '''
+        Get Spotify catalog information about artists similar to an identified
+        artist. Similarity is based on analysis of the Spotify community’s
+        listening history.
         '''
         trid = self._get_id('artist', artist_id)
         return self.get('artists/' + trid + '/related-artists')
@@ -217,31 +233,39 @@ class Spotify(object):
         ''' Gets basic profile information about a Spotify User
         '''
         return self.get('users/' + user_id)
-    
+
     def user_playlists(self, user):
         ''' Gets playlists of a user
         '''
         return self.get("users/%s/playlists" % user)
 
-    def user_playlist(self, user, playlist_id = None, fields=None):
+    def user_playlist(self, user, playlist_id=None, fields=None):
         ''' Gets playlist of a user
         '''
-        if playlist_id == None:
+        if playlist_id is None:
             return self.get("users/%s/starred" % (user), fields=fields)
-        return self.get("users/%s/playlists/%s" % (user, playlist_id), fields=fields)
+        return self.get(
+            "users/%s/playlists/%s" % (user, playlist_id),
+            fields=fields
+        )
 
     def user_playlist_create(self, user, name, public=True):
         ''' Creates a playlist for a user
         '''
-        data = {'name':name, 'public':True }
-        return self.post("users/%s/playlists" % (user,), payload = data)
+        data = {'name': name, 'public': True}
+        return self.post("users/%s/playlists" % (user,), payload=data)
 
-    def user_playlist_add_tracks(self, user, playlist_id, tracks, position=None):
+    def user_playlist_add_tracks(
+        self, user, playlist_id, tracks, position=None
+    ):
         ''' Adds tracks to a playlist
         '''
-        return self.post("users/%s/playlists/%s/tracks" % (user,playlist_id), 
-             payload = tracks, position=position)
-    
+        return self.post(
+            "users/%s/playlists/%s/tracks" % (user, playlist_id),
+            payload=tracks,
+            position=position
+        )
+
     def me(self):
         ''' Get detailed profile information about the current user.
         '''
@@ -259,29 +283,30 @@ class Spotify(object):
         return self.get('me/tracks', limit=limit, offset=offset)
 
     def current_user_saved_tracks_delete(self, ids=[]):
-        ''' Remove one or more tracks from the current user’s 
+        ''' Remove one or more tracks from the current user’s
             “Your Music” library.
         '''
         tlist = [self._get_id('track', t) for t in ids]
         return self.delete('me/tracks/?ids=' + ','.join(tlist))
 
     def current_user_saved_tracks_add(self, ids=[]):
-        ''' Add one or more tracks to the current user’s 
+        ''' Add one or more tracks to the current user’s
             “Your Music” library.
         '''
         tlist = [self._get_id('track', t) for t in ids]
         return self.put('me/tracks/?ids=' + ','.join(tlist))
 
-    def _get_id(self, type, id):
-        fields = id.split(':')
+    def _get_id(self, id_type, item_id):
+        msg = 'expected id of type %s but found type %s %s'
+        fields = item_id.split(':')
         if len(fields) == 3:
-            if type != fields[1]:
-                self._warn('expected id of type ' + type + ' but found type ' + fields[2] + " " + id)
+            if id_type != fields[1]:
+                self._warn(msg % id_type, fields[2], item_id)
             return fields[2]
-        fields = id.split('/')
+        fields = item_id.split('/')
         if len(fields) >= 3:
             itype = fields[-2]
-            if type != itype:
-                self._warn('expected id of type ' + type + ' but found type ' + itype + " " + id)
+            if id_type != itype:
+                self._warn(msg % id_type, itype, item_id)
             return fields[-1]
-        return id
+        return item_id
