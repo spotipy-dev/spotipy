@@ -2,7 +2,7 @@
 
 ## Description
 
-Spotipy is a thin client library for the Spotify Web API . 
+Spotipy is a thin client library for the Spotify Web API .
 
 
 ## Installation
@@ -11,7 +11,7 @@ the library simply by downloading the distribution, unpack it and install in the
 
     python setup.py install
 
-You can also install it using a popular package manager with 
+You can also install it using a popular package manager with
 
   `pip install SpotipyWebAPI`
 
@@ -22,7 +22,9 @@ or
 
 ## Dependencies
 
-- [Requests](https://github.com/kennethreitz/requests) - spotipy requires the requests package to be installed
+- [Requests](https://github.com/kennethreitz/requests) - spotipy requires the
+  requests package to be installed (`pip install -r requirements.txt` should
+  do it).
 
 
 ## Quick Start
@@ -30,8 +32,8 @@ To get started:
 
 - Install spotipy
 
-- Create a Spotify object   
-   
+- Create a Spotify object
+
     sp = spotipy.Spotify()
 
 Call methods:
@@ -41,8 +43,8 @@ Call methods:
         print ' ', i, t['name']
 
 A full set of examples can be found in the [Spotipy examples directory](https://github.com/plamere/spotipy/tree/master/examples)
-        
-   
+
+
 ## Supported Methods
 
   - **album(self, album_id)** - returns a single album given the album's ID, URN or URL
