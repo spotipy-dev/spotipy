@@ -96,14 +96,18 @@ class Spotify(object):
             kwargs.update(args)
         return self._internal_call('GET', method, kwargs)
 
-    def delete(self, method, args=None, **kwargs):
+    def delete(self, method, payload=None, args=None, **kwargs):
         if args:
             kwargs.update(args)
+        if payload:
+            kwargs['data'] = json.dumps(payload)
         return self._internal_call('DELETE', method, kwargs)
 
-    def put(self, method, args=None, **kwargs):
+    def put(self, method, payload=None, args=None, **kwargs):
         if args:
             kwargs.update(args)
+        if payload:
+            kwargs['data'] = json.dumps(payload)
         return self._internal_call('PUT', method, kwargs)
 
     def post(self, method, payload=None, args=None, **kwargs):
@@ -254,6 +258,32 @@ class Spotify(object):
         return self.post(
             "users/%s/playlists/%s/tracks" % (user, playlist_id),
             payload=tracks,
+            position=position
+        )
+
+    def user_playlist_delete_tracks(
+        self, user, playlist_id, track_uris, position=None
+    ):
+        '''
+        Deletes a list of tracks from a playlist, identified by their URI, e.g.
+
+        [
+            "spotify:track:4iV5W9uYEdYUVa79Axb7Rh",
+            "spotify:track:1301WleyT98MSxVHPZCA6M"
+        ]
+
+
+        { "tracks": [{ "uri": "spotify:track:4iV5W9uYEdYUVa79Axb7Rh" },{
+"uri": "spotify:track:1301WleyT98MSxVHPZCA6M" }] }
+        TODO: support snapshot_id
+        '''
+
+        to_delete = {"tracks": []}
+        for t in track_uris:
+            to_delete['tracks'].append({'uri': t})
+        return self.delete(
+            "users/%s/playlists/%s/tracks" % (user, playlist_id),
+            payload=to_delete,
             position=position
         )
 
