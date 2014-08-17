@@ -8,7 +8,7 @@ import requests
 import json
 
 
-__all__ = ['oauth2']
+__all__ = ['oauth2', 'util']
 
 ''' A simple and thin Python library for the Spotify Web API
 '''
