@@ -248,7 +248,8 @@ class Spotify(object):
     def user_playlist_add_tracks(
         self, user, playlist_id, tracks, position=None
     ):
-        ''' Adds tracks to a playlist
+        '''
+        Adds tracks identified by URI to a playlist
         '''
         return self.post(
             "users/%s/playlists/%s/tracks" % (user, playlist_id),
