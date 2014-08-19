@@ -53,7 +53,7 @@ class Spotify(object):
         if self._auth:
             return {'Authorization': 'Bearer {0}'.format(self._auth)}
         else:
-            return None
+            return {}
 
     def _internal_call(self, verb, method, params):
         if not method.startswith('http'):
@@ -61,20 +61,30 @@ class Spotify(object):
         else:
             url = method
         args = dict(params=params)
+        if 'data' in params.keys():
+            args['data'] = params['data']
+            del args['params']['data']
         headers = self._auth_headers()
+        headers['Content-Type'] = 'application/json'
+        if self.trace:
+            print()
+            print(args)
         r = requests.request(verb, url, headers=headers, **args)
         if self.trace:
             print()
             print(verb, r.url)
-        if not (r.status_code >= 200 and r.status_code < 300):
+        try:
+            r.raise_for_status()
+        except:
             raise SpotifyException(
                 r.status_code,
                 -1,
-                u'the requested resource could not be found: ' + r.url
+                u'%s:\n %s' % (r.url, r.json()['error']['message'])
             )
         if len(r.text) > 0:
             results = r.json()
             if self.trace:
+                print()
                 print('RESP', results)
                 print()
             return results
@@ -96,32 +106,12 @@ class Spotify(object):
             kwargs.update(args)
         return self._internal_call('PUT', method, kwargs)
 
-    def post(self, method, payload=None, **kwargs):
-        args = dict(params=kwargs)
-        if not method.startswith('http'):
-            url = self.prefix + method
-        else:
-            url = method
-        headers = self._auth_headers()
-        headers['Content-Type'] = 'application/json'
+    def post(self, method, payload=None, args=None, **kwargs):
+        if args:
+            kwargs.update(args)
         if payload:
-            r = requests.post(url, headers=headers, data=json.dumps(payload), **args)
-        else:
-            r = requests.post(url, headers=headers, **args)
-        if self.trace:
-            print()
-            print("POST", r.url)
-            print("DATA", json.dumps(payload))
-        if not (r.status_code >= 200 and r.status_code < 300):
-            raise SpotifyException(r.status_code, -1, u'the requested resource could not be found: ' + r.url)
-        try:
-            results = r.json()
-            if self.trace:
-                print('RESP', results)
-                print()
-            return results
-        except ValueError:
-            return None
+            kwargs['data'] = json.dumps(payload)
+        return self._internal_call('POST', method, kwargs)
 
     def next(self, result):
         ''' returns the next result given a result
