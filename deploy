@@ -1,2 +1,6 @@
+#
+# sudo python setup.py develop --uninstall
+# sudo python setup.py install 
+
 sudo python setup.py sdist upload
 
