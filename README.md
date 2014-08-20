@@ -93,6 +93,9 @@ at [paul@echonest.com](mailto:paul@echonest.com). Or just send me a pull request
 - v1.40, June 12, 2014 -- Initial public release.
 - v1.42, June 19, 2014 -- Removed dependency on simplejson
 - v1.43, June 27, 2014 -- Fixed JSON handling issue
-- v1.44, July 3, 2014 -- Added show_tracks.py example
+- v1.44, July 3, 2014 -- Added show tracks.py example
 - v1.45, July 7, 2014 -- Support for related artists endpoint. Don't used cache auth codes when scope changes
 - v1.49, July 23, 2014 -- Support for "Your Music" tracks (add, delete, get), with examples
+- v1.50, August 14, 2014  -- Refactored util out of examples and into the main package
+- v1.301, August 19, 2014 -- Upgraded version number to take precedence over previously botched release (sigh)
+- v1.310, August 20, 2014 -- Added playlist replace and remove methods. Added auth tests. Improved API docs
