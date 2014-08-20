@@ -265,13 +265,15 @@ class Spotify(object):
         '''
         return self._get('users/' + user)
     
-    def user_playlists(self, user):
+    def user_playlists(self, user, limit=50, offset=0):
         ''' Gets playlists of a user
 
             Parameters:
                 - user - the id of the usr
+                - limit  - the number of items to return
+                - offset - the index of the first item to return
         '''
-        return self._get("users/%s/playlists" % user)
+        return self._get("users/%s/playlists" % user, limit=limit, offset=offset)
 
     def user_playlist(self, user, playlist_id = None, fields=None):
         ''' Gets playlist of a user
@@ -283,7 +285,8 @@ class Spotify(object):
         '''
         if playlist_id == None:
             return self._get("users/%s/starred" % (user), fields=fields)
-        return self._get("users/%s/playlists/%s" % (user, playlist_id), 
+        plid = self._get_id('playlist', playlist_id)
+        return self._get("users/%s/playlists/%s" % (user, plid), 
                     fields=fields)
 
     def user_playlist_create(self, user, name, public=True):

@@ -119,18 +119,6 @@ class TestSpotipy(unittest.TestCase):
 
         - next
         - previous
-        - artist_related_artists
-        - user_playlists
-        - user_playlist
-        - user_playlist_create
-        - user_playlist_add_tracks
-        - user_playlist_replace_tracks
-        - user_playlist_remove_all_occurrences_of_tracks
-        - user_playlist_remove_specific_occurrences_of_tracks
-        - me
-        - current_user
-        - current_user_saved_tracks_delete
-        - current_user_saved_tracks_add
 '''
 
 if __name__ == '__main__':
