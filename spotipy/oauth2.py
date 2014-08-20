@@ -17,7 +17,8 @@ class SpotifyOAuth(object):
     OAUTH_AUTHORIZE_URL = 'https://accounts.spotify.com/authorize'
     OAUTH_TOKEN_URL = 'https://accounts.spotify.com/api/token'
 
-    def __init__(self, client_id, client_secret, redirect_uri, state=None, scope=None, cache_path=None):
+    def __init__(self, client_id, client_secret, redirect_uri, 
+            state=None, scope=None, cache_path=None):
         self.client_id = client_id
         self.client_secret = client_secret
         self.redirect_uri = redirect_uri
@@ -87,7 +88,8 @@ class SpotifyOAuth(object):
         headers = {'Authorization': 'Basic %s' % auth_header}
 
 
-        response = requests.post(self.OAUTH_TOKEN_URL, data=payload, headers=headers, verify=True)
+        response = requests.post(self.OAUTH_TOKEN_URL, data=payload, 
+            headers=headers, verify=True)
         if response.status_code is not 200:
             raise SpotifyOauthError(response.reason)
         token_info = response.json()
@@ -109,7 +111,8 @@ class SpotifyOAuth(object):
 
         auth_header = base64.b64encode(self.client_id + ':' + self.client_secret)
         headers = {'Authorization': 'Basic %s' % auth_header}
-        response = requests.post(self.OAUTH_TOKEN_URL, data=payload, headers=headers, verify=True)
+        response = requests.post(self.OAUTH_TOKEN_URL, data=payload, 
+            headers=headers, verify=True)
         if response.status_code is not 200:
             raise SpotifyOauthError(response.reason)
         token_info = response.json()

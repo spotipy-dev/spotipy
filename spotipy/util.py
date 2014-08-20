@@ -26,7 +26,8 @@ def prompt_for_user_token(username, scope=None):
             export CLIENT_SECRET='your-spotify-client-secret'
             export REDIRECT_URI='your-app-redirect-url'
 
-            Get your credentials at https://developer.spotify.com/my-applications
+            Get your credentials at     
+                https://developer.spotify.com/my-applications
         '''
         sys.exit(1)
 
@@ -40,12 +41,24 @@ def prompt_for_user_token(username, scope=None):
     token_info = sp_oauth.get_cached_token()
 
     if not token_info:
+        print '''
+
+            User authentication requires interaction with your
+            web browser. Once you enter your credentials and
+            give authorization, you will be redirected to
+            a url.  Paste that url you were directed to to
+            complete the authorization.
+
+        '''
         auth_url = sp_oauth.get_authorize_url()
         try:
             subprocess.call(["open", auth_url])
             print "Opening %s in your browser" % auth_url
         except:
             print "Please navigate here: %s" % auth_url
+
+        print
+        print
         response = raw_input("Enter the URL you were redirected to: ")
         code = sp_oauth.parse_response_code(response)
         token_info = sp_oauth.get_access_token(code)

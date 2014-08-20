@@ -10,5 +10,7 @@ else:
     urn = 'spotify:artist:3jOstUTkEu2JkjvRdBA5Gu'
 
 sp = spotipy.Spotify()
+
 artist = sp.artist(urn)
+
 pprint.pprint(artist)

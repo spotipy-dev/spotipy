@@ -64,6 +64,15 @@ class TestSpotipy(unittest.TestCase):
         self.assertTrue('tracks' in results)
         self.assertTrue(len(results['tracks']) == 10)
 
+    def test_artist_related_artists(self):
+        results = self.spotify.artist_related_artists(self.weezer_urn)
+        self.assertTrue('artists' in results)
+        self.assertTrue(len(results['artists']) == 20)
+        for artist in results['artists']:
+            if artist['name'] == 'Rivers Cuomo':
+                found = True
+        self.assertTrue(found)
+
     def test_artist_search(self):
         results = self.spotify.search(q='weezer', type='artist')
         self.assertTrue('artists' in results)
@@ -95,7 +104,7 @@ class TestSpotipy(unittest.TestCase):
         self.assertTrue(results['tracks']['items'][0]['name'] == 'El Scorcho')
 
     def test_user(self):
-        user = self.spotify.user(user_id='plamere')
+        user = self.spotify.user(user='plamere')
         self.assertTrue(user['uri'] == 'spotify:user:plamere')
 
     def test_track_bad_id(self):
@@ -104,6 +113,25 @@ class TestSpotipy(unittest.TestCase):
             self.assertTrue(False)
         except spotipy.SpotifyException:
             self.assertTrue(True)
+
+'''
+    Need tests for:
+
+        - next
+        - previous
+        - artist_related_artists
+        - user_playlists
+        - user_playlist
+        - user_playlist_create
+        - user_playlist_add_tracks
+        - user_playlist_replace_tracks
+        - user_playlist_remove_all_occurrences_of_tracks
+        - user_playlist_remove_specific_occurrences_of_tracks
+        - me
+        - current_user
+        - current_user_saved_tracks_delete
+        - current_user_saved_tracks_add
+'''
 
 if __name__ == '__main__':
     unittest.main()
