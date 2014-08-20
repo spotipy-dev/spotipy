@@ -66,8 +66,9 @@ A full set of examples can be found in the [Spotipy examples directory](https://
   - **user_playlists(self, user)** -      Gets playlists of a user
   - **current_user(self)** -  Get detailed profile information about the current user.
   - **current_user_saved_tracks(self, limit=20, offset=0)** -  Gets a list of the tracks saved in the current authorized user's "Your Music" library
-  - **current_user_saved_tracks_delete(self, limit=20, offset=0)** - Remove tracks from the current authorized user's "Your Music" library
-  - **current_user_saved_tracks_add(self, limit=20, offset=0)** - Add tracks to the current authorized user's "Your Music" library
+  - **current_user_saved_tracks_delete(self, tracks)** - Remove tracks from the current authorized user's "Your Music" library
+  - **current_user_saved_tracks_add(self, tracks)** - Add tracks to the current authorized user's "Your Music" library
+  - **current_user_saved_tracks_contains(self, tracks)** - Check if one or more tracks is already saved in the current Spotify user’s “Your Music” library.
 
 Refer to the [Spotify API documentation](https://developer.spotify.com/spotify-web-api/) for details on the methods and parameters.
 
