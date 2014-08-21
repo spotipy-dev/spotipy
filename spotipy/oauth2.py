@@ -1,9 +1,11 @@
+from __future__ import print_function
 import base64
 import urllib
 import requests
 import os
 import json
 import time
+import sys
 
 class SpotifyOauthError(Exception):
     pass
@@ -49,7 +51,7 @@ class SpotifyOAuth(object):
     def save_token_info(self, token_info):
         if self.cache_path:
             f = open(self.cache_path, 'w')
-            print >>f, json.dumps(token_info)
+            f.write(json.dumps(token_info))
             f.close()
 
     def is_token_expired(self, token_info):
@@ -111,10 +113,16 @@ class SpotifyOAuth(object):
 
         auth_header = base64.b64encode(self.client_id + ':' + self.client_secret)
         headers = {'Authorization': 'Basic %s' % auth_header}
+
         response = requests.post(self.OAUTH_TOKEN_URL, data=payload, 
-            headers=headers, verify=True)
-        if response.status_code is not 200:
-            raise SpotifyOauthError(response.reason)
+            headers=headers)
+        if response.status_code != 200:
+            if False:  # debugging code
+                print('headers', headers)
+                print('request', response.url)
+            self._warn("couldn't refresh token: code:%d reason:%s" \
+                % (response.status_code, response.reason))
+            return None
         token_info = response.json()
         token_info = self._add_custom_values_to_token_info(token_info)
         if not 'refresh_token' in token_info:
@@ -130,4 +138,7 @@ class SpotifyOAuth(object):
         token_info['expires_at'] = int(time.time()) + token_info['expires_in']
         token_info['scope'] = self.scope
         return token_info
+
+    def _warn(self, msg):
+        print('warning:' + msg, file=sys.stderr)
 
