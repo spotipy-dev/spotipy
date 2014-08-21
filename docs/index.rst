@@ -11,6 +11,26 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+$project
+========
+
+Features
+========
+
+Installation
+============
+
+Getting Started
+===============
+
+Support
+=======
+
+Contribute
+==========
+
+License
+=======
 
 
 Indices and tables
