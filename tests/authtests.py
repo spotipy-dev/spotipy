@@ -29,7 +29,8 @@ class AuthTestSpotipy(unittest.TestCase):
     two_tracks = ["spotify:track:6RtPijgfPKROxEzTHNRiDp", 
                 "spotify:track:7IHOIqZUUInxjVkko181PB"]
 
-    other_tracks=["spotify:track:2wySlB6vMzCbQrRnNGOYKa", "spotify:track:29xKs5BAHlmlX1u4gzQAbJ",
+    other_tracks=["spotify:track:2wySlB6vMzCbQrRnNGOYKa", 
+            "spotify:track:29xKs5BAHlmlX1u4gzQAbJ",
             "spotify:track:1PB7gRWcvefzu7t3LJLUlf"]
 
     bad_id = 'BAD_ID'
@@ -55,11 +56,15 @@ class AuthTestSpotipy(unittest.TestCase):
         self.assertTrue(user['id'] == username)
 
 
+    @unittest.expectedFailure
     def test_user_playlists(self):
         playlists = spotify.user_playlists(username, limit=5)
         self.assertTrue('items' in playlists)
 
         # known API issue currently causes this test to fail
+        # the issue is that the API doesn't currently respect the
+        # limit paramter
+
         self.assertTrue(len(playlists['items']) == 5)
 
     def test_current_user_saved_tracks(self):
@@ -81,15 +86,21 @@ class AuthTestSpotipy(unittest.TestCase):
         new_total = tracks['total']
         self.assertTrue(new_total == total)
 
+    def get_or_create_spotify_playlist(self, username, playlist_name):
+        playlists = spotify.user_playlists(username)
+        while playlists:
+            for item in playlists['items']:
+                if item['name'] == playlist_name:
+                    return item['id']
+            playlists = spotify.next(playlists)
+        playlist = spotify.user_playlist_create(username, playlist_name)
+        playlist_id = playlist['uri']
+        return playlist_id
+
     def test_user_playlist_ops(self):
         # create empty playlist
-        if False:
-            # this creates a new playlist every time, so for now
-            # use a known id
-            playlist = spotify.user_playlist_create(username, 'spotipy-testing-playlist')
-            playlist_id = playlist['uri']
-        else:
-            playlist_id = "spotify:user:plamere:playlist:4csW04zSLNZYFsH7qk5X3t"
+        playlist_id = self.get_or_create_spotify_playlist(username, 
+                'spotipy-testing-playlist-1')
 
         # remove all tracks from it
 
@@ -125,7 +136,7 @@ class AuthTestSpotipy(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) > 0:
+    if len(sys.argv) > 1:
         username = sys.argv[1]
         del sys.argv[1]
 
