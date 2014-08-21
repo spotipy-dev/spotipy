@@ -9,4 +9,4 @@ setup(
     url='http://github.com/plamere/spotipy',
     install_requires=['requests>=1.0'],
     license='LICENSE.txt',
-    py_modules=['spotipy.oauth2', 'spotipy.util'],)
+    packages=['spotipy'])
