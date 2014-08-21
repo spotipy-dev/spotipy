@@ -38,7 +38,9 @@ class Spotify(object):
             print(user)
     '''
 
-    trace = False
+    trace = False 
+    """enable tracing"""
+
     _auth = None
     
     def __init__(self, auth=None):
