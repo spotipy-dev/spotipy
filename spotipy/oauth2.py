@@ -21,6 +21,17 @@ class SpotifyOAuth(object):
 
     def __init__(self, client_id, client_secret, redirect_uri, 
             state=None, scope=None, cache_path=None):
+        '''
+            Creates a SpotifyOAuth object
+
+            Parameters:
+                 - client_id - the client id of your app
+                 - client_secret - the client secret of your app
+                 - redirect_uri - the redirect URI of your app
+                 - state - security state
+                 - scope - the desired scope of the request
+                 - cache_path - path to location to save tokens
+        '''
         self.client_id = client_id
         self.client_secret = client_secret
         self.redirect_uri = redirect_uri
@@ -50,9 +61,14 @@ class SpotifyOAuth(object):
 
     def save_token_info(self, token_info):
         if self.cache_path:
-            f = open(self.cache_path, 'w')
-            f.write(json.dumps(token_info))
-            f.close()
+            try:
+                f = open(self.cache_path, 'w')
+                f.write(json.dumps(token_info))
+                f.close()
+            except IOError:
+                self._warn("couldn't write token cache to " + self.cache_path)
+                pass
+
 
     def is_token_expired(self, token_info):
         now = int(time.time())

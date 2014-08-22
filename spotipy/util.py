@@ -3,21 +3,35 @@
 
 import os
 import subprocess
-import sys
 import oauth2
+import spotipy
 
-def prompt_for_user_token(username, scope=None):
+def prompt_for_user_token(username, scope=None, client_id = None,
+        client_secret = None, redirect_uri = None):
     ''' prompts the user to login if necessary and returns
         the user token suitable for use with the spotipy.Spotify 
         constructor
+
+        Parameters:
+
+         - username - the Spotify username
+         - scope - the desired scope of the request
+         - client_id - the client id of your app
+         - client_secret - the client secret of your app
+         - redirect_uri - the redirect URI of your app
+
     '''
 
-    client_id = os.getenv('CLIENT_ID', 'YOUR_CLIENT_ID')
-    client_secret = os.getenv('CLIENT_SECRET', 'YOUR_CLIENT_SECRET')
-    redirect_uri = os.getenv('REDIRECT_URI', 'YOUR_REDIRECT_URI')
+    if not client_id:
+        client_id = os.getenv('CLIENT_ID')
 
+    if not client_secret:
+        client_secret = os.getenv('CLIENT_SECRET')
 
-    if client_id == 'YOUR_CLIENT_ID':
+    if not redirect_uri:
+        redirect_uri = os.getenv('REDIRECT_URI')
+
+    if not client_id:
         print '''
             You need to set your Spotify API credentials. You can do this by
             setting environment variables like so:
@@ -29,10 +43,10 @@ def prompt_for_user_token(username, scope=None):
             Get your credentials at     
                 https://developer.spotify.com/my-applications
         '''
-        sys.exit(1)
+        raise spotipy.SpotifyException(550, -1, 'no credentials set')
 
     sp_oauth = oauth2.SpotifyOAuth(client_id, client_secret, redirect_uri, 
-        scope=scope, cache_path=username)
+        scope=scope, cache_path=".cache-" + username )
 
     # try to get a valid token for this user, from the cache,
     # if not in the cache, the create a new (this will send
@@ -60,6 +74,9 @@ def prompt_for_user_token(username, scope=None):
         print
         print
         response = raw_input("Enter the URL you were redirected to: ")
+        print
+        print 
+
         code = sp_oauth.parse_response_code(response)
         token_info = sp_oauth.get_access_token(code)
     # Auth'ed API request
