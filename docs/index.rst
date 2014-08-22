@@ -71,11 +71,11 @@ Installation
 ============
 Install *Spotipy* with::
 
-    pip install SpotifyWebAPI
+    pip install SpotipyWebAPI
 
 Or with::
 
-    easy_install SpotifyWebAPI
+    easy_install SpotipyWebAPI
 
 Or you can get the source from github at https://github.com/plamere/spotipy
 
