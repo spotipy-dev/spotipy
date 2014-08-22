@@ -83,7 +83,7 @@ Getting Started
 ===============
 
 Non-Authorized requests
-~~~~~~~~~~~~~~~~~~~~~~~
+=======================
 For methods that do not require authorization, simply create a Spotify object
 and start making method calls like so::
 
@@ -93,7 +93,7 @@ and start making method calls like so::
     print results
 
 Authorized requests
-~~~~~~~~~~~~~~~~~~~~~~~
+=======================
 Many methods require user authentication. For these requests you will need to
 generate an authorization token that indicates that the user has granted
 permission for your application to perform the given task.  You will need to
@@ -146,7 +146,7 @@ Here's an example of getting user authorization to read a user's saved tracks::
         print "Can't get token for", username
 
 IDs URIs and URLs
-~~~~~~~~~~~~~~~~~~~~~~~
+=======================
 *Spotipy* supports a number of different ID types:
 
   - Spotify URI - The resource identifier that you can enter, for example, in
@@ -239,7 +239,7 @@ Shows the contents of every playlist owned by a user::
 
 
 More Examples
-~~~~~~~~~~~~~
+=======================
 There are many more examples of how to use *Spotipy* in the `Examples
 Directory <https://github.com/plamere/spotipy/tree/master/examples>`_ on Github
 
@@ -247,7 +247,7 @@ API Reference
 ==============
 
 :mod:`client` Module
-~~~~~~~~~~~~~~~~~~~~
+=======================
 
 .. automodule:: spotipy.client
     :members:
@@ -255,7 +255,7 @@ API Reference
     :show-inheritance:
 
 :mod:`oauth2` Module
-~~~~~~~~~~~~~~~~~~~~
+=======================
 
 .. automodule:: spotipy.oauth2
     :members:
