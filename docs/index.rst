@@ -1,7 +1,7 @@
 .. image:: images/spotify-web-api-doc.jpg
    :width: 100 %
 
-Spotipy
+Welcome to Spotipy!
 ===================================
 *Spotipy* is a lightweight Python library for the `Spotify Web API
 <https://developer.spotify.com/web-api/>`_. With *Spotipy*
@@ -23,7 +23,6 @@ released by the artist 'Birdy'::
 
     for album in albums:
         print(album['name'])
-        print album
 
 Here's another example showing how to get 30 second samples and cover art
 for the top 10 tracks for Led Zeppelin::
@@ -163,6 +162,87 @@ IDs URIs and URLs
 In general, any *Spotipy* method that needs an artist, album, track or playlist ID
 will accept ids in any of the above form
 
+Examples
+--------
+Here are a few more examples of using *Spotipy*.
+
+Add tracks to a playlist::
+
+    import pprint
+    import sys
+
+    import spotipy
+    import spotipy.util as util
+
+    if len(sys.argv) > 3:
+        username = sys.argv[1]
+        playlist_id = sys.argv[2]
+        track_ids = sys.argv[3:]
+    else:
+        print "Usage: %s username playlist_id track_id ..." % (sys.argv[0],)
+        sys.exit()
+
+    scope = 'playlist-modify-public'
+    token = util.prompt_for_user_token(username, scope)
+
+    if token:
+        sp = spotipy.Spotify(auth=token)
+        sp.trace = False
+        results = sp.user_playlist_add_tracks(username, playlist_id, track_ids)
+        print results
+    else:
+        print "Can't get token for", username
+
+
+Shows the contents of every playlist owned by a user::
+
+    # shows a user's playlists (need to be authenticated via oauth)
+
+    import sys
+    import spotipy
+    import spotipy.util as util
+
+    def show_tracks(results):
+        for i, item in enumerate(tracks['items']):
+            track = item['track']
+            print "   %d %32.32s %s" % (i, track['artists'][0]['name'], 
+                track['name'])
+
+
+    if __name__ == '__main__':
+        if len(sys.argv) > 1:
+            username = sys.argv[1]
+        else:
+            print "Whoops, need your username!"
+            print "usage: python user_playlists.py [username]"
+            sys.exit()
+
+        token = util.prompt_for_user_token(username)
+
+        if token:
+            sp = spotipy.Spotify(auth=token)
+            playlists = sp.user_playlists(username)
+            for playlist in playlists['items']:
+                if playlist['owner']['id'] == username:
+                    print
+                    print playlist['name']
+                    print '  total tracks', playlist['tracks']['total']
+                    results = sp.user_playlist(username, playlist['id'], 
+                        fields="tracks,next")
+                    tracks = results['tracks']
+                    show_tracks(tracks)
+                    while tracks['next']:
+                        tracks = sp.next(tracks)
+                        show_tracks(tracks)
+        else:
+            print "Can't get token for", username
+
+
+More Examples
+-------------
+There are many more examples of how to use *Spotipy* in the `Examples
+Directory <https://github.com/plamere/spotipy/tree/master/examples>`_ on Github
+
 API Reference 
 ==============
 
@@ -193,12 +273,38 @@ API Reference
 
 Support
 =======
+You can ask questions about Spotipy on Stack Overflow.   Don’t forget to add the
+*Spotipy* tag, and any other relevant tags as well, before posting.
+
+    http://stackoverflow.com/questions/ask
+
+If you think you've found a bug, let us know at 
+`Spotify Issues <https://github.com/plamere/spotipy/issues>`_
+
 
 Contribute
 ==========
+Spotipy authored by Paul Lamere (plamere) with contributions by:
+
+  - Daniel Beaudry // danbeaudry 
+  - Faruk Emre Sahin // fsahin 
+  - George // rogueleaderr 
+  - Henry Greville // sethaurus 
+  - Hugo // hugovk 
+  - José Manuel Pérez // JMPerez 
+  - Lucas Nunno // lnunno 
+  - Lynn Root // econchick 
+  - Matt Dennewitz // mattdennewitz 
+  - Matthew Duck // mattduck 
+  - Michael Thelin // thelinmichael 
+  - Ryan Choi // ryankicks 
+  - Simon Metson // drsm79 
+  - Tim Balzer // timbalzer 
+  - corycorycory // corycorycory 
 
 License
 =======
+https://github.com/plamere/spotipy/blob/master/LICENSE.txt
 
 
 Indices and tables

@@ -13,7 +13,6 @@ class SpotifyOauthError(Exception):
 class SpotifyOAuth(object):
     '''
     Implements Authorization Code Flow for Spotify's OAuth implementation.
-    Docs: https://developer.spotify.com/spotify-web-api/authorization-guide/#authorization_code_flow
     '''
 
     OAUTH_AUTHORIZE_URL = 'https://accounts.spotify.com/authorize'
@@ -32,6 +31,7 @@ class SpotifyOAuth(object):
                  - scope - the desired scope of the request
                  - cache_path - path to location to save tokens
         '''
+
         self.client_id = client_id
         self.client_secret = client_secret
         self.redirect_uri = redirect_uri
@@ -40,6 +40,8 @@ class SpotifyOAuth(object):
         self.scope=self._normalize_scope(scope)
    
     def get_cached_token(self):
+        ''' Gets a cached auth token
+        '''
         token_info = None
         if self.cache_path:
             try:
@@ -75,6 +77,8 @@ class SpotifyOAuth(object):
         return token_info['expires_at'] < now
         
     def get_authorize_url(self):
+        """ Gets the URL to use to authorize this app
+        """
         payload = {'client_id': self.client_id,
                    'response_type': 'code',
                    'redirect_uri': self.redirect_uri}
@@ -87,13 +91,25 @@ class SpotifyOAuth(object):
 
         return "%s?%s" % (self.OAUTH_AUTHORIZE_URL, urlparams)
 
-    def parse_response_code(self, response):
+    def parse_response_code(self, url):
+        """ Parse the response code in the given response url
+
+            Parameters:
+                - url - the response url
+        """
+
         try:
-            return response.split("?code=")[1].split("&")[0]
+            return url.split("?code=")[1].split("&")[0]
         except IndexError:
             return None
 
     def get_access_token(self, code):
+        """ Gets the access token for the app given the code
+
+            Parameters:
+                - code - the response code
+        """
+
         payload = {'redirect_uri': self.redirect_uri,
                    'code': code,
                    'grant_type': 'authorization_code'}

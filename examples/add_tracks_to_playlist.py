@@ -5,7 +5,6 @@ import pprint
 import sys
 
 import spotipy
-import spotipy.oauth2 as oauth2
 import spotipy.util as util
 
 if len(sys.argv) > 3:
@@ -23,6 +22,6 @@ if token:
     sp = spotipy.Spotify(auth=token)
     sp.trace = False
     results = sp.user_playlist_add_tracks(username, playlist_id, track_ids)
-    pprint.pprint(results)
+    print results
 else:
     print "Can't get token for", username
