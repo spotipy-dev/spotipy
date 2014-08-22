@@ -2,8 +2,7 @@ import pprint
 import sys
 
 import spotipy
-import spotipy.oauth2 as oauth2
-import util
+import spotipy.util as util
 
 scope = 'user-library-read'
 

@@ -6,8 +6,6 @@ import os
 import subprocess
 
 import spotipy
-
-import spotipy.oauth2 as oauth2
 import spotipy.util as util
 
 

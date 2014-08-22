@@ -5,7 +5,6 @@ import pprint
 import sys
 
 import spotipy
-import spotipy.oauth2 as oauth2
 import spotipy.util as util
 
 if len(sys.argv) > 3:
