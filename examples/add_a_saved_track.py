@@ -22,7 +22,7 @@ token = util.prompt_for_user_token(username, scope)
 if token:
     sp = spotipy.Spotify(auth=token)
     sp.trace = False
-    results = sp.current_user_saved_tracks_add(ids=tids)
+    results = sp.current_user_saved_tracks_add(tracks=tids)
     pprint.pprint(results)
 else:
     print "Can't get token for", username
