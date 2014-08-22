@@ -1,10 +1,13 @@
+.. image:: images/spotify-web-api-doc.jpg
+   :width: 100 %
+
 Spotipy
 ===================================
-Spotipy is a lightweight Python library for the `Spotify Web API
-<https://developer.spotify.com/web-api/>`_. With *spotipy*
+*Spotipy* is a lightweight Python library for the `Spotify Web API
+<https://developer.spotify.com/web-api/>`_. With *Spotipy*
 you get full access to all of the music data provided by the Spotify platform. 
 
-Here's a quick example of using *spotipy* to list the names of all the albums
+Here's a quick example of using *Spotipy* to list the names of all the albums
 released by the artist 'Birdy'::
 
     import spotipy
@@ -61,11 +64,13 @@ artist's name::
 Features
 ========
 *Spotipy* supports all of the features of the Spotify Web API including access
-to all end points, and support for user authorization.
+to all end points, and support for user authorization. For details on the
+capabilities you are encouraged to review the `Spotify Web
+API <https://developer.spotify.com/web-api/>`_ documentation.
 
 Installation
 ============
-Install spotipy with::
+Install *Spotipy* with::
 
     pip install SpotifyWebAPI
 
@@ -78,39 +83,45 @@ Or you can get the source from github at https://github.com/plamere/spotipy
 Getting Started
 ===============
 
-To use *spotipy* import the spotipy package, and create a Spotify object.  For
-methods that require authorization, pass the authorization token into the
-Spotify constructor
-
-Non authorized requests::
+Non-Authorized requests
+-----------------------
+For methods that do not require authorization, simply create a Spotify object
+and start making method calls like so::
 
     import spotipy
     spotify = spotipy.Spotify()
     results = spotify.search(q='artist:' + name, type='artist')
     print results
 
-Authorization
--------------
+Authorized requests
+-------------------
 Many methods require user authentication. For these requests you will need to
 generate an authorization token that indicates that the user has granted
-permission for your application to perform the given task. Spotipy provides a
+permission for your application to perform the given task.  You will need to
+register your app to get the credentials necessary to make authorized calls.
+Register your app at 
+`My Applications
+<https://developer.spotify.com/my-applications/#!/applications>`_.
+
+
+*Spotipy* provides a
 utility method ``util.prompt_for_user_token`` that will attempt to authorize the
 user.  You can pass your app credentials directly into the method as arguments,
 or if you are reluctant to immortalize your app credentials in your source code, 
 you can set environment variables like so::
 
-    export CLIENT_ID='your-spotify-client-id'
-    export CLIENT_SECRET='your-spotify-client-secret'
-    export REDIRECT_URI='your-app-redirect-url'
+    export SPOTIPY_CLIENT_ID='your-spotify-client-id'
+    export SPOTIPY_CLIENT_SECRET='your-spotify-client-secret'
+    export SPOTIPY_REDIRECT_URI='your-app-redirect-url'
 
 Call ``util.prompt_for_user_token`` method with the username and the 
 desired scope (see `Using
 Scopes <https://developer.spotify.com/web-api/using-scopes/>`_ for information
 about scopes) and credentials. This will coordinate the user authorization via
-a the browser.  The credentials are cached locally 
+your web browser.  The credentials are cached locally and are used to automatically
+re-authorized expired tokens.
 
-
-Authorized requests::
+Here's an example of getting user authorization to read a user's saved tracks::
 
     import sys
     import spotipy
@@ -135,17 +146,25 @@ Authorized requests::
     else:
         print "Can't get token for", username
 
+IDs URIs and URLs
+-----------------
+*Spotipy* supports a number of different ID types:
 
-spotipy Package
-===============
+  - Spotify URI - The resource identifier that you can enter, for example, in
+    the Spotify Desktop client's search box to locate an artist, album, or
+    track. Example: spotify:track:6rqhFgbbKwnb9MLmUQDhG6
+  - Spotify URL - An HTML link that opens a track, album, app, playlist or other
+    Spotify resource in a Spotify client. Example:
+    http://open.spotify.com/track/6rqhFgbbKwnb9MLmUQDhG6
+  - Spotify ID - A base-62 number that you can find at the end of the Spotify
+    URI (see above) for an artist, track, album, etc. Example:
+    6rqhFgbbKwnb9MLmUQDhG6
 
-:mod:`spotipy` Package
-----------------------
+In general, any *Spotipy* method that needs an artist, album, track or playlist ID
+will accept ids in any of the above form
 
-.. automodule:: spotipy.__init__
-    :members:
-    :undoc-members:
-    :show-inheritance:
+API Reference 
+==============
 
 :mod:`client` Module
 --------------------

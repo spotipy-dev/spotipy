@@ -1,11 +1,8 @@
 
 # Adds tracks to a playlist
 
-import pprint
 import sys
-
 import spotipy
-import spotipy.oauth2 as oauth2
 import spotipy.util as util
 
 scope = 'user-library-read'
@@ -20,8 +17,9 @@ token = util.prompt_for_user_token(username, scope)
 
 if token:
     sp = spotipy.Spotify(auth=token)
-    sp.trace = False
     results = sp.current_user_saved_tracks()
-    pprint.pprint(results)
+    for item in results['items']:
+        track = item['track']
+        print track['name'] + ' - ' + track['artists'][0]['name']
 else:
     print "Can't get token for", username

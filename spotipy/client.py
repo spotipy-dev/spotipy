@@ -22,7 +22,7 @@ class SpotifyException(Exception):
 
 class Spotify(object):
     '''
-        Example usage:
+        Example usage::
 
             import spotipy
 
@@ -324,8 +324,7 @@ class Spotify(object):
             Parameters:
                 - user - the id of the user
                 - playlist_id - the id of the playlist
-                - tracks - the list of track URIs, URLs or IDs to add 
-                           to the playlist
+                - tracks - the list of track ids to add to the playlist
         '''
         plid = self._get_id('playlist', playlist_id)
         ftracks = [ self._get_uri('track', tid) for tid in tracks]
@@ -340,9 +339,10 @@ class Spotify(object):
             Parameters:
                 - user - the id of the user
                 - playlist_id - the id of the playlist
-                - tracks - the list of track URIs, URLs or IDs to add 
-                           to the playlist
+                - tracks - the list of track ids to add to the playlist
+
         '''
+
         plid = self._get_id('playlist', playlist_id)
         ftracks = [ self._get_uri('track', tid) for tid in tracks]
         payload = { "tracks": [ {"uri": track} for track in ftracks] }
@@ -356,14 +356,11 @@ class Spotify(object):
             Parameters:
                 - user - the id of the user
                 - playlist_id - the id of the playlist
-                - tracks - an array of objects containing Spotify URIs of the 
-                            tracks to remove with their current positions in 
-                            the playlist.  For example: 
-        [  
-            {"uri": "spotify:track:4iV5W9uYEdYUVa79Axb7Rh", "positions": [2] },
-            {"uri": "spotify:track:1301WleyT98MSxVHPZCA6M", "positions": [7] }
-        ] 
+                - tracks - an array of objects containing Spotify URIs of the tracks to remove with their current positions in the playlist.  For example: 
+                    [  { "uri":"4iV5W9uYEdYUVa79Axb7Rh", "positions":[2] },
+                       { "uri":"1301WleyT98MSxVHPZCA6M", "positions":[7] } ] 
         '''
+
         plid = self._get_id('playlist', playlist_id)
         ftracks = [ self._get_uri('track', tid) for tid in tracks]
         payload = { "tracks": ftracks }

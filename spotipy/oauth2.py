@@ -37,7 +37,7 @@ class SpotifyOAuth(object):
         self.redirect_uri = redirect_uri
         self.state=state
         self.cache_path = cache_path
-        self.scope=self.normalize_scope(scope)
+        self.scope=self._normalize_scope(scope)
    
     def get_cached_token(self):
         token_info = None
@@ -52,14 +52,14 @@ class SpotifyOAuth(object):
                 if 'scope' not in token_info or self.scope != token_info['scope']:
                     return None
 
-                if self.is_token_expired(token_info):
-                    token_info = self.refresh_access_token(token_info['refresh_token'])
+                if self._is_token_expired(token_info):
+                    token_info = self._refresh_access_token(token_info['refresh_token'])
 
             except IOError:
                 pass
         return token_info
 
-    def save_token_info(self, token_info):
+    def _save_token_info(self, token_info):
         if self.cache_path:
             try:
                 f = open(self.cache_path, 'w')
@@ -70,7 +70,7 @@ class SpotifyOAuth(object):
                 pass
 
 
-    def is_token_expired(self, token_info):
+    def _is_token_expired(self, token_info):
         now = int(time.time())
         return token_info['expires_at'] < now
         
@@ -112,10 +112,10 @@ class SpotifyOAuth(object):
             raise SpotifyOauthError(response.reason)
         token_info = response.json()
         token_info = self._add_custom_values_to_token_info(token_info)
-        self.save_token_info(token_info)
+        self._save_token_info(token_info)
         return token_info
 
-    def normalize_scope(self, scope):
+    def _normalize_scope(self, scope):
         if scope:
             scopes = scope.split()
             scopes.sort()
@@ -123,7 +123,7 @@ class SpotifyOAuth(object):
         else:
             return None
 
-    def refresh_access_token(self, refresh_token):
+    def _refresh_access_token(self, refresh_token):
         payload = { 'refresh_token': refresh_token,
                    'grant_type': 'refresh_token'}
 
@@ -143,7 +143,7 @@ class SpotifyOAuth(object):
         token_info = self._add_custom_values_to_token_info(token_info)
         if not 'refresh_token' in token_info:
             token_info['refresh_token'] = refresh_token
-        self.save_token_info(token_info)
+        self._save_token_info(token_info)
         return token_info
 
     def _add_custom_values_to_token_info(self, token_info):
