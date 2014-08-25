@@ -61,4 +61,4 @@ If you have suggestions, bugs or other issues specific to this library, file the
 - v1.301, August 19, 2014 -- Upgraded version number to take precedence over previously botched release (sigh)
 - v1.310, August 20, 2014 -- Added playlist replace and remove methods. Added auth tests. Improved API docs
 - v2.0 - August 22, 2014 -- Upgraded APIs and docs to make it be a real library
-- v2.0.01 - August 25, 2014 -- Moved to spotipy at pypi
+- v2.0.2 - August 25, 2014 -- Moved to spotipy at pypi
