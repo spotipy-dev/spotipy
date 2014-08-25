@@ -299,6 +299,7 @@ Spotipy authored by Paul Lamere (plamere) with contributions by:
   - Michael Thelin // thelinmichael 
   - Ryan Choi // ryankicks 
   - Simon Metson // drsm79 
+  - Steve Winton // swinton
   - Tim Balzer // timbalzer 
   - corycorycory // corycorycory 
 

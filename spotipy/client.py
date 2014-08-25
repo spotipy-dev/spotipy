@@ -52,7 +52,6 @@ class Spotify(object):
         '''
         self.prefix = 'https://api.spotify.com/v1/'
         self._auth = auth
-        self.version = 'Spotipy version 1.320'
 
     def _auth_headers(self):
         if self._auth:
