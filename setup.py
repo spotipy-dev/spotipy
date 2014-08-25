@@ -6,7 +6,7 @@ setup(
     description='simple client for the Spotify Web API',
     author="@plamere",
     author_email="paul@echonest.com",
-    url='http://github.com/plamere/spotipy',
+    url='http://spotipy.readthedocs.org/',
     install_requires=['requests>=1.0'],
     license='LICENSE.txt',
     packages=['spotipy'])
