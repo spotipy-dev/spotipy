@@ -16,11 +16,11 @@ If you already have [Python](http://www.python.org/) on your system you can inst
 
 You can also install it using a popular package manager with 
 
-  `pip install SpotipyWebAPI`
+  `pip install spotipy`
 
 or
 
-  `easy_install SpotipyWebAPI`
+  `easy_install spotipy`
 
 
 ## Dependencies

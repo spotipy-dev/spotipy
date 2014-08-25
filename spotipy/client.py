@@ -300,7 +300,7 @@ class Spotify(object):
                 - name - the name of the playlist
                 - public - is the created playlist public
         '''
-        data = {'name':name, 'public':True }
+        data = {'name':name, 'public':public }
         return self._post("users/%s/playlists" % (user,), payload = data)
 
     def user_playlist_add_tracks(self, user, playlist_id, tracks, 

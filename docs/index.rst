@@ -71,11 +71,11 @@ Installation
 ============
 Install *Spotipy* with::
 
-    pip install SpotipyWebAPI
+    pip install spotipy
 
 Or with::
 
-    easy_install SpotipyWebAPI
+    easy_install spotipy
 
 Or you can get the source from github at https://github.com/plamere/spotipy
 
