@@ -1,8 +1,10 @@
+from __future__ import print_function
 import sys
 import spotipy
 
 ''' shows the albums and tracks for a given artist.
 '''
+
 
 def get_artist(name):
     results = sp.search(q='artist:' + name, type='artist')
@@ -12,6 +14,7 @@ def get_artist(name):
     else:
         return None
 
+
 def show_album_tracks(album):
     tracks = []
     results = sp.album_tracks(album['id'])
@@ -20,7 +23,8 @@ def show_album_tracks(album):
         results = sp.next(results)
         tracks.extend(results['items'])
     for track in tracks:
-        print '  ', track['name']
+        print('  ', track['name'])
+
 
 def show_artist_albums(id):
     albums = []
@@ -29,20 +33,21 @@ def show_artist_albums(id):
     while results['next']:
         results = sp.next(results)
         albums.extend(results['items'])
-    print 'Total albums:', len(albums)
+    print('Total albums:', len(albums))
     unique = set()  # skip duplicate albums
     for album in albums:
         name = album['name']
-        if not name in unique:  
-            print name
+        if name not in unique:
+            print(name)
             unique.add(name)
             show_album_tracks(album)
 
+
 def show_artist(artist):
-    print '====', artist['name'], '===='
-    print 'Popularity: ', artist['popularity']
+    print('====', artist['name'], '====')
+    print('Popularity: ', artist['popularity'])
     if len(artist['genres']) > 0:
-        print 'Genres: ', ','.join(artist['genres'])
+        print('Genres: ', ','.join(artist['genres']))
 
 if __name__ == '__main__':
     sp = spotipy.Spotify()
