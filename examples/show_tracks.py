@@ -12,7 +12,7 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         file = open(sys.argv[1])
     else:
-        file = sys.stdin
+        file = open("examples/long_track_test.dat")
     tids = file.read().split()
 
     sp = spotipy.Spotify()

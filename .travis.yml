@@ -14,7 +14,7 @@ install:
 script:
   - python setup.py install
   - coverage run --include=*spotipy* tests/tests.py
-  - for file in examples/*.py; do echo "Running " $file; python $file; done
+  - for file in examples/*.py; do echo "Running" $file; python $file; done
 
 after_success:
   - coverage report
