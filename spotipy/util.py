@@ -74,7 +74,10 @@ def prompt_for_user_token(username, scope=None, client_id = None,
 
         print()
         print()
-        response = input("Enter the URL you were redirected to: ")
+        try:
+            response = raw_input("Enter the URL you were redirected to: ")
+        except SyntaxError:
+            response = input("Enter the URL you were redirected to: ")
         print()
         print() 
 
