@@ -71,7 +71,8 @@ class Spotify(object):
                 data=json.dumps(payload), **args)
         else:
             r = requests.request(method, url, headers=headers, **args)
-
+        # close the socket
+        r.connection.close()
         if self.trace:
             print()
             print(method, r.url)
