@@ -118,8 +118,8 @@ class SpotifyOAuth(object):
         if self.state:
             payload['state'] = self.state
 
-        auth_header = base64.b64encode(self.client_id + ':' + self.client_secret)
-        headers = {'Authorization': 'Basic %s' % auth_header}
+        auth_header = base64.b64encode(str(self.client_id + ':' + self.client_secret).encode())
+        headers = {'Authorization': 'Basic %s' % auth_header.decode()}
 
 
         response = requests.post(self.OAUTH_TOKEN_URL, data=payload, 
