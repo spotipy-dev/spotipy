@@ -150,4 +150,4 @@ if __name__ == '__main__':
         spotify.trace = False
         unittest.main()
     else:
-        print "Usage: %s username" % (sys.argv[0],)
+        print("Usage: %s username" % (sys.argv[0],))

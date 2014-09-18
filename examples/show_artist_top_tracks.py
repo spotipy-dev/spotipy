@@ -13,4 +13,4 @@ sp = spotipy.Spotify()
 response = sp.artist_top_tracks(urn)
 
 for track in response['tracks']:
-    print track['name']
+    print(track['name'])
