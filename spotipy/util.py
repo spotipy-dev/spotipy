@@ -2,14 +2,14 @@
 # shows a user's playlists (need to be authenticated via oauth)
 
 import os
-import subprocess
+import webbrowser
 import oauth2
 import spotipy
 
 def prompt_for_user_token(username, scope=None, client_id = None,
         client_secret = None, redirect_uri = None):
     ''' prompts the user to login if necessary and returns
-        the user token suitable for use with the spotipy.Spotify 
+        the user token suitable for use with the spotipy.Spotify
         constructor
 
         Parameters:
@@ -40,12 +40,12 @@ def prompt_for_user_token(username, scope=None, client_id = None,
             export SPOTIPY_CLIENT_SECRET='your-spotify-client-secret'
             export SPOTIPY_REDIRECT_URI='your-app-redirect-url'
 
-            Get your credentials at     
+            Get your credentials at
                 https://developer.spotify.com/my-applications
         '''
         raise spotipy.SpotifyException(550, -1, 'no credentials set')
 
-    sp_oauth = oauth2.SpotifyOAuth(client_id, client_secret, redirect_uri, 
+    sp_oauth = oauth2.SpotifyOAuth(client_id, client_secret, redirect_uri,
         scope=scope, cache_path=".cache-" + username )
 
     # try to get a valid token for this user, from the cache,
@@ -65,17 +65,26 @@ def prompt_for_user_token(username, scope=None, client_id = None,
 
         '''
         auth_url = sp_oauth.get_authorize_url()
+
+        # Working around webbrowser's printout
+        msg = "Opening %s in your browser" % auth_url
+        stdout = os.dup(1)
+        os.close(1)
+        os.open(os.devnull, os.O_RDWR)
+
         try:
-            subprocess.call(["open", auth_url])
-            print "Opening %s in your browser" % auth_url
+            webbrowser.open(auth_url, new = 2)
         except:
-            print "Please navigate here: %s" % auth_url
+            msg = "Please navigate here: %s" % auth_url
+        finally:
+            os.dup2(stdout, 1)
+            print msg
 
         print
         print
         response = raw_input("Enter the URL you were redirected to: ")
         print
-        print 
+        print
 
         code = sp_oauth.parse_response_code(response)
         token_info = sp_oauth.get_access_token(code)
