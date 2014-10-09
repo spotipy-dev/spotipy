@@ -67,17 +67,20 @@ def prompt_for_user_token(username, scope=None, client_id = None,
         auth_url = sp_oauth.get_authorize_url()
 
         # Working around webbrowser's printout
-        msg = "Opening %s in your browser" % auth_url
         stdout = os.dup(1)
+        stderr = os.dup(2)
         os.close(1)
+        os.close(2)
         os.open(os.devnull, os.O_RDWR)
 
         try:
             webbrowser.open(auth_url, new = 2)
+            msg = "Opening %s in your browser" % auth_url
         except:
             msg = "Please navigate here: %s" % auth_url
         finally:
             os.dup2(stdout, 1)
+            os.dup2(stderr, 2)
             print msg
 
         print
