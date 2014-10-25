@@ -420,6 +420,49 @@ class Spotify(object):
         tlist = [self._get_id('track', t) for t in tracks]
         return self._put('me/tracks/?ids=' + ','.join(tlist))
 
+
+    def featured_playlists(self, locale=None, country=None, 
+            timestamp=None, limit=20, offset = 0):
+        ''' Get a list of Spotify featured playlists
+            
+            Parameters:
+                - locale - The desired language, consisting of a lowercase ISO
+                  639 language code and an uppercase ISO 3166-1 alpha-2 country
+                  code, joined by an underscore. 
+
+                - country - An ISO 3166-1 alpha-2 country code. 
+
+                - timestamp - A timestamp in ISO 8601 format:
+                  yyyy-MM-ddTHH:mm:ss. Use this parameter to specify the user's
+                  local time to get results tailored for that specific date and
+                  time in the day
+
+                - limit - The maximum number of items to return. Default: 20.
+                  Minimum: 1. Maximum: 50
+
+                - offset - The index of the first item to return. Default: 0
+                  (the first object). Use with limit to get the next set of
+                  items. 
+        '''
+        return self._get('browse/featured-playlists', locale=locale,
+            country=country, timestamp=timestamp, limit=limit, offset=offset)
+
+    def new_releases(self,  country=None, limit=20, offset = 0):
+        ''' Get a list of new album releases featured in Spotify
+            
+            Parameters:
+                - country - An ISO 3166-1 alpha-2 country code. 
+
+                - limit - The maximum number of items to return. Default: 20.
+                  Minimum: 1. Maximum: 50
+
+                - offset - The index of the first item to return. Default: 0
+                  (the first object). Use with limit to get the next set of
+                  items. 
+        '''
+        return self._get('browse/new-releases', country=country,  
+            limit=limit, offset=offset)
+
     def _get_id(self, type, id):
         fields = id.split(':')
         if len(fields) >= 3:
