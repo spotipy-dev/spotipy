@@ -79,6 +79,15 @@ class AuthTestSpotipy(unittest.TestCase):
         new_total = tracks['total']
         self.assertTrue(new_total == total)
 
+
+    def test_new_releases(self):
+        response = spotify.new_releases()
+        self.assertTrue(len(response['albums']) > 0)
+
+    def test_featured_releases(self):
+        response = spotify.featured_playlists()
+        self.assertTrue(len(response['playlists']) > 0)
+
     def get_or_create_spotify_playlist(self, username, playlist_name):
         playlists = spotify.user_playlists(username)
         while playlists:
