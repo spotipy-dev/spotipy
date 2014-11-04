@@ -1,6 +1,12 @@
+
 from __future__ import print_function
 import base64
-import urllib
+# Workaround to support both python 2 & 3
+try:
+    import urllib.request, urllib.error
+    import urllib.parse as urllibparse
+except ImportError:
+    import urllib as urllibparse
 import requests
 import os
 import json
@@ -87,7 +93,7 @@ class SpotifyOAuth(object):
         if self.state:
             payload['state'] = self.state
 
-        urlparams = urllib.urlencode(payload)
+        urlparams = urllibparse.urlencode(payload)
 
         return "%s?%s" % (self.OAUTH_AUTHORIZE_URL, urlparams)
 
@@ -118,8 +124,8 @@ class SpotifyOAuth(object):
         if self.state:
             payload['state'] = self.state
 
-        auth_header = base64.b64encode(self.client_id + ':' + self.client_secret)
-        headers = {'Authorization': 'Basic %s' % auth_header}
+        auth_header = base64.b64encode(str(self.client_id + ':' + self.client_secret).encode())
+        headers = {'Authorization': 'Basic %s' % auth_header.decode()}
 
 
         response = requests.post(self.OAUTH_TOKEN_URL, data=payload, 

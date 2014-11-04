@@ -9,8 +9,8 @@ import spotipy.util as util
 if len(sys.argv) > 1:
     username = sys.argv[1]
 else:
-    print "Whoops, need your username!"
-    print "usage: python user_playlists.py [username]"
+    print("Whoops, need your username!")
+    print("usage: python user_playlists.py [username]")
     sys.exit()
 
 token = util.prompt_for_user_token(username)
@@ -23,9 +23,9 @@ if token:
     while tracks:
         for item in tracks['items']:
             track = item['track']
-            print which, track['name' ], ' --', track['artists'][0]['name']
+            print(which, track['name' ], ' --', track['artists'][0]['name'])
             which += 1
         tracks = sp.next(tracks)
 
 else:
-    print "Can't get token for", username
+    print("Can't get token for", username)

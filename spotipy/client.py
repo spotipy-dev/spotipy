@@ -1,7 +1,7 @@
 # coding: utf-8
 
-from __future__ import print_function
 
+from __future__ import print_function
 import sys
 import base64
 import requests
@@ -17,7 +17,7 @@ class SpotifyException(Exception):
         self.msg = msg
 
     def __str__(self):
-        return u'http status: {0}, code:{1} - {2}'.format(
+        return 'http status: {0}, code:{1} - {2}'.format(
             self.http_status, self.code, self.msg)
 
 class Spotify(object):
@@ -71,7 +71,8 @@ class Spotify(object):
                 data=json.dumps(payload), **args)
         else:
             r = requests.request(method, url, headers=headers, **args)
-
+        # close the socket
+        r.connection.close()
         if self.trace:
             print()
             print(method, r.url)
@@ -82,7 +83,7 @@ class Spotify(object):
             r.raise_for_status()
         except:
             raise SpotifyException(r.status_code, 
-                -1, u'%s:\n %s' % (r.url, r.json()['error']['message']))
+                -1, '%s:\n %s' % (r.url, r.json()['error']['message']))
         if len(r.text) > 0:
             results = r.json()
             if self.trace:

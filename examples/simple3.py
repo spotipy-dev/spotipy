@@ -12,5 +12,5 @@ results = spotify.search(q='artist:' + name, type='artist')
 items = results['artists']['items']
 if len(items) > 0:
     artist = items[0]
-    print artist['name'], artist['images'][0]['url']
+    print(artist['name'], artist['images'][0]['url'])
 

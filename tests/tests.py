@@ -22,7 +22,7 @@ class TestSpotipy(unittest.TestCase):
 
     def test_artist_urn(self):
         artist = self.spotify.artist(self.radiohead_urn)
-        self.assertTrue(artist['name'] == u'Radiohead')
+        self.assertTrue(artist['name'] == 'Radiohead')
 
     def test_artists(self):
         results = self.spotify.artists([self.weezer_urn, self.radiohead_urn])
@@ -31,7 +31,7 @@ class TestSpotipy(unittest.TestCase):
 
     def test_album_urn(self):
         album = self.spotify.album(self.pinkerton_urn)
-        self.assertTrue(album['name'] == u'Pinkerton')
+        self.assertTrue(album['name'] == 'Pinkerton')
 
     def test_album_tracks(self):
         results = self.spotify.album_tracks(self.pinkerton_urn)
@@ -44,15 +44,15 @@ class TestSpotipy(unittest.TestCase):
 
     def test_track_urn(self):
         track = self.spotify.track(self.creep_urn)
-        self.assertTrue(track['name'] == u'Creep')
+        self.assertTrue(track['name'] == 'Creep')
 
     def test_track_id(self):
         track = self.spotify.track(self.creep_id)
-        self.assertTrue(track['name'] == u'Creep')
+        self.assertTrue(track['name'] == 'Creep')
 
     def test_track_url(self):
         track = self.spotify.track(self.creep_url)
-        self.assertTrue(track['name'] == u'Creep')
+        self.assertTrue(track['name'] == 'Creep')
 
     def test_tracks(self):
         results = self.spotify.tracks([self.creep_url, self.el_scorcho_urn])

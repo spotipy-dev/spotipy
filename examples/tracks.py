@@ -1,6 +1,6 @@
 # shows tracks for the given artist
 
-from __future__ import print_function
+
 import spotipy
 import sys
 sp = spotipy.Spotify()
