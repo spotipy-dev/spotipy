@@ -19,7 +19,6 @@ class AuthTestSpotipy(unittest.TestCase):
         These tests require user authentication
     '''
 
-
     playlist = "spotify:user:plamere:playlist:2oCEWyyAPbZp9xhVSxZavx"
     four_tracks = ["spotify:track:6RtPijgfPKROxEzTHNRiDp", 
                 "spotify:track:7IHOIqZUUInxjVkko181PB",
@@ -55,11 +54,27 @@ class AuthTestSpotipy(unittest.TestCase):
         user = spotify.me()
         self.assertTrue(user['id'] == username)
 
-
-    @unittest.expectedFailure
     def test_user_playlists(self):
         playlists = spotify.user_playlists(username, limit=5)
         self.assertTrue('items' in playlists)
+
+        # known API issue currently causes this test to fail
+        # the issue is that the API doesn't currently respect the
+        # limit paramter
+
+        self.assertTrue(len(playlists['items']) == 5)
+
+    def test_user_playlist_tracks(self):
+        playlists = spotify.user_playlists(username, limit=5)
+        self.assertTrue('items' in playlists)
+        for playlist in playlists['items']:
+            user = playlist['owner']['id']
+            pid = playlist['id']
+            results = spotify.user_playlist_tracks(user, pid)
+            self.assertTrue(len(results['items']) > 0)
+
+    def user_playlist_tracks(self, user, playlist_id = None, fields=None, 
+        limit=100, offset=0):
 
         # known API issue currently causes this test to fail
         # the issue is that the API doesn't currently respect the
