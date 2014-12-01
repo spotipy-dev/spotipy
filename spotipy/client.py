@@ -374,7 +374,12 @@ class Spotify(object):
         '''
 
         plid = self._get_id('playlist', playlist_id)
-        ftracks = [ self._get_uri('track', tid) for tid in tracks]
+        ftracks = []
+        for tr in tracks:
+            ftracks.append({
+                "uri": self._get_uri("track", tr["uri"]),
+                "positions": tr["positions"],
+            })
         payload = { "tracks": ftracks }
         return self._delete("users/%s/playlists/%s/tracks" % (user, plid), 
                 payload = payload)
