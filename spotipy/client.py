@@ -345,24 +345,27 @@ class Spotify(object):
                 payload = payload)
 
     def user_playlist_remove_all_occurrences_of_tracks(self, user, playlist_id, 
-                        tracks):
+                        tracks, snapshot_id=None):
         ''' Removes all occurrences of the given tracks from the given playlist
 
             Parameters:
                 - user - the id of the user
                 - playlist_id - the id of the playlist
                 - tracks - the list of track ids to add to the playlist
+                - snapshot_id - optional id of the playlist snapshot
 
         '''
 
         plid = self._get_id('playlist', playlist_id)
         ftracks = [ self._get_uri('track', tid) for tid in tracks]
         payload = { "tracks": [ {"uri": track} for track in ftracks] }
+        if snapshot_id:
+            payload["snapshot_id"] = snapshot_id
         return self._delete("users/%s/playlists/%s/tracks" % (user, plid), 
                 payload = payload)
 
     def user_playlist_remove_specific_occurrences_of_tracks(self, user, 
-            playlist_id, tracks):
+            playlist_id, tracks, snapshot_id=None):
         ''' Removes all occurrences of the given tracks from the given playlist
 
             Parameters:
@@ -371,11 +374,14 @@ class Spotify(object):
                 - tracks - an array of objects containing Spotify URIs of the tracks to remove with their current positions in the playlist.  For example: 
                     [  { "uri":"4iV5W9uYEdYUVa79Axb7Rh", "positions":[2] },
                        { "uri":"1301WleyT98MSxVHPZCA6M", "positions":[7] } ] 
+                - snapshot_id - optional id of the playlist snapshot
         '''
 
         plid = self._get_id('playlist', playlist_id)
         ftracks = [ self._get_uri('track', tid) for tid in tracks]
         payload = { "tracks": ftracks }
+        if snapshot_id:
+            payload["snapshot_id"] = snapshot_id
         return self._delete("users/%s/playlists/%s/tracks" % (user, plid), 
                 payload = payload)
 
