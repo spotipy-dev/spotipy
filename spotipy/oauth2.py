@@ -149,8 +149,8 @@ class SpotifyOAuth(object):
         payload = { 'refresh_token': refresh_token,
                    'grant_type': 'refresh_token'}
 
-        auth_header = base64.b64encode(self.client_id + ':' + self.client_secret)
-        headers = {'Authorization': 'Basic %s' % auth_header}
+        auth_header = base64.b64encode(bytes(self.client_id + ':' + self.client_secret, encoding='utf-8'))
+        headers = {'Authorization': 'Basic %s' % auth_header.decode('ascii')}
 
         response = requests.post(self.OAUTH_TOKEN_URL, data=payload, 
             headers=headers)
