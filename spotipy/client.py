@@ -82,7 +82,7 @@ class Spotify(object):
 
         r = self._session.request(method, url, headers=headers, **args)
 
-        if self.trace:
+        if self.trace:  # pragma: no cover
             print()
             print(method, r.url)
             if payload:
@@ -95,7 +95,7 @@ class Spotify(object):
                 -1, u'%s:\n %s' % (r.url, r.json()['error']['message']))
         if len(r.text) > 0:
             results = r.json()
-            if self.trace:
+            if self.trace:  # pragma: no cover
                 print('RESP', results)
                 print()
             return results
