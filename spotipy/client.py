@@ -38,20 +38,31 @@ class Spotify(object):
             print(user)
     '''
 
-    trace = False 
-    """enable tracing"""
+    trace = False  # Enable tracing?
 
-    _auth = None
-    
-    def __init__(self, auth=None):
+    def __init__(self, auth=None, requests_session=True):
         '''
-           creates a spotify object
+        Create a Spotify API object.
 
-           Parameters:
-                - auth - the optional authorization token 
+        :param auth: An authorization token (optional)
+        :param requests_session:
+            A Requests session object or a truthy value to create one.
+            A falsy value disables sessions.
+            It should generally be a good idea to keep sessions enabled
+            for performance reasons (connection pooling).
+
         '''
         self.prefix = 'https://api.spotify.com/v1/'
         self._auth = auth
+
+        if isinstance(requests_session, requests.Session):
+            self._session = requests_session
+        else:
+            if requests_session:  # Build a new session.
+                self._session = requests.Session()
+            else:  # Use the Requests API module as a "session".
+                from requests import api
+                self._session = api
 
     def _auth_headers(self):
         if self._auth:
@@ -67,10 +78,9 @@ class Spotify(object):
         headers['Content-Type'] = 'application/json'
 
         if payload:
-            r = requests.request(method, url, headers=headers, 
-                data=json.dumps(payload), **args)
-        else:
-            r = requests.request(method, url, headers=headers, **args)
+            args["data"] = json.dumps(payload)
+
+        r = self._session.request(method, url, headers=headers, **args)
 
         if self.trace:
             print()
