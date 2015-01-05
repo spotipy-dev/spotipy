@@ -10,3 +10,4 @@ v1.301, August 19, 2014 -- Upgraded version number to take precedence over
                            previously botched release (sigh)
 v1.310, August 20, 2014 -- Added playlist replace and remove methods. Added auth
                            tests. Improved API docs
+v1.310, January 05, 2015 -- Added session support
