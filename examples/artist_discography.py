@@ -21,6 +21,8 @@ def show_album_tracks(album):
         tracks.extend(results['items'])
     for track in tracks:
         print '  ', track['name']
+        print
+        print track
 
 def show_artist_albums(id):
     albums = []
