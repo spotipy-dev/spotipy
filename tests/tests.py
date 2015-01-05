@@ -2,6 +2,7 @@
 import spotipy
 import unittest
 import pprint
+from spotipy.client import SpotifyException
 
 
 class TestSpotipy(unittest.TestCase):
@@ -113,6 +114,26 @@ class TestSpotipy(unittest.TestCase):
             self.assertTrue(False)
         except spotipy.SpotifyException:
             self.assertTrue(True)
+
+    def test_unauthenticated_post_fails(self):
+        with self.assertRaises(SpotifyException) as cm:
+            self.spotify.user_playlist_create("spotify", "Best hits of the 90s")
+        self.assertEqual(cm.exception.http_status, 401)
+
+    def test_custom_requests_session(self):
+        from requests import Session
+        sess = Session()
+        sess.headers["user-agent"] = "spotipy-test"
+        with_custom_session = spotipy.Spotify(requests_session=sess)
+        self.assertTrue(with_custom_session.user(user="akx")["uri"] == "spotify:user:akx")
+
+    def test_force_no_requests_session(self):
+        from requests import Session
+        with_no_session = spotipy.Spotify(requests_session=False)
+        self.assertFalse(isinstance(with_no_session._session, Session))
+        self.assertTrue(with_no_session.user(user="akx")["uri"] == "spotify:user:akx")
+
+
 
 '''
     Need tests for:
