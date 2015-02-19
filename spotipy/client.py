@@ -264,8 +264,8 @@ class Spotify(object):
                 - q - the search query
                 - limit  - the number of items to return
                 - offset - the index of the first item to return
-                - type - the type of item to return. One of 'artist', 'album' 
-                         or 'track'
+                - type - the type of item to return. One of 'artist', 'album',
+                         'track' or 'playlist'
         '''
         return self._get('search', q=q, limit=limit, offset=offset, type=type)
 
