@@ -58,8 +58,8 @@ class SpotifyOAuth(object):
                 if 'scope' not in token_info or self.scope != token_info['scope']:
                     return None
 
-                if self._is_token_expired(token_info):
-                    token_info = self._refresh_access_token(token_info['refresh_token'])
+                if self.is_token_expired(token_info):
+                    token_info = self.refresh_access_token(token_info['refresh_token'])
 
             except IOError:
                 pass
@@ -76,7 +76,7 @@ class SpotifyOAuth(object):
                 pass
 
 
-    def _is_token_expired(self, token_info):
+    def is_token_expired(self, token_info):
         now = int(time.time())
         return token_info['expires_at'] < now
         
@@ -142,7 +142,7 @@ class SpotifyOAuth(object):
         else:
             return None
 
-    def _refresh_access_token(self, refresh_token):
+    def refresh_access_token(self, refresh_token):
         payload = { 'refresh_token': refresh_token,
                    'grant_type': 'refresh_token'}
 
