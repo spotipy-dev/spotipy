@@ -97,8 +97,6 @@ class SpotifyOAuth(object):
 
         urlparams = urlencode(payload)
 
-        log.info("authorize url params: %r" % urlparams)
-
         return "%s?%s" % (self.OAUTH_AUTHORIZE_URL, urlparams)
 
     def parse_response_code(self, url):
