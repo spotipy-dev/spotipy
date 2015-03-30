@@ -354,6 +354,27 @@ class Spotify(object):
         return self._put("users/%s/playlists/%s/tracks" % (user,plid), 
                 payload = payload)
 
+    def user_playlist_reorder_tracks(self, user, playlist_id, range_start, insert_before,
+                        range_length=1, snapshot_id=None):
+        ''' Reorder tracks in a playlist
+
+            Parameters:
+                - user - the id of the user
+                - playlist_id - the id of the playlist
+                - range_start - the position of the first track to be reordered
+                - range_length - optional the number of tracks to be reordered (default: 1)
+                - insert_before - the position where the tracks should be inserted
+                - snapshot_id - optional playlist's snapshot ID
+        '''
+        plid = self._get_id('playlist', playlist_id)
+        payload = { "range_start": range_start,
+                    "range_length": range_length,
+                    "insert_before": insert_before }
+        if snapshot_id:
+            payload["snapshot_id"] = snapshot_id
+        return self._put("users/%s/playlists/%s/tracks" % (user,plid),
+                payload = payload)
+
     def user_playlist_remove_all_occurrences_of_tracks(self, user, playlist_id, 
                         tracks, snapshot_id=None):
         ''' Removes all occurrences of the given tracks from the given playlist
