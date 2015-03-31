@@ -1,1 +1,2 @@
-requests==2.3.0
+requests>=2.3.0
+six>=1.8.0

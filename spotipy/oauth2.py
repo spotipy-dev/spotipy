@@ -1,11 +1,13 @@
 from __future__ import print_function
+
 import base64
-import urllib
-import requests
-import os
 import json
 import time
 import sys
+
+import requests
+from six.moves.urllib.parse import urlencode
+
 
 class SpotifyOauthError(Exception):
     pass
@@ -19,7 +21,8 @@ class SpotifyOAuth(object):
     OAUTH_TOKEN_URL = 'https://accounts.spotify.com/api/token'
 
     def __init__(self, client_id, client_secret, redirect_uri, 
-            state=None, scope=None, cache_path=None):
+            state=None, scope=None, cache_path=None,
+            show_dialog=None):
         '''
             Creates a SpotifyOAuth object
 
@@ -38,7 +41,8 @@ class SpotifyOAuth(object):
         self.state=state
         self.cache_path = cache_path
         self.scope=self._normalize_scope(scope)
-   
+        self.show_dialog = show_dialog
+
     def get_cached_token(self):
         ''' Gets a cached auth token
         '''
@@ -76,18 +80,22 @@ class SpotifyOAuth(object):
         now = int(time.time())
         return token_info['expires_at'] < now
         
-    def get_authorize_url(self):
+    def get_authorize_url(self, state=None):
         """ Gets the URL to use to authorize this app
         """
         payload = {'client_id': self.client_id,
                    'response_type': 'code',
                    'redirect_uri': self.redirect_uri}
-        if self.scope:
+        if self.scope is not None:
             payload['scope'] = self.scope
-        if self.state:
-            payload['state'] = self.state
+        if state is None:
+            state = self.state
+        if state is not None:
+            payload['state'] = state
+        if self.show_dialog is not None:
+            payload['show_dialog'] = str(self.show_dialog).lower()
 
-        urlparams = urllib.urlencode(payload)
+        urlparams = urlencode(payload)
 
         return "%s?%s" % (self.OAUTH_AUTHORIZE_URL, urlparams)
 
@@ -110,22 +118,17 @@ class SpotifyOAuth(object):
                 - code - the response code
         """
 
-        payload = {'redirect_uri': self.redirect_uri,
-                   'code': code,
-                   'grant_type': 'authorization_code'}
-        if self.scope:
-            payload['scope'] = self.scope
-        if self.state:
-            payload['state'] = self.state
+        payload = {
+            'redirect_uri': self.redirect_uri,
+            'code': code,
+            'grant_type': 'authorization_code',
+            'client_id': self.client_id,
+            'client_secret': self.client_secret,
+        }
 
-        auth_header = base64.b64encode(self.client_id + ':' + self.client_secret)
-        headers = {'Authorization': 'Basic %s' % auth_header}
-
-
-        response = requests.post(self.OAUTH_TOKEN_URL, data=payload, 
-            headers=headers, verify=True)
+        response = requests.post(self.OAUTH_TOKEN_URL, data=payload, verify=True)
         if response.status_code is not 200:
-            raise SpotifyOauthError(response.reason)
+            raise SpotifyOauthError(response.reason + '\n' + response.text)
         token_info = response.json()
         token_info = self._add_custom_values_to_token_info(token_info)
         self._save_token_info(token_info)
