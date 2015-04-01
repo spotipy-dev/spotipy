@@ -40,7 +40,8 @@ class Spotify(object):
 
     trace = False  # Enable tracing?
 
-    def __init__(self, auth=None, requests_session=True):
+    def __init__(self, auth=None, requests_session=True,
+        client_credentials_manager=None):
         '''
         Create a Spotify API object.
 
@@ -50,10 +51,13 @@ class Spotify(object):
             A falsy value disables sessions.
             It should generally be a good idea to keep sessions enabled
             for performance reasons (connection pooling).
+        :param client_credentials_manager:
+            SpotifyClientCredentials object
 
         '''
         self.prefix = 'https://api.spotify.com/v1/'
         self._auth = auth
+        self.client_credentials_manager = client_credentials_manager
 
         if isinstance(requests_session, requests.Session):
             self._session = requests_session
@@ -67,6 +71,9 @@ class Spotify(object):
     def _auth_headers(self):
         if self._auth:
             return {'Authorization': 'Bearer {0}'.format(self._auth)}
+        elif self.client_credentials_manager:
+            token = self.client_credentials_manager.get_access_token()
+            return {'Authorization': 'Bearer {0}'.format(token)}
         else:
             return {}
 
