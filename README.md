@@ -66,3 +66,4 @@ If you have suggestions, bugs or other issues specific to this library, file the
 - v2.2.0 - November 15, 2014 -- Added support for user_playlist_tracks
 - v2.3.0 - January 5, 2015 -- Added session support added by akx. 
 - v2.3.2 - March 31, 2015 -- Added auto retry logic
+- v2.3.3 - April 1, 2015 -- added client credential flow
