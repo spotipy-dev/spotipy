@@ -6,6 +6,7 @@ import sys
 import base64
 import requests
 import json
+import time
 
 ''' A simple and thin Python library for the Spotify Web API
 '''
@@ -39,6 +40,7 @@ class Spotify(object):
     '''
 
     trace = False  # Enable tracing?
+    max_get_retries = 5
 
     def __init__(self, auth=None, requests_session=True,
         client_credentials_manager=None):
@@ -112,7 +114,19 @@ class Spotify(object):
     def _get(self, url, args=None, payload=None, **kwargs):
         if args:
             kwargs.update(args)
-        return self._internal_call('GET', url, payload, kwargs)
+        retries = self.max_get_retries
+        while retries > 0:
+            try:
+                return self._internal_call('GET', url, payload, kwargs)
+            except SpotifyException as e:
+                if e.http_status >= 500 and e.http_status < 600:
+                    retries -= 1
+                    if retries < 0:
+                        raise
+                    else:
+                        time.sleep(1)
+                else:
+                    raise
 
     def _post(self, url, args=None, payload=None, **kwargs):
         if args:
