@@ -67,4 +67,4 @@ If you have suggestions, bugs or other issues specific to this library, file the
 - v2.3.0 - January 5, 2015 -- Added session support added by akx. 
 - v2.3.2 - March 31, 2015 -- Added auto retry logic
 - v2.3.3 - April 1, 2015 -- added client credential flow
-- v2.3.4 - April 28, 2015 -- Fixed bug in auto retry logic
+- v2.3.5 - April 28, 2015 -- Fixed bug in auto retry logic

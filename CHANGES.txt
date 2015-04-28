@@ -12,4 +12,4 @@ v2.310, August 20, 2014 -- Added playlist replace and remove methods. Added auth
                            tests. Improved API docs
 v2.310, January 05, 2015 -- Added session support
 v2.3.1, March 28, 2015 --  auto retry support
-v2.3.4, April 28, 2015 --  fixed bug in auto retry support
+v2.3.5, April 28, 2015 --  fixed bug in auto retry support

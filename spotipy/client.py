@@ -131,7 +131,7 @@ class Spotify(object):
                         time.sleep(delay)
                         delay += 1
                 else:
-                    print ('http status:'  + status)
+                    print ('http status:'  + str(status))
                     raise
 
     def _post(self, url, args=None, payload=None, **kwargs):
