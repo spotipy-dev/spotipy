@@ -123,15 +123,15 @@ class Spotify(object):
                 retries -= 1
                 status = e.http_status
                 # 429 means we hit a rate limit, backoff
-                if status == 429 or status >= 500 and status < 600:
+                if status == 429 or (status >= 500 and status < 600):
                     if retries < 0:
                         raise
                     else:
-                        if self.trace:
-                            print ('retrying ...' + str(delay) + 'secs')
+                        print ('retrying ...' + str(delay) + 'secs')
                         time.sleep(delay)
                         delay += 1
                 else:
+                    print ('http status:'  + status)
                     raise
 
     def _post(self, url, args=None, payload=None, **kwargs):
