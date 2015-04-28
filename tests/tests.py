@@ -118,7 +118,8 @@ class TestSpotipy(unittest.TestCase):
     def test_unauthenticated_post_fails(self):
         with self.assertRaises(SpotifyException) as cm:
             self.spotify.user_playlist_create("spotify", "Best hits of the 90s")
-        self.assertEqual(cm.exception.http_status, 401)
+        self.assertTrue(cm.exception.http_status == 401 or
+            cm.exception.http_status == 403)
 
     def test_custom_requests_session(self):
         from requests import Session

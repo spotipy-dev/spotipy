@@ -40,7 +40,7 @@ class Spotify(object):
     '''
 
     trace = False  # Enable tracing?
-    max_get_retries = 5
+    max_get_retries = 10
 
     def __init__(self, auth=None, requests_session=True,
         client_credentials_manager=None):
@@ -115,16 +115,22 @@ class Spotify(object):
         if args:
             kwargs.update(args)
         retries = self.max_get_retries
+        delay = 1
         while retries > 0:
             try:
                 return self._internal_call('GET', url, payload, kwargs)
             except SpotifyException as e:
-                if e.http_status >= 500 and e.http_status < 600:
-                    retries -= 1
+                retries -= 1
+                status = e.http_status
+                # 429 means we hit a rate limit, backoff
+                if status == 429 or status >= 500 and status < 600:
                     if retries < 0:
                         raise
                     else:
-                        time.sleep(1)
+                        if self.trace:
+                            print ('retrying ...' + str(delay) + 'secs')
+                        time.sleep(delay)
+                        delay += 1
                 else:
                     raise
 
