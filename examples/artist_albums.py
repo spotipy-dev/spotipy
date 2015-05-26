@@ -12,7 +12,7 @@ def get_artist(name):
     else:
         return None
 
-def show_artist_albums(id):
+def show_artist_albums(artist):
     albums = []
     results = sp.artist_albums(artist['id'], album_type='album')
     albums.extend(results['items'])
