@@ -100,7 +100,7 @@ class Spotify(object):
         try:
             r.raise_for_status()
         except:
-            raise SpotifyException(r.status_code, 
+            raise SpotifyException(r.status_code,
                 -1, u'%s:\n %s' % (r.url, r.json()['error']['message']))
         if len(r.text) > 0:
             results = r.json()
@@ -153,7 +153,7 @@ class Spotify(object):
         ''' returns the next result given a paged result
 
             Parameters:
-                - result - a previously returned paged result 
+                - result - a previously returned paged result
         '''
         if result['next']:
             return self._get(result['next'])
@@ -164,13 +164,13 @@ class Spotify(object):
         ''' returns the previous result given a paged result
 
             Parameters:
-                - result - a previously returned paged result 
+                - result - a previously returned paged result
         '''
         if result['previous']:
             return self._get(result['previous'])
         else:
             return None
-            
+
     def _warn(self, msg):
         print('warning:' + msg, file=sys.stderr)
 
@@ -215,7 +215,7 @@ class Spotify(object):
         tlist = [self._get_id('artist', a) for a in artists]
         return self._get('artists/?ids=' + ','.join(tlist))
 
-    def artist_albums(self, artist_id, album_type=None, country=None, 
+    def artist_albums(self, artist_id, album_type=None, country=None,
             limit=20, offset=0):
         ''' Get Spotify catalog information about an artist's albums
 
@@ -228,11 +228,11 @@ class Spotify(object):
         '''
 
         trid = self._get_id('artist', artist_id)
-        return self._get('artists/' + trid + '/albums', album_type=album_type, 
+        return self._get('artists/' + trid + '/albums', album_type=album_type,
             country=country, limit=limit, offset=offset)
 
     def artist_top_tracks(self, artist_id, country='US'):
-        ''' Get Spotify catalog information about an artist's top 10 tracks 
+        ''' Get Spotify catalog information about an artist's top 10 tracks
             by country.
 
             Parameters:
@@ -244,8 +244,8 @@ class Spotify(object):
         return self._get('artists/' + trid + '/top-tracks', country=country)
 
     def artist_related_artists(self, artist_id):
-        ''' Get Spotify catalog information about artists similar to an 
-            identified artist. Similarity is based on analysis of the 
+        ''' Get Spotify catalog information about artists similar to an
+            identified artist. Similarity is based on analysis of the
             Spotify community's listening history.
 
             Parameters:
@@ -254,25 +254,29 @@ class Spotify(object):
         trid = self._get_id('artist', artist_id)
         return self._get('artists/' + trid + '/related-artists')
 
-    def album(self, album_id):
+    def album(self, album_id, limit=50, offset=0):
         ''' returns a single album given the album's ID, URIs or URL
 
             Parameters:
                 - album_id - the album ID, URI or URL
+                - limit  - the number of items to return
+                - offset - the index of the first item to return
         '''
 
         trid = self._get_id('album', album_id)
-        return self._get('albums/' + trid)
+        return self._get('albums/' + trid, limit=limit, offset=offset)
 
-    def album_tracks(self, album_id):
+    def album_tracks(self, album_id, limit=50, offset=0):
         ''' Get Spotify catalog information about an album's tracks
 
             Parameters:
                 - album_id - the album ID, URI or URL
+                - limit  - the number of items to return
+                - offset - the index of the first item to return
         '''
 
         trid = self._get_id('album', album_id)
-        return self._get('albums/' + trid + '/tracks/')
+        return self._get('albums/' + trid + '/tracks/', limit=limit, offset=offset)
 
     def albums(self, albums):
         ''' returns a list of albums given the album IDs, URIs, or URLs
@@ -303,7 +307,7 @@ class Spotify(object):
                 - user - the id of the usr
         '''
         return self._get('users/' + user)
-    
+
     def user_playlists(self, user, limit=50, offset=0):
         ''' Gets playlists of a user
 
@@ -326,7 +330,7 @@ class Spotify(object):
         plid = self._get_id('playlist', playlist_id)
         return self._get("users/%s/playlists/%s" % (user, plid), fields=fields)
 
-    def user_playlist_tracks(self, user, playlist_id = None, fields=None, 
+    def user_playlist_tracks(self, user, playlist_id = None, fields=None,
         limit=100, offset=0):
         ''' Get full details of the tracks of a playlist owned by a user.
 
@@ -338,7 +342,7 @@ class Spotify(object):
                 - offset - the index of the first track to return
         '''
         plid = self._get_id('playlist', playlist_id)
-        return self._get("users/%s/playlists/%s/tracks" % (user, plid), 
+        return self._get("users/%s/playlists/%s/tracks" % (user, plid),
                     limit=limit, offset=offset, fields=fields)
 
     def user_playlist_create(self, user, name, public=True):
@@ -352,7 +356,7 @@ class Spotify(object):
         data = {'name':name, 'public':public }
         return self._post("users/%s/playlists" % (user,), payload = data)
 
-    def user_playlist_add_tracks(self, user, playlist_id, tracks, 
+    def user_playlist_add_tracks(self, user, playlist_id, tracks,
                 position=None):
         ''' Adds tracks to a playlist
 
@@ -364,7 +368,7 @@ class Spotify(object):
         '''
         plid = self._get_id('playlist', playlist_id)
         ftracks = [ self._get_uri('track', tid) for tid in tracks]
-        return self._post("users/%s/playlists/%s/tracks" % (user,plid), 
+        return self._post("users/%s/playlists/%s/tracks" % (user,plid),
              payload = ftracks, position=position)
 
     def user_playlist_replace_tracks(self, user, playlist_id, tracks):
@@ -378,7 +382,7 @@ class Spotify(object):
         plid = self._get_id('playlist', playlist_id)
         ftracks = [ self._get_uri('track', tid) for tid in tracks]
         payload = { "uris": ftracks }
-        return self._put("users/%s/playlists/%s/tracks" % (user,plid), 
+        return self._put("users/%s/playlists/%s/tracks" % (user,plid),
                 payload = payload)
 
     def user_playlist_reorder_tracks(self, user, playlist_id, range_start, insert_before,
@@ -402,7 +406,7 @@ class Spotify(object):
         return self._put("users/%s/playlists/%s/tracks" % (user,plid),
                 payload = payload)
 
-    def user_playlist_remove_all_occurrences_of_tracks(self, user, playlist_id, 
+    def user_playlist_remove_all_occurrences_of_tracks(self, user, playlist_id,
                         tracks, snapshot_id=None):
         ''' Removes all occurrences of the given tracks from the given playlist
 
@@ -419,19 +423,19 @@ class Spotify(object):
         payload = { "tracks": [ {"uri": track} for track in ftracks] }
         if snapshot_id:
             payload["snapshot_id"] = snapshot_id
-        return self._delete("users/%s/playlists/%s/tracks" % (user, plid), 
+        return self._delete("users/%s/playlists/%s/tracks" % (user, plid),
                 payload = payload)
 
-    def user_playlist_remove_specific_occurrences_of_tracks(self, user, 
+    def user_playlist_remove_specific_occurrences_of_tracks(self, user,
             playlist_id, tracks, snapshot_id=None):
         ''' Removes all occurrences of the given tracks from the given playlist
 
             Parameters:
                 - user - the id of the user
                 - playlist_id - the id of the playlist
-                - tracks - an array of objects containing Spotify URIs of the tracks to remove with their current positions in the playlist.  For example: 
+                - tracks - an array of objects containing Spotify URIs of the tracks to remove with their current positions in the playlist.  For example:
                     [  { "uri":"4iV5W9uYEdYUVa79Axb7Rh", "positions":[2] },
-                       { "uri":"1301WleyT98MSxVHPZCA6M", "positions":[7] } ] 
+                       { "uri":"1301WleyT98MSxVHPZCA6M", "positions":[7] } ]
                 - snapshot_id - optional id of the playlist snapshot
         '''
 
@@ -445,7 +449,7 @@ class Spotify(object):
         payload = { "tracks": ftracks }
         if snapshot_id:
             payload["snapshot_id"] = snapshot_id
-        return self._delete("users/%s/playlists/%s/tracks" % (user, plid), 
+        return self._delete("users/%s/playlists/%s/tracks" % (user, plid),
                 payload = payload)
 
     def me(self):
@@ -455,7 +459,7 @@ class Spotify(object):
         return self._get('me/')
 
     def current_user(self):
-        ''' Get detailed profile information about the current user. 
+        ''' Get detailed profile information about the current user.
             An alias for the 'me' method.
         '''
         return self.me()
@@ -472,7 +476,7 @@ class Spotify(object):
         return self._get('me/tracks', limit=limit, offset=offset)
 
     def current_user_saved_tracks_delete(self, tracks=[]):
-        ''' Remove one or more tracks from the current user's 
+        ''' Remove one or more tracks from the current user's
             "Your Music" library.
 
             Parameters:
@@ -493,7 +497,7 @@ class Spotify(object):
 
 
     def current_user_saved_tracks_add(self, tracks=[]):
-        ''' Add one or more tracks to the current user's 
+        ''' Add one or more tracks to the current user's
             "Your Music" library.
 
             Parameters:
@@ -503,16 +507,16 @@ class Spotify(object):
         return self._put('me/tracks/?ids=' + ','.join(tlist))
 
 
-    def featured_playlists(self, locale=None, country=None, 
+    def featured_playlists(self, locale=None, country=None,
             timestamp=None, limit=20, offset = 0):
         ''' Get a list of Spotify featured playlists
-            
+
             Parameters:
                 - locale - The desired language, consisting of a lowercase ISO
                   639 language code and an uppercase ISO 3166-1 alpha-2 country
-                  code, joined by an underscore. 
+                  code, joined by an underscore.
 
-                - country - An ISO 3166-1 alpha-2 country code. 
+                - country - An ISO 3166-1 alpha-2 country code.
 
                 - timestamp - A timestamp in ISO 8601 format:
                   yyyy-MM-ddTHH:mm:ss. Use this parameter to specify the user's
@@ -524,25 +528,25 @@ class Spotify(object):
 
                 - offset - The index of the first item to return. Default: 0
                   (the first object). Use with limit to get the next set of
-                  items. 
+                  items.
         '''
         return self._get('browse/featured-playlists', locale=locale,
             country=country, timestamp=timestamp, limit=limit, offset=offset)
 
     def new_releases(self,  country=None, limit=20, offset = 0):
         ''' Get a list of new album releases featured in Spotify
-            
+
             Parameters:
-                - country - An ISO 3166-1 alpha-2 country code. 
+                - country - An ISO 3166-1 alpha-2 country code.
 
                 - limit - The maximum number of items to return. Default: 20.
                   Minimum: 1. Maximum: 50
 
                 - offset - The index of the first item to return. Default: 0
                   (the first object). Use with limit to get the next set of
-                  items. 
+                  items.
         '''
-        return self._get('browse/new-releases', country=country,  
+        return self._get('browse/new-releases', country=country,
             limit=limit, offset=offset)
 
     def _get_id(self, type, id):

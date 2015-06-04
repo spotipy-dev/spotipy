@@ -55,7 +55,7 @@ If you have suggestions, bugs or other issues specific to this library, file the
 - v1.42, June 19, 2014 -- Removed dependency on simplejson
 - v1.43, June 27, 2014 -- Fixed JSON handling issue
 - v1.44, July 3, 2014 -- Added show tracks.py example
-- v1.45, July 7, 2014 -- Support for related artists endpoint. Don't used cache auth codes when scope changes
+- v1.45, July 7, 2014 -- Support for related artists endpoint. Don't use cache auth codes when scope changes
 - v1.49, July 23, 2014 -- Support for "Your Music" tracks (add, delete, get), with examples
 - v1.50, August 14, 2014  -- Refactored util out of examples and into the main package
 - v1.301, August 19, 2014 -- Upgraded version number to take precedence over previously botched release (sigh)
@@ -68,3 +68,4 @@ If you have suggestions, bugs or other issues specific to this library, file the
 - v2.3.2 - March 31, 2015 -- Added auto retry logic
 - v2.3.3 - April 1, 2015 -- added client credential flow
 - v2.3.5 - April 28, 2015 -- Fixed bug in auto retry logic
+- v2.3.6 - June 3, 2015 -- Support for offset/limit with album/album_tracks API

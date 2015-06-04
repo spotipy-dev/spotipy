@@ -15,6 +15,8 @@ class TestSpotipy(unittest.TestCase):
     weezer_urn = 'spotify:artist:3jOstUTkEu2JkjvRdBA5Gu'
     pablo_honey_urn = 'spotify:album:6AZv3m27uyRxi8KyJSfUxL'
     radiohead_urn = 'spotify:artist:4Z8W4fKeB5YxbusRsdQVPb'
+    angeles_haydn_urn = 'spotify:album:1vAbqAeuJVWNAe7UR00bdM'
+
 
     bad_id = 'BAD_ID'
 
@@ -37,6 +39,17 @@ class TestSpotipy(unittest.TestCase):
     def test_album_tracks(self):
         results = self.spotify.album_tracks(self.pinkerton_urn)
         self.assertTrue(len(results['items']) == 10)
+
+    def test_album_tracks_many(self):
+        results = self.spotify.album_tracks(self.angeles_haydn_urn)
+        tracks = results['items']
+        total, received = results['total'], len(tracks)
+        while received < total:
+            results = self.spotify.album_tracks(self.angeles_haydn_urn, offset=received)
+            tracks.extend(results['items'])
+            received = len(tracks)
+
+        self.assertEqual(received, total)
 
     def test_albums(self):
         results = self.spotify.albums([self.pinkerton_urn, self.pablo_honey_urn])
