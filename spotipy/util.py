@@ -1,6 +1,7 @@
 
 # shows a user's playlists (need to be authenticated via oauth)
 
+from __future__ import print_function
 import os
 import subprocess
 from . import oauth2
