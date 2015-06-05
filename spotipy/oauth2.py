@@ -62,8 +62,12 @@ class SpotifyClientCredentials(object):
         """Gets client credentials access token """
         payload = { 'grant_type': 'client_credentials'}
 
-        auth_header = base64.b64encode(self.client_id + ':' + self.client_secret)
-        headers = {'Authorization': 'Basic %s' % auth_header}
+        if sys.version_info[0] >= 3: # Python 3
+            auth_header = base64.b64encode(str(self.client_id + ':' + self.client_secret).encode())
+            headers = {'Authorization': 'Basic %s' % auth_header.decode()}
+        else: # Python 2
+            auth_header = base64.b64encode(self.client_id + ':' + self.client_secret)
+            headers = {'Authorization': 'Basic %s' % auth_header}
 
         response = requests.post(self.OAUTH_TOKEN_URL, data=payload,
             headers=headers, verify=True)
