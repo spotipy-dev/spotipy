@@ -1,12 +1,19 @@
 
 from __future__ import print_function
 import base64
-import urllib.request, urllib.parse, urllib.error
 import requests
 import os
 import json
 import time
 import sys
+
+# Workaround to support both python 2 & 3
+try:
+    import urllib.request, urllib.error
+    import urllib.parse as urllibparse
+except ImportError:
+    import urllib as urllibparse
+
 
 
 class SpotifyOauthError(Exception):
@@ -155,7 +162,7 @@ class SpotifyOAuth(object):
         if self.state:
             payload['state'] = self.state
 
-        urlparams = urllib.parse.urlencode(payload)
+        urlparams = urllibparse.urlencode(payload)
 
         return "%s?%s" % (self.OAUTH_AUTHORIZE_URL, urlparams)
 
