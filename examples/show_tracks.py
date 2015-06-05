@@ -15,10 +15,10 @@ if __name__ == '__main__':
     tids = file.read().split()
 
     sp = spotipy.Spotify()
-    for start in xrange(0, len(tids), max_tracks_per_call):
+    for start in range(0, len(tids), max_tracks_per_call):
         results = sp.tracks(tids[start: start + max_tracks_per_call])
         for track in results['tracks']:
-            print track['name'] + ' - ' + track['artists'][0]['name']
+            print(track['name'] + ' - ' + track['artists'][0]['name'])
 
 
 
