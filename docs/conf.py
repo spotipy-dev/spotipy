@@ -42,8 +42,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'spotipy'
-copyright = u'2014, Paul Lamere'
+project = 'spotipy'
+copyright = '2014, Paul Lamere'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -185,8 +185,8 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'spotipy.tex', u'spotipy Documentation',
-   u'Paul Lamere', 'manual'),
+  ('index', 'spotipy.tex', 'spotipy Documentation',
+   'Paul Lamere', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -215,8 +215,8 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'spotipy', u'spotipy Documentation',
-     [u'Paul Lamere'], 1)
+    ('index', 'spotipy', 'spotipy Documentation',
+     ['Paul Lamere'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -229,8 +229,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'spotipy', u'spotipy Documentation',
-   u'Paul Lamere', 'spotipy', 'One line description of project.',
+  ('index', 'spotipy', 'spotipy Documentation',
+   'Paul Lamere', 'spotipy', 'One line description of project.',
    'Miscellaneous'),
 ]
 

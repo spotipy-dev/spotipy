@@ -57,11 +57,6 @@ class AuthTestSpotipy(unittest.TestCase):
     def test_user_playlists(self):
         playlists = spotify.user_playlists(username, limit=5)
         self.assertTrue('items' in playlists)
-
-        # known API issue currently causes this test to fail
-        # the issue is that the API doesn't currently respect the
-        # limit paramter
-
         self.assertTrue(len(playlists['items']) == 5)
 
     def test_user_playlist_tracks(self):
@@ -174,4 +169,4 @@ if __name__ == '__main__':
         spotify.trace = False
         unittest.main()
     else:
-        print "Usage: %s username" % (sys.argv[0],)
+        print("Usage: %s username" % (sys.argv[0],))

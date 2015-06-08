@@ -17,7 +17,7 @@ class ClientCredentialsTestSpotipy(unittest.TestCase):
 
     def test_request_with_token(self):
         artist = spotify.artist(self.muse_urn)
-        self.assertTrue(artist['name'] == u'Muse')
+        self.assertTrue(artist['name'] == 'Muse')
 
 
 if __name__ == '__main__':
