@@ -135,6 +135,17 @@ class Spotify(object):
                 else:
                     print ('http status:'  + str(status))
                     raise
+            except: 
+                # some other exception. Requests have
+                # been know to throw a BadStatusLine exception
+                retries -= 1
+                if retries >= 0:
+                    print ('retrying ...' + str(delay) + 'secs')
+                    time.sleep(delay)
+                    delay += 1
+                else:
+                    raise
+
 
     def _post(self, url, args=None, payload=None, **kwargs):
         if args:
