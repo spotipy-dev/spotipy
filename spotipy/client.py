@@ -485,6 +485,16 @@ class Spotify(object):
 
         '''
         return self._get('me/tracks', limit=limit, offset=offset)
+    
+    def current_user_followed_artists(self, limit=20, after=None):
+        ''' Gets a list of the artists followed by the current authorized user
+
+            Parameters:
+                - limit - the number of tracks to return
+                - after - ghe last artist ID retrieved from the previous request
+
+        '''
+        return self._get('me/following', type='artist', limit=limit, after=after)
 
     def current_user_saved_tracks_delete(self, tracks=[]):
         ''' Remove one or more tracks from the current user's

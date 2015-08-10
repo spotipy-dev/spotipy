@@ -105,6 +105,11 @@ class AuthTestSpotipy(unittest.TestCase):
         response = spotify.featured_playlists()
         self.assertTrue(len(response['playlists']) > 0)
 
+    def test_current_user_follows(self):
+        response = spotify.current_user_followed_artists()
+        artists = response['artists']
+        self.assertTrue(len(artists['items']) > 0)
+
     def get_or_create_spotify_playlist(self, username, playlist_name):
         playlists = spotify.user_playlists(username)
         while playlists:
@@ -161,6 +166,7 @@ if __name__ == '__main__':
 
         scope = 'playlist-modify-public '
         scope += 'user-library-read '
+        scope += 'user-follow-read '
         scope += 'user-library-modify '
         scope += 'user-read-private'
 
