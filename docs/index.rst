@@ -98,6 +98,14 @@ Many methods require user authentication. For these requests you will need to
 generate an authorization token that indicates that the user has granted
 permission for your application to perform the given task.  You will need to
 register your app to get the credentials necessary to make authorized calls.
+
+Even if your script does not have an accessible URL you need to specify one
+when registering your application where the spotify authentication API will
+redirect to after successful login. The URL doesn't need to work or be
+accessible, you can specify "http://localhost/", after successful login you
+just need to copy the "http://localhost/?code=..." URL from your browser 
+and paste it to the console where your script is running.
+
 Register your app at 
 `My Applications
 <https://developer.spotify.com/my-applications/#!/applications>`_.
@@ -117,8 +125,9 @@ Call ``util.prompt_for_user_token`` method with the username and the
 desired scope (see `Using
 Scopes <https://developer.spotify.com/web-api/using-scopes/>`_ for information
 about scopes) and credentials. This will coordinate the user authorization via
-your web browser.  The credentials are cached locally and are used to automatically
-re-authorized expired tokens.
+your web browser and ask for the SPOTIPY_REDIRECT_URI you were redirected to
+with the authorization token appended. The credentials are cached locally and
+are used to automatically re-authorized expired tokens.
 
 Here's an example of getting user authorization to read a user's saved tracks::
 
