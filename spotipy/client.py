@@ -69,6 +69,12 @@ class Spotify(object):
             else:  # Use the Requests API module as a "session".
                 from requests import api
                 self._session = api
+    def __del__(self):
+        '''
+        Make sure the connection (pool) gets closed
+        '''
+        if isinstance(self._session, requests.Session):
+            self._session.close()
 
     def _auth_headers(self):
         if self._auth:
@@ -133,7 +139,7 @@ class Spotify(object):
                 else:
                     print ('http status:'  + str(status))
                     raise
-            except: 
+            except:
                 # some other exception. Requests have
                 # been know to throw a BadStatusLine exception
                 retries -= 1
@@ -483,7 +489,7 @@ class Spotify(object):
 
         '''
         return self._get('me/tracks', limit=limit, offset=offset)
-    
+
     def current_user_followed_artists(self, limit=20, after=None):
         ''' Gets a list of the artists followed by the current authorized user
 
