@@ -130,7 +130,7 @@ class SpotifyOAuth(object):
                 token_info = json.loads(token_info_string)
 
                 # if scopes don't match, then bail
-                if 'scope' not in token_info or self.scope != token_info['scope']:
+                if 'scope' not in token_info or not self._is_scope_subset(self.scope, token_info['scope']):
                     return None
 
                 if self._is_token_expired(token_info):
@@ -150,6 +150,11 @@ class SpotifyOAuth(object):
                 self._warn("couldn't write token cache to " + self.cache_path)
                 pass
 
+    def _is_scope_subset(self, needle_scope, haystack_scope):
+        needle_scope = set(needle_scope.split())
+        haystack_scope = set(haystack_scope.split())
+
+        return needle_scope <= haystack_scope
 
     def _is_token_expired(self, token_info):
         now = int(time.time())
