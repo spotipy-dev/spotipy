@@ -29,7 +29,7 @@ or
 
 
 ## Quick Start
-To get started, simply install spotipy, reate a Spotify object and call methods:
+To get started, simply install spotipy, create a Spotify object and call methods:
 
     import spotipy
     sp = spotipy.Spotify()
