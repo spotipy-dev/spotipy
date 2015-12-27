@@ -100,8 +100,12 @@ class Spotify(object):
         try:
             r.raise_for_status()
         except:
-            raise SpotifyException(r.status_code,
-                -1, '%s:\n %s' % (r.url, r.json()['error']['message']))
+            if r.status_code in [404,]:
+                raise SpotifyException(r.status_code,
+                    -1, '%s' % r.url)
+            else:
+                raise SpotifyException(r.status_code,
+                    -1, '%s:\n %s' % (r.url, r.json()['error']['message']))
         finally:
             r.connection.close()
         if len(r.text) > 0:
