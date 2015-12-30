@@ -66,7 +66,7 @@ class AuthTestSpotipy(unittest.TestCase):
             user = playlist['owner']['id']
             pid = playlist['id']
             results = spotify.user_playlist_tracks(user, pid)
-            self.assertTrue(len(results['items']) > 0)
+            self.assertTrue(len(results['items']) >= 0)
 
     def user_playlist_tracks(self, user, playlist_id = None, fields=None, 
         limit=100, offset=0):
@@ -80,6 +80,10 @@ class AuthTestSpotipy(unittest.TestCase):
     def test_current_user_saved_tracks(self):
         tracks = spotify.current_user_saved_tracks()
         self.assertTrue(len(tracks['items']) > 0)
+
+    def test_current_user_saved_albums(self):
+        albums = spotify.current_user_saved_albums()
+        self.assertTrue(len(albums['items']) > 0)
 
     def test_current_user_save_and_unsave_tracks(self):
         tracks = spotify.current_user_saved_tracks()

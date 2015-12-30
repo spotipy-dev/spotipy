@@ -31,6 +31,7 @@ class Spotify(object):
             sp = spotipy.Spotify()
 
             sp.trace = True # turn on tracing
+            sp.trace_out = True # turn on trace out
 
             artist = sp.artist(urn)
             print(artist)
@@ -40,6 +41,7 @@ class Spotify(object):
     '''
 
     trace = False  # Enable tracing?
+    trace_out = False
     max_get_retries = 10
 
     def __init__(self, auth=None, requests_session=True,
@@ -89,6 +91,8 @@ class Spotify(object):
         if payload:
             args["data"] = json.dumps(payload)
 
+        if self.trace_out:
+            print(url)
         r = self._session.request(method, url, headers=headers, **args)
 
         if self.trace:  # pragma: no cover
@@ -475,6 +479,17 @@ class Spotify(object):
         '''
         return self.me()
 
+    def current_user_saved_albums(self, limit=20, offset=0):
+        ''' Gets a list of the albums saved in the current authorized user's
+            "Your Music" library
+
+            Parameters:
+                - limit - the number of albums to return
+                - offset - the index of the first album to return
+
+        '''
+        return self._get('me/albums', limit=limit, offset=offset)
+
     def current_user_saved_tracks(self, limit=20, offset=0):
         ''' Gets a list of the tracks saved in the current authorized user's
             "Your Music" library
@@ -569,6 +584,14 @@ class Spotify(object):
         '''
         return self._get('browse/new-releases', country=country,
             limit=limit, offset=offset)
+
+    def audio_features(self, tracks=[]):
+        ''' Get audio features for multiple tracks based upon their Spotify IDs
+            Parameters:
+                - tracks - a list of track URIs, URLs or IDs, maximum: 50 ids
+        '''
+        tlist = [self._get_id('track', t) for t in tracks]
+        return self._get('audio-features?ids=' + ','.join(tlist))
 
     def _get_id(self, type, id):
         fields = id.split(':')
