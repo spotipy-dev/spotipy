@@ -101,6 +101,17 @@ class AuthTestSpotipy(unittest.TestCase):
         self.assertTrue(new_total == total)
 
 
+    def test_categories(self):
+        response = spotify.categories()
+        self.assertTrue(len(response['categories']) > 0)
+
+    def test_category_playlists(self):
+        response = spotify.categories()
+        for cat in response['categories']['items']:
+            cat_id = cat['id']
+            response = spotify.category_playlists(category_id=cat_id)
+            self.assertTrue(len(response['playlists']["items"]) > 0)
+    
     def test_new_releases(self):
         response = spotify.new_releases()
         self.assertTrue(len(response['albums']) > 0)

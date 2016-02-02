@@ -585,6 +585,43 @@ class Spotify(object):
         return self._get('browse/new-releases', country=country,
             limit=limit, offset=offset)
 
+    def categories(self,  country=None, locale=None, limit=20, offset = 0):
+        ''' Get a list of new album releases featured in Spotify
+
+            Parameters:
+                - country - An ISO 3166-1 alpha-2 country code.
+                - locale - The desired language, consisting of an ISO 639
+                  language code and an ISO 3166-1 alpha-2 country code, joined
+                  by an underscore.
+
+                - limit - The maximum number of items to return. Default: 20.
+                  Minimum: 1. Maximum: 50
+
+                - offset - The index of the first item to return. Default: 0
+                  (the first object). Use with limit to get the next set of
+                  items.
+        '''
+        return self._get('browse/categories', country=country, locale=locale,
+            limit=limit, offset=offset)
+
+    def category_playlists(self,  category_id=None, country=None, limit=20, offset = 0):
+        ''' Get a list of new album releases featured in Spotify
+
+            Parameters:
+                - category_id - The Spotify category ID for the category.
+
+                - country - An ISO 3166-1 alpha-2 country code.
+
+                - limit - The maximum number of items to return. Default: 20.
+                  Minimum: 1. Maximum: 50
+
+                - offset - The index of the first item to return. Default: 0
+                  (the first object). Use with limit to get the next set of
+                  items.
+        '''
+        return self._get('browse/categories/' + category_id + '/playlists', country=country, 
+            limit=limit, offset=offset)
+
     def audio_features(self, tracks=[]):
         ''' Get audio features for multiple tracks based upon their Spotify IDs
             Parameters:
