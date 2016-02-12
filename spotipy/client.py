@@ -104,8 +104,12 @@ class Spotify(object):
         try:
             r.raise_for_status()
         except:
-            raise SpotifyException(r.status_code,
-                -1, '%s:\n %s' % (r.url, r.json()['error']['message']))
+            if r.text:
+                raise SpotifyException(r.status_code,
+                    -1, '%s:\n %s' % (r.url, r.json()['error']['message']))
+            else:
+                raise SpotifyException(r.status_code,
+                    -1, '%s:\n %s' % (r.url, 'error'))
         finally:
             r.connection.close()
         if len(r.text) > 0:
@@ -137,9 +141,10 @@ class Spotify(object):
                         time.sleep(delay)
                         delay += 1
                 else:
-                    print ('http status:'  + str(status))
                     raise
-            except: 
+            except Exception as e: 
+                raise
+                print ('exception', str(e))
                 # some other exception. Requests have
                 # been know to throw a BadStatusLine exception
                 retries -= 1
