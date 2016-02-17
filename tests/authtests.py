@@ -173,6 +173,24 @@ class AuthTestSpotipy(unittest.TestCase):
         self.assertTrue(playlist['tracks']['total'] == 3)
         self.assertTrue(len(playlist['tracks']['items']) == 3)
 
+    def test_audio_features(self):
+        results = spotify.audio_features(self.four_tracks)
+        self.assertTrue(len(results) == len(self.four_tracks))
+        for attr in results:
+            assert('speechiness' in attr)
+
+    def test_audio_features_with_bad_track(self):
+        bad_tracks = ['spotify:track:bad']
+        input = self.four_tracks + bad_tracks
+        results = spotify.audio_features(input)
+        self.assertTrue(len(results) == len(input))
+        none_count = 0
+        for attr in results:
+            if attr == None:
+                none_count +=1
+            else:
+                assert('speechiness' in attr)
+        self.assertTrue(none_count == len(bad_tracks))
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
