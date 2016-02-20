@@ -97,6 +97,7 @@ class Spotify(object):
 
         if self.trace:  # pragma: no cover
             print()
+            print ('http status', r.status_code)
             print(method, r.url)
             if payload:
                 print("DATA", json.dumps(payload))
@@ -547,6 +548,30 @@ class Spotify(object):
         tlist = [self._get_id('track', t) for t in tracks]
         return self._put('me/tracks/?ids=' + ','.join(tlist))
 
+    def current_user_top_artists(self, limit=20, offset=0, time_range='6-months'):
+        ''' Get the current user's top artists
+
+            Parameters:
+                - limit - the number of entities to return
+                - offset - the index of the first entity to return
+                - time_range - Over what time frame are the affinities computed.
+                  Valid-values: all-time, 6-months, 14-days. Default: 6-months
+        '''
+        return self._get('me/toplists/artists', args={'time-range':time_range}, 
+            limit=limit,offset=offset)
+
+    def current_user_top_tracks(self, limit=20, offset=0, time_range='6-months'):
+        ''' Get the current user's top tracks
+
+            Parameters:
+                - limit - the number of entities to return
+                - offset - the index of the first entity to return
+                - time_range - Over what time frame are the affinities computed.
+                  Valid-values: all-time, 6-months, 14-days. Default: 6-months
+        '''
+        return self._get('me/toplists/tracks', args={'time-range':time_range}, 
+            limit=limit,offset=offset)
+
 
     def featured_playlists(self, locale=None, country=None,
             timestamp=None, limit=20, offset = 0):
@@ -636,8 +661,8 @@ class Spotify(object):
         results =  self._get('audio-features?ids=' + ','.join(tlist))
         # the response has changed, look for the new style first, and if
         # its not there, fallback on the old style
-        if 'audio_attributes' in results:
-            return results['audio_attributes']
+        if 'audio_features' in results:
+            return results['audio_features']
         else:
             return results
 

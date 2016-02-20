@@ -11,7 +11,7 @@ import sys
 
 client_credentials_manager = SpotifyClientCredentials()
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
-sp.trace=True
+sp.trace=False
 
 if len(sys.argv) > 1:
     artist_name = ' '.join(sys.argv[1:])
@@ -21,12 +21,8 @@ if len(sys.argv) > 1:
         print(' ', i, t['name'])
         tids.append(t['uri'])
 
-    print(tids)
-
     start = time.time()
     features = sp.audio_features(tids)
     delta = time.time() - start
-    print ("features", features)
     print(json.dumps(features, indent=4))
-
     print ("features retrieved in %.2f seconds" % (delta,))

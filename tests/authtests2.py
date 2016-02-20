@@ -38,7 +38,6 @@ class AuthTestSpotipy(unittest.TestCase):
 
 
     def test_audio_features(self):
-        print "test audio features"
         results = spotify.audio_features(self.four_tracks)
         self.assertTrue(len(results) == len(self.four_tracks))
         for track in results:
@@ -49,7 +48,6 @@ class AuthTestSpotipy(unittest.TestCase):
         bad_tracks = ['spotify:track:bad']
         input = bad_tracks + self.four_tracks + bad_tracks
         results = spotify.audio_features(input)
-        print(json.dumps(results, indent=4))
         self.assertTrue(len(results) == len(input))
         for track in results[:-1]:
             assert('speechiness' in track)
