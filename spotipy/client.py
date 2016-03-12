@@ -97,6 +97,7 @@ class Spotify(object):
 
         if self.trace:  # pragma: no cover
             print()
+            print ('headers', headers)
             print ('http status', r.status_code)
             print(method, r.url)
             if payload:
@@ -548,29 +549,27 @@ class Spotify(object):
         tlist = [self._get_id('track', t) for t in tracks]
         return self._put('me/tracks/?ids=' + ','.join(tlist))
 
-    def current_user_top_artists(self, limit=20, offset=0, time_range='6-months'):
+    def current_user_top_artists(self, limit=20, offset=0, time_range='medium_term'):
         ''' Get the current user's top artists
 
             Parameters:
                 - limit - the number of entities to return
                 - offset - the index of the first entity to return
                 - time_range - Over what time frame are the affinities computed.
-                  Valid-values: all-time, 6-months, 14-days. Default: 6-months
+                  Valid-values: short_term, medium_term, long_term
         '''
-        return self._get('me/toplists/artists', args={'time-range':time_range}, 
-            limit=limit,offset=offset)
+        return self._get('me/top/artists', time_range=time_range, limit=limit,offset=offset)
 
-    def current_user_top_tracks(self, limit=20, offset=0, time_range='6-months'):
+    def current_user_top_tracks(self, limit=20, offset=0, time_range='medium_term'):
         ''' Get the current user's top tracks
 
             Parameters:
                 - limit - the number of entities to return
                 - offset - the index of the first entity to return
                 - time_range - Over what time frame are the affinities computed.
-                  Valid-values: all-time, 6-months, 14-days. Default: 6-months
+                  Valid-values: short_term, medium_term, long_term
         '''
-        return self._get('me/toplists/tracks', args={'time-range':time_range}, 
-            limit=limit,offset=offset)
+        return self._get('me/top/tracks', time_range=time_range, limit=limit,offset=offset)
 
 
     def featured_playlists(self, locale=None, country=None,

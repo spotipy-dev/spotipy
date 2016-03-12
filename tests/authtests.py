@@ -126,6 +126,16 @@ class AuthTestSpotipy(unittest.TestCase):
         artists = response['artists']
         self.assertTrue(len(artists['items']) > 0)
 
+    def test_current_user_top_tracks(self):
+        response = spotify.current_user_top_tracks()
+        items = response['items']
+        self.assertTrue(len(items) > 0)
+
+    def test_current_user_top_artists(self):
+        response = spotify.current_user_top_artists()
+        items = response['items']
+        self.assertTrue(len(items) > 0)
+
     def get_or_create_spotify_playlist(self, username, playlist_name):
         playlists = spotify.user_playlists(username)
         while playlists:
@@ -183,7 +193,8 @@ if __name__ == '__main__':
         scope += 'user-library-read '
         scope += 'user-follow-read '
         scope += 'user-library-modify '
-        scope += 'user-read-private'
+        scope += 'user-read-private '
+        scope += 'user-top-read'
 
         token = util.prompt_for_user_token(username, scope)
         spotify = spotipy.Spotify(auth=token)
