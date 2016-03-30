@@ -46,15 +46,16 @@ class AuthTestSpotipy(unittest.TestCase):
     def test_audio_features_with_bad_track(self):
         bad_tracks = []
         bad_tracks = ['spotify:track:bad']
-        input = bad_tracks + self.four_tracks + bad_tracks
+        input = self.four_tracks + bad_tracks
         results = spotify.audio_features(input)
         self.assertTrue(len(results) == len(input))
         for track in results[:-1]:
-            assert('speechiness' in track)
+            if track != None:
+                assert('speechiness' in track)
         self.assertTrue(results[-1] == None)
 
     def test_recommendations(self):
-        results = spotify.recommendations(self.four_tracks, min_danceability=0, max_loudness=0, target_popularity=50)
+        results = spotify.recommendations(seed_tracks=self.four_tracks, min_danceability=0, max_loudness=0, target_popularity=50)
         self.assertTrue(len(results['tracks']) == 20)
 
 
