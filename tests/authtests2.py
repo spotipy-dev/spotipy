@@ -53,6 +53,10 @@ class AuthTestSpotipy(unittest.TestCase):
             assert('speechiness' in track)
         self.assertTrue(results[-1] == None)
 
+    def test_recommendations(self):
+        results = spotify.recommendations(self.four_tracks, min_danceability=0, max_loudness=0, target_popularity=50)
+        self.assertTrue(len(results['tracks']) == 20)
+
 
 if __name__ == '__main__':
     client_credentials_manager = SpotifyClientCredentials()
