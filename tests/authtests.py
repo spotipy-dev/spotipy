@@ -5,6 +5,7 @@ from  spotipy import util
 import unittest
 import pprint
 import sys
+import simplejson as json
 
 '''
     Since these tests require authentication they are maintained
@@ -66,7 +67,7 @@ class AuthTestSpotipy(unittest.TestCase):
             user = playlist['owner']['id']
             pid = playlist['id']
             results = spotify.user_playlist_tracks(user, pid)
-            self.assertTrue(len(results['items']) > 0)
+            self.assertTrue(len(results['items']) >= 0)
 
     def user_playlist_tracks(self, user, playlist_id = None, fields=None, 
         limit=100, offset=0):
@@ -80,6 +81,10 @@ class AuthTestSpotipy(unittest.TestCase):
     def test_current_user_saved_tracks(self):
         tracks = spotify.current_user_saved_tracks()
         self.assertTrue(len(tracks['items']) > 0)
+
+    def test_current_user_saved_albums(self):
+        albums = spotify.current_user_saved_albums()
+        self.assertTrue(len(albums['items']) > 0)
 
     def test_current_user_save_and_unsave_tracks(self):
         tracks = spotify.current_user_saved_tracks()
@@ -97,6 +102,17 @@ class AuthTestSpotipy(unittest.TestCase):
         self.assertTrue(new_total == total)
 
 
+    def test_categories(self):
+        response = spotify.categories()
+        self.assertTrue(len(response['categories']) > 0)
+
+    def test_category_playlists(self):
+        response = spotify.categories()
+        for cat in response['categories']['items']:
+            cat_id = cat['id']
+            response = spotify.category_playlists(category_id=cat_id)
+            self.assertTrue(len(response['playlists']["items"]) > 0)
+    
     def test_new_releases(self):
         response = spotify.new_releases()
         self.assertTrue(len(response['albums']) > 0)
@@ -109,6 +125,16 @@ class AuthTestSpotipy(unittest.TestCase):
         response = spotify.current_user_followed_artists()
         artists = response['artists']
         self.assertTrue(len(artists['items']) > 0)
+
+    def test_current_user_top_tracks(self):
+        response = spotify.current_user_top_tracks()
+        items = response['items']
+        self.assertTrue(len(items) > 0)
+
+    def test_current_user_top_artists(self):
+        response = spotify.current_user_top_artists()
+        items = response['items']
+        self.assertTrue(len(items) > 0)
 
     def get_or_create_spotify_playlist(self, username, playlist_name):
         playlists = spotify.user_playlists(username)
@@ -158,7 +184,6 @@ class AuthTestSpotipy(unittest.TestCase):
         self.assertTrue(playlist['tracks']['total'] == 3)
         self.assertTrue(len(playlist['tracks']['items']) == 3)
 
-
 if __name__ == '__main__':
     if len(sys.argv) > 1:
         username = sys.argv[1]
@@ -168,7 +193,8 @@ if __name__ == '__main__':
         scope += 'user-library-read '
         scope += 'user-follow-read '
         scope += 'user-library-modify '
-        scope += 'user-read-private'
+        scope += 'user-read-private '
+        scope += 'user-top-read'
 
         token = util.prompt_for_user_token(username, scope)
         spotify = spotipy.Spotify(auth=token)

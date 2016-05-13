@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='spotipy',
-    version='2.3.7',
+    version='2.3.8',
     description='simple client for the Spotify Web API',
     author="@plamere",
     author_email="paul@echonest.com",
