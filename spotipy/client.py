@@ -383,7 +383,6 @@ class Spotify(object):
             Parameters:
                 - user - the id of the user
                 - name - the name of the playlist
-                - public - is the created playlist public
         '''
         return self._delete("users/%s/playlists/%s/followers" % (user, playlist_id))
 
