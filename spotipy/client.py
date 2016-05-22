@@ -157,7 +157,6 @@ class Spotify(object):
                 else:
                     raise
 
-
     def _post(self, url, args=None, payload=None, **kwargs):
         if args:
             kwargs.update(args)
@@ -377,6 +376,16 @@ class Spotify(object):
         '''
         data = {'name':name, 'public':public }
         return self._post("users/%s/playlists" % (user,), payload = data)
+
+    def user_playlist_unfollow(self, user, playlist_id):
+        ''' Unfollows (deletes) a playlist for a user
+
+            Parameters:
+                - user - the id of the user
+                - name - the name of the playlist
+                - public - is the created playlist public
+        '''
+        return self._delete("users/%s/playlists/%s/followers" % (user, playlist_id))
 
     def user_playlist_add_tracks(self, user, playlist_id, tracks,
                 position=None):
