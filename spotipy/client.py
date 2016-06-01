@@ -378,6 +378,24 @@ class Spotify(object):
         data = {'name':name, 'public':public }
         return self._post("users/%s/playlists" % (user,), payload = data)
 
+    def user_playlist_change_details(
+            self, user, playlist_id, name=None, public=None):
+        ''' Changes a playlist's name and/or public/private state
+
+            Parameters:
+                - user - the id of the user
+                - playlist_id - the id of the playlist
+                - name - optional name of the playlist
+                - public - optional is the playlist public
+        '''
+        data = {}
+        if name is not None:
+            data['name'] = name
+        if public is not None:
+            data['public'] = public
+        return self._put("users/%s/playlists/%s" % (user, playlist_id),
+                         payload=data)
+
     def user_playlist_add_tracks(self, user, playlist_id, tracks,
                 position=None):
         ''' Adds tracks to a playlist
