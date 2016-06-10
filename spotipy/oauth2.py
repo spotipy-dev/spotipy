@@ -134,7 +134,7 @@ class SpotifyOAuth(object):
                     return None
 
                 if self._is_token_expired(token_info):
-                    token_info = self._refresh_access_token(token_info['refresh_token'])
+                    token_info = self.refresh_access_token(token_info['refresh_token'])
 
             except IOError:
                 pass
@@ -221,7 +221,7 @@ class SpotifyOAuth(object):
         else:
             return None
 
-    def _refresh_access_token(self, refresh_token):
+    def refresh_access_token(self, refresh_token):
         payload = { 'refresh_token': refresh_token,
                    'grant_type': 'refresh_token'}
 
