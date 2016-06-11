@@ -310,7 +310,7 @@ class Spotify(object):
         tlist = [self._get_id('album', a) for a in albums]
         return self._get('albums/?ids=' + ','.join(tlist))
 
-    def search(self, q, limit=10, offset=0, type='track,artist',market='US'):
+    def search(self, q, limit=10, offset=0, type='track'):
         ''' searches for an item
 
             Parameters:
@@ -320,7 +320,7 @@ class Spotify(object):
                 - type - the type of item to return. One of 'artist', 'album',
                          'track' or 'playlist'
         '''
-        return self._get('search', q=q, limit=limit, offset=offset, type=type,market=market)
+        return self._get('search', q=q, limit=limit, offset=offset, type=type)
 
     def user(self, user):
         ''' Gets basic profile information about a Spotify User
