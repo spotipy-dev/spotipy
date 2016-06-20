@@ -252,7 +252,7 @@ API Reference
 .. automodule:: spotipy.client
     :members:
     :undoc-members:
-    :special-members:
+    :special-members: __init__
     :show-inheritance:
 
 :mod:`oauth2` Module
@@ -261,7 +261,7 @@ API Reference
 .. automodule:: spotipy.oauth2
     :members:
     :undoc-members:
-    :special-members:
+    :special-members: __init__
     :show-inheritance:
 
 :mod:`util` Module
@@ -270,7 +270,7 @@ API Reference
 .. automodule:: spotipy.util
     :members:
     :undoc-members:
-    :special-members:
+    :special-members: __init__
     :show-inheritance:
 
 
