@@ -202,7 +202,7 @@ Shows the contents of every playlist owned by a user::
     import spotipy
     import spotipy.util as util
 
-    def show_tracks(results):
+    def show_tracks(tracks):
         for i, item in enumerate(tracks['items']):
             track = item['track']
             print "   %d %32.32s %s" % (i, track['artists'][0]['name'], 
@@ -252,6 +252,7 @@ API Reference
 .. automodule:: spotipy.client
     :members:
     :undoc-members:
+    :special-members: __init__
     :show-inheritance:
 
 :mod:`oauth2` Module
@@ -260,6 +261,7 @@ API Reference
 .. automodule:: spotipy.oauth2
     :members:
     :undoc-members:
+    :special-members: __init__
     :show-inheritance:
 
 :mod:`util` Module
@@ -268,6 +270,7 @@ API Reference
 .. automodule:: spotipy.util
     :members:
     :undoc-members:
+    :special-members: __init__
     :show-inheritance:
 
 
