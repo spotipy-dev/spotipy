@@ -704,7 +704,7 @@ class Spotify(object):
                 - tracks - a list of track URIs, URLs or IDs, maximum: 50 ids
         '''
         tlist = [self._get_id('track', t) for t in tracks]
-        results =  self._get('audio-features?ids=' + ','.join(tlist))
+        results =  self._get('audio-features/?ids=' + ','.join(tlist))
         # the response has changed, look for the new style first, and if
         # its not there, fallback on the old style
         if 'audio_features' in results:
