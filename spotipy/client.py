@@ -45,7 +45,7 @@ class Spotify(object):
     max_get_retries = 10
 
     def __init__(self, auth=None, requests_session=True,
-        client_credentials_manager=None):
+        client_credentials_manager=None, proxies=None):
         '''
         Create a Spotify API object.
 
@@ -57,11 +57,14 @@ class Spotify(object):
             for performance reasons (connection pooling).
         :param client_credentials_manager:
             SpotifyClientCredentials object
+        :param proxies:
+            Definition of proxies (optional)
 
         '''
         self.prefix = 'https://api.spotify.com/v1/'
         self._auth = auth
         self.client_credentials_manager = client_credentials_manager
+        self.proxies = proxies
 
         if isinstance(requests_session, requests.Session):
             self._session = requests_session
@@ -93,7 +96,7 @@ class Spotify(object):
 
         if self.trace_out:
             print(url)
-        r = self._session.request(method, url, headers=headers, **args)
+        r = self._session.request(method, url, headers=headers, proxies=self.proxies, **args)
 
         if self.trace:  # pragma: no cover
             print()
