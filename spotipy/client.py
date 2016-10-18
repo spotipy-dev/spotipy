@@ -208,15 +208,16 @@ class Spotify(object):
         trid = self._get_id('track', track_id)
         return self._get('tracks/' + trid)
 
-    def tracks(self, tracks):
+    def tracks(self, tracks, market = None):
         ''' returns a list of tracks given a list of track IDs, URIs, or URLs
 
             Parameters:
                 - tracks - a list of spotify URIs, URLs or IDs
+                - market - an ISO 3166-1 alpha-2 country code.
         '''
 
         tlist = [self._get_id('track', t) for t in tracks]
-        return self._get('tracks/?ids=' + ','.join(tlist))
+        return self._get('tracks/?ids=' + ','.join(tlist), market = market)
 
     def artist(self, artist_id):
         ''' returns a single artist given the artist's ID, URI or URL
