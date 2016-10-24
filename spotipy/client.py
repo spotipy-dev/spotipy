@@ -144,7 +144,7 @@ class Spotify(object):
                         delay += 1
                 else:
                     raise
-            except Exception as e: 
+            except Exception as e:
                 raise
                 print ('exception', str(e))
                 # some other exception. Requests have
@@ -508,7 +508,7 @@ class Spotify(object):
 
         '''
         return self._get('me/tracks', limit=limit, offset=offset)
-    
+
     def current_user_followed_artists(self, limit=20, after=None):
         ''' Gets a list of the artists followed by the current authorized user
 
@@ -649,7 +649,7 @@ class Spotify(object):
                   (the first object). Use with limit to get the next set of
                   items.
         '''
-        return self._get('browse/categories/' + category_id + '/playlists', country=country, 
+        return self._get('browse/categories/' + category_id + '/playlists', country=country,
             limit=limit, offset=offset)
 
     def recommendations(self, seed_artists=[], seed_genres=[], seed_tracks=[],
@@ -661,40 +661,42 @@ class Spotify(object):
 
                 - seed_tracks - a list of artist IDs, URIs or URLs
 
-                - seed_genres - a list of genre names. Available genres for 
+                - seed_genres - a list of genre names. Available genres for
                   recommendations can be found by calling recommendation_genre_seeds
 
-                - country - An ISO 3166-1 alpha-2 country code. If provided, all 
+                - country - An ISO 3166-1 alpha-2 country code. If provided, all
                   results will be playable in this country.
 
                 - limit - The maximum number of items to return. Default: 20.
                   Minimum: 1. Maximum: 100
 
-                - min/max/target_<attribute> - For the tuneable track attributes listed 
+                - min/max/target_<attribute> - For the tuneable track attributes listed
                   in the documentation, these values provide filters and targeting on
                   results.
         '''
         params = dict(limit=limit)
         if seed_artists:
-            params['seed_artists'] = [self._get_id('artist', a) for a in seed_artists]
+            params['seed_artists'] = ','.join(
+                [self._get_id('artist', a) for a in seed_artists])
         if seed_genres:
-            params['seed_genres'] = seed_genres
+            params['seed_genres'] = ','.join(seed_genres)
         if seed_tracks:
-            params['seed_tracks'] = [self._get_id('track', t) for t in seed_tracks]
+            params['seed_tracks'] = ','.join(
+                [self._get_id('track', t) for t in seed_tracks])
         if country:
             params['market'] = country
 
-        for attribute in ["acousticness", "danceability", "duration_ms", "energy", 
+        for attribute in ["acousticness", "danceability", "duration_ms", "energy",
             "instrumentalness", "key", "liveness", "loudness", "mode", "popularity",
             "speechiness", "tempo", "time_signature", "valence"]:
             for prefix in ["min_", "max_", "target_"]:
                 param = prefix + attribute
                 if param in kwargs:
                     params[param] = kwargs[param]
-        return self._get('recommendations', **params)   
+        return self._get('recommendations', **params)
 
     def recommendation_genre_seeds(self):
-        ''' Get a list of genres available for the recommendations function. 
+        ''' Get a list of genres available for the recommendations function.
         '''
         return self._get('recommendations/available-genre-seeds')
 
