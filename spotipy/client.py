@@ -45,7 +45,7 @@ class Spotify(object):
     max_get_retries = 10
 
     def __init__(self, auth=None, requests_session=True,
-        client_credentials_manager=None):
+                 client_credentials_manager=None, requests_timeout=None):
         '''
         Create a Spotify API object.
 
@@ -57,11 +57,13 @@ class Spotify(object):
             for performance reasons (connection pooling).
         :param client_credentials_manager:
             SpotifyClientCredentials object
-
+        :param requests_timeout:
+            Tell Requests to stop waiting for a response after a given number of seconds
         '''
         self.prefix = 'https://api.spotify.com/v1/'
         self._auth = auth
         self.client_credentials_manager = client_credentials_manager
+        self.requests_timeout = requests_timeout
 
         if isinstance(requests_session, requests.Session):
             self._session = requests_session
@@ -83,6 +85,7 @@ class Spotify(object):
 
     def _internal_call(self, method, url, payload, params):
         args = dict(params=params)
+        args["timeout"] = self.requests_timeout
         if not url.startswith('http'):
             url = self.prefix + url
         headers = self._auth_headers()
