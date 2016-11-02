@@ -1,5 +1,4 @@
-
-# Adds tracks to a playlist
+# shows a user's saved tracks (need to be authenticated via oauth)
 
 import sys
 import spotipy
