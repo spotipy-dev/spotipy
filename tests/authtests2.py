@@ -37,6 +37,10 @@ class AuthTestSpotipy(unittest.TestCase):
     bad_id = 'BAD_ID'
 
 
+    def test_audio_analysis(self):
+        result = spotify.audio_analysis(self.four_tracks[0])
+        assert('beats' in result)
+
     def test_audio_features(self):
         results = spotify.audio_features(self.four_tracks)
         self.assertTrue(len(results) == len(self.four_tracks))
