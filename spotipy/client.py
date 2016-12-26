@@ -395,7 +395,7 @@ class Spotify(object):
                 - collaborative - optional is the playlist collaborative
         '''
         data = {}
-        if name is not None:
+        if isinstance(name, basestring):
             data['name'] = name
         if isinstance(public, bool):
             data['public'] = public
