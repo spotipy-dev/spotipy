@@ -383,7 +383,8 @@ class Spotify(object):
         return self._post("users/%s/playlists" % (user,), payload=data)
 
     def user_playlist_change_details(
-            self, user, playlist_id, name=None, public=None):
+            self, user, playlist_id, name=None, public=None,
+            collaborative=None):
         ''' Changes a playlist's name and/or public/private state
 
             Parameters:
@@ -391,12 +392,15 @@ class Spotify(object):
                 - playlist_id - the id of the playlist
                 - name - optional name of the playlist
                 - public - optional is the playlist public
+                - collaborative - optional is the playlist collaborative
         '''
         data = {}
         if name is not None:
             data['name'] = name
-        if public is not None:
+        if isinstance(public, bool):
             data['public'] = public
+        if isinstance(collaborative, bool):
+            data['collaborative'] = collaborative
         return self._put("users/%s/playlists/%s" % (user, playlist_id),
                          payload=data)
 
