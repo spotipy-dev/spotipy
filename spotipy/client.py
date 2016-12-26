@@ -497,6 +497,17 @@ class Spotify(object):
         return self._delete("users/%s/playlists/%s/tracks" % (user, plid),
                             payload=payload)
 
+    def user_playlist_follow_playlist(self, playlist_owner_id, playlist_id):
+        '''
+        Add the current authenticated user as a follower of a playlist.
+
+        Parameters:
+            - playlist_owner_id - the user id of the playlist owner
+            - playlist_id - the id of the playlist
+
+        '''
+        return self._put("users/{}/playlists/{}/followers".format(playlist_owner_id, playlist_id))
+
     def me(self):
         ''' Get detailed profile information about the current user.
             An alias for the 'current_user' method.
