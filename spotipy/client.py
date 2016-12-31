@@ -7,6 +7,7 @@ import base64
 import requests
 import json
 import time
+import re
 
 ''' A simple and thin Python library for the Spotify Web API
 '''
@@ -190,8 +191,18 @@ class Spotify(object):
             Parameters:
                 - result - a previously returned paged result
         '''
-        if result['next']:
-            return self._get(result['next'])
+        if (result['offset'] + result['limit']) < result['total']:
+            # get new offset
+            offset = 'offset={}'.format(result['offset'] + result['limit'])
+            
+            # update or add offset to result's href string
+            if 'offset' in result['href']:
+                href = re.sub('offset=([0-9]+)', offset, result['href'])
+            else:
+                href = '&'.join(result['href'], offset)
+
+            # call updated href string
+            return self._get(href)
         else:
             return None
 
@@ -201,8 +212,18 @@ class Spotify(object):
             Parameters:
                 - result - a previously returned paged result
         '''
-        if result['previous']:
-            return self._get(result['previous'])
+        if (result['offset'] - result['limit']) >= 0:
+            # get new offset
+            offset = 'offset={}'.format(result['offset'] - result['limit'])
+            
+            # update or add offset to result's href string
+            if 'offset' in result['href']:
+                href = re.sub('offset=([0-9]+)', offset, result['href'])
+            else:
+                href = '&'.join(result['href'], offset)
+
+            # call updated href string
+            return self._get(href)
         else:
             return None
 
@@ -322,7 +343,7 @@ class Spotify(object):
         tlist = [self._get_id('album', a) for a in albums]
         return self._get('albums/?ids=' + ','.join(tlist))
 
-    def search(self, q, limit=10, offset=0, type='track'):
+    def search(self, q, limit=10, offset=0, type='track', market=None):
         ''' searches for an item
 
             Parameters:
@@ -331,8 +352,10 @@ class Spotify(object):
                 - offset - the index of the first item to return
                 - type - the type of item to return. One of 'artist', 'album',
                          'track' or 'playlist'
+                - market - the market results should be limited to
         '''
-        return self._get('search', q=q, limit=limit, offset=offset, type=type)
+        return self._get('search', q=q, limit=limit, offset=offset, type=type, 
+                         market=market)
 
     def user(self, user):
         ''' Gets basic profile information about a Spotify User
