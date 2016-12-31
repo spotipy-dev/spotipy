@@ -78,7 +78,7 @@ class SpotifyClientCredentials(object):
 
     def _is_token_expired(self, token_info):
         now = int(time.time())
-        return token_info['expires_at'] < now
+        return token_info['expires_at'] - now < 60
 
     def _add_custom_values_to_token_info(self, token_info):
         """
