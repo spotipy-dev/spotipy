@@ -12,6 +12,7 @@ class TestSpotipy(unittest.TestCase):
     creep_id = '3HfB5hBU0dmBt8T0iCmH42'
     creep_url = 'http://open.spotify.com/track/3HfB5hBU0dmBt8T0iCmH42'
     el_scorcho_urn = 'spotify:track:0Svkvt5I79wficMFgaqEQJ'
+    el_scorcho_bad_urn = 'spotify:track:0Svkvt5I79wficMFgaqEQK'
     pinkerton_urn = 'spotify:album:04xe676vyiTeYNXw15o9jT'
     weezer_urn = 'spotify:artist:3jOstUTkEu2JkjvRdBA5Gu'
     pablo_honey_urn = 'spotify:album:6AZv3m27uyRxi8KyJSfUxL'
@@ -40,7 +41,7 @@ class TestSpotipy(unittest.TestCase):
     def test_album_tracks(self):
         results = self.spotify.album_tracks(self.pinkerton_urn)
         self.assertTrue(len(results['items']) == 10)
-
+    
     def test_album_tracks_many(self):
         results = self.spotify.album_tracks(self.angeles_haydn_urn)
         tracks = results['items']
@@ -68,6 +69,13 @@ class TestSpotipy(unittest.TestCase):
     def test_track_url(self):
         track = self.spotify.track(self.creep_url)
         self.assertTrue(track['name'] == 'Creep')
+
+    def test_track_bad_urn(self):
+        try:
+            track = self.spotify.track(self.el_scorcho_bad_urn)
+            self.assertTrue(False)
+        except spotipy.SpotifyException:
+            self.assertTrue(True)
 
     def test_tracks(self):
         results = self.spotify.tracks([self.creep_url, self.el_scorcho_urn])
@@ -136,6 +144,13 @@ class TestSpotipy(unittest.TestCase):
     def test_user(self):
         user = self.spotify.user(user='plamere')
         self.assertTrue(user['uri'] == 'spotify:user:plamere')
+
+    def test_track_bad_id(self):
+        try:
+            track = self.spotify.track(self.bad_id)
+            self.assertTrue(False)
+        except spotipy.SpotifyException:
+            self.assertTrue(True)
 
     def test_track_bad_id(self):
         try:
