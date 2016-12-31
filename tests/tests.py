@@ -2,6 +2,7 @@
 import spotipy
 import unittest
 import pprint
+import requests
 from spotipy.client import SpotifyException
 
 
@@ -104,6 +105,15 @@ class TestSpotipy(unittest.TestCase):
                 found = True
 
         self.assertTrue(found)
+
+    def test_search_timeout(self):
+        sp = spotipy.Spotify(requests_timeout=.1)
+        try:
+            results = sp.search(q='my*', type='track')
+            self.assertTrue(False, 'unexpected search timeout')
+        except requests.ReadTimeout:
+            self.assertTrue(True, 'expected search timeout')
+
 
     def test_album_search(self):
         results = self.spotify.search(q='weezer pinkerton', type='album')
