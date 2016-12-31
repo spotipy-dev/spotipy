@@ -6,6 +6,7 @@ import os
 import subprocess
 from . import oauth2
 import spotipy
+import webbrowser
 
 def prompt_for_user_token(username, scope=None, client_id = None,
         client_secret = None, redirect_uri = None):
@@ -67,7 +68,7 @@ def prompt_for_user_token(username, scope=None, client_id = None,
         ''')
         auth_url = sp_oauth.get_authorize_url()
         try:
-            subprocess.call(["open", auth_url])
+            webbrowser.open(auth_url, new=1)
             print("Opening %s in your browser" % auth_url)
         except:
             print("Please navigate here: %s" % auth_url)
