@@ -16,7 +16,7 @@ if __name__ == '__main__':
         username = sys.argv[1]
     else:
         print("Whoops, need your username!")
-        print("usage: python user_playlists.py [username]")
+        print("usage: python user_playlists_contents.py [username]")
         sys.exit()
 
     token = util.prompt_for_user_token(username)
