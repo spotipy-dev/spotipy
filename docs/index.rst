@@ -103,7 +103,19 @@ Register your app at
 <https://developer.spotify.com/my-applications/#!/applications>`_.
 
 
-*Spotipy* provides a
+*spotipy* supports two authorization flows:
+
+  - The **Authorization Code flow** This method is suitable for long-running applications 
+    which the user logs into once. It provides an access token that can be refreshed.
+
+  - The **Client Credentials flow**  The method makes it possible
+    to authenticate your requests to the Spotify Web API and to obtain
+    a higher rate limit than you would
+
+
+Authorization Code Flow
+=======================
+To support the **Authorization Code Flow** *Spotipy* provides a
 utility method ``util.prompt_for_user_token`` that will attempt to authorize the
 user.  You can pass your app credentials directly into the method as arguments,
 or if you are reluctant to immortalize your app credentials in your source code, 
@@ -144,6 +156,31 @@ Here's an example of getting user authorization to read a user's saved tracks::
             print track['name'] + ' - ' + track['artists'][0]['name']
     else:
         print "Can't get token for", username
+
+Client Credentials Flow
+=======================
+To support the **Client Credentials Flow** *Spotipy* provides a
+class SpotifyClientCredentials that can be used to authenticate requests like so::
+
+
+    import spotipy
+    from spotipy.oauth2 import SpotifyClientCredentials
+
+    client_credentials_manager = SpotifyClientCredentials()
+    sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+
+    playlists = sp.user_playlists('spotify')
+    while playlists:
+        for i, playlist in enumerate(playlists['items']):
+            print("%4d %s %s" % (i + 1 + playlists['offset'], playlist['uri'],  playlist['name']))
+        if playlists['next']:
+            playlists = sp.next(playlists)
+        else:
+            playlists = None
+
+Client credentials flow is appropriate for requests that do not require access to a
+user's private data.  Even if you are only making calls that do not require 
+authorization, using this flow yields the benefit of a higher rate limit 
 
 IDs URIs and URLs
 =======================
