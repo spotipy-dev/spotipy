@@ -21,6 +21,7 @@ class SpotifyException(Exception):
         return 'http status: {0}, code:{1} - {2}'.format(
             self.http_status, self.code, self.msg)
 
+
 class Spotify(object):
     '''
         Example usage::
@@ -333,6 +334,14 @@ class Spotify(object):
                 - user - the id of the usr
         '''
         return self._get('users/' + user)
+
+    def current_user_playlists(self, limit=50, offset=0):
+        """ Get current user playlists without required getting his profile
+            Parameters:
+                - limit  - the number of items to return
+                - offset - the index of the first item to return
+        """
+        return self._get("me/playlists", limit=limit, offset=offset)
 
     def user_playlists(self, user, limit=50, offset=0):
         ''' Gets playlists of a user
