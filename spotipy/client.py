@@ -711,6 +711,14 @@ class Spotify(object):
         '''
         return self._get('recommendations/available-genre-seeds')
 
+    def audio_analysis(self, track_id):
+        ''' Get audio analysis for a track based upon its Spotify ID
+            Parameters:
+                - track_id - a track URI, URL or ID
+        '''
+        trid = self._get_id('track', track_id)
+        return self._get('audio-analysis/' + trid)
+
     def audio_features(self, tracks=[]):
         ''' Get audio features for multiple tracks based upon their Spotify IDs
             Parameters:
