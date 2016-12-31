@@ -45,7 +45,7 @@ class Spotify(object):
     max_get_retries = 10
 
     def __init__(self, auth=None, requests_session=True,
-        client_credentials_manager=None):
+        client_credentials_manager=None, proxies=None):
         '''
         Create a Spotify API object.
 
@@ -57,11 +57,14 @@ class Spotify(object):
             for performance reasons (connection pooling).
         :param client_credentials_manager:
             SpotifyClientCredentials object
+        :param proxies:
+            Definition of proxies (optional)
 
         '''
         self.prefix = 'https://api.spotify.com/v1/'
         self._auth = auth
         self.client_credentials_manager = client_credentials_manager
+        self.proxies = proxies
 
         if isinstance(requests_session, requests.Session):
             self._session = requests_session
@@ -93,7 +96,7 @@ class Spotify(object):
 
         if self.trace_out:
             print(url)
-        r = self._session.request(method, url, headers=headers, **args)
+        r = self._session.request(method, url, headers=headers, proxies=self.proxies, **args)
 
         if self.trace:  # pragma: no cover
             print()
@@ -720,12 +723,16 @@ class Spotify(object):
         return self._get('audio-analysis/' + trid)
 
     def audio_features(self, tracks=[]):
-        ''' Get audio features for multiple tracks based upon their Spotify IDs
+        ''' Get audio features for one or multiple tracks based upon their Spotify IDs
             Parameters:
                 - tracks - a list of track URIs, URLs or IDs, maximum: 50 ids
         '''
-        tlist = [self._get_id('track', t) for t in tracks]
-        results =  self._get('audio-features?ids=' + ','.join(tlist))
+        if isinstance(tracks, str):
+            trackid = self._get_id('track', tracks)
+            results = self._get('audio-features/?ids=' + trackid)
+        else:
+            tlist = [self._get_id('track', t) for t in tracks]
+            results = self._get('audio-features/?ids=' + ','.join(tlist))
         # the response has changed, look for the new style first, and if
         # its not there, fallback on the old style
         if 'audio_features' in results:

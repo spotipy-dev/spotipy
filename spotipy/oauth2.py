@@ -23,7 +23,7 @@ class SpotifyOauthError(Exception):
 class SpotifyClientCredentials(object):
     OAUTH_TOKEN_URL = 'https://accounts.spotify.com/api/token'
 
-    def __init__(self, client_id=None, client_secret=None):
+    def __init__(self, client_id=None, client_secret=None, proxies=None):
         """
         You can either provid a client_id and client_secret to the
         constructor or set SPOTIPY_CLIENT_ID and SPOTIPY_CLIENT_SECRET
@@ -44,6 +44,7 @@ class SpotifyClientCredentials(object):
         self.client_id = client_id
         self.client_secret = client_secret
         self.token_info = None
+        self.proxies = proxies
 
     def get_access_token(self):
         """
@@ -70,7 +71,7 @@ class SpotifyClientCredentials(object):
             headers = {'Authorization': 'Basic %s' % auth_header}
 
         response = requests.post(self.OAUTH_TOKEN_URL, data=payload,
-            headers=headers, verify=True)
+            headers=headers, verify=True, proxies=self.proxies)
         if response.status_code is not 200:
             raise SpotifyOauthError(response.reason)
         token_info = response.json()
@@ -205,7 +206,7 @@ class SpotifyOAuth(object):
             headers = {'Authorization': 'Basic %s' % auth_header}
 
         response = requests.post(self.OAUTH_TOKEN_URL, data=payload,
-            headers=headers, verify=True)
+            headers=headers, verify=True, proxies=self.proxies)
         if response.status_code is not 200:
             raise SpotifyOauthError(response.reason)
         token_info = response.json()
@@ -233,7 +234,7 @@ class SpotifyOAuth(object):
             headers = {'Authorization': 'Basic %s' % auth_header}
 
         response = requests.post(self.OAUTH_TOKEN_URL, data=payload,
-            headers=headers)
+            headers=headers, proxies=self.proxies)
         if response.status_code != 200:
             if False:  # debugging code
                 print('headers', headers)
