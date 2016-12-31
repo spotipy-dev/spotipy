@@ -94,6 +94,12 @@ class TestSpotipy(unittest.TestCase):
         self.assertTrue(len(results['artists']['items']) > 0)
         self.assertTrue(results['artists']['items'][0]['name'] == 'Weezer')
 
+    def test_artist_search_with_market(self):
+        results = self.spotify.search(q='weezer', type='artist', market='GB')
+        self.assertTrue('artists' in results)
+        self.assertTrue(len(results['artists']['items']) > 0)
+        self.assertTrue(results['artists']['items'][0]['name'] == 'Weezer')
+
     def test_artist_albums(self):
         results = self.spotify.artist_albums(self.weezer_urn)
         self.assertTrue('items' in results)
