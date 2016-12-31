@@ -12,10 +12,15 @@ import time
 '''
 
 class SpotifyException(Exception):
-    def __init__(self, http_status, code, msg):
+    def __init__(self, http_status, code, msg, headers=None):
         self.http_status = http_status
         self.code = code
         self.msg = msg
+        # `headers` is used to support `Retry-After` in the event of a
+        # 429 status code.
+        if headers is None:
+            headers = {}
+        self.headers = headers
 
     def __str__(self):
         return 'http status: {0}, code:{1} - {2}'.format(
@@ -112,10 +117,11 @@ class Spotify(object):
         except:
             if r.text and len(r.text) > 0 and r.text != 'null':
                 raise SpotifyException(r.status_code,
-                    -1, '%s:\n %s' % (r.url, r.json()['error']['message']))
+                    -1, '%s:\n %s' % (r.url, r.json()['error']['message']),
+                    headers=r.headers)
             else:
                 raise SpotifyException(r.status_code,
-                    -1, '%s:\n %s' % (r.url, 'error'))
+                    -1, '%s:\n %s' % (r.url, 'error'), headers=r.headers)
         finally:
             r.connection.close()
         if r.text and len(r.text) > 0 and r.text != 'null':
@@ -143,8 +149,9 @@ class Spotify(object):
                     if retries < 0:
                         raise
                     else:
-                        print ('retrying ...' + str(delay) + 'secs')
-                        time.sleep(delay)
+                        sleep_seconds = int(e.headers.get('Retry-After', delay))
+                        print ('retrying ...' + str(sleep_seconds) + 'secs')
+                        time.sleep(sleep_seconds)
                         delay += 1
                 else:
                     raise
@@ -155,8 +162,9 @@ class Spotify(object):
                 # been know to throw a BadStatusLine exception
                 retries -= 1
                 if retries >= 0:
+                    sleep_seconds = int(e.headers.get('Retry-After', delay))
                     print ('retrying ...' + str(delay) + 'secs')
-                    time.sleep(delay)
+                    time.sleep(sleep_seconds)
                     delay += 1
                 else:
                     raise
