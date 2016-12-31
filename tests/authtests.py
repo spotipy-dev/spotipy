@@ -86,6 +86,11 @@ class AuthTestSpotipy(unittest.TestCase):
         albums = spotify.current_user_saved_albums()
         self.assertTrue(len(albums['items']) > 0)
 
+    def test_current_user_playlists(self):
+        playlists = spotify.current_user_playlists(limit=10)
+        self.assertTrue('items' in playlists)
+        self.assertTrue(len(playlists['items']) == 10)
+
     def test_current_user_save_and_unsave_tracks(self):
         tracks = spotify.current_user_saved_tracks()
         total = tracks['total']
