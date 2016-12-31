@@ -6,7 +6,7 @@ Spotipy is a thin client library for the Spotify Web API.
 
 ## Documentation
 
-Spotipy's full documentation is online at [Spotipy Documentation](http://spotipy.readthedocs.org/) 
+Spotipy's full documentation is online at [Spotipy Documentation](http://spotipy.readthedocs.org/)
 
 
 ## Installation
@@ -14,7 +14,7 @@ If you already have [Python](http://www.python.org/) on your system you can inst
 
     python setup.py install
 
-You can also install it using a popular package manager with 
+You can also install it using a popular package manager with
 
   `pip install spotipy`
 
@@ -39,7 +39,7 @@ To get started, simply install spotipy, create a Spotify object and call methods
         print ' ', i, t['name']
 
 A full set of examples can be found in the [online documentation](http://spotipy.readthedocs.org/) and in the [Spotipy examples directory](https://github.com/plamere/spotipy/tree/master/examples).
-        
+
 
 ## Reporting Issues
 
@@ -64,7 +64,7 @@ If you have suggestions, bugs or other issues specific to this library, file the
 - v2.0.2 - August 25, 2014 -- Moved to spotipy at pypi
 - v2.1.0 - October 25, 2014 -- Added support for new_releases and featured_playlists
 - v2.2.0 - November 15, 2014 -- Added support for user_playlist_tracks
-- v2.3.0 - January 5, 2015 -- Added session support added by akx. 
+- v2.3.0 - January 5, 2015 -- Added session support added by akx.
 - v2.3.2 - March 31, 2015 -- Added auto retry logic
 - v2.3.3 - April 1, 2015 -- added client credential flow
 - v2.3.5 - April 28, 2015 -- Fixed bug in auto retry logic
