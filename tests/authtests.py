@@ -91,6 +91,19 @@ class AuthTestSpotipy(unittest.TestCase):
         self.assertTrue('items' in playlists)
         self.assertTrue(len(playlists['items']) == 10)
 
+    def test_user_playlist_follow(self):
+        spotify.user_playlist_follow_playlist('plamere', '4erXB04MxwRAVqcUEpu30O')
+        follows = spotify.user_playlist_is_following('plamere', '4erXB04MxwRAVqcUEpu30O', ['plamere'])
+
+        self.assertTrue(len(follows) == 1, 'proper follows length')
+        self.assertTrue(follows[0], 'is following')
+        spotify.user_playlist_unfollow('plamere', '4erXB04MxwRAVqcUEpu30O')
+
+        follows = spotify.user_playlist_is_following('plamere', '4erXB04MxwRAVqcUEpu30O', ['plamere'])
+        self.assertTrue(len(follows) == 1, 'proper follows length')
+        self.assertFalse(follows[0], 'is no longer following')
+
+
     def test_current_user_save_and_unsave_tracks(self):
         tracks = spotify.current_user_saved_tracks()
         total = tracks['total']

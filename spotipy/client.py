@@ -507,6 +507,18 @@ class Spotify(object):
         '''
         return self._put("users/{}/playlists/{}/followers".format(playlist_owner_id, playlist_id))
 
+    def user_playlist_is_following(self, playlist_owner_id, playlist_id, user_ids):
+        '''
+        Check to see if the given users are following the given playlist
+
+        Parameters:
+            - playlist_owner_id - the user id of the playlist owner
+            - playlist_id - the id of the playlist
+            - user_ids - the ids of the users that you want to check to see if they follow the playlist. Maximum: 5 ids.
+
+        '''
+        return self._get("users/{}/playlists/{}/followers/contains?ids={}".format(playlist_owner_id, playlist_id, ','.join(user_ids)))
+
     def me(self):
         ''' Get detailed profile information about the current user.
             An alias for the 'current_user' method.
