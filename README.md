@@ -71,3 +71,4 @@ If you have suggestions, bugs or other issues specific to this library, file the
 - v2.3.6 - June 3, 2015 -- Support for offset/limit with album_tracks API
 - v2.3.7 - August 10, 2015 -- Added current_user_followed_artists
 - v2.3.8 - March 30, 2016 -- Added recs, audio features, user top lists
+- v2.4.0 - December 31, 2016 -- Incorporated a number of PRs
