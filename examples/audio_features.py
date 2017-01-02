@@ -15,14 +15,22 @@ sp.trace=False
 
 if len(sys.argv) > 1:
     artist_name = ' '.join(sys.argv[1:])
-    results = sp.search(q=artist_name, limit=50)
-    tids = []
-    for i, t in enumerate(results['tracks']['items']):
-        print(' ', i, t['name'])
-        tids.append(t['uri'])
+else:
+    artist_name = 'weezer'
 
-    start = time.time()
-    features = sp.audio_features(tids)
-    delta = time.time() - start
-    print(json.dumps(features, indent=4))
-    print ("features retrieved in %.2f seconds" % (delta,))
+results = sp.search(q=artist_name, limit=50)
+tids = []
+for i, t in enumerate(results['tracks']['items']):
+    print(' ', i, t['name'])
+    tids.append(t['uri'])
+
+start = time.time()
+features = sp.audio_features(tids)
+delta = time.time() - start
+for feature in features:
+    print(json.dumps(feature, indent=4))
+    print()
+    analysis = sp._get(feature['analysis_url'])
+    print(json.dumps(analysis, indent=4))
+    print()
+print ("features retrieved in %.2f seconds" % (delta,))
