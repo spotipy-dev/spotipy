@@ -99,7 +99,7 @@ class SpotifyOAuth(object):
     OAUTH_TOKEN_URL = 'https://accounts.spotify.com/api/token'
 
     def __init__(self, client_id, client_secret, redirect_uri,
-            state=None, scope=None, cache_path=None):
+            state=None, scope=None, cache_path=None, proxies=None):
         '''
             Creates a SpotifyOAuth object
 
@@ -118,6 +118,7 @@ class SpotifyOAuth(object):
         self.state=state
         self.cache_path = cache_path
         self.scope=self._normalize_scope(scope)
+        self.proxies = proxies
 
     def get_cached_token(self):
         ''' Gets a cached auth token
