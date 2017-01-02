@@ -74,3 +74,4 @@ If you have suggestions, bugs or other issues specific to this library, file the
 - v2.4.0 - December 31, 2016 -- Incorporated a number of PRs
 - v2.4.1 - January 2, 2017 -- Incorporated proxy support
 - v2.4.2 - January 2, 2017 -- support getting audio features for a single track
+- v2.4.3 - January 2, 2017 -- fixed proxy issue in standard auth flow
