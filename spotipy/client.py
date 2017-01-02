@@ -809,12 +809,16 @@ class Spotify(object):
         return self._get('audio-analysis/' + trid)
 
     def audio_features(self, tracks=[]):
-        ''' Get audio features for multiple tracks based upon their Spotify IDs
+        ''' Get audio features for one or multiple tracks based upon their Spotify IDs
             Parameters:
                 - tracks - a list of track URIs, URLs or IDs, maximum: 50 ids
         '''
-        tlist = [self._get_id('track', t) for t in tracks]
-        results = self._get('audio-features?ids=' + ','.join(tlist))
+        if isinstance(tracks, str):
+            trackid = self._get_id('track', tracks)
+            results = self._get('audio-features/?ids=' + trackid)
+        else:
+            tlist = [self._get_id('track', t) for t in tracks]
+            results = self._get('audio-features/?ids=' + ','.join(tlist))
         # the response has changed, look for the new style first, and if
         # its not there, fallback on the old style
         if 'audio_features' in results:
