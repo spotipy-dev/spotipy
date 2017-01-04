@@ -418,7 +418,12 @@ class Spotify(object):
                 - collaborative - optional is the playlist collaborative
         '''
         data = {}
-        if isinstance(name, str):
+        # Add Python2 and Python3 compatibility checking string types
+        try:
+            basestring
+        except NameError:
+            basestring = str
+        if isinstance(name, basestring):
             data['name'] = name
         if isinstance(public, bool):
             data['public'] = public
