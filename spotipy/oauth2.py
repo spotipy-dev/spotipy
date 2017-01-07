@@ -8,16 +8,17 @@ import time
 import sys
 
 # Workaround to support both python 2 & 3
-try:
-    import urllib.request, urllib.error
-    import urllib.parse as urllibparse
-except ImportError:
-    import urllib as urllibparse
-
+import six
+import six.moves.urllib.parse as urllibparse
 
 
 class SpotifyOauthError(Exception):
     pass
+
+
+def _make_authorization_headers(client_id, client_secret):
+    auth_header = base64.b64encode(six.text_type(client_id + ':' + client_secret).encode('ascii'))
+    return {'Authorization': 'Basic %s' % auth_header.decode('ascii')}
 
 
 class SpotifyClientCredentials(object):
@@ -63,12 +64,7 @@ class SpotifyClientCredentials(object):
         """Gets client credentials access token """
         payload = { 'grant_type': 'client_credentials'}
 
-        if sys.version_info[0] >= 3: # Python 3
-            auth_header = base64.b64encode(str(self.client_id + ':' + self.client_secret).encode())
-            headers = {'Authorization': 'Basic %s' % auth_header.decode()}
-        else: # Python 2
-            auth_header = base64.b64encode(self.client_id + ':' + self.client_secret)
-            headers = {'Authorization': 'Basic %s' % auth_header}
+        headers = _make_authorization_headers(self.client_id, self.client_secret)
 
         response = requests.post(self.OAUTH_TOKEN_URL, data=payload,
             headers=headers, verify=True, proxies=self.proxies)
@@ -189,6 +185,9 @@ class SpotifyOAuth(object):
         except IndexError:
             return None
 
+    def _make_authorization_headers(self):
+        return _make_authorization_headers(self.client_id, self.client_secret)
+
     def get_access_token(self, code):
         """ Gets the access token for the app given the code
 
@@ -204,12 +203,7 @@ class SpotifyOAuth(object):
         if self.state:
             payload['state'] = self.state
 
-        if sys.version_info[0] >= 3: # Python 3
-            auth_header = base64.b64encode(str(self.client_id + ':' + self.client_secret).encode())
-            headers = {'Authorization': 'Basic %s' % auth_header.decode()}
-        else: # Python 2
-            auth_header = base64.b64encode(self.client_id + ':' + self.client_secret)
-            headers = {'Authorization': 'Basic %s' % auth_header}
+        headers = self._make_authorization_headers()
 
         response = requests.post(self.OAUTH_TOKEN_URL, data=payload,
             headers=headers, verify=True, proxies=self.proxies)
@@ -232,12 +226,7 @@ class SpotifyOAuth(object):
         payload = { 'refresh_token': refresh_token,
                    'grant_type': 'refresh_token'}
 
-        if sys.version_info[0] >= 3: # Python 3
-            auth_header = base64.b64encode(str(self.client_id + ':' + self.client_secret).encode())
-            headers = {'Authorization': 'Basic %s' % auth_header.decode()}
-        else: # Python 2
-            auth_header = base64.b64encode(self.client_id + ':' + self.client_secret)
-            headers = {'Authorization': 'Basic %s' % auth_header}
+        headers = self._make_authorization_headers()
 
         response = requests.post(self.OAUTH_TOKEN_URL, data=payload,
             headers=headers, proxies=self.proxies)
