@@ -7,6 +7,9 @@ setup(
     author="@plamere",
     author_email="paul@echonest.com",
     url='http://spotipy.readthedocs.org/',
-    install_requires=['requests>=1.0'],
+    install_requires=[
+        'requests>=1.0',
+        'six>=1.10.0',
+    ],
     license='LICENSE.txt',
     packages=['spotipy'])

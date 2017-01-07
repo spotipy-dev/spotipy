@@ -7,6 +7,8 @@ import requests
 import json
 import time
 
+import six
+
 ''' A simple and thin Python library for the Spotify Web API
 '''
 
@@ -418,12 +420,7 @@ class Spotify(object):
                 - collaborative - optional is the playlist collaborative
         '''
         data = {}
-        # Add Python2 and Python3 compatibility checking string types
-        try:
-            basestring
-        except NameError:
-            basestring = str
-        if isinstance(name, basestring):
+        if isinstance(name, six.string_types):
             data['name'] = name
         if isinstance(public, bool):
             data['public'] = public
