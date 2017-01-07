@@ -39,16 +39,16 @@ def _make_oauth(*args, **kwargs):
 class OAuthCacheTest(unittest.TestCase):
 
     @patch.multiple(SpotifyOAuth,
-                    _is_token_expired=DEFAULT, refresh_access_token=DEFAULT)
+                    is_token_expired=DEFAULT, refresh_access_token=DEFAULT)
     @patch('spotipy.oauth2.open', create=True)
     def test_gets_from_cache_path(self, opener,
-                                  _is_token_expired, refresh_access_token):
+                                  is_token_expired, refresh_access_token):
         scope = "playlist-modify-private"
         path = ".cache-username"
         tok = _make_fake_token(1, 1, scope)
 
         opener.return_value = _token_file(json.dumps(tok, ensure_ascii=False))
-        _is_token_expired.return_value = False
+        is_token_expired.return_value = False
 
         spot = _make_oauth(scope, path)
         cached_tok = spot.get_cached_token()
@@ -58,10 +58,10 @@ class OAuthCacheTest(unittest.TestCase):
         self.assertEqual(refresh_access_token.call_count, 0)
 
     @patch.multiple(SpotifyOAuth,
-                    _is_token_expired=DEFAULT, refresh_access_token=DEFAULT)
+                    is_token_expired=DEFAULT, refresh_access_token=DEFAULT)
     @patch('spotipy.oauth2.open', create=True)
     def test_expired_token_refreshes(self, opener,
-                                     _is_token_expired, refresh_access_token):
+                                     is_token_expired, refresh_access_token):
         scope = "playlist-modify-private"
         path = ".cache-username"
         expired_tok = _make_fake_token(0, None, scope)
@@ -74,22 +74,22 @@ class OAuthCacheTest(unittest.TestCase):
         spot = _make_oauth(scope, path)
         spot.get_cached_token()
 
-        _is_token_expired.assert_called_with(expired_tok)
+        is_token_expired.assert_called_with(expired_tok)
         refresh_access_token.assert_called_with(expired_tok['refresh_token'])
         opener.assert_any_call(path)
 
     @patch.multiple(SpotifyOAuth,
-                    _is_token_expired=DEFAULT, refresh_access_token=DEFAULT)
+                    is_token_expired=DEFAULT, refresh_access_token=DEFAULT)
     @patch('spotipy.oauth2.open', create=True)
     def test_badly_scoped_token_bails(self, opener,
-                                      _is_token_expired, refresh_access_token):
+                                      is_token_expired, refresh_access_token):
         token_scope = "playlist-modify-public"
         requested_scope = "playlist-modify-private"
         path = ".cache-username"
         tok = _make_fake_token(1, 1, token_scope)
 
         opener.return_value = _token_file(json.dumps(tok, ensure_ascii=False))
-        _is_token_expired.return_value = False
+        is_token_expired.return_value = False
 
         spot = _make_oauth(requested_scope, path)
         cached_tok = spot.get_cached_token()
