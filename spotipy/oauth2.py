@@ -162,7 +162,7 @@ class SpotifyOAuth(object):
         now = int(time.time())
         return token_info['expires_at'] < now
 
-    def get_authorize_url(self):
+    def get_authorize_url(self, state=None):
         """ Gets the URL to use to authorize this app
         """
         payload = {'client_id': self.client_id,
@@ -170,8 +170,10 @@ class SpotifyOAuth(object):
                    'redirect_uri': self.redirect_uri}
         if self.scope:
             payload['scope'] = self.scope
-        if self.state:
-            payload['state'] = self.state
+        if state is None:
+            state = self.state
+        if state is not None:
+            payload['state'] = state
 
         urlparams = urllibparse.urlencode(payload)
 
