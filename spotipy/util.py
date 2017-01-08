@@ -2,11 +2,11 @@
 # shows a user's playlists (need to be authenticated via oauth)
 
 from __future__ import print_function
-import oauth2
-import os
-import spotipy
-import subprocess
 
+import os
+from . import oauth2
+import spotipy
+import webbrowser
 
 def prompt_for_user_token(username, scope=None, client_id=None,
                           client_secret=None, redirect_uri=None):
@@ -69,16 +69,20 @@ def prompt_for_user_token(username, scope=None, client_id=None,
         ''')
         auth_url = sp_oauth.get_authorize_url()
         try:
-            subprocess.call(["open", auth_url])
-            print("Opening %s in your browser" % auth_url)
+            webbrowser.open(auth_url)
+            print("Opened %s in your browser" % auth_url)
         except:
             print("Please navigate here: %s" % auth_url)
 
         print()
         print()
-        response = raw_input("Enter the URL you were redirected to: ")
+        try:
+            response = raw_input("Enter the URL you were redirected to: ")
+        except NameError:
+            response = input("Enter the URL you were redirected to: ")
+
         print()
-        print()
+        print() 
 
         code = sp_oauth.parse_response_code(response)
         token_info = sp_oauth.get_access_token(code)

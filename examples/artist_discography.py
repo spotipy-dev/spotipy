@@ -24,7 +24,8 @@ def show_album_tracks(album):
         tracks.extend(results['items'])
     for track in tracks:
         print('  ', track['name'])
-
+        print()
+        print(track)
 
 def show_artist_albums(id):
     albums = []
@@ -36,8 +37,8 @@ def show_artist_albums(id):
     print('Total albums:', len(albums))
     unique = set()  # skip duplicate albums
     for album in albums:
-        name = album['name']
-        if name not in unique:
+        name = album['name'].lower()
+        if name not in unique:  
             print(name)
             unique.add(name)
             show_album_tracks(album)
@@ -54,7 +55,7 @@ if __name__ == '__main__':
     sp.trace = False
 
     if len(sys.argv) < 2:
-        print('Usage: {0} artist name'.format(sys.argv[0]))
+        print(('Usage: {0} artist name'.format(sys.argv[0])))
     else:
         name = ' '.join(sys.argv[1:])
         artist = get_artist(name)

@@ -9,7 +9,7 @@ import spotipy.util as util
 def show_tracks(results):
     for i, item in enumerate(tracks['items']):
         track = item['track']
-        print("   %d %32.32s %s" % (i, track['artists'][0]['name'],
+        print("   %d %32.32s %s" % (i, track['artists'][0]['name'], 
                                     track['name']))
 
 
@@ -18,7 +18,7 @@ if __name__ == '__main__':
         username = sys.argv[1]
     else:
         print("Whoops, need your username!")
-        print("usage: python user_playlists.py [username]")
+        print("usage: python user_playlists_contents.py [username]")
         sys.exit()
 
     token = util.prompt_for_user_token(username)
@@ -32,7 +32,7 @@ if __name__ == '__main__':
                 print()
                 print(playlist['name'])
                 print('  total tracks', playlist['tracks']['total'])
-                results = sp.user_playlist(username, playlist['id'],
+                results = sp.user_playlist(username, playlist['id'], 
                                            fields="tracks,next")
                 tracks = results['tracks']
                 show_tracks(tracks)

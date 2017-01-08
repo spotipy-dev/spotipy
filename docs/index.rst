@@ -98,12 +98,32 @@ Many methods require user authentication. For these requests you will need to
 generate an authorization token that indicates that the user has granted
 permission for your application to perform the given task.  You will need to
 register your app to get the credentials necessary to make authorized calls.
+
+Even if your script does not have an accessible URL you need to specify one
+when registering your application where the spotify authentication API will
+redirect to after successful login. The URL doesn't need to work or be
+accessible, you can specify "http://localhost/", after successful login you
+just need to copy the "http://localhost/?code=..." URL from your browser 
+and paste it to the console where your script is running.
+
 Register your app at 
 `My Applications
 <https://developer.spotify.com/my-applications/#!/applications>`_.
 
 
-*Spotipy* provides a
+*spotipy* supports two authorization flows:
+
+  - The **Authorization Code flow** This method is suitable for long-running applications 
+    which the user logs into once. It provides an access token that can be refreshed.
+
+  - The **Client Credentials flow**  The method makes it possible
+    to authenticate your requests to the Spotify Web API and to obtain
+    a higher rate limit than you would
+
+
+Authorization Code Flow
+=======================
+To support the **Authorization Code Flow** *Spotipy* provides a
 utility method ``util.prompt_for_user_token`` that will attempt to authorize the
 user.  You can pass your app credentials directly into the method as arguments,
 or if you are reluctant to immortalize your app credentials in your source code, 
@@ -117,8 +137,9 @@ Call ``util.prompt_for_user_token`` method with the username and the
 desired scope (see `Using
 Scopes <https://developer.spotify.com/web-api/using-scopes/>`_ for information
 about scopes) and credentials. This will coordinate the user authorization via
-your web browser.  The credentials are cached locally and are used to automatically
-re-authorized expired tokens.
+your web browser and ask for the SPOTIPY_REDIRECT_URI you were redirected to
+with the authorization token appended. The credentials are cached locally and
+are used to automatically re-authorized expired tokens.
 
 Here's an example of getting user authorization to read a user's saved tracks::
 
@@ -144,6 +165,31 @@ Here's an example of getting user authorization to read a user's saved tracks::
             print track['name'] + ' - ' + track['artists'][0]['name']
     else:
         print "Can't get token for", username
+
+Client Credentials Flow
+=======================
+To support the **Client Credentials Flow** *Spotipy* provides a
+class SpotifyClientCredentials that can be used to authenticate requests like so::
+
+
+    import spotipy
+    from spotipy.oauth2 import SpotifyClientCredentials
+
+    client_credentials_manager = SpotifyClientCredentials()
+    sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+
+    playlists = sp.user_playlists('spotify')
+    while playlists:
+        for i, playlist in enumerate(playlists['items']):
+            print("%4d %s %s" % (i + 1 + playlists['offset'], playlist['uri'],  playlist['name']))
+        if playlists['next']:
+            playlists = sp.next(playlists)
+        else:
+            playlists = None
+
+Client credentials flow is appropriate for requests that do not require access to a
+user's private data.  Even if you are only making calls that do not require 
+authorization, using this flow yields the benefit of a higher rate limit 
 
 IDs URIs and URLs
 =======================
@@ -202,7 +248,7 @@ Shows the contents of every playlist owned by a user::
     import spotipy
     import spotipy.util as util
 
-    def show_tracks(results):
+    def show_tracks(tracks):
         for i, item in enumerate(tracks['items']):
             track = item['track']
             print "   %d %32.32s %s" % (i, track['artists'][0]['name'], 
@@ -252,6 +298,7 @@ API Reference
 .. automodule:: spotipy.client
     :members:
     :undoc-members:
+    :special-members: __init__
     :show-inheritance:
 
 :mod:`oauth2` Module
@@ -260,6 +307,7 @@ API Reference
 .. automodule:: spotipy.oauth2
     :members:
     :undoc-members:
+    :special-members: __init__
     :show-inheritance:
 
 :mod:`util` Module
@@ -268,6 +316,7 @@ API Reference
 .. automodule:: spotipy.util
     :members:
     :undoc-members:
+    :special-members: __init__
     :show-inheritance:
 
 
@@ -302,6 +351,7 @@ Spotipy authored by Paul Lamere (plamere) with contributions by:
   - Steve Winton // swinton
   - Tim Balzer // timbalzer 
   - corycorycory // corycorycory 
+  - Nathan Coleman // nathancoleman
 
 License
 =======

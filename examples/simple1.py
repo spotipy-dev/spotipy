@@ -12,5 +12,5 @@ while results['next']:
     albums.extend(results['items'])
 
 for album in albums:
-    print(album['name'])
+    print((album['name']))
 

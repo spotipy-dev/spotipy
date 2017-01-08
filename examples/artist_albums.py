@@ -12,7 +12,7 @@ def get_artist(name):
     else:
         return None
 
-def show_artist_albums(id):
+def show_artist_albums(artist):
     albums = []
     results = sp.artist_albums(artist['id'], album_type='album')
     albums.extend(results['items'])
@@ -24,14 +24,14 @@ def show_artist_albums(id):
     for album in albums:
         name = album['name']
         if name not in seen:
-            print(' ' + name)
+            print((' ' + name))
             seen.add(name)
 
 if __name__ == '__main__':
     sp = spotipy.Spotify()
 
     if len(sys.argv) < 2:
-        print('Usage: {0} artist name'.format(sys.argv[0]))
+        print(('Usage: {0} artist name'.format(sys.argv[0])))
     else:
         name = ' '.join(sys.argv[1:])
         artist = get_artist(name)
