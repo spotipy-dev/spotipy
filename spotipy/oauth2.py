@@ -149,8 +149,10 @@ class SpotifyOAuth(object):
                 pass
 
     def _is_scope_subset(self, needle_scope, haystack_scope):
-        needle_scope = set(needle_scope.split())
-        haystack_scope = set(haystack_scope.split())
+        if needle_scope:
+            needle_scope = set(needle_scope.split())
+        if haystack_scope:
+            haystack_scope = set(haystack_scope.split())
 
         return needle_scope <= haystack_scope
 
