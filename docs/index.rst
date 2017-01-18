@@ -352,6 +352,7 @@ Spotipy authored by Paul Lamere (plamere) with contributions by:
   - Tim Balzer // timbalzer 
   - corycorycory // corycorycory 
   - Nathan Coleman // nathancoleman
+  - Michael Birtwell // mbirtwell
 
 License
 =======
