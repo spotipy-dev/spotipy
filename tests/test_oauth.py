@@ -7,6 +7,7 @@ try:
     import unittest.mock as mock
 except ImportError:
     import mock
+import six.moves.urllib.parse as urllibparse
 
 patch = mock.patch
 DEFAULT = mock.DEFAULT
@@ -112,6 +113,38 @@ class OAuthCacheTest(unittest.TestCase):
 
         opener.assert_called_with(path, 'w')
         self.assertTrue(fi.write.called)
+
+
+class TestSpotifyOAuth(unittest.TestCase):
+
+    def test_get_authorize_url_doesnt_pass_state_by_default(self):
+        oauth = SpotifyOAuth("CLID", "CLISEC", "REDIR")
+
+        url = oauth.get_authorize_url()
+
+        parsed_url = urllibparse.urlparse(url)
+        parsed_qs = urllibparse.parse_qs(parsed_url.query)
+        self.assertNotIn('state', parsed_qs)
+
+    def test_get_authorize_url_passes_state_from_constructor(self):
+        state = "STATE"
+        oauth = SpotifyOAuth("CLID", "CLISEC", "REDIR", state)
+
+        url = oauth.get_authorize_url()
+
+        parsed_url = urllibparse.urlparse(url)
+        parsed_qs = urllibparse.parse_qs(parsed_url.query)
+        self.assertEqual(parsed_qs['state'][0], state)
+
+    def test_get_authorize_url_passes_state_from_func_call(self):
+        state = "STATE"
+        oauth = SpotifyOAuth("CLID", "CLISEC", "REDIR", "NOT STATE")
+
+        url = oauth.get_authorize_url(state=state)
+
+        parsed_url = urllibparse.urlparse(url)
+        parsed_qs = urllibparse.parse_qs(parsed_url.query)
+        self.assertEqual(parsed_qs['state'][0], state)
 
 
 if __name__ == '__main__':
