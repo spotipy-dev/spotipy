@@ -438,6 +438,16 @@ class Spotify(object):
         '''
         return self._delete("users/%s/playlists/%s/followers" % (user, playlist_id))
 
+    def user_playlist_unfollow(self, user, playlist_id):
+        ''' Remove the current user as a follower of a playlist.
+
+            Parameters:
+                - user - the id of the user
+                - playlist_id - the id of the playlist
+        '''
+        plid = self._get_id('playlist', playlist_id)
+        return self._delete("users/%s/playlists/%s/followers" % (user, plid))
+
     def user_playlist_add_tracks(self, user, playlist_id, tracks,
                                  position=None):
         ''' Adds tracks to a playlist
