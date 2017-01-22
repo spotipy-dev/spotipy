@@ -211,8 +211,11 @@ class Spotify(object):
         else:
             return None
 
-    def _warn(self, msg):
+    def _warn_old(self, msg):
         print('warning:' + msg, file=sys.stderr)
+
+    def _warn(self, msg, *args):
+        print('warning:' + msg.format(*args), file=sys.stderr)
 
     def track(self, track_id):
         ''' returns a single track given the track's ID, URI or URL
