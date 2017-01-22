@@ -1,6 +1,5 @@
-
+from __future__ import print_function
 import spotipy
-
 
 lz_uri = 'spotify:artist:36QJpDe2go2KgaRleHCDTp'
 

@@ -1,5 +1,6 @@
 # Delete a track from 'Your Collection' of saved tracks
 
+from __future__ import print_function
 import pprint
 import sys
 

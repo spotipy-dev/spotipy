@@ -7,6 +7,7 @@ python:
   - 3.3
   - 3.4
   - pypy
+  - pypy3
 
 install:
   - pip install coveralls
@@ -14,7 +15,7 @@ install:
 script:
   - python setup.py install
   - coverage run --include=*spotipy* tests/tests.py
-  - for file in examples/*.py; do python $file; done
+  - for file in examples/*.py; do echo "Running" $file; python $file; done
 
 after_success:
   - coverage report
@@ -26,4 +27,6 @@ after_success:
 matrix:
   allow_failures:
     - python: 3.2
+    - python: 3.3
     - python: 3.4
+    - python: pypy3

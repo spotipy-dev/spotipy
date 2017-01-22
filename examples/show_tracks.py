@@ -3,6 +3,7 @@
 
     given a list of track IDs show the artist and track name
 '''
+from __future__ import print_function
 import sys
 import spotipy
 
@@ -11,7 +12,7 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         file = open(sys.argv[1])
     else:
-        file = sys.stdin
+        file = open("examples/long_track_test.dat")
     tids = file.read().split()
 
     sp = spotipy.Spotify()
@@ -19,6 +20,3 @@ if __name__ == '__main__':
         results = sp.tracks(tids[start: start + max_tracks_per_call])
         for track in results['tracks']:
             print(track['name'] + ' - ' + track['artists'][0]['name'])
-
-
-

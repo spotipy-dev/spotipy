@@ -1,9 +1,7 @@
 # shows a user's playlists (need to be authenticated via oauth)
 
-import pprint
+from __future__ import print_function
 import sys
-import os
-import subprocess
 
 import spotipy
 

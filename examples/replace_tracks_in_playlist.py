@@ -1,6 +1,7 @@
 
 # Replaces all tracks in a playlist
 
+from __future__ import print_function
 import pprint
 import sys
 

@@ -1,3 +1,4 @@
+from __future__ import print_function
 import spotipy
 import sys
 
@@ -13,4 +14,3 @@ items = results['artists']['items']
 if len(items) > 0:
     artist = items[0]
     print(artist['name'], artist['images'][0]['url'])
-

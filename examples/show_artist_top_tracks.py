@@ -1,8 +1,8 @@
 # shows artist info for a URN or URL
 
+from __future__ import print_function
 import spotipy
 import sys
-import pprint
 
 if len(sys.argv) > 1:
     urn = sys.argv[1]

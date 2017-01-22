@@ -1,9 +1,9 @@
 
 # shows related artists for the given seed artist
 
+from __future__ import print_function
 import spotipy
 import sys
-import pprint
 
 if len(sys.argv) > 1:
     artist_name = sys.argv[1]
@@ -22,4 +22,3 @@ try:
         print('  ', artist['name'])
 except:
     print("usage show_related.py [artist-name]")
-

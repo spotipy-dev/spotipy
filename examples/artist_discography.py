@@ -1,8 +1,10 @@
+from __future__ import print_function
 import sys
 import spotipy
 
 ''' shows the albums and tracks for a given artist.
 '''
+
 
 def get_artist(name):
     results = sp.search(q='artist:' + name, type='artist')
@@ -11,6 +13,7 @@ def get_artist(name):
         return items[0]
     else:
         return None
+
 
 def show_album_tracks(album):
     tracks = []
@@ -35,10 +38,11 @@ def show_artist_albums(id):
     unique = set()  # skip duplicate albums
     for album in albums:
         name = album['name'].lower()
-        if not name in unique:  
+        if name not in unique:  
             print(name)
             unique.add(name)
             show_album_tracks(album)
+
 
 def show_artist(artist):
     print('====', artist['name'], '====')

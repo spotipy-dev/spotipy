@@ -1,5 +1,7 @@
 # Spotipy - a Python client for The Spotify Web API
 
+[![Build Status](https://travis-ci.org/plamere/spotipy.svg?branch=travis)](https://travis-ci.org/plamere/spotipy)
+
 ## Description
 
 Spotipy is a thin client library for the Spotify Web API.

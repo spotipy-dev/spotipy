@@ -1,5 +1,6 @@
 # Creates a playlist for a user
 
+from __future__ import print_function
 import pprint
 import sys
 import os

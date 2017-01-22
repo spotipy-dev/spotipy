@@ -1,14 +1,16 @@
 # shows a user's playlists (need to be authenticated via oauth)
 
+from __future__ import print_function
 import sys
-import os
 import spotipy
 import spotipy.util as util
+
 
 def show_tracks(results):
     for i, item in enumerate(tracks['items']):
         track = item['track']
-        print("   %d %32.32s %s" % (i, track['artists'][0]['name'], track['name']))
+        print("   %d %32.32s %s" % (i, track['artists'][0]['name'], 
+                                    track['name']))
 
 
 if __name__ == '__main__':
@@ -30,7 +32,8 @@ if __name__ == '__main__':
                 print()
                 print(playlist['name'])
                 print('  total tracks', playlist['tracks']['total'])
-                results = sp.user_playlist(username, playlist['id'], fields="tracks,next")
+                results = sp.user_playlist(username, playlist['id'], 
+                                           fields="tracks,next")
                 tracks = results['tracks']
                 show_tracks(tracks)
                 while tracks['next']:
@@ -38,4 +41,3 @@ if __name__ == '__main__':
                     show_tracks(tracks)
     else:
         print("Can't get token for", username)
-
