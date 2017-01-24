@@ -678,6 +678,18 @@ class Spotify(object):
         r = self._put('me/albums?ids=' + ','.join(alist))
         return r
 
+    def public_playlist(self, user, playlist_id):
+        ''' Return public playlist, given the owner user ID 
+            and playlist ID 
+
+		    Parameters:
+		        - user - playlist owner's User ID
+		        - playlist_id - playlist URI string
+        '''
+
+        plid = self._get_id('playlist', playlist_id)
+        return self._get('users/' + user + '/playlists/' + plid)
+
     def featured_playlists(self, locale=None, country=None, timestamp=None,
                            limit=20, offset=0):
         ''' Get a list of Spotify featured playlists
