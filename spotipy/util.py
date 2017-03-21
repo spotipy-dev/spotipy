@@ -5,7 +5,6 @@ from __future__ import print_function
 import os
 from . import oauth2
 import spotipy
-import webbrowser
 
 def prompt_for_user_token(username, scope=None, client_id = None,
         client_secret = None, redirect_uri = None):
@@ -67,6 +66,7 @@ def prompt_for_user_token(username, scope=None, client_id = None,
         ''')
         auth_url = sp_oauth.get_authorize_url()
         try:
+            import webbrowser
             webbrowser.open(auth_url)
             print("Opened %s in your browser" % auth_url)
         except:
