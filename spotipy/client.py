@@ -842,6 +842,162 @@ class Spotify(object):
         id = self._get_id('track', id)
         return self._get('audio-analysis/'+id)
 
+    def devices(self):
+        ''' Get a list of user's available devices.
+        '''
+        return self._get("me/player/devices")
+
+    def current_playback(self, market = None):
+        ''' Get information about user's current playback.
+
+            Parameters:
+                - market - an ISO 3166-1 alpha-2 country code.
+        '''
+        return self._get("me/player", market = market)
+
+    def currently_playing(self, market = None):
+        ''' Get user's currently playing track.
+
+            Parameters:
+                - market - an ISO 3166-1 alpha-2 country code.
+        '''
+        return self._get("me/player/currently-playing", market = market)
+
+    def transfer_playback(self, device_id, force_play = True):
+        ''' Transfer playback to another device.
+            Note that the API accepts a list of device ids, but only
+            actually supports one.
+
+            Parameters:
+                - device_id - transfer playback to this device
+                - force_play - true: after transfer, play. false:
+                               keep current state.
+        '''
+        data = {
+            'device_ids': [device_id],
+            'play': force_play
+        }
+        return self._put("me/player", payload=data)
+
+    def start_playback(self, device_id = None, context_uri = None, uris = None, offset = None):
+        ''' Start or resume user's playback.
+
+            Provide a `context_uri` to start playback or a album,
+            artist, or playlist.
+
+            Provide a `uris` list to start playback of one or more
+            tracks.
+
+            Provide `offset` as {"position": <int>} or {"uri": "<track uri>"}
+            to start playback at a particular offset.
+
+            Parameters:
+                - device_id - device target for playback
+                - context_uri - spotify context uri to play
+                - uris - spotify track uris
+                - offset - offset into context by index or track
+        '''
+        if context_uri is not None and uris is not None:
+            self._warn('specify either context uri or uris, not both')
+            return
+        if uris is not None and not isinstance(uris, list):
+            self._warn('uris must be a list')
+            return
+        data = {}
+        if context_uri is not None:
+            data['context_uri'] = context_uri
+        if uris is not None:
+            data['uris'] = uris
+        if offset is not None:
+            data['offset'] = offset
+        return self._put(self._append_device_id("me/player/play", device_id), payload=data)
+
+    def pause_playback(self, device_id = None):
+        ''' Pause user's playback.
+
+            Parameters:
+                - device_id - device target for playback
+        '''
+        return self._put(self._append_device_id("me/player/pause", device_id))
+
+    def next_track(self, device_id = None):
+        ''' Skip user's playback to next track.
+
+            Parameters:
+                - device_id - device target for playback
+        '''
+        return self._post(self._append_device_id("me/player/next", device_id))
+
+    def previous_track(self, device_id = None):
+        ''' Skip user's playback to previous track.
+
+            Parameters:
+                - device_id - device target for playback
+        '''
+        return self._post(self._append_device_id("me/player/previous", device_id))
+
+    def seek_track(self, position_ms, device_id = None):
+        ''' Seek to position in current track.
+
+            Parameters:
+                - position_ms - position in milliseconds to seek to
+                - device_id - device target for playback
+        '''
+        if not isinstance(position_ms, int):
+            self._warn('position_ms must be an integer')
+            return
+        return self._put(self._append_device_id("me/player/seek?position_ms=%s" % position_ms, device_id))
+
+    def repeat(self, state, device_id = None):
+        ''' Set repeat mode for playback.
+
+            Parameters:
+                - state - `track`, `context`, or `off`
+                - device_id - device target for playback
+        '''
+        if state not in ['track', 'context', 'off']:
+            self._warn('invalid state')
+            return
+        self._put(self._append_device_id("me/player/repeat?state=%s" % state, device_id))
+
+    def volume(self, volume_percent, device_id = None):
+        ''' Set playback volume.
+
+            Parameters:
+                - volume_percent - volume between 0 and 100
+                - device_id - device target for playback
+        '''
+        if not isinstance(volume_percent, int):
+            self._warn('volume must be an integer')
+            return
+        if volume_percent < 0 or volume_percent > 100:
+            self._warn('volume must be between 0 and 100, inclusive')
+            return
+        self._put(self._append_device_id("me/player/volume?volume_percent=%s" % volume_percent, device_id))
+
+    def shuffle(self, state, device_id = None):
+        ''' Toggle playback shuffling.
+
+            Parameters:
+                - state - true or false
+                - device_id - device target for playback
+        '''
+        if not isinstance(state, bool):
+            self._warn('state must be a boolean')
+            return
+        state = str(state).lower()
+        self._put(self._append_device_id("me/player/shuffle?state=%s" % state, device_id))
+
+    def _append_device_id(self, path, device_id):
+        ''' Append device ID to API path.
+
+            Parameters:
+                - device_id - device id to append
+        '''
+        if device_id:
+            path += "&device_id=%s" % device_id
+        return path
+
     def _get_id(self, type, id):
         fields = id.split(':')
         if len(fields) >= 3:
