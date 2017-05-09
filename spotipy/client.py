@@ -803,6 +803,16 @@ class Spotify(object):
                     params[param] = kwargs[param]
         return self._get('recommendations', **params)
 
+    def user_current_playback(self):
+        ''' Get information about the user's current playback
+        '''
+        return self._get('me/player')
+    
+    def user_available_devices(self):
+        ''' Get user's available devices 
+        '''
+        return self._get('me/player/devices')
+    
     def recommendation_genre_seeds(self):
         ''' Get a list of genres available for the recommendations function.
         '''
