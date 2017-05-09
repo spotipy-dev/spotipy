@@ -811,7 +811,7 @@ class Spotify(object):
     def user_available_devices(self):
         ''' Get user's available devices 
         '''
-        return self._get('/me/player/devices')
+        return self._get('me/player/devices')
     
     def recommendation_genre_seeds(self):
         ''' Get a list of genres available for the recommendations function.
