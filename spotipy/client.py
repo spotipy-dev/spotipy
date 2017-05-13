@@ -573,6 +573,11 @@ class Spotify(object):
         '''
         return self.me()
 
+    def current_user_playing_track(self):
+        ''' Get information about the current users currently playing track.
+        '''
+        return self._get('me/player/currently-playing')
+
     def current_user_saved_albums(self, limit=20, offset=0):
         ''' Gets a list of the albums saved in the current authorized user's
             "Your Music" library
