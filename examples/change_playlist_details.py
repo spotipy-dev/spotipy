@@ -19,9 +19,13 @@ if len(sys.argv) > 3:
     if len(sys.argv) > 5:
         collaborative = sys.argv[5].lower() == 'true'
 
+    description = None
+    if len(sys.argv) > 6:
+        description = sys.argv[6]
+
 else:
-    print ("Usage: %s username playlist_id name [public collaborative]" %
-           (sys.argv[0]))
+    print ("Usage: %s username playlist_id name [public collaborative "
+           "description]" % (sys.argv[0]))
     sys.exit()
 
 scope = 'playlist-modify-public playlist-modify-private'
@@ -32,7 +36,7 @@ if token:
     sp.trace = False
     results = sp.user_playlist_change_details(
         username, playlist_id, name=name, public=public,
-        collaborative=collaborative)
+        collaborative=collaborative, description=description)
     print results
 else:
     print "Can't get token for", username
