@@ -399,20 +399,21 @@ class Spotify(object):
                          limit=limit, offset=offset, fields=fields,
                          market=market)
 
-    def user_playlist_create(self, user, name, public=True):
+    def user_playlist_create(self, user, name, public=True, description=''):
         ''' Creates a playlist for a user
 
             Parameters:
                 - user - the id of the user
                 - name - the name of the playlist
                 - public - is the created playlist public
+                - description - the description of the playlist
         '''
-        data = {'name': name, 'public': public}
+        data = {'name': name, 'public': public, 'description': description}
         return self._post("users/%s/playlists" % (user,), payload=data)
 
     def user_playlist_change_details(
             self, user, playlist_id, name=None, public=None,
-            collaborative=None):
+            collaborative=None, description=None):
         ''' Changes a playlist's name and/or public/private state
 
             Parameters:
@@ -421,6 +422,7 @@ class Spotify(object):
                 - name - optional name of the playlist
                 - public - optional is the playlist public
                 - collaborative - optional is the playlist collaborative
+                - description - optional description of the playlist
         '''
         data = {}
         if isinstance(name, six.string_types):
@@ -429,6 +431,8 @@ class Spotify(object):
             data['public'] = public
         if isinstance(collaborative, bool):
             data['collaborative'] = collaborative
+        if isinstance(description, six.string_types):
+            data['description'] = description
         return self._put("users/%s/playlists/%s" % (user, playlist_id),
                          payload=data)
 
