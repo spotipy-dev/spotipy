@@ -53,7 +53,8 @@ class Spotify(object):
     max_get_retries = 10
 
     def __init__(self, auth=None, requests_session=True,
-        client_credentials_manager=None, proxies=None, requests_timeout=None):
+                 client_credentials_manager=None, proxies=None,
+                 requests_timeout=None):
         '''
         Create a Spotify API object.
 
@@ -107,7 +108,11 @@ class Spotify(object):
 
         if self.trace_out:
             print(url)
-        r = self._session.request(method, url, headers=headers, proxies=self.proxies, **args)
+        r = self._session.request(method,
+                                  url,
+                                  headers=headers,
+                                  proxies=self.proxies,
+                                  **args)
 
         if self.trace:  # pragma: no cover
             print()
@@ -121,12 +126,17 @@ class Spotify(object):
             r.raise_for_status()
         except:
             if r.text and len(r.text) > 0 and r.text != 'null':
-                raise SpotifyException(r.status_code,
-                    -1, '%s:\n %s' % (r.url, r.json()['error']['message']),
+                raise SpotifyException(
+                    r.status_code,
+                    -1,
+                    '%s:\n %s' % (r.url, r.json()['error']['message']),
                     headers=r.headers)
             else:
-                raise SpotifyException(r.status_code,
-                    -1, '%s:\n %s' % (r.url, 'error'), headers=r.headers)
+                raise SpotifyException(
+                    r.status_code,
+                    -1,
+                    '%s:\n %s' % (r.url, 'error'),
+                    headers=r.headers)
         finally:
             r.connection.close()
         if r.text and len(r.text) > 0 and r.text != 'null':
@@ -154,7 +164,8 @@ class Spotify(object):
                     if retries < 0:
                         raise
                     else:
-                        sleep_seconds = int(e.headers.get('Retry-After', delay))
+                        sleep_seconds = int(e.headers.get('Retry-After',
+                                                          delay))
                         print ('retrying ...' + str(sleep_seconds) + 'secs')
                         time.sleep(sleep_seconds + 1)
                         delay += 1
@@ -227,7 +238,7 @@ class Spotify(object):
         trid = self._get_id('track', track_id)
         return self._get('tracks/' + trid)
 
-    def tracks(self, tracks, market = None):
+    def tracks(self, tracks, market=None):
         ''' returns a list of tracks given a list of track IDs, URIs, or URLs
 
             Parameters:
@@ -236,7 +247,7 @@ class Spotify(object):
         '''
 
         tlist = [self._get_id('track', t) for t in tracks]
-        return self._get('tracks/?ids=' + ','.join(tlist), market = market)
+        return self._get('tracks/?ids=' + ','.join(tlist), market=market)
 
     def artist(self, artist_id):
         ''' returns a single artist given the artist's ID, URI or URL
@@ -547,9 +558,14 @@ class Spotify(object):
             - playlist_id - the id of the playlist
 
         '''
-        return self._put("users/{}/playlists/{}/followers".format(playlist_owner_id, playlist_id))
+        return self._put(
+            "users/{}/playlists/{}/followers".format(
+                playlist_owner_id, playlist_id))
 
-    def user_playlist_is_following(self, playlist_owner_id, playlist_id, user_ids):
+    def user_playlist_is_following(self,
+                                   playlist_owner_id,
+                                   playlist_id,
+                                   user_ids):
         '''
         Check to see if the given users are following the given playlist
 
@@ -834,14 +850,6 @@ class Spotify(object):
         else:
             return results
 
-    def audio_analysis(self, id):
-        ''' Get audio analysis for a track based upon its Spotify ID
-            Parameters:
-                - id - a track URIs, URLs or IDs
-        '''
-        id = self._get_id('track', id)
-        return self._get('audio-analysis/'+id)
-
     def _get_id(self, type, id):
         fields = id.split(':')
         if len(fields) >= 3:
@@ -860,3 +868,28 @@ class Spotify(object):
 
     def _get_uri(self, type, id):
         return 'spotify:' + type + ":" + self._get_id(type, id)
+
+    def get_devices(self):
+        '''
+        Gets the available devices.
+        '''
+        results = self._get('me/player/devices')
+        return results
+
+    def set_device(self, device_id, play=True):
+        '''
+        Set the active device, with an optional play parameter.
+        '''
+        data = {}
+        data['device_ids'] = [device_id]
+        data['play'] = play
+        return self._put("me/player", payload=data)
+
+    def play_track(self, device_id, spotify_uri):
+        '''
+        Play a track on a specified device.
+        '''
+        data = {}
+        data['device_id'] = device_id
+        data['uris'] = [spotify_uri]
+        return self._put("me/player/play", payload=data)
