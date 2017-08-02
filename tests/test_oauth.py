@@ -146,6 +146,24 @@ class TestSpotifyOAuth(unittest.TestCase):
         parsed_qs = urllibparse.parse_qs(parsed_url.query)
         self.assertEqual(parsed_qs['state'][0], state)
 
+    def test_get_authorize_url_does_not_show_dialog_by_default(self):
+        oauth = SpotifyOAuth("CLID", "CLISEC", "REDIR")
+
+        url = oauth.get_authorize_url()
+
+        parsed_url = urllibparse.urlparse(url)
+        parsed_qs = urllibparse.parse_qs(parsed_url.query)
+        self.assertNotIn('show_dialog', parsed_qs)
+
+    def test_get_authorize_url_shows_dialog_when_requested(self):
+        oauth = SpotifyOAuth("CLID", "CLISEC", "REDIR")
+
+        url = oauth.get_authorize_url(show_dialog=True)
+
+        parsed_url = urllibparse.urlparse(url)
+        parsed_qs = urllibparse.parse_qs(parsed_url.query)
+        self.assertTrue(parsed_qs['show_dialog'])
+
 
 if __name__ == '__main__':
     unittest.main()
