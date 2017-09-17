@@ -73,7 +73,7 @@ class SpotifyClientCredentials(object):
 
         response = requests.post(self.OAUTH_TOKEN_URL, data=payload,
             headers=headers, verify=True, proxies=self.proxies)
-        if response.status_code is not 200:
+        if response.status_code != 200:
             raise SpotifyOauthError(response.reason)
         token_info = response.json()
         return token_info
@@ -153,17 +153,14 @@ class SpotifyOAuth(object):
                 pass
 
     def _is_scope_subset(self, needle_scope, haystack_scope):
-        if needle_scope:
-            needle_scope = set(needle_scope.split())
-        if haystack_scope:
-            haystack_scope = set(haystack_scope.split())
-
+        needle_scope = set(needle_scope.split()) if needle_scope else set()
+        haystack_scope = set(haystack_scope.split()) if haystack_scope else set()
         return needle_scope <= haystack_scope
 
     def is_token_expired(self, token_info):
         return is_token_expired(token_info)
 
-    def get_authorize_url(self, state=None):
+    def get_authorize_url(self, state=None, show_dialog=False):
         """ Gets the URL to use to authorize this app
         """
         payload = {'client_id': self.client_id,
@@ -175,6 +172,8 @@ class SpotifyOAuth(object):
             state = self.state
         if state is not None:
             payload['state'] = state
+        if show_dialog:
+            payload['show_dialog'] = True
 
         urlparams = urllibparse.urlencode(payload)
 
@@ -214,7 +213,7 @@ class SpotifyOAuth(object):
 
         response = requests.post(self.OAUTH_TOKEN_URL, data=payload,
             headers=headers, verify=True, proxies=self.proxies)
-        if response.status_code is not 200:
+        if response.status_code != 200:
             raise SpotifyOauthError(response.reason)
         token_info = response.json()
         token_info = self._add_custom_values_to_token_info(token_info)

@@ -5,10 +5,9 @@ from __future__ import print_function
 import os
 from . import oauth2
 import spotipy
-import webbrowser
 
 def prompt_for_user_token(username, scope=None, client_id = None,
-        client_secret = None, redirect_uri = None):
+        client_secret = None, redirect_uri = None, cache_path = None):
     ''' prompts the user to login if necessary and returns
         the user token suitable for use with the spotipy.Spotify 
         constructor
@@ -20,6 +19,7 @@ def prompt_for_user_token(username, scope=None, client_id = None,
          - client_id - the client id of your app
          - client_secret - the client secret of your app
          - redirect_uri - the redirect URI of your app
+         - cache_path - path to location to save tokens
 
     '''
 
@@ -46,8 +46,9 @@ def prompt_for_user_token(username, scope=None, client_id = None,
         ''')
         raise spotipy.SpotifyException(550, -1, 'no credentials set')
 
+    cache_path = cache_path or ".cache-" + username
     sp_oauth = oauth2.SpotifyOAuth(client_id, client_secret, redirect_uri, 
-        scope=scope, cache_path=".cache-" + username )
+        scope=scope, cache_path=cache_path)
 
     # try to get a valid token for this user, from the cache,
     # if not in the cache, the create a new (this will send
@@ -67,6 +68,7 @@ def prompt_for_user_token(username, scope=None, client_id = None,
         ''')
         auth_url = sp_oauth.get_authorize_url()
         try:
+            import webbrowser
             webbrowser.open(auth_url)
             print("Opened %s in your browser" % auth_url)
         except:
