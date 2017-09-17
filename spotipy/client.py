@@ -691,6 +691,20 @@ class Spotify(object):
         r = self._put('me/albums?ids=' + ','.join(alist))
         return r
 
+    def user_follow_artists(self, ids=[]):
+        ''' Follow one or more artists
+            Parameters:
+                - ids - a list of artist IDs
+        '''
+        return self._put('me/following?type=artist&ids=' + ','.join(ids))
+
+    def user_follow_users(self, ids=[]):
+        ''' Follow one or more users
+            Parameters:
+                - ids - a list of user IDs
+        '''
+        return self._put('me/following?type=user&ids=' + ','.join(ids))
+
     def featured_playlists(self, locale=None, country=None, timestamp=None,
                            limit=20, offset=0):
         ''' Get a list of Spotify featured playlists
