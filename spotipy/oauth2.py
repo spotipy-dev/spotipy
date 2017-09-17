@@ -160,7 +160,7 @@ class SpotifyOAuth(object):
     def is_token_expired(self, token_info):
         return is_token_expired(token_info)
 
-    def get_authorize_url(self, state=None):
+    def get_authorize_url(self, state=None, show_dialog=False):
         """ Gets the URL to use to authorize this app
         """
         payload = {'client_id': self.client_id,
@@ -172,6 +172,8 @@ class SpotifyOAuth(object):
             state = self.state
         if state is not None:
             payload['state'] = state
+        if show_dialog:
+            payload['show_dialog'] = True
 
         urlparams = urllibparse.urlencode(payload)
 
