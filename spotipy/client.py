@@ -238,6 +238,21 @@ class Spotify(object):
         tlist = [self._get_id('track', t) for t in tracks]
         return self._get('tracks/?ids=' + ','.join(tlist), market = market)
 
+    def me_player_pause(self):
+        """ pauses the spotify player (requires modify player scope)
+        
+        """
+        return self._put('me/player/pause')
+    
+    def me_player_currently_playing(self):
+        """ pauses the spotify player (requires modify player scope)
+        
+        """
+        return self._put('me/player/currently-playing')
+    
+    def me_player_play(self):
+        return self._put('me/player/play')
+    
     def artist(self, artist_id):
         """ returns a single artist given the artist's ID, URI or URL
 
