@@ -370,6 +370,15 @@ class Spotify(object):
         return self._get("users/%s/playlists" % user, limit=limit,
                          offset=offset)
 
+    def recently_played(self, limit=50):
+
+        ''' Gets recently played tracks of current user
+
+            Parameters:
+                - limit  - the number of items to return
+        '''
+        return self._get("me/player/recently-played", limit=limit)
+
     def user_playlist(self, user, playlist_id=None, fields=None):
         ''' Gets playlist of a user
             Parameters:
