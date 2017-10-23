@@ -33,4 +33,4 @@ for feature in features:
     analysis = sp._get(feature['analysis_url'])
     print(json.dumps(analysis, indent=4))
     print()
-print ("features retrieved in %.2f seconds" % (delta,))
+print("features retrieved in %.2f seconds" % (delta,))
