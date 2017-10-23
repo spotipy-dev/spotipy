@@ -21,7 +21,7 @@ def find_songs_that_start_with_word(word):
 
     out = []
     while  offset < max_offset and len(out) < max_titles:
-        results = sp.search(q=word, type = 'track', limit=50, offset = offset)
+        results = sp.search(q=word, type='track', limit=50, offset=offset)
         if len(results['tracks']['items']) == 0:
             break
 

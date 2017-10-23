@@ -19,7 +19,7 @@ def get_artist(name):
 
 def show_recommendations_for_artist(artist):
     albums = []
-    results = sp.recommendations(seed_artists = [artist['id']])
+    results = sp.recommendations(seed_artists=[artist['id']])
     for track in results['tracks']:
         print track['name'], '-', track['artists'][0]['name']
 
