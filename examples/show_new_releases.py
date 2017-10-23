@@ -2,7 +2,6 @@
 
 import spotipy
 import sys
-import pprint
 import spotipy.util as util
 
 if len(sys.argv) > 1:

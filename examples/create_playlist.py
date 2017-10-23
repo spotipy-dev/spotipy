@@ -2,8 +2,6 @@
 
 import pprint
 import sys
-import os
-import subprocess
 
 import spotipy
 import spotipy.util as util

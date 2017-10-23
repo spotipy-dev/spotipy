@@ -3,7 +3,6 @@
 
 import spotipy
 import sys
-import pprint
 
 if len(sys.argv) > 1:
     artist_name = sys.argv[1]

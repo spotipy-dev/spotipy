@@ -1,11 +1,9 @@
 # Shows the top artists for a user
 
-import pprint
 import sys
 
 import spotipy
 import spotipy.util as util
-import simplejson as json
 
 if len(sys.argv) > 1:
     username = sys.argv[1]
