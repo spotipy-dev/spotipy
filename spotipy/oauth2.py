@@ -81,11 +81,12 @@ class SpotifyClientCredentials(object):
     def is_token_expired(self):
         return is_token_expired(self.token_info)
 
-    def _add_custom_values_to_token_info(self, token_info):
+    def _add_custom_values_to_token_info(self):
         """
         Store some values that aren't directly provided by a Web API
         response.
         """
+        token_info = self.token_info
         token_info['expires_at'] = int(time.time()) + token_info['expires_in']
         return token_info
 
