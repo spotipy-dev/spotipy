@@ -29,7 +29,7 @@ def is_token_expired(token_info):
 class SpotifyClientCredentials(object):
     OAUTH_TOKEN_URL = 'https://accounts.spotify.com/api/token'
 
-    def __init__(self, client_id=None, client_secret=None, proxies=None):
+    def __init__(self, client_id=None, client_secret=None, proxies=None, requests_timeout=None):
         """
         You can either provid a client_id and client_secret to the
         constructor or set SPOTIPY_CLIENT_ID and SPOTIPY_CLIENT_SECRET
@@ -51,6 +51,7 @@ class SpotifyClientCredentials(object):
         self.client_secret = client_secret
         self.token_info = None
         self.proxies = proxies
+        self.requests_timeout = requests_timeout
 
     def get_access_token(self):
         """
@@ -72,7 +73,7 @@ class SpotifyClientCredentials(object):
         headers = _make_authorization_headers(self.client_id, self.client_secret)
 
         response = requests.post(self.OAUTH_TOKEN_URL, data=payload,
-            headers=headers, verify=True, proxies=self.proxies)
+            headers=headers, verify=True, proxies=self.proxies, timeout=self.requests_timeout)
         if response.status_code != 200:
             raise SpotifyOauthError(response.reason)
         token_info = response.json()
@@ -99,7 +100,7 @@ class SpotifyOAuth(object):
     OAUTH_TOKEN_URL = 'https://accounts.spotify.com/api/token'
 
     def __init__(self, client_id, client_secret, redirect_uri,
-            state=None, scope=None, cache_path=None, proxies=None):
+            state=None, scope=None, cache_path=None, proxies=None, requests_timeout=None):
         '''
             Creates a SpotifyOAuth object
 
@@ -110,6 +111,8 @@ class SpotifyOAuth(object):
                  - state - security state
                  - scope - the desired scope of the request
                  - cache_path - path to location to save tokens
+                 - requests_timeout - tell Requests to stop waiting for a response after a given number of seconds
+
         '''
 
         self.client_id = client_id
@@ -119,6 +122,7 @@ class SpotifyOAuth(object):
         self.cache_path = cache_path
         self.scope=self._normalize_scope(scope)
         self.proxies = proxies
+        self.requests_timeout = requests_timeout
 
     def get_cached_token(self):
         ''' Gets a cached auth token
@@ -212,7 +216,7 @@ class SpotifyOAuth(object):
         headers = self._make_authorization_headers()
 
         response = requests.post(self.OAUTH_TOKEN_URL, data=payload,
-            headers=headers, verify=True, proxies=self.proxies)
+            headers=headers, verify=True, proxies=self.proxies, timeout=self.requests_timeout)
         if response.status_code != 200:
             raise SpotifyOauthError(response.reason)
         token_info = response.json()
@@ -235,7 +239,7 @@ class SpotifyOAuth(object):
         headers = self._make_authorization_headers()
 
         response = requests.post(self.OAUTH_TOKEN_URL, data=payload,
-            headers=headers, proxies=self.proxies)
+            headers=headers, proxies=self.proxies, timeout=self.requests_timeout)
         if response.status_code != 200:
             if False:  # debugging code
                 print('headers', headers)
