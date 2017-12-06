@@ -13,7 +13,7 @@ released by the artist 'Birdy'::
     import spotipy
 
     birdy_uri = 'spotify:artist:2WX2uTcsvV5OnS0inACecP'
-    spotify = spotipy.Spotify()
+    spotify = spotipy.Spotify(auth=<token>)
 
     results = spotify.artist_albums(birdy_uri, album_type='album')
     albums = results['items']
@@ -31,7 +31,7 @@ for the top 10 tracks for Led Zeppelin::
 
     lz_uri = 'spotify:artist:36QJpDe2go2KgaRleHCDTp'
 
-    spotify = spotipy.Spotify()
+    spotify = spotipy.Spotify(auth=<token>)
     results = spotify.artist_top_tracks(lz_uri)
 
     for track in results['tracks'][:10]:
@@ -46,7 +46,7 @@ artist's name::
     import spotipy
     import sys
 
-    spotify = spotipy.Spotify()
+    spotify = spotipy.Spotify(auth=<token>)
 
     if len(sys.argv) > 1:
         name = ' '.join(sys.argv[1:])
@@ -82,21 +82,11 @@ Or you can get the source from github at https://github.com/plamere/spotipy
 Getting Started
 ===============
 
-Non-Authorized requests
+Authorization
 =======================
-For methods that do not require authorization, simply create a Spotify object
-and start making method calls like so::
-
-    import spotipy
-    spotify = spotipy.Spotify()
-    results = spotify.search(q='artist:' + name, type='artist')
-    print results
-
-Authorized requests
-=======================
-Many methods require user authentication. For these requests you will need to
+All methods require authorization. You will need to
 generate an authorization token that indicates that the user has granted
-permission for your application to perform the given task.  You will need to
+permission for your application to perform the given task. You will need to
 register your app to get the credentials necessary to make authorized calls.
 
 Even if your script does not have an accessible URL you need to specify one
@@ -191,8 +181,7 @@ class SpotifyClientCredentials that can be used to authenticate requests like so
             playlists = None
 
 Client credentials flow is appropriate for requests that do not require access to a
-user's private data.  Even if you are only making calls that do not require 
-authorization, using this flow yields the benefit of a higher rate limit 
+user's private data.
 
 IDs URIs and URLs
 =======================
