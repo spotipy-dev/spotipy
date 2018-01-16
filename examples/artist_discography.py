@@ -1,3 +1,4 @@
+from spotipy.oauth2 import SpotifyClientCredentials
 import sys
 import spotipy
 
@@ -47,7 +48,8 @@ def show_artist(artist):
         print('Genres: ', ','.join(artist['genres']))
 
 if __name__ == '__main__':
-    sp = spotipy.Spotify()
+    client_credentials_manager = SpotifyClientCredentials()
+    sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
     sp.trace = False
 
     if len(sys.argv) < 2:

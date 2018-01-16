@@ -1,9 +1,13 @@
 # shows tracks for the given artist
 
+# usage: python tracks.py [artist name]
 
+from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy
 import sys
-sp = spotipy.Spotify()
+
+client_credentials_manager = SpotifyClientCredentials()
+sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
 if len(sys.argv) > 1:
     artist_name = ' '.join(sys.argv[1:])

@@ -1,3 +1,4 @@
+from spotipy.oauth2 import SpotifyClientCredentials
 import sys
 import spotipy
 
@@ -28,7 +29,8 @@ def show_artist_albums(artist):
             seen.add(name)
 
 if __name__ == '__main__':
-    sp = spotipy.Spotify()
+    client_credentials_manager = SpotifyClientCredentials()
+    sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
     if len(sys.argv) < 2:
         print(('Usage: {0} artist name'.format(sys.argv[0])))
