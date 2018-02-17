@@ -24,6 +24,7 @@ import simplejson as json
 sys.path.insert(0, os.path.abspath(os.pardir))
 
 from spotipy import (
+    CLIENT_CREDS_ENV_VARS as CCEV,
     prompt_for_user_token,
     Spotify,
     SpotifyException,
@@ -60,13 +61,13 @@ class AuthTestSpotipy(unittest.TestCase):
 
     @classmethod
     def setUpClass(self):
-        client_cred_env_vars = ['SPOTIPY_CLIENT_USERNAME', 'SPOTIPY_CLIENT_ID', 'SPOTIPY_CLIENT_SECRET', 'SPOTIPY_REDIRECT_URI']
-        missing = filter(lambda var: not os.getenv(var), client_cred_env_vars)
+
+        missing = filter(lambda var: not os.getenv(CCEV[var]), CCEV)
 
         if missing:
-            raise Exception('Please set the client credetials for the test application using the following environment variables: {}'.format(client_cred_env_vars))
+            raise Exception('Please set the client credentials for the test application using the following environment variables: {}'.format(CCEV.values()))
 
-        self.username = os.getenv('SPOTIPY_CLIENT_USERNAME')
+        self.username = os.getenv(CCEV['client_username'])
 
         self.scope = (
             'playlist-modify-public '
