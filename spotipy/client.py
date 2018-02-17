@@ -1,16 +1,21 @@
-# coding: utf-8
+# -*- coding: utf-8 -*-
 
+""" A simple and thin Python library for the Spotify Web API """
 
 from __future__ import print_function
-import sys
-import requests
+
+__all__ = [
+    'Spotify',
+    'SpotifyException'
+]
+
 import json
+import sys
 import time
 
+import requests
 import six
 
-""" A simple and thin Python library for the Spotify Web API
-"""
 
 
 class SpotifyException(Exception):

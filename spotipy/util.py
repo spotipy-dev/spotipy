@@ -1,9 +1,17 @@
+# -*- coding: utf-8 -*-
 
-# shows a user's playlists (need to be authenticated via oauth)
+""" Shows a user's playlists (need to be authenticated via oauth) """
 
 from __future__ import print_function
+
+__all__ = [
+    'prompt_for_user_token9'
+]
+
 import os
+
 from . import oauth2
+
 import spotipy
 
 def prompt_for_user_token(username, scope=None, client_id = None,
