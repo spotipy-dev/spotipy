@@ -5,6 +5,7 @@
 from __future__ import print_function
 
 __all__ = [
+    'CLIENT_CREDS_ENV_VARS',
     'prompt_for_user_token'
 ]
 
@@ -13,6 +14,13 @@ import os
 from . import oauth2
 
 import spotipy
+
+CLIENT_CREDS_ENV_VARS = {
+    'client_id': 'SPOTIPY_CLIENT_ID',
+    'client_secret': 'SPOTIPY_CLIENT_SECRET',
+    'client_username': 'SPOTIPY_CLIENT_USERNAME',
+    'redirect_uri': 'SPOTIPY_REDIRECT_URI'
+}
 
 def prompt_for_user_token(username, scope=None, client_id = None,
         client_secret = None, redirect_uri = None, cache_path = None):
