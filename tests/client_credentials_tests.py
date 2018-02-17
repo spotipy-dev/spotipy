@@ -1,27 +1,36 @@
-# -*- coding: latin-1 -*-
+# -*- coding: utf-8 -*-
 
-import spotipy
-from  spotipy.oauth2 import SpotifyClientCredentials
+""" Client Credentials Requests Tests """
+
+import os
+import sys
 import unittest
 
-'''
-    Client Credentials Requests Tests
-'''
+sys.path.insert(0, os.path.abspath(os.pardir))
+
+from  spotipy import (
+    Spotify,
+    SpotifyClientCredentials,
+)
+
 
 class ClientCredentialsTestSpotipy(unittest.TestCase):
     '''
         These tests require user authentication
     '''
 
+    @classmethod
+    def setUpClass(self):
+        self.spotify = Spotify(client_credentials_manager=SpotifyClientCredentials())
+        self.spotify.trace = False
+
     muse_urn = 'spotify:artist:12Chz98pHFMPJEknJQMWvI'
 
     def test_request_with_token(self):
-        artist = spotify.artist(self.muse_urn)
+        artist = self.spotify.artist(self.muse_urn)
         self.assertTrue(artist['name'] == 'Muse')
 
 
 if __name__ == '__main__':
-    spotify_cc = SpotifyClientCredentials()
-    spotify = spotipy.Spotify(client_credentials_manager=spotify_cc)
-    spotify.trace = False
+
     unittest.main()

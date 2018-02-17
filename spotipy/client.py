@@ -60,7 +60,7 @@ class Spotify(object):
     def __init__(self, auth=None, requests_session=True,
         client_credentials_manager=None, proxies=None, requests_timeout=None):
         """
-        Create a Spotify API object.
+        Creates a Spotify API client.
 
         :param auth: An authorization token (optional)
         :param requests_session:
