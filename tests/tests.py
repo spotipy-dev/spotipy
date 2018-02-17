@@ -18,6 +18,18 @@ from spotipy import (
 
 class TestSpotipy(unittest.TestCase):
 
+    """
+    These tests require user authentication - provide client credentials using the
+    following environment variables
+
+    ::
+
+        'SPOTIPY_CLIENT_USERNAME'
+        'SPOTIPY_CLIENT_ID'
+        'SPOTIPY_CLIENT_SECRET'
+        'SPOTIPY_REDIRECT_URI'
+    """
+
     creep_urn = 'spotify:track:3HfB5hBU0dmBt8T0iCmH42'
     creep_id = '3HfB5hBU0dmBt8T0iCmH42'
     creep_url = 'http://open.spotify.com/track/3HfB5hBU0dmBt8T0iCmH42'
@@ -34,12 +46,19 @@ class TestSpotipy(unittest.TestCase):
 
     @classmethod
     def setUpClass(self):
-        self.token = os.getenv('SPOTIPY_CLIENT_TOKEN')
-        if not self.token:
-            raise Exception('Set your Spotify client app token via the environment variable `SPOTIPY_CLIENT_TOKEN`')
+        client_cred_env_vars = ['SPOTIPY_CLIENT_USERNAME', 'SPOTIPY_CLIENT_ID', 'SPOTIPY_CLIENT_SECRET', 'SPOTIPY_REDIRECT_URI']
+        missing = filter(lambda var: not os.getenv(var), client_cred_env_vars)
+
+        if missing:
+            raise Exception('Please set the client credetials for the test application using the following environment variables: {}'.format(client_cred_env_vars))
+
+        self.username = os.getenv('SPOTIPY_CLIENT_USERNAME')
+
+        self.scope = 'user-library-read'
+
+        self.token = prompt_for_user_token(self.username, scope=self.scope)
 
         self.spotify = Spotify(auth=self.token)
-
 
     def test_artist_urn(self):
         artist = self.spotify.artist(self.radiohead_urn)

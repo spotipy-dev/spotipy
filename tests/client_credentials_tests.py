@@ -15,9 +15,17 @@ from  spotipy import (
 
 
 class ClientCredentialsTestSpotipy(unittest.TestCase):
-    '''
-        These tests require user authentication
-    '''
+    """
+    These tests require user authentication - provide client credentials using the
+    following environment variables
+
+    ::
+
+        'SPOTIPY_CLIENT_USERNAME'
+        'SPOTIPY_CLIENT_ID'
+        'SPOTIPY_CLIENT_SECRET'
+        'SPOTIPY_REDIRECT_URI'
+    """
 
     @classmethod
     def setUpClass(self):
