@@ -5,7 +5,7 @@
 from __future__ import print_function
 
 __all__ = [
-    'prompt_for_user_token9'
+    'prompt_for_user_token'
 ]
 
 import os
