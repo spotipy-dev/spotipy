@@ -11,6 +11,8 @@ import sys
 import six
 import six.moves.urllib.parse as urllibparse
 
+from exceptions import SpotifyException
+
 
 class SpotifyOauthError(Exception):
     pass
@@ -236,13 +238,17 @@ class SpotifyOAuth(object):
 
         response = requests.post(self.OAUTH_TOKEN_URL, data=payload,
             headers=headers, proxies=self.proxies)
-        if response.status_code != 200:
-            if False:  # debugging code
-                print('headers', headers)
-                print('request', response.url)
-            self._warn("couldn't refresh token: code:%d reason:%s" \
-                % (response.status_code, response.reason))
-            return None
+        try:
+            response.raise_for_status()
+        except:
+            message = "Couldn't refresh token: code:%d reason:%s" % (
+                response.status_code,
+                response.reason,
+            )
+            raise SpotifyException(response.status_code,
+                                   -1,
+                                   message,
+                                   headers)
         token_info = response.json()
         token_info = self._add_custom_values_to_token_info(token_info)
         if not 'refresh_token' in token_info:
