@@ -1,7 +1,11 @@
 import spotipy
 import sys
+from spotipy.oauth2 import SpotifyClientCredentials
 
-spotify = spotipy.Spotify()
+client_credentials_manager = SpotifyClientCredentials(client_id='YOUR CLIENT ID HERE',
+                                                      client_secret='YOUR CLIENT SECRET HERE')
+spotify = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+
 
 if len(sys.argv) > 1:
     name = ' '.join(sys.argv[1:])
