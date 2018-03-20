@@ -1,10 +1,12 @@
-
 import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
 
+client_credentials_manager = SpotifyClientCredentials(client_id='YOUR CLIENT ID HERE',
+                                                      client_secret='YOUR CLIENT SECRET HERE')
+spotify = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
 lz_uri = 'spotify:artist:36QJpDe2go2KgaRleHCDTp'
 
-spotify = spotipy.Spotify()
 
 results = spotify.artist_top_tracks(lz_uri)
 
