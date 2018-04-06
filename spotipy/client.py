@@ -619,7 +619,7 @@ class Spotify(object):
         return self._get('me/following', type='artist', limit=limit,
                          after=after)
     
-     def current_user_followed_artists_contains(self, artists):
+    def current_user_followed_artists_contains(self, artists):
         """ Returns a list of booleans of whether or not each artist
             in the list is followed by the current authorized user
 
