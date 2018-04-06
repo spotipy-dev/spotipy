@@ -618,6 +618,17 @@ class Spotify(object):
         """
         return self._get('me/following', type='artist', limit=limit,
                          after=after)
+    
+     def current_user_followed_artists_contains(self, artists):
+        """ Returns a list of booleans of whether or not each artist
+            in the list is followed by the current authorized user
+
+            Parameters:
+                - artists - a list of  artist IDs, URIs or URLs
+
+        """
+        tlist = [self._get_id('artist', a) for a in artists]
+        return self._get('me/following/?ids=' + ','.join(tlist))
 
     def current_user_saved_tracks_delete(self, tracks=None):
         """ Remove one or more tracks from the current user's
