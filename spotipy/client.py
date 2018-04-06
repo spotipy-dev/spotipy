@@ -628,7 +628,7 @@ class Spotify(object):
 
         """
         tlist = [self._get_id('artist', a) for a in artists]
-        return self._get('me/following/?ids=' + ','.join(tlist))
+        return self._get('me/following/?type=artist?ids=' + ','.join(tlist))
 
     def current_user_saved_tracks_delete(self, tracks=None):
         """ Remove one or more tracks from the current user's
