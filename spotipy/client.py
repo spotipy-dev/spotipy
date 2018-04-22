@@ -681,12 +681,22 @@ class Spotify(object):
         return self._get('me/top/tracks', time_range=time_range, limit=limit,
                          offset=offset)
 
-    def current_user_recently_played(self, limit=50):
+    def current_user_recently_played(self, limit=50, cursor_type=None, timestamp=0):
         ''' Get the current user's recently played tracks
 
             Parameters:
                 - limit - the number of entities to return
-        '''        
+                - cursor_type - either "after" to get all items after timestamp or
+                  "before" to use all values before the timestamp.
+                - timestamp - A Unix timestamp in milliseconds.
+        '''
+
+        if cursor_type == "after":
+            return self._get('me/player/recently-played', limit=limit, after=timestamp)
+
+        if cursor_type == "before":
+            return self._get('me/player/recently-played', limit=limit, before=timestamp)
+
         return self._get('me/player/recently-played', limit=limit)
 
     def current_user_saved_albums_add(self, albums=[]):
