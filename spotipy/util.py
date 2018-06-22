@@ -1,15 +1,66 @@
-
-# shows a user's playlists (need to be authenticated via oauth)
-
 from __future__ import print_function
 import os
+from threading import RLock, Thread, Event
+from http.server import BaseHTTPRequestHandler, HTTPServer
+from urllib.parse import urlparse
 from . import oauth2
 import spotipy
 
+
+class AuthLocalWebserver(object):
+
+    def __init__(self, redirect_uri):
+        self.redirect_uri = redirect_uri
+        url = urlparse(redirect_uri)
+        self.scheme = url.scheme
+        self.hostname = url.hostname
+        self.port = url.port
+        self.httpd = None
+        self.url_lock = RLock()
+        self.oauth_url = None
+
+    def _make_handler_class(self):
+        ws = self
+
+        class Handler(BaseHTTPRequestHandler):
+            def do_GET(self):
+                # TODO there must be a better way
+                ws.oauth_url = ws.scheme + ws.hostname + ':' + str(ws.port) + \
+                    self.path
+                self.send_response(200)
+                self.end_headers()
+                self.wfile.write('You can now close this page.'.encode('utf-8'))
+                self.wfile.close()
+        return Handler
+
+    def start(self):
+        self.httpd = HTTPServer((self.hostname, self.port),
+                                self._make_handler_class())
+        ev = Event()
+        thread = Thread(target=self.serve, daemon=True, args=(ev,))
+        thread.start()
+        return ev
+
+    def serve(self, event):
+        self.url_lock.acquire()
+        event.set()
+        # handle only one request
+        self.httpd.handle_request()
+        self.url_lock.release()
+
+    def get_oauth_url(self):
+        # make sure we block until we get the url from spotify
+        self.url_lock.acquire()
+        url = self.oauth_url
+        self.url_lock.release()
+        return url
+
+
 def prompt_for_user_token(username, scope=None, client_id = None,
-        client_secret = None, redirect_uri = None, cache_path = None):
+        client_secret = None, redirect_uri = None, cache_path = None,
+        local_webserver = False):
     ''' prompts the user to login if necessary and returns
-        the user token suitable for use with the spotipy.Spotify 
+        the user token suitable for use with the spotipy.Spotify
         constructor
 
         Parameters:
@@ -41,13 +92,13 @@ def prompt_for_user_token(username, scope=None, client_id = None,
             export SPOTIPY_CLIENT_SECRET='your-spotify-client-secret'
             export SPOTIPY_REDIRECT_URI='your-app-redirect-url'
 
-            Get your credentials at     
+            Get your credentials at
                 https://developer.spotify.com/my-applications
         ''')
         raise spotipy.SpotifyException(550, -1, 'no credentials set')
 
     cache_path = cache_path or ".cache-" + username
-    sp_oauth = oauth2.SpotifyOAuth(client_id, client_secret, redirect_uri, 
+    sp_oauth = oauth2.SpotifyOAuth(client_id, client_secret, redirect_uri,
         scope=scope, cache_path=cache_path)
 
     # try to get a valid token for this user, from the cache,
@@ -57,15 +108,23 @@ def prompt_for_user_token(username, scope=None, client_id = None,
     token_info = sp_oauth.get_cached_token()
 
     if not token_info:
-        print('''
+        if not local_webserver:
+            print('''
 
-            User authentication requires interaction with your
-            web browser. Once you enter your credentials and
-            give authorization, you will be redirected to
-            a url.  Paste that url you were directed to to
-            complete the authorization.
+                User authentication requires interaction with your
+                web browser. Once you enter your credentials and
+                give authorization, you will be redirected to
+                a url.  Paste that url you were directed to to
+                complete the authorization.
 
-        ''')
+            ''')
+        else:
+            server = AuthLocalWebserver(redirect_uri)
+            ready = server.start()
+            # this will ensure we block until the server starts, then
+            # get_oauth_url will block until we get a request from spotify
+            ready.wait()
+
         auth_url = sp_oauth.get_authorize_url()
         try:
             import webbrowser
@@ -74,15 +133,18 @@ def prompt_for_user_token(username, scope=None, client_id = None,
         except:
             print("Please navigate here: %s" % auth_url)
 
-        print()
-        print()
-        try:
-            response = raw_input("Enter the URL you were redirected to: ")
-        except NameError:
-            response = input("Enter the URL you were redirected to: ")
+        if not local_webserver:
+            print()
+            print()
+            try:
+                response = raw_input("Enter the URL you were redirected to: ")
+            except NameError:
+                response = input("Enter the URL you were redirected to: ")
 
-        print()
-        print() 
+            print()
+            print()
+        else:
+            response = server.get_oauth_url()
 
         code = sp_oauth.parse_response_code(response)
         token_info = sp_oauth.get_access_token(code)
