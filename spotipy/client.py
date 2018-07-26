@@ -382,7 +382,7 @@ class Spotify(object):
         plid = self._get_id('playlist', playlist_id)
         return self._get("users/%s/playlists/%s" % (user, plid), fields=fields)
 
-    def user_playlist_tracks(self, user, playlist_id=None, fields=None,
+    def user_playlist_tracks(self, user, playlist_id, fields=None,
                              limit=100, offset=0, market=None):
         """ Get full details of the tracks of a playlist owned by a user.
 
@@ -398,7 +398,6 @@ class Spotify(object):
         return self._get("users/%s/playlists/%s/tracks" % (user, plid),
                          limit=limit, offset=offset, fields=fields,
                          market=market)
-
 
     def user_playlist_create(self, user, name, public=True, description=''):
         """ Creates a playlist for a user
