@@ -158,6 +158,11 @@ class Spotify(object):
                         print ('retrying ...' + str(sleep_seconds) + 'secs')
                         time.sleep(sleep_seconds + 1)
                         delay += 1
+                elif status == 404:
+                    if retries < 0:
+                        raise
+                    else:
+                        continue
                 else:
                     raise
             except Exception as e:
