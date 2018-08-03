@@ -50,7 +50,7 @@ class Spotify(object):
 
     trace = False  # Enable tracing?
     trace_out = False
-    max_get_retries = 10
+    max_get_retries = 15
 
     def __init__(self, auth=None, requests_session=True,
         client_credentials_manager=None, proxies=None, requests_timeout=None):
