@@ -385,6 +385,8 @@ class Spotify(object):
     def user_playlist_tracks(self, user, playlist_id, fields=None,
                              limit=100, offset=0, market=None):
         """ Get full details of the tracks of a playlist owned by a user.
+        # If you pass a playlist_id that doesn't belong to your user_id (which you presumably passed as well)
+        # method will return the playlist tracks without showing an error
 
             Parameters:
                 - user - the id of the user
