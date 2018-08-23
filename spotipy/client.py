@@ -451,7 +451,7 @@ class Spotify(object):
         """
 
         trid = self._get_id('playlist', playlist_id)
-        return self._get('playlist/' + trid, fields=fields, market=market)
+        return self._get('playlists/' + trid, fields=fields, market=market)
 
     def search(self, q, limit=10, offset=0, type='track', market=None):
         """ searches for an item
