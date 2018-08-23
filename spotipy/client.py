@@ -443,6 +443,16 @@ class Spotify(object):
         tlist = [self._get_id('album', a) for a in albums]
         return self._get('albums/?ids=' + ','.join(tlist))
 
+     def playlist(self, playlist_id, fields=None, market=None):
+        """ returns a single playlist given the playlist's ID, URIs or URL
+
+            Parameters:
+                - playlist_id - the playlist ID, URI or URL
+        """
+
+        trid = self._get_id('playlist', playlist_id)
+        return self._get('playlist/' + trid, fields=fields, market=market)
+
     def search(self, q, limit=10, offset=0, type='track', market=None):
         """ searches for an item
 
