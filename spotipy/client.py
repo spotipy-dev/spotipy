@@ -456,9 +456,11 @@ class Spotify(object):
             Parameters:
                 - user - the id of the user
                 - playlist_id - the id of the playlist
-                - tracks - a list of track URIs, URLs or IDs
+                - tracks - a string or list of track URIs, URLs or IDs
                 - position - the position to add the tracks
         """
+        if isinstance(tracks, (int, str)):
+            tracks = list(tracks)
         plid = self._get_id('playlist', playlist_id)
         ftracks = [self._get_uri('track', tid) for tid in tracks]
         return self._post("users/%s/playlists/%s/tracks" % (user, plid),
