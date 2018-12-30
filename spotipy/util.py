@@ -87,6 +87,11 @@ def prompt_for_user_token(username, scope=None, client_id = None,
 
 
 def assert_port_available(port):
+    """
+    Assert a given network port is available.
+    raise SpotifyException if the port is not available
+    :param port: network port to check
+    """
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try:
         s.bind(("", port))
@@ -98,7 +103,13 @@ def assert_port_available(port):
 
 
 def get_authentication_code():
+    """
+    Create a temporary http server and get authentication code.
+    As soon as a request is received, the server is closed.
+    :return: the authentication code
+    """
     httpd = MicroServer((REDIRECT_URI.replace("http:", "").replace("https:", "").replace("/", ""), 80), CustomHandler)
+    # stop the server once a request is received
     while not httpd.latest_query_components:
         httpd.handle_request()
     httpd.server_close()
