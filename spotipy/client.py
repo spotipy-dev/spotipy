@@ -1,5 +1,7 @@
 # coding: utf-8
 
+""" A simple and thin Python library for the Spotify Web API
+"""
 
 from __future__ import print_function
 import sys
@@ -16,9 +18,6 @@ except:
 
 
 import six
-
-""" A simple and thin Python library for the Spotify Web API
-"""
 
 
 class SpotifyException(Exception):
@@ -611,8 +610,8 @@ class Spotify(object):
         return self.me()
 
     def current_user_playing_track(self):
-        ''' Get information about the current users currently playing track.
-        '''
+        """ Get information about the current users currently playing track.
+        """
         return self._get('me/player/currently-playing')
 
     def current_user_saved_albums(self, limit=20, offset=0):
@@ -711,11 +710,11 @@ class Spotify(object):
                          offset=offset)
 
     def current_user_recently_played(self, limit=50):
-        ''' Get the current user's recently played tracks
+        """ Get the current user's recently played tracks
 
             Parameters:
                 - limit - the number of entities to return
-        '''
+        """
         return self._get('me/player/recently-played', limit=limit)
 
     def current_user_saved_albums_add(self, albums=[]):
@@ -729,17 +728,17 @@ class Spotify(object):
         return r
 
     def user_follow_artists(self, ids=[]):
-        ''' Follow one or more artists
+        """ Follow one or more artists
             Parameters:
                 - ids - a list of artist IDs
-        '''
+        """
         return self._put('me/following?type=artist&ids=' + ','.join(ids))
 
     def user_follow_users(self, ids=[]):
-        ''' Follow one or more users
+        """ Follow one or more users
             Parameters:
                 - ids - a list of user IDs
-        '''
+        """
         return self._put('me/following?type=user&ids=' + ','.join(ids))
 
     def featured_playlists(self, locale=None, country=None, timestamp=None,
@@ -899,28 +898,28 @@ class Spotify(object):
             return results
 
     def devices(self):
-        ''' Get a list of user's available devices.
-        '''
+        """ Get a list of user's available devices.
+        """
         return self._get('me/player/devices')
 
     def current_playback(self, market=None):
-        ''' Get information about user's current playback.
+        """ Get information about user's current playback.
 
             Parameters:
                 - market - an ISO 3166-1 alpha-2 country code.
-        '''
+        """
         return self._get('me/player', market=market)
 
     def currently_playing(self, market=None):
-        ''' Get user's currently playing track.
+        """ Get user's currently playing track.
 
             Parameters:
                 - market - an ISO 3166-1 alpha-2 country code.
-        '''
+        """
         return self._get('me/player/currently-playing', market=market)
 
     def transfer_playback(self, device_id, force_play=True):
-        ''' Transfer playback to another device.
+        """ Transfer playback to another device.
             Note that the API accepts a list of device ids, but only
             actually supports one.
 
@@ -928,7 +927,7 @@ class Spotify(object):
                 - device_id - transfer playback to this device
                 - force_play - true: after transfer, play. false:
                                keep current state.
-        '''
+        """
         data = {
             'device_ids': [device_id],
             'play': force_play
@@ -937,7 +936,7 @@ class Spotify(object):
 
     def start_playback(self, device_id=None, context_uri=None, uris=None,
                        offset=None):
-        ''' Start or resume user's playback.
+        """ Start or resume user's playback.
 
             Provide a `context_uri` to start playback or a album,
             artist, or playlist.
@@ -953,7 +952,7 @@ class Spotify(object):
                 - context_uri - spotify context uri to play
                 - uris - spotify track uris
                 - offset - offset into context by index or track
-        '''
+        """
         if context_uri is not None and uris is not None:
             self._warn('specify either context uri or uris, not both')
             return
@@ -971,37 +970,37 @@ class Spotify(object):
         return self._put(url, payload=data)
 
     def pause_playback(self, device_id=None):
-        ''' Pause user's playback.
+        """ Pause user's playback.
 
             Parameters:
                 - device_id - device target for playback
-        '''
+        """
         return self._put(self._append_device_id('me/player/pause', device_id))
 
     def next_track(self, device_id=None):
-        ''' Skip user's playback to next track.
+        """ Skip user's playback to next track.
 
             Parameters:
                 - device_id - device target for playback
-        '''
+        """
         return self._post(self._append_device_id('me/player/next', device_id))
 
     def previous_track(self, device_id=None):
-        ''' Skip user's playback to previous track.
+        """ Skip user's playback to previous track.
 
             Parameters:
                 - device_id - device target for playback
-        '''
+        """
         url = self._append_device_id('me/player/previous', device_id)
         return self._post(url)
 
     def seek_track(self, position_ms, device_id=None):
-        ''' Seek to position in current track.
+        """ Seek to position in current track.
 
             Parameters:
                 - position_ms - position in milliseconds to seek to
                 - device_id - device target for playback
-        '''
+        """
         if not isinstance(position_ms, int):
             self._warn('position_ms must be an integer')
             return
@@ -1010,12 +1009,12 @@ class Spotify(object):
         return self._put(url)
 
     def repeat(self, state, device_id=None):
-        ''' Set repeat mode for playback.
+        """ Set repeat mode for playback.
 
             Parameters:
                 - state - `track`, `context`, or `off`
                 - device_id - device target for playback
-        '''
+        """
         if state not in ['track', 'context', 'off']:
             self._warn('invalid state')
             return
@@ -1024,12 +1023,12 @@ class Spotify(object):
         self._put(url)
 
     def volume(self, volume_percent, device_id=None):
-        ''' Set playback volume.
+        """ Set playback volume.
 
             Parameters:
                 - volume_percent - volume between 0 and 100
                 - device_id - device target for playback
-        '''
+        """
         if not isinstance(volume_percent, int):
             self._warn('volume must be an integer')
             return
@@ -1041,12 +1040,12 @@ class Spotify(object):
         self._put(url)
 
     def shuffle(self, state, device_id=None):
-        ''' Toggle playback shuffling.
+        """ Toggle playback shuffling.
 
             Parameters:
                 - state - true or false
                 - device_id - device target for playback
-        '''
+        """
         if not isinstance(state, bool):
             self._warn('state must be a boolean')
             return
@@ -1056,11 +1055,11 @@ class Spotify(object):
         self._put(url)
 
     def _append_device_id(self, path, device_id):
-        ''' Append device ID to API path.
+        """ Append device ID to API path.
 
             Parameters:
                 - device_id - device id to append
-        '''
+        """
         if device_id:
             if '?' in path:
                 path += '&device_id=%s' % device_id
