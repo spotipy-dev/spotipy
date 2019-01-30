@@ -128,26 +128,31 @@ class Spotify(object):
         try:
             response.raise_for_status()
         except:
-            if response.text and len(response.text) > 0 and response.text != 'null':
+            if not response.text:
+                error = "Error (empty response.text)"
+                error_message = '%s:\n %s' % (response.url, error)
                 raise SpotifyException(response.status_code,
                                        -1,
-                                       '%s:\n %s' % (response.url, response.json()['error']['message']),
+                                       error_message,
                                        headers=response.headers)
-            else:
-                raise SpotifyException(response.status_code,
-                                       -1,
-                                       '%s:\n %s' % (response.url, 'error'),
-                                       headers=response.headers)
+            try:
+                error = response.json()['error']['message']
+            except:
+                error = "Error (invalid error message JSON) response.text: %s" % response.text
+            error_message = '%s:\n %s' % (response.url, error)
+            raise SpotifyException(response.status_code,
+                                   -1,
+                                   error_message,
+                                   headers=response.headers)
         finally:
             response.connection.close()
-        if response.text and len(response.text) > 0 and response.text != 'null':
-            results = response.json()
-            if self.trace:  # pragma: no cover
-                print('RESP', results)
-                print()
-            return results
-        else:
+        if not response.text:
             return None
+        results = response.json()
+        if self.trace:  # pragma: no cover
+            print('RESP', results)
+            print()
+        return results
 
     def _get(self, url, args=None, payload=None, **kwargs):
         if args:
