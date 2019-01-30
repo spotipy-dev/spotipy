@@ -362,7 +362,7 @@ class Spotify(object):
             Parameters:
                 - user - the id of the usr
         """
-        url = 'users/%s' % urllib_quote(user)
+        url = 'users/%s' % self._url_encode(user)
         return self._get(url)
 
     def current_user_playlists(self, limit=50, offset=0):
@@ -381,7 +381,7 @@ class Spotify(object):
                 - limit  - the number of items to return
                 - offset - the index of the first item to return
         """
-        url = 'users/%s/playlists' % urllib_quote(user)
+        url = 'users/%s/playlists' % self._url_encode(user)
         return self._get(url, limit=limit, offset=offset)
 
     def user_playlist(self, user, playlist_id=None, fields=None):
@@ -392,10 +392,10 @@ class Spotify(object):
                 - fields - which fields to return
         """
         if playlist_id is None:
-            url = 'users/%s/starred' % urllib_quote(user)
+            url = 'users/%s/starred' % self._url_encode(user)
             return self._get(url, fields=fields)
         plid = self._get_id('playlist', playlist_id)
-        url = 'users/%s/playlists/%s' % (urllib_quote(user), plid)
+        url = 'users/%s/playlists/%s' % (self._url_encode(user), plid)
         return self._get(url, fields=fields)
 
     def user_playlist_tracks(self, user, playlist_id=None, fields=None,
@@ -411,7 +411,7 @@ class Spotify(object):
                 - market - an ISO 3166-1 alpha-2 country code.
         """
         plid = self._get_id('playlist', playlist_id)
-        url = 'users/%s/playlists/%s/tracks' % (urllib_quote(user), plid)
+        url = 'users/%s/playlists/%s/tracks' % (self._url_encode(user), plid)
         return self._get(url,
                          limit=limit,
                          offset=offset,
@@ -429,7 +429,7 @@ class Spotify(object):
                 - description - the description of the playlist
         """
         data = {'name': name, 'public': public, 'description': description}
-        url = 'users/%s/playlists' % urllib_quote(user)
+        url = 'users/%s/playlists' % self._url_encode(user)
         return self._post(url, payload=data)
 
     def user_playlist_change_details(
@@ -455,7 +455,7 @@ class Spotify(object):
             data['collaborative'] = collaborative
         if isinstance(description, six.string_types):
             data['description'] = description
-        url = 'users/%s/playlists/%s' % (urllib_quote(user), playlist_id)
+        url = 'users/%s/playlists/%s' % (self._url_encode(user), playlist_id)
         return self._put(url, payload=data)
 
     def user_playlist_unfollow(self, user, playlist_id):
@@ -465,7 +465,7 @@ class Spotify(object):
                 - user - the id of the user
                 - name - the name of the playlist
         """
-        url = 'users/%s/playlists/%s/followers' % (urllib_quote(user),
+        url = 'users/%s/playlists/%s/followers' % (self._url_encode(user),
                                                    playlist_id)
         return self._delete(url)
 
@@ -481,7 +481,7 @@ class Spotify(object):
         """
         plid = self._get_id('playlist', playlist_id)
         ftracks = [self._get_uri('track', tid) for tid in tracks]
-        url = 'users/%s/playlists/%s/tracks' % (urllib_quote(user), plid)
+        url = 'users/%s/playlists/%s/tracks' % (self._url_encode(user), plid)
         return self._post(url, payload=ftracks, position=position)
 
     def user_playlist_replace_tracks(self, user, playlist_id, tracks):
@@ -495,7 +495,7 @@ class Spotify(object):
         plid = self._get_id('playlist', playlist_id)
         ftracks = [self._get_uri('track', tid) for tid in tracks]
         payload = {"uris": ftracks}
-        url = 'users/%s/playlists/%s/tracks' % (urllib_quote(user), plid)
+        url = 'users/%s/playlists/%s/tracks' % (self._url_encode(user), plid)
         return self._put(url, payload=payload)
 
     def user_playlist_reorder_tracks(
@@ -517,7 +517,7 @@ class Spotify(object):
                    "insert_before": insert_before}
         if snapshot_id:
             payload["snapshot_id"] = snapshot_id
-        url = 'users/%s/playlists/%s/tracks' % (urllib_quote(user), plid)
+        url = 'users/%s/playlists/%s/tracks' % (self._url_encode(user), plid)
         return self._put(url, payload=payload)
 
     def user_playlist_remove_all_occurrences_of_tracks(
@@ -537,7 +537,7 @@ class Spotify(object):
         payload = {"tracks": [{"uri": track} for track in ftracks]}
         if snapshot_id:
             payload["snapshot_id"] = snapshot_id
-        url = 'users/%s/playlists/%s/tracks' % (urllib_quote(user), plid)
+        url = 'users/%s/playlists/%s/tracks' % (self._url_encode(user), plid)
         return self._delete(url, payload=payload)
 
     def user_playlist_remove_specific_occurrences_of_tracks(
@@ -563,7 +563,7 @@ class Spotify(object):
         payload = {"tracks": ftracks}
         if snapshot_id:
             payload["snapshot_id"] = snapshot_id
-        url = 'users/%s/playlists/%s/tracks' % (urllib_quote(user), plid)
+        url = 'users/%s/playlists/%s/tracks' % (self._url_encode(user), plid)
         return self._delete(url, payload=payload)
 
     def user_playlist_follow_playlist(self, playlist_owner_id, playlist_id):
@@ -575,7 +575,7 @@ class Spotify(object):
             - playlist_id - the id of the playlist
 
         """
-        url = 'users/{}/playlists/{}/followers'.format(urllib_quote(playlist_owner_id),
+        url = 'users/{}/playlists/{}/followers'.format(self._url_encode(playlist_owner_id),
                                                        playlist_id)
         return self._put(url)
 
@@ -590,7 +590,7 @@ class Spotify(object):
             - user_ids - the ids of the users that you want to check to see if they follow the playlist. Maximum: 5 ids.
 
         """
-        url = 'users/{}/playlists/{}/followers/contains?ids={}'.format(urllib_quote(playlist_owner_id),
+        url = 'users/{}/playlists/{}/followers/contains?ids={}'.format(self._url_encode(playlist_owner_id),
                                                                        playlist_id,
                                                                        ','.join(user_ids))
         return self._get(url)
@@ -1090,3 +1090,8 @@ class Spotify(object):
 
     def _get_uri(self, type, id):
         return 'spotify:' + type + ":" + self._get_id(type, id)
+
+    def _url_encode(self, value, encoding='utf-8'):
+        if isinstance(value, unicode):
+            value = value.encode(encoding)
+        return urllib_quote(value)
