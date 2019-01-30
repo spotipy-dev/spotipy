@@ -1,5 +1,7 @@
 # coding: utf-8
 
+""" A simple and thin Python library for the Spotify Web API
+"""
 
 from __future__ import print_function
 import sys
@@ -18,9 +20,6 @@ except:
 import six
 
 from exceptions import SpotifyException
-
-""" A simple and thin Python library for the Spotify Web API
-"""
 
 
 class Spotify(object):
@@ -47,7 +46,8 @@ class Spotify(object):
     max_get_retries = 10
 
     def __init__(self, auth=None, requests_session=True,
-        client_credentials_manager=None, proxies=None, requests_timeout=None):
+                 client_credentials_manager=None, proxies=None,
+                 requests_timeout=None):
         """
         Create a Spotify API object.
 
@@ -95,42 +95,50 @@ class Spotify(object):
             url = self.prefix + url
         headers = self._auth_headers()
         headers['Content-Type'] = 'application/json'
-
         if payload:
             args["data"] = json.dumps(payload)
-
         if self.trace_out:
             print(url)
-        r = self._session.request(method, url, headers=headers, proxies=self.proxies, **args)
-
+        response = self._session.request(method,
+                                         url,
+                                         headers=headers,
+                                         proxies=self.proxies,
+                                         **args)
         if self.trace:  # pragma: no cover
             print()
             print ('headers', headers)
-            print ('http status', r.status_code)
-            print(method, r.url)
+            print ('http status', response.status_code)
+            print(method, response.url)
             if payload:
                 print("DATA", json.dumps(payload))
-
         try:
-            r.raise_for_status()
+            response.raise_for_status()
         except:
-            if r.text and len(r.text) > 0 and r.text != 'null':
-                raise SpotifyException(r.status_code,
-                    -1, '%s:\n %s' % (r.url, r.json()['error']['message']),
-                    headers=r.headers)
-            else:
-                raise SpotifyException(r.status_code,
-                    -1, '%s:\n %s' % (r.url, 'error'), headers=r.headers)
+            if not response.text:
+                error = "Error (empty response.text)"
+                error_message = '%s:\n %s' % (response.url, error)
+                raise SpotifyException(response.status_code,
+                                       -1,
+                                       error_message,
+                                       headers=response.headers)
+            try:
+                error = response.json()['error']['message']
+            except:
+                error = "Error (invalid error message JSON) response.text: %s" % response.text
+            error_message = '%s:\n %s' % (response.url, error)
+            raise SpotifyException(response.status_code,
+                                   -1,
+                                   error_message,
+                                   headers=response.headers)
         finally:
-            r.connection.close()
-        if r.text and len(r.text) > 0 and r.text != 'null':
-            results = r.json()
-            if self.trace:  # pragma: no cover
-                print('RESP', results)
-                print()
-            return results
-        else:
+            response.connection.close()
+        if not response.text:
             return None
+        results = response.json()
+        if self.trace:  # pragma: no cover
+            print('RESP', results)
+            print()
+        return results
 
     def _get(self, url, args=None, payload=None, **kwargs):
         if args:
@@ -221,7 +229,7 @@ class Spotify(object):
         trid = self._get_id('track', track_id)
         return self._get('tracks/' + trid)
 
-    def tracks(self, tracks, market = None):
+    def tracks(self, tracks, market=None):
         """ returns a list of tracks given a list of track IDs, URIs, or URLs
 
             Parameters:
@@ -230,7 +238,7 @@ class Spotify(object):
         """
 
         tlist = [self._get_id('track', t) for t in tracks]
-        return self._get('tracks/?ids=' + ','.join(tlist), market = market)
+        return self._get('tracks/?ids=' + ','.join(tlist), market=market)
 
     def artist(self, artist_id):
         """ returns a single artist given the artist's ID, URI or URL
@@ -403,7 +411,6 @@ class Spotify(object):
                          offset=offset,
                          fields=fields,
                          market=market)
-
 
     def user_playlist_create(self, user, name, public=True, description=''):
         """ Creates a playlist for a user
@@ -594,8 +601,8 @@ class Spotify(object):
         return self.me()
 
     def current_user_playing_track(self):
-        ''' Get information about the current users currently playing track.
-        '''
+        """ Get information about the current users currently playing track.
+        """
         return self._get('me/player/currently-playing')
 
     def current_user_saved_albums(self, limit=20, offset=0):
@@ -694,11 +701,11 @@ class Spotify(object):
                          offset=offset)
 
     def current_user_recently_played(self, limit=50):
-        ''' Get the current user's recently played tracks
+        """ Get the current user's recently played tracks
 
             Parameters:
                 - limit - the number of entities to return
-        '''
+        """
         return self._get('me/player/recently-played', limit=limit)
 
     def current_user_saved_albums_add(self, albums=[]):
@@ -712,17 +719,17 @@ class Spotify(object):
         return r
 
     def user_follow_artists(self, ids=[]):
-        ''' Follow one or more artists
+        """ Follow one or more artists
             Parameters:
                 - ids - a list of artist IDs
-        '''
+        """
         return self._put('me/following?type=artist&ids=' + ','.join(ids))
 
     def user_follow_users(self, ids=[]):
-        ''' Follow one or more users
+        """ Follow one or more users
             Parameters:
                 - ids - a list of user IDs
-        '''
+        """
         return self._put('me/following?type=user&ids=' + ','.join(ids))
 
     def featured_playlists(self, locale=None, country=None, timestamp=None,
@@ -881,37 +888,29 @@ class Spotify(object):
         else:
             return results
 
-    def audio_analysis(self, id):
-        """ Get audio analysis for a track based upon its Spotify ID
-            Parameters:
-                - id - a track URIs, URLs or IDs
-        """
-        id = self._get_id('track', id)
-        return self._get('audio-analysis/'+id)
-
     def devices(self):
-        ''' Get a list of user's available devices.
-        '''
+        """ Get a list of user's available devices.
+        """
         return self._get('me/player/devices')
 
-    def current_playback(self, market = None):
-        ''' Get information about user's current playback.
+    def current_playback(self, market=None):
+        """ Get information about user's current playback.
 
             Parameters:
                 - market - an ISO 3166-1 alpha-2 country code.
-        '''
-        return self._get('me/player', market = market)
+        """
+        return self._get('me/player', market=market)
 
-    def currently_playing(self, market = None):
-        ''' Get user's currently playing track.
+    def currently_playing(self, market=None):
+        """ Get user's currently playing track.
 
             Parameters:
                 - market - an ISO 3166-1 alpha-2 country code.
-        '''
-        return self._get('me/player/currently-playing', market = market)
+        """
+        return self._get('me/player/currently-playing', market=market)
 
-    def transfer_playback(self, device_id, force_play = True):
-        ''' Transfer playback to another device.
+    def transfer_playback(self, device_id, force_play=True):
+        """ Transfer playback to another device.
             Note that the API accepts a list of device ids, but only
             actually supports one.
 
@@ -919,15 +918,16 @@ class Spotify(object):
                 - device_id - transfer playback to this device
                 - force_play - true: after transfer, play. false:
                                keep current state.
-        '''
+        """
         data = {
             'device_ids': [device_id],
             'play': force_play
         }
         return self._put('me/player', payload=data)
 
-    def start_playback(self, device_id = None, context_uri = None, uris = None, offset = None):
-        ''' Start or resume user's playback.
+    def start_playback(self, device_id=None, context_uri=None, uris=None,
+                       offset=None):
+        """ Start or resume user's playback.
 
             Provide a `context_uri` to start playback or a album,
             artist, or playlist.
@@ -943,7 +943,7 @@ class Spotify(object):
                 - context_uri - spotify context uri to play
                 - uris - spotify track uris
                 - offset - offset into context by index or track
-        '''
+        """
         if context_uri is not None and uris is not None:
             self._warn('specify either context uri or uris, not both')
             return
@@ -960,38 +960,38 @@ class Spotify(object):
         url = self._append_device_id('me/player/play', device_id)
         return self._put(url, payload=data)
 
-    def pause_playback(self, device_id = None):
-        ''' Pause user's playback.
+    def pause_playback(self, device_id=None):
+        """ Pause user's playback.
 
             Parameters:
                 - device_id - device target for playback
-        '''
+        """
         return self._put(self._append_device_id('me/player/pause', device_id))
 
-    def next_track(self, device_id = None):
-        ''' Skip user's playback to next track.
+    def next_track(self, device_id=None):
+        """ Skip user's playback to next track.
 
             Parameters:
                 - device_id - device target for playback
-        '''
+        """
         return self._post(self._append_device_id('me/player/next', device_id))
 
-    def previous_track(self, device_id = None):
-        ''' Skip user's playback to previous track.
+    def previous_track(self, device_id=None):
+        """ Skip user's playback to previous track.
 
             Parameters:
                 - device_id - device target for playback
-        '''
+        """
         url = self._append_device_id('me/player/previous', device_id)
         return self._post(url)
 
-    def seek_track(self, position_ms, device_id = None):
-        ''' Seek to position in current track.
+    def seek_track(self, position_ms, device_id=None):
+        """ Seek to position in current track.
 
             Parameters:
                 - position_ms - position in milliseconds to seek to
                 - device_id - device target for playback
-        '''
+        """
         if not isinstance(position_ms, int):
             self._warn('position_ms must be an integer')
             return
@@ -999,13 +999,13 @@ class Spotify(object):
                                      device_id)
         return self._put(url)
 
-    def repeat(self, state, device_id = None):
-        ''' Set repeat mode for playback.
+    def repeat(self, state, device_id=None):
+        """ Set repeat mode for playback.
 
             Parameters:
                 - state - `track`, `context`, or `off`
                 - device_id - device target for playback
-        '''
+        """
         if state not in ['track', 'context', 'off']:
             self._warn('invalid state')
             return
@@ -1013,13 +1013,13 @@ class Spotify(object):
                                      device_id)
         self._put(url)
 
-    def volume(self, volume_percent, device_id = None):
-        ''' Set playback volume.
+    def volume(self, volume_percent, device_id=None):
+        """ Set playback volume.
 
             Parameters:
                 - volume_percent - volume between 0 and 100
                 - device_id - device target for playback
-        '''
+        """
         if not isinstance(volume_percent, int):
             self._warn('volume must be an integer')
             return
@@ -1030,13 +1030,13 @@ class Spotify(object):
                                      device_id)
         self._put(url)
 
-    def shuffle(self, state, device_id = None):
-        ''' Toggle playback shuffling.
+    def shuffle(self, state, device_id=None):
+        """ Toggle playback shuffling.
 
             Parameters:
                 - state - true or false
                 - device_id - device target for playback
-        '''
+        """
         if not isinstance(state, bool):
             self._warn('state must be a boolean')
             return
@@ -1046,11 +1046,11 @@ class Spotify(object):
         self._put(url)
 
     def _append_device_id(self, path, device_id):
-        ''' Append device ID to API path.
+        """ Append device ID to API path.
 
             Parameters:
                 - device_id - device id to append
-        '''
+        """
         if device_id:
             if '?' in path:
                 path += '&device_id=%s' % device_id
