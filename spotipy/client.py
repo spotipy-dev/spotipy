@@ -4,18 +4,16 @@
 """
 
 from __future__ import print_function
-import sys
-import requests
 import json
+import requests
+import sys
 import time
-
 try:
     # Python 3
     from urllib.parse import quote as urllib_quote
 except:
     # Python 2
     from urllib import quote as urllib_quote
-
 
 import six
 
