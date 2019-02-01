@@ -3,10 +3,9 @@
 """ A simple and thin Python library for the Spotify Web API
 """
 
-from __future__ import print_function
 import json
+import logging
 import requests
-import sys
 import time
 try:
     # Python 3
@@ -20,6 +19,9 @@ import six
 from exceptions import SpotifyException
 
 
+logger = logging.getLogger(__name__)
+
+
 class Spotify(object):
     """
         Example usage::
@@ -29,9 +31,6 @@ class Spotify(object):
             urn = 'spotify:artist:3jOstUTkEu2JkjvRdBA5Gu'
             sp = spotipy.Spotify()
 
-            sp.trace = True # turn on tracing
-            sp.trace_out = True # turn on trace out
-
             artist = sp.artist(urn)
             print(artist)
 
@@ -39,8 +38,25 @@ class Spotify(object):
             print(user)
     """
 
-    trace = False  # Enable tracing?
-    trace_out = False
+    TRACK_ATTRIBUTES = [
+        'acousticness',
+        'danceability',
+        'duration_ms',
+        'energy',
+        'instrumentalness',
+        'key',
+        'liveness',
+        'loudness',
+        'mode',
+        'popularity',
+        'speechiness',
+        'tempo',
+        'time_signature',
+        'valence',
+    ]
+
+    TRACK_ATTRIBUTE_PREFIXES = ['min_', 'max_', 'target_']
+
     max_get_retries = 10
 
     def __init__(self, auth=None, requests_session=True,
@@ -71,9 +87,11 @@ class Spotify(object):
         if isinstance(requests_session, requests.Session):
             self._session = requests_session
         else:
-            if requests_session:  # Build a new session.
+            if requests_session:
+                # Build a new session.
                 self._session = requests.Session()
-            else:  # Use the Requests API module as a "session".
+            else:
+                # Use the Requests API module as a "session".
                 from requests import api
                 self._session = api
 
@@ -88,27 +106,24 @@ class Spotify(object):
 
     def _internal_call(self, method, url, payload, params):
         args = dict(params=params)
-        args["timeout"] = self.requests_timeout
+        args['timeout'] = self.requests_timeout
         if not url.startswith('http'):
             url = self.prefix + url
         headers = self._auth_headers()
         headers['Content-Type'] = 'application/json'
         if payload:
-            args["data"] = json.dumps(payload)
-        if self.trace_out:
-            print(url)
+            args['data'] = json.dumps(payload)
+            logger.debug(url)
         response = self._session.request(method,
                                          url,
                                          headers=headers,
                                          proxies=self.proxies,
                                          **args)
-        if self.trace:  # pragma: no cover
-            print()
-            print ('headers', headers)
-            print ('http status', response.status_code)
-            print(method, response.url)
-            if payload:
-                print("DATA", json.dumps(payload))
+        logger.debug("headers: %s", headers)
+        logger.debug("http status: %s", response.status_code)
+        logger.debug("%s / %s", method, response.url)
+        if payload:
+            logger.debug("DATA: %s", json.dumps(payload))
         try:
             response.raise_for_status()
         except:
@@ -133,9 +148,7 @@ class Spotify(object):
         if not response.text:
             return None
         results = response.json()
-        if self.trace:  # pragma: no cover
-            print('RESP', results)
-            print()
+        logger.debug("RESP: %s", results)
         return results
 
     def _get(self, url, args=None, payload=None, **kwargs):
@@ -155,24 +168,13 @@ class Spotify(object):
                         raise
                     else:
                         sleep_seconds = int(e.headers.get('Retry-After', delay))
-                        print ('retrying ...' + str(sleep_seconds) + 'secs')
+                        logger.info("Retrying ... %s secs", sleep_seconds)
                         time.sleep(sleep_seconds + 1)
                         delay += 1
                 else:
                     raise
             except Exception as e:
                 raise
-                print ('exception', str(e))
-                # some other exception. Requests have
-                # been know to throw a BadStatusLine exception
-                retries -= 1
-                if retries >= 0:
-                    sleep_seconds = int(e.headers.get('Retry-After', delay))
-                    print ('retrying ...' + str(delay) + 'secs')
-                    time.sleep(sleep_seconds + 1)
-                    delay += 1
-                else:
-                    raise
 
     def _post(self, url, args=None, payload=None, **kwargs):
         if args:
@@ -210,12 +212,6 @@ class Spotify(object):
             return self._get(result['previous'])
         else:
             return None
-
-    def _warn_old(self, msg):
-        print('warning:' + msg, file=sys.stderr)
-
-    def _warn(self, msg, *args):
-        print('warning:' + msg.format(*args), file=sys.stderr)
 
     def track(self, track_id):
         """ returns a single track given the track's ID, URI or URL
@@ -485,7 +481,7 @@ class Spotify(object):
         """
         plid = self._get_id('playlist', playlist_id)
         ftracks = [self._get_uri('track', tid) for tid in tracks]
-        payload = {"uris": ftracks}
+        payload = {'uris': ftracks}
         url = 'users/%s/playlists/%s/tracks' % (self._url_encode(user), plid)
         return self._put(url, payload=payload)
 
@@ -503,11 +499,11 @@ class Spotify(object):
                 - snapshot_id - optional playlist's snapshot ID
         """
         plid = self._get_id('playlist', playlist_id)
-        payload = {"range_start": range_start,
-                   "range_length": range_length,
-                   "insert_before": insert_before}
+        payload = {'range_start': range_start,
+                   'range_length': range_length,
+                   'insert_before': insert_before}
         if snapshot_id:
-            payload["snapshot_id"] = snapshot_id
+            payload['snapshot_id'] = snapshot_id
         url = 'users/%s/playlists/%s/tracks' % (self._url_encode(user), plid)
         return self._put(url, payload=payload)
 
@@ -525,9 +521,9 @@ class Spotify(object):
 
         plid = self._get_id('playlist', playlist_id)
         ftracks = [self._get_uri('track', tid) for tid in tracks]
-        payload = {"tracks": [{"uri": track} for track in ftracks]}
+        payload = {'tracks': [{'uri': track} for track in ftracks]}
         if snapshot_id:
-            payload["snapshot_id"] = snapshot_id
+            payload['snapshot_id'] = snapshot_id
         url = 'users/%s/playlists/%s/tracks' % (self._url_encode(user), plid)
         return self._delete(url, payload=payload)
 
@@ -538,9 +534,15 @@ class Spotify(object):
             Parameters:
                 - user - the id of the user
                 - playlist_id - the id of the playlist
-                - tracks - an array of objects containing Spotify URIs of the tracks to remove with their current positions in the playlist.  For example:
-                    [  { "uri":"4iV5W9uYEdYUVa79Axb7Rh", "positions":[2] },
-                       { "uri":"1301WleyT98MSxVHPZCA6M", "positions":[7] } ]
+                - tracks - an array of objects containing Spotify URIs of the
+                    tracks to remove with their current positions in the
+                    playlist.
+
+                    For example:
+                    [
+                        {'uri': '4iV5W9uYEdYUVa79Axb7Rh', 'positions': [2]},
+                        {'uri': '1301WleyT98MSxVHPZCA6M', 'positions': [7]},
+                    ]
                 - snapshot_id - optional id of the playlist snapshot
         """
 
@@ -548,12 +550,12 @@ class Spotify(object):
         ftracks = []
         for tr in tracks:
             ftracks.append({
-                "uri": self._get_uri("track", tr["uri"]),
-                "positions": tr["positions"],
+                'uri': self._get_uri('track', tr['uri']),
+                'positions': tr['positions'],
             })
-        payload = {"tracks": ftracks}
+        payload = {'tracks': ftracks}
         if snapshot_id:
-            payload["snapshot_id"] = snapshot_id
+            payload['snapshot_id'] = snapshot_id
         url = 'users/%s/playlists/%s/tracks' % (self._url_encode(user), plid)
         return self._delete(url, payload=payload)
 
@@ -844,12 +846,8 @@ class Spotify(object):
                 [self._get_id('track', t) for t in seed_tracks])
         if country:
             params['market'] = country
-
-        for attribute in ["acousticness", "danceability", "duration_ms",
-                          "energy", "instrumentalness", "key", "liveness",
-                          "loudness", "mode", "popularity", "speechiness",
-                          "tempo", "time_signature", "valence"]:
-            for prefix in ["min_", "max_", "target_"]:
+        for attribute in Spotify.TRACK_ATTRIBUTES:
+            for prefix in Spotify.TRACK_ATTRIBUTE_PREFIXES:
                 param = prefix + attribute
                 if param in kwargs:
                     params[param] = kwargs[param]
@@ -933,7 +931,7 @@ class Spotify(object):
             Provide a `uris` list to start playback of one or more
             tracks.
 
-            Provide `offset` as {"position": <int>} or {"uri": "<track uri>"}
+            Provide `offset` as {'position': <int>} or {'uri': '<track uri>'}
             to start playback at a particular offset.
 
             Parameters:
@@ -943,10 +941,10 @@ class Spotify(object):
                 - offset - offset into context by index or track
         """
         if context_uri is not None and uris is not None:
-            self._warn('specify either context uri or uris, not both')
+            logger.warning("Specify either context uri or uris, not both")
             return
         if uris is not None and not isinstance(uris, list):
-            self._warn('uris must be a list')
+            logger.warning("Uris must be a list")
             return
         data = {}
         if context_uri is not None:
@@ -991,7 +989,7 @@ class Spotify(object):
                 - device_id - device target for playback
         """
         if not isinstance(position_ms, int):
-            self._warn('position_ms must be an integer')
+            logger.warning("position_ms must be an integer")
             return
         url = self._append_device_id('me/player/seek?position_ms=%s' % position_ms,
                                      device_id)
@@ -1005,7 +1003,7 @@ class Spotify(object):
                 - device_id - device target for playback
         """
         if state not in ['track', 'context', 'off']:
-            self._warn('invalid state')
+            logger.warning("Invalid state")
             return
         url = self._append_device_id('me/player/repeat?state=%s' % state,
                                      device_id)
@@ -1019,10 +1017,10 @@ class Spotify(object):
                 - device_id - device target for playback
         """
         if not isinstance(volume_percent, int):
-            self._warn('volume must be an integer')
+            logger.warning("volume_percent must be an integer")
             return
         if volume_percent < 0 or volume_percent > 100:
-            self._warn('volume must be between 0 and 100, inclusive')
+            logger.warning("volume_percent must be between 0 and 100, inclusive")
             return
         url = self._append_device_id('me/player/volume?volume_percent=%s' % volume_percent,
                                      device_id)
@@ -1036,7 +1034,7 @@ class Spotify(object):
                 - device_id - device target for playback
         """
         if not isinstance(state, bool):
-            self._warn('state must be a boolean')
+            logger.warning("state must be a boolean")
             return
         state = str(state).lower()
         url = self._append_device_id('me/player/shuffle?state=%s' % state,
@@ -1056,24 +1054,28 @@ class Spotify(object):
                 path += '?device_id=%s' % device_id
         return path
 
-    def _get_id(self, type, id):
+    def _get_id(self, id_type, id):
         fields = id.split(':')
         if len(fields) >= 3:
-            if type != fields[-2]:
-                self._warn('expected id of type %s but found type %s %s',
-                           type, fields[-2], id)
+            if id_type != fields[-2]:
+                logger.warning("Expected id of type %s but found type %s %s",
+                               id_type,
+                               fields[-2],
+                               id)
             return fields[-1]
         fields = id.split('/')
         if len(fields) >= 3:
             itype = fields[-2]
-            if type != itype:
-                self._warn('expected id of type %s but found type %s %s',
-                           type, itype, id)
+            if id_type != itype:
+                logger.warning("Expected id of type %s but found type %s %s",
+                               id_type,
+                               itype,
+                               id)
             return fields[-1]
         return id
 
-    def _get_uri(self, type, id):
-        return 'spotify:' + type + ":" + self._get_id(type, id)
+    def _get_uri(self, id_type, id):
+        return 'spotify:%s:%s' % (id_type, self._get_id(id_type, id))
 
     def _url_encode(self, value, encoding='utf-8'):
         if isinstance(value, unicode):
