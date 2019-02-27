@@ -686,7 +686,7 @@ class Spotify(object):
 
             Parameters:
                 - limit - the number of entities to return
-        '''        
+        '''
         return self._get('me/player/recently-played', limit=limit)
 
     def current_user_saved_albums_add(self, albums=[]):
@@ -1024,6 +1024,17 @@ class Spotify(object):
             return
         state = str(state).lower()
         self._put(self._append_device_id("me/player/shuffle?state=%s" % state, device_id))
+
+
+    def playlist(self, playlist_id):
+        #return self._get('playlists/%s' % playlist_id)
+        actual_id = self._get_id('playlist', playlist_id)
+        return self._get('playlists/' + actual_id)
+
+    def playlist_tracks(self, playlist_id):
+        actual_id = self._get_id('playlist', playlist_id)
+        return self._get('playlists/%s/tracks' % actual_id)
+
 
     def _append_device_id(self, path, device_id):
         ''' Append device ID to API path.
