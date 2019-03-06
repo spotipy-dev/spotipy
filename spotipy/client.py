@@ -189,6 +189,16 @@ class Spotify(object):
             kwargs.update(args)
         return self._internal_call('PUT', url, payload, kwargs)
 
+    def get_auth(self):
+        """ returns the authorization object associated with this client
+        """
+        return self._auth
+
+    def set_auth(self, auth):
+        """ returns the authorization object associated with this client
+        """
+        self._auth = auth
+
     def next(self, result):
         """ returns the next result given a paged result
 

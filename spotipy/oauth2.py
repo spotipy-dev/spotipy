@@ -7,6 +7,8 @@ import json
 import time
 import sys
 
+import logging
+
 # Workaround to support both python 2 & 3
 import six
 import six.moves.urllib.parse as urllibparse
@@ -136,10 +138,12 @@ class SpotifyOAuth(object):
                     return None
 
                 if self.is_token_expired(token_info):
+                    logging.info('Access token is expired. Getting a new one.')
                     token_info = self.refresh_access_token(token_info['refresh_token'])
 
-            except IOError:
-                pass
+            except IOError as e:
+                raise e
+
         return token_info
 
     def _save_token_info(self, token_info):
@@ -229,6 +233,7 @@ class SpotifyOAuth(object):
             return None
 
     def refresh_access_token(self, refresh_token):
+        logging.info('Refreshing access token')
         payload = { 'refresh_token': refresh_token,
                    'grant_type': 'refresh_token'}
 
@@ -236,12 +241,16 @@ class SpotifyOAuth(object):
 
         response = requests.post(self.OAUTH_TOKEN_URL, data=payload,
             headers=headers, proxies=self.proxies)
+
         if response.status_code != 200:
+            logging.info('Non 200 response. Response code: %d', response.status_code)
             if False:  # debugging code
                 print('headers', headers)
                 print('request', response.url)
             self._warn("couldn't refresh token: code:%d reason:%s" \
                 % (response.status_code, response.reason))
+
+            logging.info('Response reason %s', response.reason)
             return None
         token_info = response.json()
         token_info = self._add_custom_values_to_token_info(token_info)
