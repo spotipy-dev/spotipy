@@ -142,7 +142,7 @@ class SpotifyOAuth(object):
                     token_info = self.refresh_access_token(token_info['refresh_token'])
 
             except IOError as e:
-                raise e
+                pass
 
         return token_info
 
