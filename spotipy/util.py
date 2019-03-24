@@ -10,7 +10,9 @@ from urllib.parse import urlparse, parse_qs
 
 import spotipy
 
-REDIRECT_URI = "http://localhost"
+PORT = 8080
+REDIRECT_ADDRESS = "http://localhost"
+REDIRECT_URI = "{}:{}".format(REDIRECT_ADDRESS, PORT)
 
 
 def prompt_for_user_token(username, scope=None, client_id = None,
@@ -108,7 +110,7 @@ def get_authentication_code():
     As soon as a request is received, the server is closed.
     :return: the authentication code
     """
-    httpd = MicroServer((REDIRECT_URI.replace("http:", "").replace("https:", "").replace("/", ""), 80), CustomHandler)
+    httpd = MicroServer((REDIRECT_URI.split("://")[1].split(":")[0], PORT), CustomHandler)
     # stop the server once a request is received
     while not httpd.latest_query_components:
         httpd.handle_request()
