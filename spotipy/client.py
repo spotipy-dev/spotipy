@@ -713,6 +713,21 @@ class Spotify(object):
         '''
         return self._put('me/following?type=user&ids=' + ','.join(ids))
 
+    def playlist_tracks(self, playlist_id, fields=None,limit=100,offset=0,market=None):
+        ''' Get full details of the tracks of a playlist owned by a Spotify user.
+            
+            Parameters:
+                - playlist_id - the id of the playlist
+                - fields - which fields to return
+                - limit - the maximum number of tracks to return
+                - offset - the index of the first track to return
+                - market - an ISO 3166-1 alpha-2 country code.
+        '''
+        plid = self._get_id('playlist', playlist_id)
+        return self._get('playlists/%s/tracks' % plid,limit=limit, offset=offset, fields=fields,
+                         market=market)
+
+    
     def featured_playlists(self, locale=None, country=None, timestamp=None,
                            limit=20, offset=0):
         """ Get a list of Spotify featured playlists
