@@ -127,7 +127,7 @@ To support the **Authorization Code Flow** *Spotipy* provides a
 utility method ``util.prompt_for_user_token`` that will attempt to authorize the
 user.  You can pass your app credentials directly into the method as arguments::
 
-    util.prompt_for_user_token(username,scope,client_id='your-app-redirect-url',client_secret='your-app-redirect-url',redirect_uri='your-app-redirect-url')
+    util.prompt_for_user_token(username,scope,client_id='your-app-id',client_secret='your-app-secret',redirect_uri='your-app-redirect-url')
 
 or if you are reluctant to immortalize your app credentials in your source code, 
 you can set environment variables like so::
