@@ -23,7 +23,7 @@ def _make_authorization_headers(client_id, client_secret):
 
 def is_token_expired(token_info):
     now = int(time.time())
-    return token_info['expires_at'] - now < 60
+    return token_info['expires_at'] - now < 1200
 
 
 class SpotifyClientCredentials(object):
@@ -67,7 +67,7 @@ class SpotifyClientCredentials(object):
 
     def _request_access_token(self):
         """Gets client credentials access token """
-        payload = { 'grant_type': 'client_credentials'}
+        payload = {'grant_type': 'client_credentials'}
 
         headers = _make_authorization_headers(self.client_id, self.client_secret)
 
