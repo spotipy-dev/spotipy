@@ -31,7 +31,7 @@ def prompt_for_user_token(username, scope=None, client_id = None,
 
     '''
 
-    assert_port_available(80)
+    assert_port_available(PORT)
 
     if not client_id:
         client_id = os.getenv('SPOTIPY_CLIENT_ID')
