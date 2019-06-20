@@ -29,7 +29,7 @@ def is_token_expired(token_info):
 class SpotifyClientCredentials(object):
     OAUTH_TOKEN_URL = 'https://accounts.spotify.com/api/token'
 
-    def __init__(self, client_id=None, client_secret=None, proxies=None):
+    def __init__(self, client_id=None, client_secret=None, requests_session=True, proxies=None):
         """
         You can either provid a client_id and client_secret to the
         constructor or set SPOTIPY_CLIENT_ID and SPOTIPY_CLIENT_SECRET
@@ -51,6 +51,14 @@ class SpotifyClientCredentials(object):
         self.client_secret = client_secret
         self.token_info = None
         self.proxies = proxies
+        if isinstance(requests_session, requests.Session):
+            self._session = requests_session
+        else:
+            if requests_session:  # Build a new session.
+                self._session = requests.Session()
+            else:  # Use the Requests API module as a "session".
+                from requests import api
+                self._session = api
 
     def get_access_token(self):
         """
@@ -71,7 +79,7 @@ class SpotifyClientCredentials(object):
 
         headers = _make_authorization_headers(self.client_id, self.client_secret)
 
-        response = requests.post(self.OAUTH_TOKEN_URL, data=payload,
+        response = session.post(self.OAUTH_TOKEN_URL, data=payload,
             headers=headers, verify=True, proxies=self.proxies)
         if response.status_code != 200:
             raise SpotifyOauthError(response.reason)
@@ -211,7 +219,7 @@ class SpotifyOAuth(object):
 
         headers = self._make_authorization_headers()
 
-        response = requests.post(self.OAUTH_TOKEN_URL, data=payload,
+        response = session.post(self.OAUTH_TOKEN_URL, data=payload,
             headers=headers, verify=True, proxies=self.proxies)
         if response.status_code != 200:
             raise SpotifyOauthError(response.reason)
@@ -234,7 +242,7 @@ class SpotifyOAuth(object):
 
         headers = self._make_authorization_headers()
 
-        response = requests.post(self.OAUTH_TOKEN_URL, data=payload,
+        response = session.post(self.OAUTH_TOKEN_URL, data=payload,
             headers=headers, proxies=self.proxies)
         if response.status_code != 200:
             if False:  # debugging code
