@@ -40,7 +40,7 @@ class Spotify(object):
 
             import spotipy
 
-            urn = 'spotify:artist:3jOstUTkEu2JkjvRdBA5Gu'
+                urn = 'spotify:artist:3jOstUTkEu2JkjvRdBA5Gu'
             sp = spotipy.Spotify()
 
             sp.trace = True # turn on tracing
@@ -605,7 +605,7 @@ class Spotify(object):
         '''
         return self._get('me/player/currently-playing')
 
-    def current_user_saved_albums(self, limit=20, offset=0):
+    def current_user_saved_albums(self, limit=600, offset=0):
         """ Gets a list of the albums saved in the current authorized user's
             "Your Music" library
 
