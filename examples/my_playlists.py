@@ -1,4 +1,4 @@
-# Shows the top artists for a user
+# Shows a user's playlists
 
 import pprint
 import sys
