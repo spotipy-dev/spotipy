@@ -1,6 +1,7 @@
 # shows artist info for a URN or URL
 
 import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
 import sys
 import pprint
 
@@ -9,7 +10,8 @@ if len(sys.argv) > 1:
 else:
     urn = 'spotify:artist:3jOstUTkEu2JkjvRdBA5Gu'
 
-sp = spotipy.Spotify()
+client_credentials_manager = SpotifyClientCredentials()
+sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 response = sp.artist_top_tracks(urn)
 
 for track in response['tracks']:
