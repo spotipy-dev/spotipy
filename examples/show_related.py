@@ -2,6 +2,7 @@
 # shows related artists for the given seed artist
 
 import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
 import sys
 import pprint
 
@@ -10,7 +11,9 @@ if len(sys.argv) > 1:
 else:
     artist_name = 'weezer'
 
-sp = spotipy.Spotify()
+
+client_credentials_manager = SpotifyClientCredentials()
+sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 result = sp.search(q='artist:' + artist_name, type='artist')
 try:
     name = result['artists']['items'][0]['name']
