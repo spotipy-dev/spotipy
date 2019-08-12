@@ -27,6 +27,7 @@ released by the artist 'Birdy'::
 Here's another example showing how to get 30 second samples and cover art
 for the top 10 tracks for Led Zeppelin::
 
+    from __future__ import print_function
     import spotipy
 
     lz_uri = 'spotify:artist:36QJpDe2go2KgaRleHCDTp'
@@ -35,14 +36,15 @@ for the top 10 tracks for Led Zeppelin::
     results = spotify.artist_top_tracks(lz_uri)
 
     for track in results['tracks'][:10]:
-        print 'track    : ' + track['name']
-        print 'audio    : ' + track['preview_url']
-        print 'cover art: ' + track['album']['images'][0]['url']
-        print
+        print('track    : ' + track['name'])
+        print('audio    : ' + track['preview_url'])
+        print('cover art: ' + track['album']['images'][0]['url'])
+        print()
 
 Finally, here's an example that will get the URL for an artist image given the
 artist's name::
 
+    from __future__ import print_function
     import spotipy
     import sys
 
@@ -57,7 +59,7 @@ artist's name::
     items = results['artists']['items']
     if len(items) > 0:
         artist = items[0]
-        print artist['name'], artist['images'][0]['url']
+        print(artist['name'], artist['images'][0]['url'])
 
 
 Features
@@ -87,10 +89,11 @@ Non-Authorized requests
 For methods that do not require authorization, simply create a Spotify object
 and start making method calls like so::
 
+    from __future__ import print_function
     import spotipy
     spotify = spotipy.Spotify()
     results = spotify.search(q='artist:' + name, type='artist')
-    print results
+    print(results)
 
 Authorized requests
 =======================
@@ -146,6 +149,7 @@ are used to automatically re-authorized expired tokens.
 
 Here's an example of getting user authorization to read a user's saved tracks::
 
+    from __future__ import print_function
     import sys
     import spotipy
     import spotipy.util as util
@@ -155,7 +159,7 @@ Here's an example of getting user authorization to read a user's saved tracks::
     if len(sys.argv) > 1:
         username = sys.argv[1]
     else:
-        print "Usage: %s username" % (sys.argv[0],)
+        print("Usage: %s username" % (sys.argv[0],))
         sys.exit()
 
     token = util.prompt_for_user_token(username, scope)
@@ -165,9 +169,9 @@ Here's an example of getting user authorization to read a user's saved tracks::
         results = sp.current_user_saved_tracks()
         for item in results['items']:
             track = item['track']
-            print track['name'] + ' - ' + track['artists'][0]['name']
+            print(track['name'] + ' - ' + track['artists'][0]['name'])
     else:
-        print "Can't get token for", username
+        print("Can't get token for", username)
 
 Client Credentials Flow
 =======================
@@ -217,6 +221,7 @@ Here are a few more examples of using *Spotipy*.
 
 Add tracks to a playlist::
 
+    from __future__ import print_function
     import pprint
     import sys
 
@@ -228,7 +233,7 @@ Add tracks to a playlist::
         playlist_id = sys.argv[2]
         track_ids = sys.argv[3:]
     else:
-        print "Usage: %s username playlist_id track_id ..." % (sys.argv[0],)
+        print("Usage: %s username playlist_id track_id ..." % (sys.argv[0],))
         sys.exit()
 
     scope = 'playlist-modify-public'
@@ -238,15 +243,16 @@ Add tracks to a playlist::
         sp = spotipy.Spotify(auth=token)
         sp.trace = False
         results = sp.user_playlist_add_tracks(username, playlist_id, track_ids)
-        print results
+        print(results)
     else:
-        print "Can't get token for", username
+        print("Can't get token for", username)
 
 
 Shows the contents of every playlist owned by a user::
 
     # shows a user's playlists (need to be authenticated via oauth)
 
+    from __future__ import print_function
     import sys
     import spotipy
     import spotipy.util as util
@@ -254,16 +260,16 @@ Shows the contents of every playlist owned by a user::
     def show_tracks(tracks):
         for i, item in enumerate(tracks['items']):
             track = item['track']
-            print "   %d %32.32s %s" % (i, track['artists'][0]['name'], 
-                track['name'])
+            print("   %d %32.32s %s" % (i, track['artists'][0]['name'], 
+                track['name']))
 
 
     if __name__ == '__main__':
         if len(sys.argv) > 1:
             username = sys.argv[1]
         else:
-            print "Whoops, need your username!"
-            print "usage: python user_playlists.py [username]"
+            print("Whoops, need your username!")
+            print("usage: python user_playlists.py [username]")
             sys.exit()
 
         token = util.prompt_for_user_token(username)
@@ -273,9 +279,9 @@ Shows the contents of every playlist owned by a user::
             playlists = sp.user_playlists(username)
             for playlist in playlists['items']:
                 if playlist['owner']['id'] == username:
-                    print
-                    print playlist['name']
-                    print '  total tracks', playlist['tracks']['total']
+                    print()
+                    print(playlist['name'])
+                    print ('  total tracks', playlist['tracks']['total'])
                     results = sp.user_playlist(username, playlist['id'], 
                         fields="tracks,next")
                     tracks = results['tracks']
@@ -284,7 +290,7 @@ Shows the contents of every playlist owned by a user::
                         tracks = sp.next(tracks)
                         show_tracks(tracks)
         else:
-            print "Can't get token for", username
+            print("Can't get token for", username)
 
 
 More Examples
