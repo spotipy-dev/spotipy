@@ -586,7 +586,7 @@ class Spotify(object):
         '''
         return self._get('me/player/currently-playing')
 
-    def current_user_saved_albums(self, limit=600, offset=0):
+    def current_user_saved_albums(self, limit=20, offset=0):
         """ Gets a list of the albums saved in the current authorized user's
             "Your Music" library
 
@@ -596,6 +596,18 @@ class Spotify(object):
 
         """
         return self._get('me/albums', limit=limit, offset=offset)
+
+    def current_user_saved_albums_delete(self, albums=None):
+        """ Remove one or more albums from the current user's
+            "Your Music" library.
+
+            Parameters:
+                - albums - a list of album URIs, URLs or IDs
+        """
+        alist = []
+        if albums is not None:
+            alist = [self._get_id('album', a) for a in albums]
+        return self._delete('me/albums/?ids=' + ','.join(alist))
 
     def current_user_saved_tracks(self, limit=20, offset=0):
         """ Gets a list of the tracks saved in the current authorized user's
