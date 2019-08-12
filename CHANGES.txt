@@ -14,3 +14,4 @@ v2.310, January 5, 2015 -- Added session support
 v2.3.1, March 28, 2015  -- Auto retry support
 v2.3.5, April 28, 2015  -- Fixed bug in auto retry support
 v2.3.6, June 3, 2015    -- Support for offset/limit with album_tracks API
+v2.5.0 - January 11, 2020 -- Added follow and player endpoints
