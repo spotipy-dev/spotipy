@@ -76,7 +76,7 @@ class TestSpotipy(unittest.TestCase):
     def test_album_tracks(self):
         results = self.spotify.album_tracks(self.pinkerton_urn)
         self.assertTrue(len(results['items']) == 10)
-    
+
     def test_album_tracks_many(self):
         results = self.spotify.album_tracks(self.angeles_haydn_urn)
         tracks = results['items']

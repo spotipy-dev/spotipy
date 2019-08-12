@@ -41,15 +41,15 @@ class AuthTestSpotipy(unittest.TestCase):
     """
 
     playlist = "spotify:user:plamere:playlist:2oCEWyyAPbZp9xhVSxZavx"
-    four_tracks = ["spotify:track:6RtPijgfPKROxEzTHNRiDp", 
+    four_tracks = ["spotify:track:6RtPijgfPKROxEzTHNRiDp",
                 "spotify:track:7IHOIqZUUInxjVkko181PB",
-                "4VrWlk8IQxevMvERoX08iC", 
+                "4VrWlk8IQxevMvERoX08iC",
                 "http://open.spotify.com/track/3cySlItpiPiIAzU3NyHCJf"]
 
-    two_tracks = ["spotify:track:6RtPijgfPKROxEzTHNRiDp", 
+    two_tracks = ["spotify:track:6RtPijgfPKROxEzTHNRiDp",
                 "spotify:track:7IHOIqZUUInxjVkko181PB"]
 
-    other_tracks=["spotify:track:2wySlB6vMzCbQrRnNGOYKa", 
+    other_tracks=["spotify:track:2wySlB6vMzCbQrRnNGOYKa",
             "spotify:track:29xKs5BAHlmlX1u4gzQAbJ",
             "spotify:track:1PB7gRWcvefzu7t3LJLUlf"]
 
