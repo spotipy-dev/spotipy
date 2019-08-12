@@ -526,7 +526,7 @@ class Spotify(object):
             Parameters:
                 - user - the id of the user
                 - playlist_id - the id of the playlist
-                - tracks - the list of track ids to add to the playlist
+                - tracks - the list of track ids to remove from the playlist
                 - snapshot_id - optional id of the playlist snapshot
 
         """
