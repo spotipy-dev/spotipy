@@ -1081,15 +1081,15 @@ class Spotify(object):
         fields = id.split(':')
         if len(fields) >= 3:
             if type != fields[-2]:
-                self._warn('expected id of type %s but found type %s %s',
-                           type, fields[-2], id)
+                self._warn('expected id of type %s but found type %s %s' %
+                           (type, fields[-2], id))
             return fields[-1]
         fields = id.split('/')
         if len(fields) >= 3:
             itype = fields[-2]
             if type != itype:
-                self._warn('expected id of type %s but found type %s %s',
-                           type, itype, id)
+                self._warn('expected id of type %s but found type %s %s' %
+                           (type, itype, id))
             return fields[-1]
         return id
 
