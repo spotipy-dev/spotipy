@@ -389,7 +389,7 @@ class Spotify(object):
 
     def playlist(self, playlist_id, fields=None, market=None):
         """ Gets playlist by id
-            
+
             Parameters:
             - playlist - the id of the playlist
             - fields - which fields to return
@@ -400,7 +400,7 @@ class Spotify(object):
 
         return self._get("playlists/%s" % (plid), fields=fields)
 
-    
+
     def user_playlist_tracks(self, user, playlist_id=None, fields=None,
                              limit=100, offset=0, market=None):
         """ Get full details of the tracks of a playlist owned by a user.
@@ -546,9 +546,11 @@ class Spotify(object):
             Parameters:
                 - user - the id of the user
                 - playlist_id - the id of the playlist
-                - tracks - an array of objects containing Spotify URIs of the tracks to remove with their current positions in the playlist.  For example:
-                    [  { "uri":"4iV5W9uYEdYUVa79Axb7Rh", "positions":[2] },
-                       { "uri":"1301WleyT98MSxVHPZCA6M", "positions":[7] } ]
+                - tracks - an array of objects containing Spotify URIs of the
+                    tracks to remove with their current positions in the
+                    playlist.  For example:
+                        [  { "uri":"4iV5W9uYEdYUVa79Axb7Rh", "positions":[2] },
+                        { "uri":"1301WleyT98MSxVHPZCA6M", "positions":[7] } ]
                 - snapshot_id - optional id of the playlist snapshot
         """
 
@@ -583,7 +585,8 @@ class Spotify(object):
         Parameters:
             - playlist_owner_id - the user id of the playlist owner
             - playlist_id - the id of the playlist
-            - user_ids - the ids of the users that you want to check to see if they follow the playlist. Maximum: 5 ids.
+            - user_ids - the ids of the users that you want to check to see
+                if they follow the playlist. Maximum: 5 ids.
 
         """
         return self._get("users/{}/playlists/{}/followers/contains?ids={}".format(playlist_owner_id, playlist_id, ','.join(user_ids)))
@@ -705,7 +708,7 @@ class Spotify(object):
 
             Parameters:
                 - limit - the number of entities to return
-        '''        
+        '''
         return self._get('me/player/recently-played', limit=limit)
 
     def current_user_saved_albums_delete(self, albums=[]):
@@ -760,7 +763,7 @@ class Spotify(object):
                 - ids - a list of artist IDs
         '''
         return self._delete('me/following?type=artist&ids=' + ','.join(ids))
-    
+
     def user_unfollow_users(self, ids=[]):
         ''' Unfollow one or more users
             Parameters:
