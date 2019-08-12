@@ -708,6 +708,28 @@ class Spotify(object):
         '''        
         return self._get('me/player/recently-played', limit=limit)
 
+    def current_user_saved_albums_delete(self, albums=[]):
+        """ Remove one or more albums from the current user's
+            "Your Music" library.
+
+            Parameters:
+                - albums - a list of album URIs, URLs or IDs
+        """
+        alist = [self._get_id('album', a) for a in albums]
+        r = self._delete('me/albums/?ids=' + ','.join(alist))
+        return r
+
+    def current_user_saved_albums_contains(self, albums=[]):
+        """ Check if one or more albums is already saved in
+            the current Spotify user’s “Your Music” library.
+
+            Parameters:
+                - albums - a list of album URIs, URLs or IDs
+        """
+        alist = [self._get_id('album', a) for a in albums]
+        r = self._get('me/albums/contains?ids=' + ','.join(alist))
+        return r
+
     def current_user_saved_albums_add(self, albums=[]):
         """ Add one or more albums to the current user's
             "Your Music" library.
