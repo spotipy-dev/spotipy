@@ -1,6 +1,6 @@
 # Gets all the public playlists for the given
 # user. Uses Client Credentials flow
-# 
+#
 
 import sys
 import spotipy

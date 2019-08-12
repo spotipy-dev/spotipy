@@ -5,7 +5,7 @@ Welcome to Spotipy!
 ===================================
 *Spotipy* is a lightweight Python library for the `Spotify Web API
 <https://developer.spotify.com/web-api/>`_. With *Spotipy*
-you get full access to all of the music data provided by the Spotify platform. 
+you get full access to all of the music data provided by the Spotify platform.
 
 Here's a quick example of using *Spotipy* to list the names of all the albums
 released by the artist 'Birdy'::
@@ -106,17 +106,17 @@ Even if your script does not have an accessible URL you need to specify one
 when registering your application where the spotify authentication API will
 redirect to after successful login. The URL doesn't need to work or be
 accessible, you can specify "http://localhost/", after successful login you
-just need to copy the "http://localhost/?code=..." URL from your browser 
+just need to copy the "http://localhost/?code=..." URL from your browser
 and paste it to the console where your script is running.
 
-Register your app at 
+Register your app at
 `My Applications
 <https://developer.spotify.com/my-applications/#!/applications>`_.
 
 
 *spotipy* supports two authorization flows:
 
-  - The **Authorization Code flow** This method is suitable for long-running applications 
+  - The **Authorization Code flow** This method is suitable for long-running applications
     which the user logs into once. It provides an access token that can be refreshed.
 
   - The **Client Credentials flow**  The method makes it possible
@@ -132,14 +132,14 @@ user.  You can pass your app credentials directly into the method as arguments::
 
     util.prompt_for_user_token(username,scope,client_id='your-spotify-client-id',client_secret='your-spotify-client-secret',redirect_uri='your-app-redirect-url')
 
-or if you are reluctant to immortalize your app credentials in your source code, 
+or if you are reluctant to immortalize your app credentials in your source code,
 you can set environment variables like so::
 
     export SPOTIPY_CLIENT_ID='your-spotify-client-id'
     export SPOTIPY_CLIENT_SECRET='your-spotify-client-secret'
     export SPOTIPY_REDIRECT_URI='your-app-redirect-url'
 
-Call ``util.prompt_for_user_token`` method with the username and the 
+Call ``util.prompt_for_user_token`` method with the username and the
 desired scope (see `Using
 Scopes <https://developer.spotify.com/web-api/using-scopes/>`_ for information
 about scopes) and credentials. This will coordinate the user authorization via
@@ -195,8 +195,8 @@ class SpotifyClientCredentials that can be used to authenticate requests like so
             playlists = None
 
 Client credentials flow is appropriate for requests that do not require access to a
-user's private data.  Even if you are only making calls that do not require 
-authorization, using this flow yields the benefit of a higher rate limit 
+user's private data.  Even if you are only making calls that do not require
+authorization, using this flow yields the benefit of a higher rate limit
 
 IDs URIs and URLs
 =======================
@@ -260,7 +260,7 @@ Shows the contents of every playlist owned by a user::
     def show_tracks(tracks):
         for i, item in enumerate(tracks['items']):
             track = item['track']
-            print("   %d %32.32s %s" % (i, track['artists'][0]['name'], 
+            print("   %d %32.32s %s" % (i, track['artists'][0]['name'],
                 track['name']))
 
 
@@ -282,7 +282,7 @@ Shows the contents of every playlist owned by a user::
                     print()
                     print(playlist['name'])
                     print ('  total tracks', playlist['tracks']['total'])
-                    results = sp.user_playlist(username, playlist['id'], 
+                    results = sp.user_playlist(username, playlist['id'],
                         fields="tracks,next")
                     tracks = results['tracks']
                     show_tracks(tracks)
@@ -298,7 +298,7 @@ More Examples
 There are many more examples of how to use *Spotipy* in the `Examples
 Directory <https://github.com/plamere/spotipy/tree/master/examples>`_ on Github
 
-API Reference 
+API Reference
 ==============
 
 :mod:`client` Module
@@ -336,7 +336,7 @@ You can ask questions about Spotipy on Stack Overflow.   Don’t forget to add t
 
     http://stackoverflow.com/questions/ask
 
-If you think you've found a bug, let us know at 
+If you think you've found a bug, let us know at
 `Spotify Issues <https://github.com/plamere/spotipy/issues>`_
 
 
@@ -344,24 +344,25 @@ Contribute
 ==========
 Spotipy authored by Paul Lamere (plamere) with contributions by:
 
-  - Daniel Beaudry // danbeaudry 
-  - Faruk Emre Sahin // fsahin 
-  - George // rogueleaderr 
-  - Henry Greville // sethaurus 
-  - Hugo // hugovk 
-  - José Manuel Pérez // JMPerez 
-  - Lucas Nunno // lnunno 
-  - Lynn Root // econchick 
-  - Matt Dennewitz // mattdennewitz 
-  - Matthew Duck // mattduck 
-  - Michael Thelin // thelinmichael 
-  - Ryan Choi // ryankicks 
-  - Simon Metson // drsm79 
+  - Daniel Beaudry // danbeaudry
+  - Faruk Emre Sahin // fsahin
+  - George // rogueleaderr
+  - Henry Greville // sethaurus
+  - Hugo // hugovk
+  - José Manuel Pérez // JMPerez
+  - Lucas Nunno // lnunno
+  - Lynn Root // econchick
+  - Matt Dennewitz // mattdennewitz
+  - Matthew Duck // mattduck
+  - Michael Thelin // thelinmichael
+  - Ryan Choi // ryankicks
+  - Simon Metson // drsm79
   - Steve Winton // swinton
-  - Tim Balzer // timbalzer 
-  - corycorycory // corycorycory 
+  - Tim Balzer // timbalzer
+  - corycorycory // corycorycory
   - Nathan Coleman // nathancoleman
   - Michael Birtwell // mbirtwell
+  - Harrison Hayes // Harrison97
 
 License
 =======

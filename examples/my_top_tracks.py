@@ -26,6 +26,6 @@ if token:
         for i, item in enumerate(results['items']):
             print (i, item['name'], '//', item['artists'][0]['name'])
         print ()
-        
+
 else:
     print("Can't get token for", username)
