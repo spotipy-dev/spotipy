@@ -754,6 +754,20 @@ class Spotify(object):
         '''
         return self._put('me/following?type=user&ids=' + ','.join(ids))
 
+    def user_unfollow_artists(self, ids=[]):
+        ''' Unfollow one or more artists
+            Parameters:
+                - ids - a list of artist IDs
+        '''
+        return self._delete('me/following?type=artist&ids=' + ','.join(ids))
+    
+    def user_unfollow_users(self, ids=[]):
+        ''' Unfollow one or more users
+            Parameters:
+                - ids - a list of user IDs
+        '''
+        return self._delete('me/following?type=user&ids=' + ','.join(ids))
+
     def featured_playlists(self, locale=None, country=None, timestamp=None,
                            limit=20, offset=0):
         """ Get a list of Spotify featured playlists
