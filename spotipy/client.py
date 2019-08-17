@@ -569,6 +569,27 @@ class Spotify(object):
         """
         return self._get("users/{}/playlists/{}/followers/contains?ids={}".format(playlist_owner_id, playlist_id, ','.join(user_ids)))
 
+    def get_playlist_tracks(self, playlist_id=None):
+        """
+        Get full details of the tracks of a playlist owned by a Spotify user. Link to api doc as of 08/17/2019:
+            - https://developer.spotify.com/documentation/web-api/reference/playlists/get-playlists-tracks/
+
+        Parameters:
+            - playlist_id: the id of the playlist
+
+        """
+        return self._get("playlists/{}/tracks".format(playlist_id))
+
+    def get_playlist(self, playlist_id):
+        """
+        Get a playlist owned by a spotify user. Link to api doc as of 08/17/2019:
+            - https://developer.spotify.com/documentation/web-api/reference/playlists/get-playlist/
+
+        Parameters:
+            - playlist_id: the id of the playlist
+        """
+        return self._get("playlists/{}".format(playlist_id))
+
     def me(self):
         """ Get detailed profile information about the current user.
             An alias for the 'current_user' method.
