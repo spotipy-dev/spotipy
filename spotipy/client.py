@@ -569,16 +569,17 @@ class Spotify(object):
         """
         return self._get("users/{}/playlists/{}/followers/contains?ids={}".format(playlist_owner_id, playlist_id, ','.join(user_ids)))
 
-    def get_playlist_tracks(self, playlist_id=None):
+    def get_playlist_tracks(self, playlist_id, limit=100, offset=0):
         """
         Get full details of the tracks of a playlist owned by a Spotify user. Link to api doc as of 08/17/2019:
             - https://developer.spotify.com/documentation/web-api/reference/playlists/get-playlists-tracks/
 
         Parameters:
             - playlist_id: the id of the playlist
-
+            - limit: maximum number of tracks to return
+            - offset: index of the first track to return
         """
-        return self._get("playlists/{}/tracks".format(playlist_id))
+        return self._get("playlists/{}/tracks?limit={}&offset={}".format(playlist_id, limit, offset))
 
     def get_playlist(self, playlist_id):
         """
