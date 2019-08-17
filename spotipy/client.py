@@ -579,7 +579,8 @@ class Spotify(object):
             - limit: maximum number of tracks to return
             - offset: index of the first track to return
         """
-        return self._get("playlists/{}/tracks?limit={}&offset={}".format(playlist_id, limit, offset))
+        plid = self._get_id('playlist', playlist_id)
+        return self._get("playlists/{}/tracks?limit={}&offset={}".format(plid, limit, offset))
 
     def get_playlist(self, playlist_id):
         """
@@ -589,7 +590,8 @@ class Spotify(object):
         Parameters:
             - playlist_id: the id of the playlist
         """
-        return self._get("playlists/{}".format(playlist_id))
+        plid = self._get_id('playlist', playlist_id)
+        return self._get("playlists/{}".format(plid))
 
     def me(self):
         """ Get detailed profile information about the current user.
