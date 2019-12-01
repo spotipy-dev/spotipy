@@ -101,8 +101,9 @@ class Spotify(object):
             url = self.prefix + url
         headers = self._auth_headers()
 
-        if 'content_type' in args:
-            headers['Content-Type'] = args['content-type']
+        if 'content_type' in args['params']:
+            headers['Content-Type'] = args['params']['content_type']
+            del args['params']['content_type']
         else:
             headers['Content-Type'] = 'application/json'
 
