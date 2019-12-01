@@ -100,7 +100,11 @@ class Spotify(object):
         if not url.startswith('http'):
             url = self.prefix + url
         headers = self._auth_headers()
-        headers['Content-Type'] = 'application/json'
+
+        if 'content_type' in args:
+            headers['Content-Type'] = args['content-type']
+        else:
+            headers['Content-Type'] = 'application/json'
 
         if payload:
             args["data"] = json.dumps(payload)
@@ -568,6 +572,18 @@ class Spotify(object):
 
         """
         return self._get("users/{}/playlists/{}/followers/contains?ids={}".format(playlist_owner_id, playlist_id, ','.join(user_ids)))
+
+    def user_playlist_upload_cover_image(self, playlist_owner_id, playlist_id, image):
+        """
+        Replace the image used to represent a specific playlist
+
+        Parameters:
+            - playlist_owner_id - the user id of the playlist owner
+            - playlist_id - the id of the playlist
+            - image - image data as a base64-encoded string
+
+        """
+        return self._put("users/{}/playlists/{}/images".format(playlist_owner_id, playlist_id), payload=image, content_type="image/jpeg")
 
     def me(self):
         """ Get detailed profile information about the current user.
