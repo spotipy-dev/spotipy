@@ -104,11 +104,12 @@ class Spotify(object):
         if 'content_type' in args['params']:
             headers['Content-Type'] = args['params']['content_type']
             del args['params']['content_type']
+            if payload:
+                args["data"] = payload
         else:
             headers['Content-Type'] = 'application/json'
-
-        if payload:
-            args["data"] = json.dumps(payload)
+            if payload:
+                args["data"] = json.dumps(payload)
 
         if self.trace_out:
             print(url)
