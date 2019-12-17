@@ -11,6 +11,7 @@ setup(
         'mock>=2.0.0',
         'requests>=2.3.0',
         'six>=1.10.0',
-    ],
+        'simplejson==3.13.2',
+  ],
     license='LICENSE.txt',
     packages=['spotipy'])
