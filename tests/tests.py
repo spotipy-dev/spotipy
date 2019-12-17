@@ -47,7 +47,7 @@ class TestSpotipy(unittest.TestCase):
 
     @classmethod
     def setUpClass(self):
-        missing = filter(lambda var: not os.getenv(CCEV[var]), CCEV)
+        missing = list(filter(lambda var: not os.getenv(CCEV[var]), CCEV))
 
         if missing:
             raise Exception('Please set the client credentials for the test application using the following environment variables: {}'.format(CCEV.values()))
@@ -156,7 +156,7 @@ class TestSpotipy(unittest.TestCase):
         self.assertTrue(found)
 
     def test_search_timeout(self):
-        sp = Spotify(auth=self.token, requests_timeout=.1)
+        sp = Spotify(auth=self.token, requests_timeout=.01)
         try:
             results = sp.search(q='my*', type='track')
             self.assertTrue(False, 'unexpected search timeout')
