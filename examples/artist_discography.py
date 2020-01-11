@@ -35,7 +35,7 @@ def show_artist_albums(id):
     unique = set()  # skip duplicate albums
     for album in albums:
         name = album['name'].lower()
-        if not name in unique:  
+        if not name in unique:
             print(name)
             unique.add(name)
             show_album_tracks(album)

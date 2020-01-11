@@ -1,7 +1,14 @@
-from spotipy.oauth2 import SpotifyOAuth
-import json
+# -*- coding: utf-8 -*-
+
 import io
+import json
+import os
+import sys
 import unittest
+
+sys.path.insert(0, os.path.abspath(os.pardir))
+
+from spotipy import SpotifyOAuth
 
 try:
     import unittest.mock as mock
@@ -166,4 +173,5 @@ class TestSpotifyOAuth(unittest.TestCase):
 
 
 if __name__ == '__main__':
+
     unittest.main()

@@ -1,16 +1,21 @@
-# coding: utf-8
+# -*- coding: utf-8 -*-
 
+""" A simple and thin Python library for the Spotify Web API """
 
 from __future__ import print_function
-import sys
-import requests
+
+__all__ = [
+    'Spotify',
+    'SpotifyException'
+]
+
 import json
+import sys
 import time
 
+import requests
 import six
 
-""" A simple and thin Python library for the Spotify Web API
-"""
 
 
 class SpotifyException(Exception):
@@ -55,7 +60,7 @@ class Spotify(object):
     def __init__(self, auth=None, requests_session=True,
         client_credentials_manager=None, proxies=None, requests_timeout=None):
         """
-        Create a Spotify API object.
+        Creates a Spotify API client.
 
         :param auth: An authorization token (optional)
         :param requests_session:
@@ -382,6 +387,18 @@ class Spotify(object):
         plid = self._get_id('playlist', playlist_id)
         return self._get("users/%s/playlists/%s" % (user, plid), fields=fields)
 
+    def playlist(self, playlist_id, fields=None, market=None):
+        """ Gets playlist by id
+
+            Parameters:
+            - playlist - the id of the playlist
+            - fields - which fields to return
+            - market - An ISO 3166-1 alpha-2 country code or the string from_token.
+            """
+        plid = self._get_id('playlist', playlist_id)
+        return self._get("playlists/%s" % (plid), fields=fields)
+
+
     def user_playlist_tracks(self, user, playlist_id=None, fields=None,
                              limit=100, offset=0, market=None):
         """ Get full details of the tracks of a playlist owned by a user.
@@ -507,7 +524,7 @@ class Spotify(object):
             Parameters:
                 - user - the id of the user
                 - playlist_id - the id of the playlist
-                - tracks - the list of track ids to add to the playlist
+                - tracks - the list of track ids to remove from the playlist
                 - snapshot_id - optional id of the playlist snapshot
 
         """
@@ -527,9 +544,11 @@ class Spotify(object):
             Parameters:
                 - user - the id of the user
                 - playlist_id - the id of the playlist
-                - tracks - an array of objects containing Spotify URIs of the tracks to remove with their current positions in the playlist.  For example:
-                    [  { "uri":"4iV5W9uYEdYUVa79Axb7Rh", "positions":[2] },
-                       { "uri":"1301WleyT98MSxVHPZCA6M", "positions":[7] } ]
+                - tracks - an array of objects containing Spotify URIs of the
+                    tracks to remove with their current positions in the
+                    playlist.  For example:
+                        [  { "uri":"4iV5W9uYEdYUVa79Axb7Rh", "positions":[2] },
+                        { "uri":"1301WleyT98MSxVHPZCA6M", "positions":[7] } ]
                 - snapshot_id - optional id of the playlist snapshot
         """
 
@@ -564,7 +583,8 @@ class Spotify(object):
         Parameters:
             - playlist_owner_id - the user id of the playlist owner
             - playlist_id - the id of the playlist
-            - user_ids - the ids of the users that you want to check to see if they follow the playlist. Maximum: 5 ids.
+            - user_ids - the ids of the users that you want to check to see
+                if they follow the playlist. Maximum: 5 ids.
 
         """
         return self._get("users/{}/playlists/{}/followers/contains?ids={}".format(playlist_owner_id, playlist_id, ','.join(user_ids)))
@@ -586,17 +606,6 @@ class Spotify(object):
         '''
         return self._get('me/player/currently-playing')
 
-    def current_user_saved_albums(self, limit=20, offset=0):
-        """ Gets a list of the albums saved in the current authorized user's
-            "Your Music" library
-
-            Parameters:
-                - limit - the number of albums to return
-                - offset - the index of the first album to return
-
-        """
-        return self._get('me/albums', limit=limit, offset=offset)
-
     def current_user_saved_tracks(self, limit=20, offset=0):
         """ Gets a list of the tracks saved in the current authorized user's
             "Your Music" library
@@ -612,8 +621,8 @@ class Spotify(object):
         """ Gets a list of the artists followed by the current authorized user
 
             Parameters:
-                - limit - the number of tracks to return
-                - after - ghe last artist ID retrieved from the previous request
+                - limit - the number of artists to return
+                - after - the last artist ID retrieved from the previous request
 
         """
         return self._get('me/following', type='artist', limit=limit,
@@ -686,8 +695,29 @@ class Spotify(object):
 
             Parameters:
                 - limit - the number of entities to return
-        '''        
+        '''
         return self._get('me/player/recently-played', limit=limit)
+
+    def current_user_saved_albums(self, limit=20, offset=0):
+        """ Gets a list of the albums saved in the current authorized user's
+            "Your Music" library
+
+            Parameters:
+                - limit - the number of albums to return
+                - offset - the index of the first album to return
+
+        """
+        return self._get('me/albums', limit=limit, offset=offset)
+
+    def current_user_saved_albums_contains(self, albums=[]):
+        """ Check if one or more albums is already saved in
+            the current Spotify user’s “Your Music” library.
+
+            Parameters:
+                - albums - a list of album URIs, URLs or IDs
+        """
+        alist = [self._get_id('album', a) for a in albums]
+        return self._get('me/albums/contains?ids=' + ','.join(alist))
 
     def current_user_saved_albums_add(self, albums=[]):
         """ Add one or more albums to the current user's
@@ -696,8 +726,17 @@ class Spotify(object):
                 - albums - a list of album URIs, URLs or IDs
         """
         alist = [self._get_id('album', a) for a in albums]
-        r = self._put('me/albums?ids=' + ','.join(alist))
-        return r
+        return self._put('me/albums?ids=' + ','.join(alist))
+
+    def current_user_saved_albums_delete(self, albums=[]):
+        """ Remove one or more albums from the current user's
+            "Your Music" library.
+
+            Parameters:
+                - albums - a list of album URIs, URLs or IDs
+        """
+        alist = [self._get_id('album', a) for a in albums]
+        return self._delete('me/albums/?ids=' + ','.join(alist))
 
     def user_follow_artists(self, ids=[]):
         ''' Follow one or more artists
@@ -712,6 +751,20 @@ class Spotify(object):
                 - ids - a list of user IDs
         '''
         return self._put('me/following?type=user&ids=' + ','.join(ids))
+
+    def user_unfollow_artists(self, ids=[]):
+        ''' Unfollow one or more artists
+            Parameters:
+                - ids - a list of artist IDs
+        '''
+        return self._delete('me/following?type=artist&ids=' + ','.join(ids))
+
+    def user_unfollow_users(self, ids=[]):
+        ''' Unfollow one or more users
+            Parameters:
+                - ids - a list of user IDs
+        '''
+        return self._delete('me/following?type=user&ids=' + ','.join(ids))
 
     def featured_playlists(self, locale=None, country=None, timestamp=None,
                            limit=20, offset=0):
@@ -868,14 +921,6 @@ class Spotify(object):
             return results['audio_features']
         else:
             return results
-
-    def audio_analysis(self, id):
-        """ Get audio analysis for a track based upon its Spotify ID
-            Parameters:
-                - id - a track URIs, URLs or IDs
-        """
-        id = self._get_id('track', id)
-        return self._get('audio-analysis/'+id)
 
     def devices(self):
         ''' Get a list of user's available devices.
@@ -1040,15 +1085,15 @@ class Spotify(object):
         fields = id.split(':')
         if len(fields) >= 3:
             if type != fields[-2]:
-                self._warn('expected id of type %s but found type %s %s',
-                           type, fields[-2], id)
+                self._warn('expected id of type %s but found type %s %s' %
+                           (type, fields[-2], id))
             return fields[-1]
         fields = id.split('/')
         if len(fields) >= 3:
             itype = fields[-2]
             if type != itype:
-                self._warn('expected id of type %s but found type %s %s',
-                           type, itype, id)
+                self._warn('expected id of type %s but found type %s %s' %
+                           (type, itype, id))
             return fields[-1]
         return id
 

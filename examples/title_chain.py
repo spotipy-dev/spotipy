@@ -60,4 +60,4 @@ if __name__ == '__main__':
     import sys
     title = ' '.join(sys.argv[1:])
     make_chain(sys.argv[1].lower())
-    
+

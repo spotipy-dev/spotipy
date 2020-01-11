@@ -1,11 +1,21 @@
+# -*- coding: utf-8 -*-
 
 from __future__ import print_function
+
+__all__ = [
+    'is_token_expired',
+    'SpotifyClientCredentials',
+    'SpotifyOAuth',
+    'SpotifyOauthError'
+]
+
 import base64
-import requests
-import os
 import json
-import time
+import os
 import sys
+import time
+
+import requests
 
 # Workaround to support both python 2 & 3
 import six

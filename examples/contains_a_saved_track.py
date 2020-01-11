@@ -10,7 +10,7 @@ if len(sys.argv) > 2:
     username = sys.argv[1]
     tids = sys.argv[2:]
 else:
-    print("Usage: %s username track-id ..." % (sys.argv[0],))	
+    print("Usage: %s username track-id ..." % (sys.argv[0],))
     sys.exit()
 
 token = util.prompt_for_user_token(username, scope)
