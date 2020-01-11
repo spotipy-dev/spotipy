@@ -102,16 +102,18 @@ generate an authorization token that indicates that the user has granted
 permission for your application to perform the given task.  You will need to
 register your app to get the credentials necessary to make authorized calls.
 
-Even if your script does not have an accessible URL you need to specify one
-when registering your application where the spotify authentication API will
-redirect to after successful login. The URL doesn't need to work or be
-accessible, you can specify "http://localhost/", after successful login you
-just need to copy the "http://localhost/?code=..." URL from your browser
-and paste it to the console where your script is running.
+Even if your script does not have an accessible URL you will need to specify one
+when registering your application which the Spotify authentication server will
+redirect to after successful login. The URL doesn't need to be publicly
+accessible, so you can specify "http://localhost/", and after succesfully 
+authenticating your app, you can simply copy the 
+"http://localhost/?code=..." URL from your browser and paste it to the 
+console where your script is running.
 
 Register your app at
 `My Applications
-<https://developer.spotify.com/my-applications/#!/applications>`_.
+<https://developer.spotify.com/my-applications/#!/applications>`_ and register the
+redirect URI mentioned in the above paragragh.
 
 
 *spotipy* supports two authorization flows:
@@ -143,7 +145,7 @@ Call ``util.prompt_for_user_token`` method with the username and the
 desired scope (see `Using
 Scopes <https://developer.spotify.com/web-api/using-scopes/>`_ for information
 about scopes) and credentials. This will coordinate the user authorization via
-your web browser and ask for the SPOTIPY_REDIRECT_URI you were redirected to
+your web browser and callback to the SPOTIPY_REDIRECT_URI you were redirected to
 with the authorization token appended. The credentials are cached locally and
 are used to automatically re-authorized expired tokens.
 
