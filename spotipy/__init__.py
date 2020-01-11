@@ -1,2 +1,5 @@
-VERSION='2.0.1'
-from .client import Spotify, SpotifyException
+VERSION='2.4.5'
+
+from .client import *
+from .oauth2 import *
+from .util import *

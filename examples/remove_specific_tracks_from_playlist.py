@@ -1,5 +1,4 @@
-
-# Adds tracks to a playlist
+# removes tracks from a playlist
 
 import pprint
 import sys

@@ -1,6 +1,6 @@
 #
 # sudo python setup.py develop --uninstall
-# sudo python setup.py install 
+# sudo python setup.py install
 
 # How do deploy
 #   - run tests
@@ -9,11 +9,10 @@
 #   - Update README.md with updated version info
 #   - leave development mode
 #       sudo python setup.py develop --uninstall
-#       sudo python setup.py install 
+#       sudo python setup.py install
 #   - upload dist
 #     sudo python setup.py sdist upload
 #   docs should automatically be updated. verify them at
 #       http://spotipy.readthedocs.org/en/latest/
 
 sudo python setup.py sdist upload
-
