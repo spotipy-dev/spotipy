@@ -40,7 +40,7 @@ class Spotify(object):
 
             import spotipy
 
-                urn = 'spotify:artist:3jOstUTkEu2JkjvRdBA5Gu'
+            urn = 'spotify:artist:3jOstUTkEu2JkjvRdBA5Gu'
             sp = spotipy.Spotify()
 
             sp.trace = True # turn on tracing
@@ -395,9 +395,7 @@ class Spotify(object):
             - fields - which fields to return
             - market - An ISO 3166-1 alpha-2 country code or the string from_token.
             """
-
         plid = self._get_id('playlist', playlist_id)
-
         return self._get("playlists/%s" % (plid), fields=fields)
 
 
@@ -608,29 +606,6 @@ class Spotify(object):
         '''
         return self._get('me/player/currently-playing')
 
-    def current_user_saved_albums(self, limit=20, offset=0):
-        """ Gets a list of the albums saved in the current authorized user's
-            "Your Music" library
-
-            Parameters:
-                - limit - the number of albums to return
-                - offset - the index of the first album to return
-
-        """
-        return self._get('me/albums', limit=limit, offset=offset)
-
-    def current_user_saved_albums_delete(self, albums=None):
-        """ Remove one or more albums from the current user's
-            "Your Music" library.
-
-            Parameters:
-                - albums - a list of album URIs, URLs or IDs
-        """
-        alist = []
-        if albums is not None:
-            alist = [self._get_id('album', a) for a in albums]
-        return self._delete('me/albums/?ids=' + ','.join(alist))
-
     def current_user_saved_tracks(self, limit=20, offset=0):
         """ Gets a list of the tracks saved in the current authorized user's
             "Your Music" library
@@ -646,8 +621,8 @@ class Spotify(object):
         """ Gets a list of the artists followed by the current authorized user
 
             Parameters:
-                - limit - the number of tracks to return
-                - after - ghe last artist ID retrieved from the previous request
+                - limit - the number of artists to return
+                - after - the last artist ID retrieved from the previous request
 
         """
         return self._get('me/following', type='artist', limit=limit,
@@ -723,16 +698,16 @@ class Spotify(object):
         '''
         return self._get('me/player/recently-played', limit=limit)
 
-    def current_user_saved_albums_delete(self, albums=[]):
-        """ Remove one or more albums from the current user's
-            "Your Music" library.
+    def current_user_saved_albums(self, limit=20, offset=0):
+        """ Gets a list of the albums saved in the current authorized user's
+            "Your Music" library
 
             Parameters:
-                - albums - a list of album URIs, URLs or IDs
+                - limit - the number of albums to return
+                - offset - the index of the first album to return
+
         """
-        alist = [self._get_id('album', a) for a in albums]
-        r = self._delete('me/albums/?ids=' + ','.join(alist))
-        return r
+        return self._get('me/albums', limit=limit, offset=offset)
 
     def current_user_saved_albums_contains(self, albums=[]):
         """ Check if one or more albums is already saved in
@@ -742,8 +717,7 @@ class Spotify(object):
                 - albums - a list of album URIs, URLs or IDs
         """
         alist = [self._get_id('album', a) for a in albums]
-        r = self._get('me/albums/contains?ids=' + ','.join(alist))
-        return r
+        return self._get('me/albums/contains?ids=' + ','.join(alist))
 
     def current_user_saved_albums_add(self, albums=[]):
         """ Add one or more albums to the current user's
@@ -752,8 +726,17 @@ class Spotify(object):
                 - albums - a list of album URIs, URLs or IDs
         """
         alist = [self._get_id('album', a) for a in albums]
-        r = self._put('me/albums?ids=' + ','.join(alist))
-        return r
+        return self._put('me/albums?ids=' + ','.join(alist))
+
+    def current_user_saved_albums_delete(self, albums=[]):
+        """ Remove one or more albums from the current user's
+            "Your Music" library.
+
+            Parameters:
+                - albums - a list of album URIs, URLs or IDs
+        """
+        alist = [self._get_id('album', a) for a in albums]
+        return self._delete('me/albums/?ids=' + ','.join(alist))
 
     def user_follow_artists(self, ids=[]):
         ''' Follow one or more artists

@@ -16,4 +16,3 @@
 #       http://spotipy.readthedocs.org/en/latest/
 
 sudo python setup.py sdist upload
-

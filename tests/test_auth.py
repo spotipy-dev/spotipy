@@ -15,7 +15,7 @@ following environment variables
 from __future__ import print_function
 
 import os
-import pprint
+from pprint import pprint
 import sys
 import unittest
 
@@ -45,6 +45,7 @@ class AuthTestSpotipy(unittest.TestCase):
     """
 
     playlist = "spotify:user:plamere:playlist:2oCEWyyAPbZp9xhVSxZavx"
+    playlist_new_id = "spotify:playlist:7GlxpQjjxRjmbb3RP2rDqI"
     four_tracks = ["spotify:track:6RtPijgfPKROxEzTHNRiDp",
                 "spotify:track:7IHOIqZUUInxjVkko181PB",
                 "4VrWlk8IQxevMvERoX08iC",
@@ -57,7 +58,11 @@ class AuthTestSpotipy(unittest.TestCase):
             "spotify:track:29xKs5BAHlmlX1u4gzQAbJ",
             "spotify:track:1PB7gRWcvefzu7t3LJLUlf"]
 
+    album_ids = ["spotify:album:6kL09DaURb7rAoqqaA51KU",
+                 "spotify:album:6RTzC0rDbvagTSJLlY7AKl"]
+
     bad_id = 'BAD_ID'
+
 
     @classmethod
     def setUpClass(self):
@@ -75,7 +80,8 @@ class AuthTestSpotipy(unittest.TestCase):
             'user-follow-read '
             'user-library-modify '
             'user-read-private '
-            'user-top-read'
+            'user-top-read '
+            'user-follow-modify'
         )
 
         self.token = prompt_for_user_token(self.username, scope=self.scope)
@@ -84,7 +90,7 @@ class AuthTestSpotipy(unittest.TestCase):
 
     def test_track_bad_id(self):
         try:
-            track = self.spotify.track(self.bad_id)
+            self.spotify.track(self.bad_id)
             self.assertTrue(False)
         except SpotifyException:
             self.assertTrue(True)
@@ -120,17 +126,25 @@ class AuthTestSpotipy(unittest.TestCase):
 
         # known API issue currently causes this test to fail
         # the issue is that the API doesn't currently respect the
-        # limit paramter
+        # limit parameter
 
         self.assertTrue(len(playlists['items']) == 5)
 
-    def test_current_user_saved_tracks(self):
-        tracks = self.spotify.current_user_saved_tracks()
-        self.assertTrue(len(tracks['items']) > 0)
-
     def test_current_user_saved_albums(self):
+        # List
         albums = self.spotify.current_user_saved_albums()
-        self.assertTrue(len(albums['items']) > 0)
+        self.assertTrue(len(albums['items']) == 1)
+
+        # Add
+        self.spotify.current_user_saved_albums_add(self.album_ids)
+
+        # Contains
+        self.assertTrue(self.spotify.current_user_saved_albums_contains(self.album_ids) == [True, True])
+
+        # Remove
+        self.spotify.current_user_saved_albums_delete(self.album_ids)
+        albums = self.spotify.current_user_saved_albums()
+        self.assertTrue(len(albums['items']) == 1)
 
     def test_current_user_playlists(self):
         playlists = self.spotify.current_user_playlists(limit=10)
@@ -149,11 +163,13 @@ class AuthTestSpotipy(unittest.TestCase):
         self.assertTrue(len(follows) == 1, 'proper follows length')
         self.assertFalse(follows[0], 'is no longer following')
 
+    def test_current_user_saved_tracks(self):
+        tracks = self.spotify.current_user_saved_tracks()
+        self.assertTrue(len(tracks['items']) > 0)
 
     def test_current_user_save_and_unsave_tracks(self):
         tracks = self.spotify.current_user_saved_tracks()
         total = tracks['total']
-
         self.spotify.current_user_saved_tracks_add(self.four_tracks)
 
         tracks = self.spotify.current_user_saved_tracks()
@@ -164,7 +180,6 @@ class AuthTestSpotipy(unittest.TestCase):
         tracks = self.spotify.current_user_saved_tracks()
         new_total = tracks['total']
         self.assertTrue(new_total == total)
-
 
     def test_categories(self):
         response = self.spotify.categories()
@@ -218,25 +233,20 @@ class AuthTestSpotipy(unittest.TestCase):
         playlist_id = self.get_or_create_spotify_playlist('spotipy-testing-playlist-1')
 
         # remove all tracks from it
-
         self.spotify.user_playlist_replace_tracks(self.username, playlist_id,[])
-
         playlist = self.spotify.user_playlist(self.username, playlist_id)
         self.assertTrue(playlist['tracks']['total'] == 0)
         self.assertTrue(len(playlist['tracks']['items']) == 0)
 
         # add tracks to it
-
         self.spotify.user_playlist_add_tracks(self.username, playlist_id, self.four_tracks)
         playlist = self.spotify.user_playlist(self.username, playlist_id)
         self.assertTrue(playlist['tracks']['total'] == 4)
         self.assertTrue(len(playlist['tracks']['items']) == 4)
 
         # remove two tracks from it
-
         self.spotify.user_playlist_remove_all_occurrences_of_tracks (self.username,
                     playlist_id, self.two_tracks)
-
         playlist = self.spotify.user_playlist(self.username, playlist_id)
         self.assertTrue(playlist['tracks']['total'] == 2)
         self.assertTrue(len(playlist['tracks']['items']) == 2)
@@ -244,11 +254,44 @@ class AuthTestSpotipy(unittest.TestCase):
         # replace with 3 other tracks
         self.spotify.user_playlist_replace_tracks(self.username,
             playlist_id, self.other_tracks)
-
         playlist = self.spotify.user_playlist(self.username, playlist_id)
         self.assertTrue(playlist['tracks']['total'] == 3)
         self.assertTrue(len(playlist['tracks']['items']) == 3)
 
-if __name__ == '__main__':
+    def test_playlist(self):
+        # New playlist ID
+        pl = self.spotify.playlist(self.playlist_new_id)
+        self.assertTrue(pl["tracks"]["total"] > 0)
 
+        # Old playlist ID
+        pl = self.spotify.playlist(self.playlist)
+        self.assertTrue(pl["tracks"]["total"] > 0)
+
+    def test_user_follows_and_unfollows_artist(self):
+        # Initially follows 1 artist
+        res = self.spotify.current_user_followed_artists()
+        self.assertTrue(res['artists']['total'] == 1)
+
+        # Follow 2 more artists
+        artists = ["6DPYiyq5kWVQS4RGwxzPC7", "0NbfKEOTQCcwd6o7wSDOHI"]
+        self.spotify.user_follow_artists(artists)
+        res = self.spotify.current_user_followed_artists()
+        self.assertTrue(res['artists']['total'] == 3)
+
+        # Unfollow these 2 artists
+        self.spotify.user_unfollow_artists(artists)
+        res = self.spotify.current_user_followed_artists()
+        self.assertTrue(res['artists']['total'] == 1)
+
+    def test_user_follows_and_unfollows_user(self):
+        # TODO improve after implementing `me/following/contains`
+        users = ["11111204", "xlqeojt6n7on0j7coh9go8ifd"]
+
+        # Follow 2 more users
+        self.spotify.user_follow_users(users)
+
+        # Unfollow these 2 users
+        self.spotify.user_unfollow_users(users)
+
+if __name__ == '__main__':
     unittest.main()
