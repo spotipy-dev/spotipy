@@ -84,3 +84,4 @@ If you have suggestions, bugs or other issues specific to this library, file the
 - v2.4.2 - January 2, 2017 -- support getting audio features for a single track
 - v2.4.3 - January 2, 2017 -- fixed proxy issue in standard auth flow
 - v2.4.4 - January 4, 2017 -- python 3 fix
+- v2.5.0 - January 11, 2020 -- Added follow and player endpoints
