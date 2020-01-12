@@ -41,7 +41,7 @@ class SpotifyClientCredentials(object):
 
     def __init__(self, client_id=None, client_secret=None, proxies=None):
         """
-        You can either provid a client_id and client_secret to the
+        You can either provide a client_id and client_secret to the
         constructor or set SPOTIPY_CLIENT_ID and SPOTIPY_CLIENT_SECRET
         environment variables
         """
