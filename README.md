@@ -43,7 +43,7 @@ sp = spotipy.Spotify()
 
 results = sp.search(q='weezer', limit=20)
 for i, t in enumerate(results['tracks']['items']):
-    print ' ', i, t['name']
+    print(' ', i, t['name'])
 ```
 
 A full set of examples can be found in the [online documentation](http://spotipy.readthedocs.org/) and in the [Spotipy examples directory](https://github.com/plamere/spotipy/tree/master/examples).
