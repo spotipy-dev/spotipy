@@ -25,7 +25,7 @@ if len(sys.argv) > 3:
 
 else:
     print("Usage: %s username playlist_id name [public collaborative "
-           "description]" % (sys.argv[0]))
+          "description]" % (sys.argv[0]))
     sys.exit()
 
 scope = 'playlist-modify-public playlist-modify-private'

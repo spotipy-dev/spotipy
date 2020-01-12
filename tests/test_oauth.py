@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import six.moves.urllib.parse as urllibparse
+from spotipy import SpotifyOAuth
 import io
 import json
 import os
@@ -8,13 +10,11 @@ import unittest
 
 sys.path.insert(0, os.path.abspath(os.pardir))
 
-from spotipy import SpotifyOAuth
 
 try:
     import unittest.mock as mock
 except ImportError:
     import mock
-import six.moves.urllib.parse as urllibparse
 
 patch = mock.patch
 DEFAULT = mock.DEFAULT

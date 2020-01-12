@@ -2,16 +2,15 @@
 
 """ Client Credentials Requests Tests """
 
+from spotipy import (
+    Spotify,
+    SpotifyClientCredentials,
+)
 import os
 import sys
 import unittest
 
 sys.path.insert(0, os.path.abspath(os.pardir))
-
-from  spotipy import (
-    Spotify,
-    SpotifyClientCredentials,
-)
 
 
 class ClientCredentialsTestSpotipy(unittest.TestCase):
@@ -29,7 +28,8 @@ class ClientCredentialsTestSpotipy(unittest.TestCase):
 
     @classmethod
     def setUpClass(self):
-        self.spotify = Spotify(client_credentials_manager=SpotifyClientCredentials())
+        self.spotify = Spotify(
+            client_credentials_manager=SpotifyClientCredentials())
         self.spotify.trace = False
 
     muse_urn = 'spotify:artist:12Chz98pHFMPJEknJQMWvI'

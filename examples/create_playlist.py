@@ -12,7 +12,9 @@ if len(sys.argv) > 2:
     playlist_name = sys.argv[2]
     playlist_description = sys.argv[3]
 else:
-    print("Usage: %s username playlist-name playlist-description" % (sys.argv[0],))
+    print(
+        "Usage: %s username playlist-name playlist-description" %
+        (sys.argv[0],))
     sys.exit()
 
 scope = "playlist-modify-public"

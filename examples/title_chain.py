@@ -14,13 +14,14 @@ skiplist = set(['dm', 'remix'])
 max_offset = 500
 seen = set()
 
+
 def find_songs_that_start_with_word(word):
     max_titles = 20
     max_offset = 200
     offset = 0
 
     out = []
-    while  offset < max_offset and len(out) < max_titles:
+    while offset < max_offset and len(out) < max_titles:
         results = sp.search(q=word, type='track', limit=50, offset=offset)
         if len(results['tracks']['items']) == 0:
             break
@@ -37,12 +38,14 @@ def find_songs_that_start_with_word(word):
             if '/' in name:
                 continue
             words = name.split()
-            if len(words) > 1 and words[0] == word and words[-1] not in skiplist:
-                #print "        ", name, len(out)
+            if len(
+                    words) > 1 and words[0] == word and words[-1] not in skiplist:
+                # print "        ", name, len(out)
                 out.append(item)
         offset += 50
-    #print "found", len(out), "matches"
+    # print "found", len(out), "matches"
     return out
+
 
 def make_chain(word):
     which = 1
@@ -56,8 +59,8 @@ def make_chain(word):
         else:
             break
 
+
 if __name__ == '__main__':
     import sys
     title = ' '.join(sys.argv[1:])
     make_chain(sys.argv[1].lower())
-

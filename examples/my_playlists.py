@@ -19,6 +19,6 @@ if token:
     sp.trace = False
     results = sp.current_user_playlists(limit=50)
     for i, item in enumerate(results['items']):
-        print("%d %s" %(i, item['name']))
+        print("%d %s" % (i, item['name']))
 else:
     print("Can't get token for", username)
