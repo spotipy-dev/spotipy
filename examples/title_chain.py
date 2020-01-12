@@ -1,6 +1,5 @@
 import spotipy
 import random
-import simplejson as json
 
 '''
     generates a list of songs where the first word in each subsequent song
@@ -38,8 +37,8 @@ def find_songs_that_start_with_word(word):
             if '/' in name:
                 continue
             words = name.split()
-            if len(
-                    words) > 1 and words[0] == word and words[-1] not in skiplist:
+            if len(words) > 1 and words[0] == word \
+                    and words[-1] not in skiplist:
                 # print "        ", name, len(out)
                 out.append(item)
         offset += 50
@@ -53,7 +52,7 @@ def make_chain(word):
         songs = find_songs_that_start_with_word(word)
         if len(songs) > 0:
             song = random.choice(songs)
-            print which, song['name'] + " by " + song['artists'][0]['name']
+            print(which, song['name'] + " by " + song['artists'][0]['name'])
             which += 1
             word = song['name'].lower().split()[-1]
         else:

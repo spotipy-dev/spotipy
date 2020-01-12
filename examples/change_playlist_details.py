@@ -37,6 +37,6 @@ if token:
     results = sp.user_playlist_change_details(
         username, playlist_id, name=name, public=public,
         collaborative=collaborative, description=description)
-    print results
+    print(results)
 else:
-    print "Can't get token for", username
+    print("Can't get token for"), username

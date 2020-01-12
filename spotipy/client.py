@@ -57,7 +57,8 @@ class Spotify(object):
     max_get_retries = 10
 
     def __init__(self, auth=None, requests_session=True,
-                 client_credentials_manager=None, proxies=None, requests_timeout=None):
+                 client_credentials_manager=None, proxies=None,
+                 requests_timeout=None):
         """
         Creates a Spotify API client.
 
@@ -72,7 +73,8 @@ class Spotify(object):
         :param proxies:
             Definition of proxies (optional)
         :param requests_timeout:
-            Tell Requests to stop waiting for a response after a given number of seconds
+            Tell Requests to stop waiting for a response after a given
+            number of seconds
         """
         self.prefix = 'https://api.spotify.com/v1/'
         self._auth = auth
@@ -130,12 +132,14 @@ class Spotify(object):
             r.raise_for_status()
         except BaseException:
             if r.text and len(r.text) > 0 and r.text != 'null':
+                msg = '%s:\n %s' % (r.url, r.json()['error']['message'])
                 raise SpotifyException(r.status_code,
-                                       -1, '%s:\n %s' % (r.url, r.json()['error']['message']),
+                                       -1, msg,
                                        headers=r.headers)
             else:
                 raise SpotifyException(r.status_code,
-                                       -1, '%s:\n %s' % (r.url, 'error'), headers=r.headers)
+                                       -1, '%s:\n %s' % (r.url, 'error'),
+                                       headers=r.headers)
         finally:
             if hasattr(r, "connection"):
                 r.connection.close()
@@ -350,7 +354,8 @@ class Spotify(object):
                 - offset - the index of the first item to return
                 - type - the type of item to return. One of 'artist', 'album',
                          'track' or 'playlist'
-                - market - An ISO 3166-1 alpha-2 country code or the string from_token.
+                - market - An ISO 3166-1 alpha-2 country code or the string
+                           from_token.
         """
         return self._get('search', q=q, limit=limit,
                          offset=offset, type=type, market=market)
@@ -400,7 +405,8 @@ class Spotify(object):
             Parameters:
             - playlist - the id of the playlist
             - fields - which fields to return
-            - market - An ISO 3166-1 alpha-2 country code or the string from_token.
+            - market - An ISO 3166-1 alpha-2 country code or the string
+                       from_token.
             """
         plid = self._get_id('playlist', playlist_id)
         return self._get("playlists/%s" % (plid), fields=fields)
@@ -509,8 +515,10 @@ class Spotify(object):
                 - user - the id of the user
                 - playlist_id - the id of the playlist
                 - range_start - the position of the first track to be reordered
-                - range_length - optional the number of tracks to be reordered (default: 1)
-                - insert_before - the position where the tracks should be inserted
+                - range_length - optional the number of tracks to be reordered
+                                 (default: 1)
+                - insert_before - the position where the tracks should be
+                                  inserted
                 - snapshot_id - optional playlist's snapshot ID
         """
         plid = self._get_id('playlist', playlist_id)
@@ -580,7 +588,8 @@ class Spotify(object):
 
         """
         return self._put(
-            "users/{}/playlists/{}/followers".format(playlist_owner_id, playlist_id))
+            "users/{}/playlists/{}/followers".format(playlist_owner_id,
+                                                     playlist_id))
 
     def user_playlist_is_following(
             self, playlist_owner_id, playlist_id, user_ids):
@@ -594,8 +603,10 @@ class Spotify(object):
                 if they follow the playlist. Maximum: 5 ids.
 
         """
-        return self._get("users/{}/playlists/{}/followers/contains?ids={}".format(
-            playlist_owner_id, playlist_id, ','.join(user_ids)))
+        endpoint = "users/{}/playlists/{}/followers/contains?ids={}"
+        return self._get(endpoint.format(playlist_owner_id,
+                                         playlist_id,
+                                         ','.join(user_ids)))
 
     def me(self):
         """ Get detailed profile information about the current user.
@@ -630,7 +641,8 @@ class Spotify(object):
 
             Parameters:
                 - limit - the number of artists to return
-                - after - the last artist ID retrieved from the previous request
+                - after - the last artist ID retrieved from the previous
+                          request
 
         """
         return self._get('me/following', type='artist', limit=limit,
@@ -865,17 +877,18 @@ class Spotify(object):
                 - seed_tracks - a list of track IDs, URIs or URLs
 
                 - seed_genres - a list of genre names. Available genres for
-                  recommendations can be found by calling recommendation_genre_seeds
+                                recommendations can be found by calling
+                                recommendation_genre_seeds
 
-                - country - An ISO 3166-1 alpha-2 country code. If provided, all
-                  results will be playable in this country.
+                - country - An ISO 3166-1 alpha-2 country code. If provided,
+                            all results will be playable in this country.
 
                 - limit - The maximum number of items to return. Default: 20.
-                  Minimum: 1. Maximum: 100
+                          Minimum: 1. Maximum: 100
 
-                - min/max/target_<attribute> - For the tuneable track attributes listed
-                  in the documentation, these values provide filters and targeting on
-                  results.
+                - min/max/target_<attribute> - For the tuneable track
+                    attributes listed in the documentation, these values
+                    provide filters and targeting on results.
         """
         params = dict(limit=limit)
         if seed_artists:

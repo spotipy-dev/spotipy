@@ -17,19 +17,16 @@ from spotipy import (
     SpotifyClientCredentials,
 )
 import os
-import pprint
 import sys
 import unittest
-
-import simplejson as json
 
 sys.path.insert(0, os.path.abspath(os.pardir))
 
 
 class AuthTestSpotipy(unittest.TestCase):
     """
-    These tests require user authentication - provide client credentials using the
-    following environment variables
+    These tests require user authentication - provide client credentials using
+    the following environment variables
 
     ::
 
@@ -91,5 +88,4 @@ class AuthTestSpotipy(unittest.TestCase):
 
 
 if __name__ == '__main__':
-
     unittest.main()

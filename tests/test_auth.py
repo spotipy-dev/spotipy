@@ -21,19 +21,16 @@ from spotipy import (
     SpotifyException,
 )
 import os
-from pprint import pprint
 import sys
 import unittest
-
-import simplejson as json
 
 sys.path.insert(0, os.path.abspath(os.pardir))
 
 
 class AuthTestSpotipy(unittest.TestCase):
     """
-    These tests require user authentication - provide client credentials using the
-    following environment variables
+    These tests require user authentication - provide client credentials using
+    the following environment variables
 
     ::
 
@@ -69,7 +66,8 @@ class AuthTestSpotipy(unittest.TestCase):
 
         if missing:
             raise Exception(
-                'Please set the client credentials for the test application using the following environment variables: {}'.format(
+                ('Please set the client credentials for the test application'
+                 ' using the following environment variables: {}').format(
                     CCEV.values()))
 
         self.username = os.getenv(CCEV['client_username'])
@@ -121,14 +119,12 @@ class AuthTestSpotipy(unittest.TestCase):
             results = self.spotify.user_playlist_tracks(user, pid)
             self.assertTrue(len(results['items']) >= 0)
 
-    def user_playlist_tracks(self, user, playlist_id=None, fields=None,
-                             limit=100, offset=0):
-
-        # known API issue currently causes this test to fail
-        # the issue is that the API doesn't currently respect the
-        # limit parameter
-
-        self.assertTrue(len(playlists['items']) == 5)
+    # known API issue currently causes this test to fail
+    # the issue is that the API doesn't currently respect the
+    # limit parameter
+    # def user_playlist_tracks(self, user, playlist_id=None, fields=None,
+    #                          limit=100, offset=0):
+    #     self.assertTrue(len(playlists['items']) == 5)
 
     def test_current_user_saved_albums(self):
         # List
@@ -240,35 +236,39 @@ class AuthTestSpotipy(unittest.TestCase):
         return playlist_id
 
     def test_user_playlist_ops(self):
+        sp = self.spotify
         # create empty playlist
         playlist_id = self.get_or_create_spotify_playlist(
             'spotipy-testing-playlist-1')
 
         # remove all tracks from it
-        self.spotify.user_playlist_replace_tracks(
+        sp.user_playlist_replace_tracks(
             self.username, playlist_id, [])
-        playlist = self.spotify.user_playlist(self.username, playlist_id)
+        playlist = sp.user_playlist(self.username, playlist_id)
         self.assertTrue(playlist['tracks']['total'] == 0)
         self.assertTrue(len(playlist['tracks']['items']) == 0)
 
         # add tracks to it
-        self.spotify.user_playlist_add_tracks(
+        sp.user_playlist_add_tracks(
             self.username, playlist_id, self.four_tracks)
-        playlist = self.spotify.user_playlist(self.username, playlist_id)
+        playlist = sp.user_playlist(self.username, playlist_id)
         self.assertTrue(playlist['tracks']['total'] == 4)
         self.assertTrue(len(playlist['tracks']['items']) == 4)
 
         # remove two tracks from it
-        self.spotify.user_playlist_remove_all_occurrences_of_tracks(self.username,
-                                                                    playlist_id, self.two_tracks)
-        playlist = self.spotify.user_playlist(self.username, playlist_id)
+
+        sp.user_playlist_remove_all_occurrences_of_tracks(self.username,
+                                                          playlist_id,
+                                                          self.two_tracks)
+        playlist = sp.user_playlist(self.username, playlist_id)
         self.assertTrue(playlist['tracks']['total'] == 2)
         self.assertTrue(len(playlist['tracks']['items']) == 2)
 
         # replace with 3 other tracks
-        self.spotify.user_playlist_replace_tracks(self.username,
-                                                  playlist_id, self.other_tracks)
-        playlist = self.spotify.user_playlist(self.username, playlist_id)
+        sp.user_playlist_replace_tracks(self.username,
+                                        playlist_id,
+                                        self.other_tracks)
+        playlist = sp.user_playlist(self.username, playlist_id)
         self.assertTrue(playlist['tracks']['total'] == 3)
         self.assertTrue(len(playlist['tracks']['items']) == 3)
 

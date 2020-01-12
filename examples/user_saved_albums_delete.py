@@ -3,9 +3,7 @@
 
 """
 
-import pprint
 import sys
-import json
 import spotipy
 import spotipy.util as util
 

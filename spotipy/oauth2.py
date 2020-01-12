@@ -87,7 +87,8 @@ class SpotifyClientCredentials(object):
             self.client_id, self.client_secret)
 
         response = requests.post(self.OAUTH_TOKEN_URL, data=payload,
-                                 headers=headers, verify=True, proxies=self.proxies)
+                                 headers=headers, verify=True,
+                                 proxies=self.proxies)
         if response.status_code != 200:
             raise SpotifyOauthError(response.reason)
         token_info = response.json()
@@ -230,7 +231,8 @@ class SpotifyOAuth(object):
         headers = self._make_authorization_headers()
 
         response = requests.post(self.OAUTH_TOKEN_URL, data=payload,
-                                 headers=headers, verify=True, proxies=self.proxies)
+                                 headers=headers, verify=True,
+                                 proxies=self.proxies)
         if response.status_code != 200:
             raise SpotifyOauthError(response.reason)
         token_info = response.json()
@@ -262,7 +264,7 @@ class SpotifyOAuth(object):
             return None
         token_info = response.json()
         token_info = self._add_custom_values_to_token_info(token_info)
-        if not 'refresh_token' in token_info:
+        if 'refresh_token' not in token_info:
             token_info['refresh_token'] = refresh_token
         self._save_token_info(token_info)
         return token_info

@@ -24,7 +24,8 @@ CLIENT_CREDS_ENV_VARS = {
 
 
 def prompt_for_user_token(username, scope=None, client_id=None,
-                          client_secret=None, redirect_uri=None, cache_path=None):
+                          client_secret=None, redirect_uri=None,
+                          cache_path=None):
     ''' prompts the user to login if necessary and returns
         the user token suitable for use with the spotipy.Spotify
         constructor

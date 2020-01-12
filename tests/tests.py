@@ -7,7 +7,6 @@ from spotipy import (
     SpotifyException,
 )
 import os
-import pprint
 import sys
 import unittest
 
@@ -19,8 +18,8 @@ sys.path.insert(0, os.path.abspath(os.pardir))
 class TestSpotipy(unittest.TestCase):
 
     """
-    These tests require user authentication - provide client credentials using the
-    following environment variables
+    These tests require user authentication - provide client credentials using
+    the following environment variables
 
     ::
 
@@ -49,7 +48,8 @@ class TestSpotipy(unittest.TestCase):
 
         if missing:
             raise Exception(
-                'Please set the client credentials for the test application using the following environment variables: {}'.format(
+                ('Please set the client credentials for the test '
+                 'the following environment variables: {}').format(
                     CCEV.values()))
 
         self.username = os.getenv(CCEV['client_username'])
@@ -109,7 +109,7 @@ class TestSpotipy(unittest.TestCase):
 
     def test_track_bad_urn(self):
         try:
-            track = self.spotify.track(self.el_scorcho_bad_urn)
+            self.spotify.track(self.el_scorcho_bad_urn)
             self.assertTrue(False)
         except SpotifyException:
             self.assertTrue(True)
@@ -160,7 +160,7 @@ class TestSpotipy(unittest.TestCase):
     def test_search_timeout(self):
         sp = Spotify(auth=self.token, requests_timeout=.01)
         try:
-            results = sp.search(q='my*', type='track')
+            sp.search(q='my*', type='track')
             self.assertTrue(False, 'unexpected search timeout')
         except requests.Timeout:
             self.assertTrue(True, 'expected search timeout')
@@ -184,14 +184,7 @@ class TestSpotipy(unittest.TestCase):
 
     def test_track_bad_id(self):
         try:
-            track = self.spotify.track(self.bad_id)
-            self.assertTrue(False)
-        except SpotifyException:
-            self.assertTrue(True)
-
-    def test_track_bad_id(self):
-        try:
-            track = self.spotify.track(self.bad_id)
+            self.spotify.track(self.bad_id)
             self.assertTrue(False)
         except SpotifyException:
             self.assertTrue(True)
@@ -229,5 +222,4 @@ class TestSpotipy(unittest.TestCase):
 '''
 
 if __name__ == '__main__':
-
     unittest.main()

@@ -15,8 +15,8 @@ sys.path.insert(0, os.path.abspath(os.pardir))
 
 class ClientCredentialsTestSpotipy(unittest.TestCase):
     """
-    These tests require user authentication - provide client credentials using the
-    following environment variables
+    These tests require user authentication - provide client credentials using
+    the following environment variables
 
     ::
 
@@ -40,5 +40,4 @@ class ClientCredentialsTestSpotipy(unittest.TestCase):
 
 
 if __name__ == '__main__':
-
     unittest.main()
