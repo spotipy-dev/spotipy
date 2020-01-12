@@ -22,6 +22,5 @@ try:
     print('Related artists for', name)
     for artist in related['artists']:
         print('  ', artist['name'])
-except:
+except BaseException:
     print("usage show_related.py [artist-name]")
-

@@ -10,4 +10,4 @@ username = uri.split(':')[2]
 playlist_id = uri.split(':')[4]
 
 results = sp.user_playlist(username, playlist_id)
-print (json.dumps(results, indent=4))
+print(json.dumps(results, indent=4))

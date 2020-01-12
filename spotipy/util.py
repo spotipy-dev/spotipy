@@ -22,8 +22,10 @@ CLIENT_CREDS_ENV_VARS = {
     'redirect_uri': 'SPOTIPY_REDIRECT_URI'
 }
 
-def prompt_for_user_token(username, scope=None, client_id = None,
-        client_secret = None, redirect_uri = None, cache_path = None):
+
+def prompt_for_user_token(username, scope=None, client_id=None,
+                          client_secret=None, redirect_uri=None,
+                          cache_path=None):
     ''' prompts the user to login if necessary and returns
         the user token suitable for use with the spotipy.Spotify
         constructor
@@ -64,7 +66,7 @@ def prompt_for_user_token(username, scope=None, client_id = None,
 
     cache_path = cache_path or ".cache-" + username
     sp_oauth = oauth2.SpotifyOAuth(client_id, client_secret, redirect_uri,
-        scope=scope, cache_path=cache_path)
+                                   scope=scope, cache_path=cache_path)
 
     # try to get a valid token for this user, from the cache,
     # if not in the cache, the create a new (this will send
@@ -87,7 +89,7 @@ def prompt_for_user_token(username, scope=None, client_id = None,
             import webbrowser
             webbrowser.open(auth_url)
             print("Opened %s in your browser" % auth_url)
-        except:
+        except BaseException:
             print("Please navigate here: %s" % auth_url)
 
         print()

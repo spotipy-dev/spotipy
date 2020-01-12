@@ -5,7 +5,6 @@ import spotipy
 import spotipy.util as util
 
 
-
 if len(sys.argv) > 1:
     username = sys.argv[1]
 else:

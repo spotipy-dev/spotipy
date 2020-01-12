@@ -11,7 +11,7 @@ import sys
 
 client_credentials_manager = SpotifyClientCredentials()
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
-sp.trace=False
+sp.trace = False
 
 if len(sys.argv) > 1:
     artist_name = ' '.join(sys.argv[1:])

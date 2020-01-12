@@ -4,6 +4,7 @@ import spotipy
 ''' shows the albums and tracks for a given artist.
 '''
 
+
 def get_artist(name):
     results = sp.search(q='artist:' + name, type='artist')
     items = results['artists']['items']
@@ -11,6 +12,7 @@ def get_artist(name):
         return items[0]
     else:
         return None
+
 
 def show_album_tracks(album):
     tracks = []
@@ -24,6 +26,7 @@ def show_album_tracks(album):
         print()
         print(track)
 
+
 def show_artist_albums(id):
     albums = []
     results = sp.artist_albums(artist['id'], album_type='album')
@@ -35,16 +38,18 @@ def show_artist_albums(id):
     unique = set()  # skip duplicate albums
     for album in albums:
         name = album['name'].lower()
-        if not name in unique:
+        if name not in unique:
             print(name)
             unique.add(name)
             show_album_tracks(album)
+
 
 def show_artist(artist):
     print('====', artist['name'], '====')
     print('Popularity: ', artist['popularity'])
     if len(artist['genres']) > 0:
         print('Genres: ', ','.join(artist['genres']))
+
 
 if __name__ == '__main__':
     sp = spotipy.Spotify()
