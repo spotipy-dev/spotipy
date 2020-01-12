@@ -24,7 +24,7 @@ if len(sys.argv) > 3:
         description = sys.argv[6]
 
 else:
-    print ("Usage: %s username playlist_id name [public collaborative "
+    print("Usage: %s username playlist_id name [public collaborative "
            "description]" % (sys.argv[0]))
     sys.exit()
 

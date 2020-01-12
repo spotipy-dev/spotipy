@@ -20,7 +20,7 @@ def show_artist_albums(artist):
         results = sp.next(results)
         albums.extend(results['items'])
     seen = set() # to avoid dups
-    albums.sort(key=lambda album:album['name'].lower())
+    albums.sort(key=lambda album: album['name'].lower())
     for album in albums:
         name = album['name']
         if name not in seen:

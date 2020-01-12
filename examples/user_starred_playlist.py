@@ -23,7 +23,7 @@ if token:
     while tracks:
         for item in tracks['items']:
             track = item['track']
-            print(which, track['name' ], ' --', track['artists'][0]['name'])
+            print(which, track['name'], ' --', track['artists'][0]['name'])
             which += 1
         tracks = sp.next(tracks)
 

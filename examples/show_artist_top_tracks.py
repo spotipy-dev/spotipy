@@ -3,7 +3,6 @@
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 import sys
-import pprint
 
 if len(sys.argv) > 1:
     urn = sys.argv[1]

@@ -4,7 +4,6 @@
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 import sys
-import pprint
 
 if len(sys.argv) > 1:
     artist_name = sys.argv[1]
