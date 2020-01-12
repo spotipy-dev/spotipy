@@ -1,37 +1,111 @@
-- 1.0 - 04/05/2014 - Initial release
-- 1.1 - 05/18/2014 - Repackaged for saner imports
-- 1.4.1 - 06/17/2014 - Updates to match released API
-- 1.4.2 - 06/21/2014 - Added support for retrieving starred playlists
-- v1.40, June 12, 2014 -- Initial public release.
-- v1.42, June 19, 2014 -- Removed dependency on simplejson
-- v1.43, June 27, 2014 -- Fixed JSON handling issue
-- v1.44, July 3, 2014 -- Added show tracks.py example
-- v1.45, July 7, 2014 -- Support for related artists endpoint. Don't use cache auth codes when scope changes
-- v1.49, July 23, 2014 -- Support for "Your Music" tracks (add, delete, get), with examples
-- v1.50, August 14, 2014  -- Refactored util out of examples and into the main package
-- v1.301, August 19, 2014 -- Upgraded version number to take precedence over previously botched release (sigh)
-- v1.310, August 20, 2014 -- Added playlist replace and remove methods. Added auth tests. Improved API docs
-- v2.0 - August 22, 2014 -- Upgraded APIs and docs to make it be a real library
-- v2.0.2 - August 25, 2014 -- Moved to spotipy at pypi
-- v2.1.0 - October 25, 2014 -- Added support for new_releases and featured_playlists
-- v2.2.0 - November 15, 2014 -- Added support for user_playlist_tracks
-- v2.3.0 - January 5, 2015 -- Added session support added by akx.
-- v2.3.2 - March 31, 2015 -- Added auto retry logic
-- v2.3.3 - April 1, 2015 -- added client credential flow
-- v2.3.5 - April 28, 2015 -- Fixed bug in auto retry logic
-- v2.3.6 - June 3, 2015 -- Support for offset/limit with album_tracks API
-- v2.3.7 - August 10, 2015 -- Added current_user_followed_artists
-- v2.3.8 - March 30, 2016 -- Added recs, audio features, user top lists
-- v2.4.0 - December 31, 2016 -- Incorporated a number of PRs
-- v2.4.1 - January 2, 2017 -- Incorporated proxy support
-- v2.4.2 - January 2, 2017 -- support getting audio features for a single track
-- v2.4.3 - January 2, 2017 -- fixed proxy issue in standard auth flow
-- v2.4.4 - January 4, 2017 -- python 3 fix
-- v2.5.0 - January 11, 2020 -- Added follow and player endpoints
-- Unreleased
-    - Added:
-        - support for `playlist()`
-        - support for `current_user_saved_albums_delete()`
-        - support for `current_user_saved_albums_contains()`
-        - support for `user_unfollow_artists()`
-        - support for `user_unfollow_users()`
+# Changelog
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+## [2.6.0] - 2020-01-12
+
+### Added
+ - Support for `playlist` to get a playlist without specifying a user
+ - Support for `current_user_saved_albums_delete`
+ - Support for `current_user_saved_albums_contains`
+ - Support for `user_unfollow_artists`
+ - Support for `user_unfollow_users`
+ - Lint with flake8 using Github action
+
+### Changed
+ - Fix typos in doc
+ - Start following [SemVer](https://semver.org) properly
+
+## [2.5.0] - 2020-01-11
+Added follow and player endpoints
+
+## [2.4.4] - 2017-01-04
+Python 3 fix
+
+## [2.4.3] - 2017-01-02
+Fixed proxy issue in standard auth flow
+
+## [2.4.2] - 2017-01-02
+Support getting audio features for a single track
+
+## [2.4.1] - 2017-01-02
+Incorporated proxy support
+
+## [2.4.0] - 2016-12-31
+Incorporated a number of PRs
+
+## [2.3.8] - 2016-03-31
+Added recs, audio features, user top lists
+
+## [2.3.7] - 2015-08-10
+Added current_user_followed_artists
+
+## [2.3.6] - 2015-06-03
+Support for offset/limit with album_tracks API
+
+## [2.3.5] - 2015-04-28
+Fixed bug in auto retry logic
+
+## [2.3.3] - 2015-04-01
+Aadded client credential flow
+
+## [2.3.2] - 2015-03-31
+Added auto retry logic
+
+## [2.3.0] - 2015-01-05
+Added session support added by akx.
+
+## [2.2.0] - 2014-11-15
+Added support for user_playlist_tracks
+
+## [2.1.0] - 2014-10-25
+Added support for new_releases and featured_playlists
+
+## [2.0.2] - 2014-08-25
+Moved to spotipy at pypi
+
+## [1.2.0] - 2014-08-22
+Upgraded APIs and docs to make it be a real library
+
+## [1.310.0] - 2014-08-20
+Added playlist replace and remove methods. Added auth tests. Improved API docs
+
+## [1.301.0] - 2014-08-19
+Upgraded version number to take precedence over previously botched release (sigh)
+
+## [1.50.0] - 2014-08-14
+Refactored util out of examples and into the main package
+
+## [1.49.0] - 2014-07-23
+Support for "Your Music" tracks (add, delete, get), with examples
+
+## [1.45.0] - 2014-07-07
+Support for related artists endpoint. Don't use cache auth codes when scope changes
+
+## [1.44.0] - 2014-07-03
+Added show tracks.py example
+
+## [1.43.0] - 2014-06-27
+Fixed JSON handling issue
+
+## [1.42.0] - 2014-06-19
+Removed dependency on simplejson
+
+## [1.40.0] - 2014-06-12
+Initial public release.
+
+## [1.4.2] - 2014-06-21
+Added support for retrieving starred playlists
+
+## [1.1.0] - 2014-06-17
+Updates to match released API
+
+## [1.1.0] - 2014-05-18
+Repackaged for saner imports
+
+## [1.0.0] - 2017-04-05
+Initial release

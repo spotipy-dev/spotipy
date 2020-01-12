@@ -1,8 +1,9 @@
-# Spotipy - a Python client for The Spotify Web API
+# Spotipy
 
-## Description
+##### A light weight Python library for the Spotify Web API
 
-Spotipy is a thin client library for the Spotify Web API.
+[![Documentation Status](https://readthedocs.org/projects/spotipy/badge/?version=latest)](https://spotipy.readthedocs.io/en/latest/?badge=latest)
+
 
 ## Documentation
 
