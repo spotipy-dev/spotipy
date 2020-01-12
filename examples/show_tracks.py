@@ -19,6 +19,3 @@ if __name__ == '__main__':
         results = sp.tracks(tids[start: start + max_tracks_per_call])
         for track in results['tracks']:
             print(track['name'] + ' - ' + track['artists'][0]['name'])
-
-
-

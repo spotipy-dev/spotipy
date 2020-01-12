@@ -1,6 +1,6 @@
 # Gets all the public playlists for the given
 # user. Uses Client Credentials flow
-# 
+#
 
 import sys
 import spotipy
@@ -18,7 +18,13 @@ playlists = sp.user_playlists(user)
 
 while playlists:
     for i, playlist in enumerate(playlists['items']):
-        print("%4d %s %s" % (i + 1 + playlists['offset'], playlist['uri'],  playlist['name']))
+        print(
+            "%4d %s %s" %
+            (i +
+             1 +
+             playlists['offset'],
+             playlist['uri'],
+             playlist['name']))
     if playlists['next']:
         playlists = sp.next(playlists)
     else:
