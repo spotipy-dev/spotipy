@@ -133,7 +133,8 @@ class Spotify(object):
                 raise SpotifyException(r.status_code,
                     -1, '%s:\n %s' % (r.url, 'error'), headers=r.headers)
         finally:
-            r.connection.close()
+            if hasattr(r, "connection"):
+                r.connection.close()
         if r.text and len(r.text) > 0 and r.text != 'null':
             results = r.json()
             if self.trace:  # pragma: no cover
