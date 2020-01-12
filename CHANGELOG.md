@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+ - Fixed invalid calls to logging warn method
+
 ## [2.6.0] - 2020-01-12
 
 ### Added
