@@ -24,7 +24,7 @@ if token:
     sp = spotipy.Spotify(auth=token)
     sp.trace = False
     playlists = sp.user_playlist_create(username, playlist_name,
-                                        playlist_description)
+                                        description=playlist_description)
     pprint.pprint(playlists)
 else:
     print("Can't get token for", username)
