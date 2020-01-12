@@ -614,7 +614,10 @@ class Spotify(object):
                                          playlist_id,
                                          ','.join(user_ids)))
 
-    def user_playlist_upload_cover_image(self, playlist_owner_id, playlist_id, image):
+    def user_playlist_upload_cover_image(self,
+                                         playlist_owner_id,
+                                         playlist_id,
+                                         image):
         """
         Replace the image used to represent a specific playlist
 
@@ -624,7 +627,10 @@ class Spotify(object):
             - image - image data as a base64-encoded string
 
         """
-        return self._put("users/{}/playlists/{}/images".format(playlist_owner_id, playlist_id), payload=image, content_type="image/jpeg")
+        return self._put("users/{}/playlists/{}/images".format(
+                            playlist_owner_id, playlist_id),
+                         payload=image,
+                         content_type="image/jpeg")
 
     def me(self):
         """ Get detailed profile information about the current user.
