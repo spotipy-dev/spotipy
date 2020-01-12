@@ -17,7 +17,8 @@ else:
     print("Usage: %s username playlist-name playlist-description" % (sys.argv[0],))
     sys.exit()
 
-token = util.prompt_for_user_token(username)
+scope = "playlist-modify-public"
+token = util.prompt_for_user_token(username, scope)
 
 if token:
     sp = spotipy.Spotify(auth=token)
