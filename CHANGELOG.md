@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
  - Fixed invalid calls to logging warn method
+ - `mock` no longer needed for install. Only used in `tox`.
 
 ## [2.6.0] - 2020-01-12
 
