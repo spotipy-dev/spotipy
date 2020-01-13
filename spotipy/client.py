@@ -1128,7 +1128,7 @@ class Spotify(object):
             if type != itype:
                 self._warn('expected id of type %s but found type %s %s' %
                            (type, itype, id))
-            return fields[-1]
+            return fields[-1].split('?')[0]
         return id
 
     def _get_uri(self, type, id):
