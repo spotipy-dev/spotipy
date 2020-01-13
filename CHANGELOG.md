@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+ - Fixed inconsistent behaviour with some API methods when
+   a full HTTP URL is passed.
+
 ### Changed
  - Fixed invalid calls to logging warn method
  - `mock` no longer needed for install. Only used in `tox`.
