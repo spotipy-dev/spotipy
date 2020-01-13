@@ -14,4 +14,3 @@ sp = spotipy.Spotify()
 sp.trace = True
 user = sp.user(username)
 pprint.pprint(user)
-

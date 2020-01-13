@@ -1,12 +1,33 @@
-# -*- coding: latin-1 -*-
-import spotipy
+# -*- coding: utf-8 -*-
+
+from spotipy import (
+    CLIENT_CREDS_ENV_VARS as CCEV,
+    prompt_for_user_token,
+    Spotify,
+    SpotifyException,
+)
+import os
+import sys
 import unittest
-import pprint
+
 import requests
-from spotipy.client import SpotifyException
+
+sys.path.insert(0, os.path.abspath(os.pardir))
 
 
 class TestSpotipy(unittest.TestCase):
+
+    """
+    These tests require user authentication - provide client credentials using
+    the following environment variables
+
+    ::
+
+        'SPOTIPY_CLIENT_USERNAME'
+        'SPOTIPY_CLIENT_ID'
+        'SPOTIPY_CLIENT_SECRET'
+        'SPOTIPY_REDIRECT_URI'
+    """
 
     creep_urn = 'spotify:track:3HfB5hBU0dmBt8T0iCmH42'
     creep_id = '3HfB5hBU0dmBt8T0iCmH42'
@@ -19,11 +40,25 @@ class TestSpotipy(unittest.TestCase):
     radiohead_urn = 'spotify:artist:4Z8W4fKeB5YxbusRsdQVPb'
     angeles_haydn_urn = 'spotify:album:1vAbqAeuJVWNAe7UR00bdM'
 
-
     bad_id = 'BAD_ID'
 
-    def setUp(self):
-        self.spotify = spotipy.Spotify()
+    @classmethod
+    def setUpClass(self):
+        missing = list(filter(lambda var: not os.getenv(CCEV[var]), CCEV))
+
+        if missing:
+            raise Exception(
+                ('Please set the client credentials for the test '
+                 'the following environment variables: {}').format(
+                    CCEV.values()))
+
+        self.username = os.getenv(CCEV['client_username'])
+
+        self.scope = 'user-library-read'
+
+        self.token = prompt_for_user_token(self.username, scope=self.scope)
+
+        self.spotify = Spotify(auth=self.token)
 
     def test_artist_urn(self):
         artist = self.spotify.artist(self.radiohead_urn)
@@ -41,20 +76,22 @@ class TestSpotipy(unittest.TestCase):
     def test_album_tracks(self):
         results = self.spotify.album_tracks(self.pinkerton_urn)
         self.assertTrue(len(results['items']) == 10)
-    
+
     def test_album_tracks_many(self):
         results = self.spotify.album_tracks(self.angeles_haydn_urn)
         tracks = results['items']
         total, received = results['total'], len(tracks)
         while received < total:
-            results = self.spotify.album_tracks(self.angeles_haydn_urn, offset=received)
+            results = self.spotify.album_tracks(
+                self.angeles_haydn_urn, offset=received)
             tracks.extend(results['items'])
             received = len(tracks)
 
         self.assertEqual(received, total)
 
     def test_albums(self):
-        results = self.spotify.albums([self.pinkerton_urn, self.pablo_honey_urn])
+        results = self.spotify.albums(
+            [self.pinkerton_urn, self.pablo_honey_urn])
         self.assertTrue('albums' in results)
         self.assertTrue(len(results['albums']) == 2)
 
@@ -72,9 +109,9 @@ class TestSpotipy(unittest.TestCase):
 
     def test_track_bad_urn(self):
         try:
-            track = self.spotify.track(self.el_scorcho_bad_urn)
+            self.spotify.track(self.el_scorcho_bad_urn)
             self.assertTrue(False)
-        except spotipy.SpotifyException:
+        except SpotifyException:
             self.assertTrue(True)
 
     def test_tracks(self):
@@ -121,19 +158,19 @@ class TestSpotipy(unittest.TestCase):
         self.assertTrue(found)
 
     def test_search_timeout(self):
-        sp = spotipy.Spotify(requests_timeout=.1)
+        sp = Spotify(auth=self.token, requests_timeout=.01)
         try:
-            results = sp.search(q='my*', type='track')
+            sp.search(q='my*', type='track')
             self.assertTrue(False, 'unexpected search timeout')
-        except requests.ReadTimeout:
+        except requests.Timeout:
             self.assertTrue(True, 'expected search timeout')
-
 
     def test_album_search(self):
         results = self.spotify.search(q='weezer pinkerton', type='album')
         self.assertTrue('albums' in results)
         self.assertTrue(len(results['albums']['items']) > 0)
-        self.assertTrue(results['albums']['items'][0]['name'].find('Pinkerton') >= 0)
+        self.assertTrue(results['albums']['items'][0]
+                        ['name'].find('Pinkerton') >= 0)
 
     def test_track_search(self):
         results = self.spotify.search(q='el scorcho weezer', type='track')
@@ -147,37 +184,34 @@ class TestSpotipy(unittest.TestCase):
 
     def test_track_bad_id(self):
         try:
-            track = self.spotify.track(self.bad_id)
+            self.spotify.track(self.bad_id)
             self.assertTrue(False)
-        except spotipy.SpotifyException:
-            self.assertTrue(True)
-
-    def test_track_bad_id(self):
-        try:
-            track = self.spotify.track(self.bad_id)
-            self.assertTrue(False)
-        except spotipy.SpotifyException:
+        except SpotifyException:
             self.assertTrue(True)
 
     def test_unauthenticated_post_fails(self):
         with self.assertRaises(SpotifyException) as cm:
-            self.spotify.user_playlist_create("spotify", "Best hits of the 90s")
+            self.spotify.user_playlist_create(
+                "spotify", "Best hits of the 90s")
         self.assertTrue(cm.exception.http_status == 401 or
-            cm.exception.http_status == 403)
+                        cm.exception.http_status == 403)
 
     def test_custom_requests_session(self):
-        from requests import Session
-        sess = Session()
+        sess = requests.Session()
         sess.headers["user-agent"] = "spotipy-test"
-        with_custom_session = spotipy.Spotify(requests_session=sess)
-        self.assertTrue(with_custom_session.user(user="akx")["uri"] == "spotify:user:akx")
+        with_custom_session = Spotify(auth=self.token, requests_session=sess)
+        self.assertTrue(
+            with_custom_session.user(
+                user="akx")["uri"] == "spotify:user:akx")
 
     def test_force_no_requests_session(self):
-        from requests import Session
-        with_no_session = spotipy.Spotify(requests_session=False)
-        self.assertFalse(isinstance(with_no_session._session, Session))
-        self.assertTrue(with_no_session.user(user="akx")["uri"] == "spotify:user:akx")
-
+        with_no_session = Spotify(auth=self.token, requests_session=False)
+        self.assertFalse(
+            isinstance(
+                with_no_session._session,
+                requests.Session))
+        self.assertTrue(with_no_session.user(user="akx")
+                        ["uri"] == "spotify:user:akx")
 
 
 '''

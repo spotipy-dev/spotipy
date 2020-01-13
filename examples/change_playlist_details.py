@@ -24,8 +24,8 @@ if len(sys.argv) > 3:
         description = sys.argv[6]
 
 else:
-    print ("Usage: %s username playlist_id name [public collaborative "
-           "description]" % (sys.argv[0]))
+    print("Usage: %s username playlist_id name [public collaborative "
+          "description]" % (sys.argv[0]))
     sys.exit()
 
 scope = 'playlist-modify-public playlist-modify-private'
@@ -37,6 +37,6 @@ if token:
     results = sp.user_playlist_change_details(
         username, playlist_id, name=name, public=public,
         collaborative=collaborative, description=description)
-    print results
+    print(results)
 else:
-    print "Can't get token for", username
+    print("Can't get token for"), username

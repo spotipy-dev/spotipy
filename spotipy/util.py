@@ -1,15 +1,33 @@
+# -*- coding: utf-8 -*-
 
-# shows a user's playlists (need to be authenticated via oauth)
+""" Shows a user's playlists (need to be authenticated via oauth) """
 
 from __future__ import print_function
+
+__all__ = [
+    'CLIENT_CREDS_ENV_VARS',
+    'prompt_for_user_token'
+]
+
 import os
+
 from . import oauth2
+
 import spotipy
 
-def prompt_for_user_token(username, scope=None, client_id = None,
-        client_secret = None, redirect_uri = None, cache_path = None):
+CLIENT_CREDS_ENV_VARS = {
+    'client_id': 'SPOTIPY_CLIENT_ID',
+    'client_secret': 'SPOTIPY_CLIENT_SECRET',
+    'client_username': 'SPOTIPY_CLIENT_USERNAME',
+    'redirect_uri': 'SPOTIPY_REDIRECT_URI'
+}
+
+
+def prompt_for_user_token(username, scope=None, client_id=None,
+                          client_secret=None, redirect_uri=None,
+                          cache_path=None):
     ''' prompts the user to login if necessary and returns
-        the user token suitable for use with the spotipy.Spotify 
+        the user token suitable for use with the spotipy.Spotify
         constructor
 
         Parameters:
@@ -41,14 +59,14 @@ def prompt_for_user_token(username, scope=None, client_id = None,
             export SPOTIPY_CLIENT_SECRET='your-spotify-client-secret'
             export SPOTIPY_REDIRECT_URI='your-app-redirect-url'
 
-            Get your credentials at     
+            Get your credentials at
                 https://developer.spotify.com/my-applications
         ''')
         raise spotipy.SpotifyException(550, -1, 'no credentials set')
 
     cache_path = cache_path or ".cache-" + username
-    sp_oauth = oauth2.SpotifyOAuth(client_id, client_secret, redirect_uri, 
-        scope=scope, cache_path=cache_path)
+    sp_oauth = oauth2.SpotifyOAuth(client_id, client_secret, redirect_uri,
+                                   scope=scope, cache_path=cache_path)
 
     # try to get a valid token for this user, from the cache,
     # if not in the cache, the create a new (this will send
@@ -71,7 +89,7 @@ def prompt_for_user_token(username, scope=None, client_id = None,
             import webbrowser
             webbrowser.open(auth_url)
             print("Opened %s in your browser" % auth_url)
-        except:
+        except BaseException:
             print("Please navigate here: %s" % auth_url)
 
         print()
@@ -82,7 +100,7 @@ def prompt_for_user_token(username, scope=None, client_id = None,
             response = input("Enter the URL you were redirected to: ")
 
         print()
-        print() 
+        print()
 
         code = sp_oauth.parse_response_code(response)
         token_info = sp_oauth.get_access_token(code)
