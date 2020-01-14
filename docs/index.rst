@@ -365,10 +365,11 @@ Spotipy authored by Paul Lamere (plamere) with contributions by:
   - Nathan Coleman // nathancoleman
   - Michael Birtwell // mbirtwell
   - Harrison Hayes // Harrison97
+  - Stephane Bruckert // stephanebruckert
 
 License
 =======
-https://github.com/plamere/spotipy/blob/master/LICENSE.txt
+https://github.com/plamere/spotipy/blob/master/LICENSE.md
 
 
 Indices and tables

@@ -113,44 +113,39 @@ class Spotify(object):
 
         if self.trace_out:
             print(url)
-        r = self._session.request(
-            method,
-            url,
-            headers=headers,
-            proxies=self.proxies,
-            **args)
+
+        with self._session.request(method, url, headers=headers,
+                                   proxies=self.proxies, **args) as r:
+
+            if self.trace:  # pragma: no cover
+                print()
+                print('Request headers:', headers)
+                print('Response headers:', r.headers)
+                print('HTTP status', r.status_code)
+                print(method, r.url)
+                if payload:
+                    print("Data", json.dumps(payload))
+
+            try:
+                r.raise_for_status()
+            except BaseException:
+                try:
+                    msg = r.json()['error']['message']
+                except BaseException:
+                    msg = 'error'
+                raise SpotifyException(r.status_code,
+                                       -1, '%s:\n %s' % (r.url, msg),
+                                       headers=r.headers)
+
+            try:
+                results = r.json()
+            except BaseException:
+                results = None
 
         if self.trace:  # pragma: no cover
+            print('Response:', results)
             print()
-            print('headers', headers)
-            print('http status', r.status_code)
-            print(method, r.url)
-            if payload:
-                print("DATA", json.dumps(payload))
-
-        try:
-            r.raise_for_status()
-        except BaseException:
-            if r.text and len(r.text) > 0 and r.text != 'null':
-                msg = '%s:\n %s' % (r.url, r.json()['error']['message'])
-                raise SpotifyException(r.status_code,
-                                       -1, msg,
-                                       headers=r.headers)
-            else:
-                raise SpotifyException(r.status_code,
-                                       -1, '%s:\n %s' % (r.url, 'error'),
-                                       headers=r.headers)
-        finally:
-            if hasattr(r, "connection"):
-                r.connection.close()
-        if r.text and len(r.text) > 0 and r.text != 'null':
-            results = r.json()
-            if self.trace:  # pragma: no cover
-                print('RESP', results)
-                print()
-            return results
-        else:
-            return None
+        return results
 
     def _get(self, url, args=None, payload=None, **kwargs):
         if args:
@@ -1128,7 +1123,7 @@ class Spotify(object):
             if type != itype:
                 self._warn('expected id of type %s but found type %s %s' %
                            (type, itype, id))
-            return fields[-1]
+            return fields[-1].split('?')[0]
         return id
 
     def _get_uri(self, type, id):
