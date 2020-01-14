@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
  - Allow session keepalive
+ - Bump requests to 2.20.0
 
 ## [2.6.1] - 2020-01-13
 
