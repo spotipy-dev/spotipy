@@ -203,6 +203,7 @@ class TestSpotipy(unittest.TestCase):
         self.assertTrue(
             with_custom_session.user(
                 user="akx")["uri"] == "spotify:user:akx")
+        sess.close()
 
     def test_force_no_requests_session(self):
         with_no_session = Spotify(auth=self.token, requests_session=False)
