@@ -16,4 +16,3 @@ sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 sp.trace = True
 user = sp.user(username)
 pprint.pprint(user)
-

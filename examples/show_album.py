@@ -3,6 +3,7 @@
 
 from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
 import sys
 import pprint
 

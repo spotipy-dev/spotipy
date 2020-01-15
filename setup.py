@@ -1,15 +1,18 @@
 from setuptools import setup
 
+desc = """### A light weight Python library for the Spotify Web API"""
+
 setup(
     name='spotipy',
-    version='2.4.4',
-    description='simple client for the Spotify Web API',
+    version='2.6.1',
+    long_description=desc,
+    long_description_content_type='text/markdown',
     author="@plamere",
     author_email="paul@echonest.com",
     url='http://spotipy.readthedocs.org/',
     install_requires=[
-        'requests>=2.3.0',
+        'requests>=2.20.0',
         'six>=1.10.0',
     ],
-    license='LICENSE.txt',
+    license='LICENSE.md',
     packages=['spotipy'])

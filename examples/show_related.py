@@ -4,7 +4,6 @@
 from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy
 import sys
-import pprint
 
 if len(sys.argv) > 1:
     artist_name = sys.argv[1]
@@ -22,6 +21,5 @@ try:
     print('Related artists for', name)
     for artist in related['artists']:
         print('  ', artist['name'])
-except:
+except BaseException:
     print("usage show_related.py [artist-name]")
-
