@@ -129,7 +129,7 @@ class AuthTestSpotipy(unittest.TestCase):
     def test_current_user_saved_albums(self):
         # List
         albums = self.spotify.current_user_saved_albums()
-        self.assertTrue(len(albums['items']) == 1)
+        self.assertTrue(len(albums['items']) > 1)
 
         # Add
         self.spotify.current_user_saved_albums_add(self.album_ids)
@@ -143,7 +143,7 @@ class AuthTestSpotipy(unittest.TestCase):
         # Remove
         self.spotify.current_user_saved_albums_delete(self.album_ids)
         albums = self.spotify.current_user_saved_albums()
-        self.assertTrue(len(albums['items']) == 1)
+        self.assertTrue(len(albums['items']) > 1)
 
     def test_current_user_playlists(self):
         playlists = self.spotify.current_user_playlists(limit=10)

@@ -1,13 +1,17 @@
 # -*- coding: utf-8 -*-
 
-import os
-import sys
 import unittest
-
+import os
 import requests
-from spotipy.client import SpotifyException
-from spotipy.oauth2 import SpotifyClientCredentials
 
+import spotipy
+from spotipy import (
+    CLIENT_CREDS_ENV_VARS as CCEV,
+    prompt_for_user_token,
+    Spotify,
+    SpotifyException,
+    SpotifyClientCredentials
+)
 
 class TestSpotipy(unittest.TestCase):
 
@@ -36,10 +40,18 @@ class TestSpotipy(unittest.TestCase):
 
     bad_id = 'BAD_ID'
 
-
-    def setUp(self):
-        client_credentials_manager = SpotifyClientCredentials()
-        self.spotify = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+    @classmethod
+    def setUpClass(self):
+        missing = list(filter(lambda var: not os.getenv(CCEV[var]), CCEV))
+        if missing:
+            raise Exception(
+                ('Please set the client credentials for the test '
+                 'the following environment variables: {}').format(
+                    CCEV.values()))
+        self.username = os.getenv(CCEV['client_username'])
+        self.scope = 'user-library-read'
+        self.token = prompt_for_user_token(self.username, scope=self.scope)
+        self.spotify = Spotify(client_credentials_manager=SpotifyClientCredentials())
 
     def test_artist_urn(self):
         artist = self.spotify.artist(self.radiohead_urn)
@@ -140,7 +152,9 @@ class TestSpotipy(unittest.TestCase):
 
     def test_search_timeout(self):
         client_credentials_manager = SpotifyClientCredentials()
-        sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager, requests_timeout=.1)
+        sp = spotipy.Spotify(
+            client_credentials_manager=client_credentials_manager,
+            requests_timeout=.01)
 
         try:
             sp.search(q='my*', type='track')
@@ -182,16 +196,22 @@ class TestSpotipy(unittest.TestCase):
     def test_custom_requests_session(self):
         sess = requests.Session()
         sess.headers["user-agent"] = "spotipy-test"
-        client_credentials_manager = SpotifyClientCredentials()
-        with_custom_session = spotipy.Spotify(client_credentials_manager=client_credentials_manager, requests_session=sess)
-        self.assertTrue(with_custom_session.user(user="akx")["uri"] == "spotify:user:akx")
+        with_custom_session = spotipy.Spotify(
+            client_credentials_manager=SpotifyClientCredentials(),
+            requests_session=sess)
+        self.assertTrue(
+            with_custom_session.user(
+                user="akx")["uri"] == "spotify:user:akx")
+        sess.close()
 
     def test_force_no_requests_session(self):
         from requests import Session
-        client_credentials_manager = SpotifyClientCredentials()
-        with_no_session = spotipy.Spotify(client_credentials_manager=client_credentials_manager, requests_session=False)
+        with_no_session = spotipy.Spotify(
+            client_credentials_manager=SpotifyClientCredentials(),
+            requests_session=False)
         self.assertFalse(isinstance(with_no_session._session, Session))
-        self.assertTrue(with_no_session.user(user="akx")["uri"] == "spotify:user:akx")
+        self.assertTrue(with_no_session.user(user="akx")
+                        ["uri"] == "spotify:user:akx")
 
 
 '''
