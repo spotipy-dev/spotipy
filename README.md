@@ -29,26 +29,33 @@ or
 easy_install spotipy
 ```
 
-
 ## Dependencies
 
 - [Requests](https://github.com/kennethreitz/requests) - spotipy requires the requests package to be installed
 
 
 ## Quick Start
-To get started, simply install spotipy, create a Spotify object and call methods:
+
+A full set of examples can be found in the [online documentation](http://spotipy.readthedocs.org/) and in the [Spotipy examples directory](https://github.com/plamere/spotipy/tree/master/examples). Here are two basic examples.
+
+To get started, install spotipy and create an app on https://developers.spotify.com/.
+Add your new ID and SECRET to your environment:
+
+    export SPOTIPY_CLIENT_ID='your-spotify-client-id'
+    export SPOTIPY_CLIENT_SECRET='your-spotify-client-secret'
+
+Then, create a Spotify object and call methods:
 
 ```python
 import spotipy
-sp = spotipy.Spotify()
+from spotipy.oauth2 import SpotifyClientCredentials
+
+sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
 
 results = sp.search(q='weezer', limit=20)
 for i, t in enumerate(results['tracks']['items']):
     print(' ', i, t['name'])
 ```
-
-A full set of examples can be found in the [online documentation](http://spotipy.readthedocs.org/) and in the [Spotipy examples directory](https://github.com/plamere/spotipy/tree/master/examples).
-
 
 ## Reporting Issues
 

@@ -1,12 +1,14 @@
 from setuptools import setup
 
-desc = """### A light weight Python library for the Spotify Web API"""
+with open("README.md", "r") as f:
+    long_description = f.read()
 
 setup(
     name='spotipy',
-    version='2.6.1',
-    long_description=desc,
-    long_description_content_type='text/markdown',
+    version='2.6.3',
+    description='A light weight Python library for the Spotify Web API',
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     author="@plamere",
     author_email="paul@echonest.com",
     url='http://spotipy.readthedocs.org/',
