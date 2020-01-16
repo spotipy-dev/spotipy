@@ -1,15 +1,14 @@
 
 # shows related artists for the given seed artist
 
-import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
+import spotipy
 import sys
 
 if len(sys.argv) > 1:
     artist_name = sys.argv[1]
 else:
     artist_name = 'weezer'
-
 
 client_credentials_manager = SpotifyClientCredentials()
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)

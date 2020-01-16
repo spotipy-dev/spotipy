@@ -1,12 +1,16 @@
+from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy
 import random
 
 '''
     generates a list of songs where the first word in each subsequent song
     matches the last word of the previous song.
+
+    usage: python title_chain.py [song name]
 '''
 
-sp = spotipy.Spotify()
+client_credentials_manager = SpotifyClientCredentials()
+sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
 
 skiplist = set(['dm', 'remix'])

@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+ - Fixed broken examples in README, examples and doc
+
 ### Changed
 
  - Allow session keepalive
