@@ -41,8 +41,8 @@ A full set of examples can be found in the [online documentation](http://spotipy
 To get started, install spotipy and create an app on https://developers.spotify.com/.
 Add your new ID and SECRET to your environment:
 
-> export SPOTIPY_CLIENT_ID='your-spotify-client-id'
-> export SPOTIPY_CLIENT_SECRET='your-spotify-client-secret'
+    export SPOTIPY_CLIENT_ID='your-spotify-client-id'
+    export SPOTIPY_CLIENT_SECRET='your-spotify-client-secret'
 
 Then, create a Spotify object and call methods:
 
