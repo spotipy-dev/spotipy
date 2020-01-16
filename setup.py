@@ -4,7 +4,7 @@ desc = """### A light weight Python library for the Spotify Web API"""
 
 setup(
     name='spotipy',
-    version='2.6.1',
+    version='2.6.2',
     long_description=desc,
     long_description_content_type='text/markdown',
     author="@plamere",
