@@ -62,10 +62,12 @@ class AuthTestSpotipy(unittest.TestCase):
 
     @classmethod
     def setUpClass(self):
-        warnings.filterwarnings(
-            "ignore",
-            category=ResourceWarning,
-            message="unclosed.*<ssl.SSLSocket.*>")
+        if sys.version_info >= (3, 2):
+            # >= Python3.2 only
+            warnings.filterwarnings(
+                "ignore",
+                category=ResourceWarning,
+                message="unclosed.*<ssl.SSLSocket.*>")
 
         missing = list(filter(lambda var: not os.getenv(CCEV[var]), CCEV))
 
