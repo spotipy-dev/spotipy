@@ -13,6 +13,7 @@ from spotipy import (
     SpotifyClientCredentials
 )
 
+
 class TestSpotipy(unittest.TestCase):
 
     """
@@ -51,7 +52,8 @@ class TestSpotipy(unittest.TestCase):
         self.username = os.getenv(CCEV['client_username'])
         self.scope = 'user-library-read'
         self.token = prompt_for_user_token(self.username, scope=self.scope)
-        self.spotify = Spotify(client_credentials_manager=SpotifyClientCredentials())
+        self.spotify = Spotify(
+            client_credentials_manager=SpotifyClientCredentials())
 
     def test_artist_urn(self):
         artist = self.spotify.artist(self.radiohead_urn)
