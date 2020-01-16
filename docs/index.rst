@@ -69,7 +69,7 @@ API <https://developer.spotify.com/web-api/>`_ documentation.
 
 Installation
 ============
-Install or upgrade *Spotipy* with:
+Install or upgrade *Spotipy* with::
 
     pip install spotipy --upgrade
 
@@ -171,7 +171,7 @@ in comparison with requests to the Web API made without an access token,
 is that a higher rate limit is applied.
 
 To support the **Client Credentials Flow** *Spotipy* provides a
-class SpotifyClientCredentials that can be used to authenticate requests like so:
+class SpotifyClientCredentials that can be used to authenticate requests like so::
 
 
     import spotipy
@@ -353,6 +353,7 @@ Spotipy authored by Paul Lamere (plamere) with contributions by:
   - Michael Birtwell // mbirtwell
   - Harrison Hayes // Harrison97
   - Stephane Bruckert // stephanebruckert
+  - Ritiek Malhotra // ritiek
 
 License
 =======
