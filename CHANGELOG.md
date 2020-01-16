@@ -6,6 +6,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+ - Support for `playlist_tracks`
+
+### Changed
+
+ - `user_playlist_tracks` doesn't require a user anymore
+
+### Deprecated
+
+ - Deprecated `user_playlist` and `user_playlist_tracks`
+
 ## [2.6.3] - 2020-01-16
 
 ### Fixed

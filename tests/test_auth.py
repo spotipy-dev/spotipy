@@ -23,6 +23,7 @@ from spotipy import (
 import os
 import sys
 import unittest
+import warnings
 
 sys.path.insert(0, os.path.abspath(os.pardir))
 
@@ -61,6 +62,10 @@ class AuthTestSpotipy(unittest.TestCase):
 
     @classmethod
     def setUpClass(self):
+        warnings.filterwarnings(
+            "ignore",
+            category=ResourceWarning,
+            message="unclosed.*<ssl.SSLSocket.*>")
 
         missing = list(filter(lambda var: not os.getenv(CCEV[var]), CCEV))
 
@@ -118,13 +123,6 @@ class AuthTestSpotipy(unittest.TestCase):
             pid = playlist['id']
             results = self.spotify.user_playlist_tracks(user, pid)
             self.assertTrue(len(results['items']) >= 0)
-
-    # known API issue currently causes this test to fail
-    # the issue is that the API doesn't currently respect the
-    # limit parameter
-    # def user_playlist_tracks(self, user, playlist_id=None, fields=None,
-    #                          limit=100, offset=0):
-    #     self.assertTrue(len(playlists['items']) == 5)
 
     def test_current_user_saved_albums(self):
         # List
@@ -281,6 +279,17 @@ class AuthTestSpotipy(unittest.TestCase):
         pl = self.spotify.playlist(self.playlist)
         self.assertTrue(pl["tracks"]["total"] > 0)
 
+    def test_playlist_tracks(self):
+        # New playlist ID
+        pl = self.spotify.playlist_tracks(self.playlist_new_id, limit=2)
+        self.assertTrue(len(pl["items"]) == 2)
+        self.assertTrue(pl["total"] > 0)
+
+        # Old playlist ID
+        pl = self.spotify.playlist_tracks(self.playlist, limit=2)
+        self.assertTrue(len(pl["items"]) == 2)
+        self.assertTrue(pl["total"] > 0)
+
     def test_user_follows_and_unfollows_artist(self):
         # Initially follows 1 artist
         res = self.spotify.current_user_followed_artists()
@@ -306,6 +315,24 @@ class AuthTestSpotipy(unittest.TestCase):
 
         # Unfollow these 2 users
         self.spotify.user_unfollow_users(users)
+
+    def test_deprecated_starred(self):
+        pl = self.spotify.user_playlist(self.username)
+        self.assertTrue(pl["tracks"] is None)
+        self.assertTrue(pl["owner"] is None)
+
+    def test_deprecated_user_playlist(self):
+        # Test without user due to change from
+        # https://developer.spotify.com/community/news/2018/06/12/changes-to-playlist-uris/
+        pl = self.spotify.user_playlist(None, self.playlist)
+        self.assertTrue(pl["tracks"]["total"] > 0)
+
+    def test_deprecated_user_playlis(self):
+        # Test without user due to change from
+        # https://developer.spotify.com/community/news/2018/06/12/changes-to-playlist-uris/
+        pl = self.spotify.user_playlist_tracks(None, self.playlist, limit=2)
+        self.assertTrue(len(pl["items"]) == 2)
+        self.assertTrue(pl["total"] > 0)
 
 
 if __name__ == '__main__':
