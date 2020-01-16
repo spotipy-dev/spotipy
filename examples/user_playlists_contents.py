@@ -31,8 +31,7 @@ if __name__ == '__main__':
                 print()
                 print(playlist['name'])
                 print('  total tracks', playlist['tracks']['total'])
-                results = sp.user_playlist(
-                    username, playlist['id'], fields="tracks,next")
+                results = sp.playlist(playlist['id'], fields="tracks,next")
                 tracks = results['tracks']
                 show_tracks(tracks)
                 while tracks['next']:
