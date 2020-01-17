@@ -271,7 +271,7 @@ Shows the contents of every playlist owned by a user::
                     print()
                     print(playlist['name'])
                     print ('  total tracks', playlist['tracks']['total'])
-                    results = sp.user_playlist(username, playlist['id'],
+                    results = sp.playlist(playlist['id'],
                         fields="tracks,next")
                     tracks = results['tracks']
                     show_tracks(tracks)

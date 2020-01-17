@@ -15,6 +15,7 @@ import time
 
 import requests
 import six
+import warnings
 
 
 class SpotifyException(Exception):
@@ -371,43 +372,57 @@ class Spotify(object):
         """
         return self._get("me/playlists", limit=limit, offset=offset)
 
-    def user_playlists(self, user, limit=50, offset=0):
-        """ Gets playlists of a user
+    def playlist(self, playlist_id, fields=None, market=None):
+        """ Gets playlist by id.
 
             Parameters:
-                - user - the id of the usr
-                - limit  - the number of items to return
-                - offset - the index of the first item to return
+                - playlist - the id of the playlist
+                - fields - which fields to return
+                - market - An ISO 3166-1 alpha-2 country code or the
+                           string from_token.
         """
-        return self._get("users/%s/playlists" % user, limit=limit,
-                         offset=offset)
+        plid = self._get_id('playlist', playlist_id)
+        return self._get("playlists/%s" % (plid), fields=fields, market=market)
 
-    def user_playlist(self, user, playlist_id=None, fields=None):
+    def playlist_tracks(self, playlist_id, fields=None,
+                        limit=100, offset=0, market=None):
+        """ Get full details of the tracks of a playlist.
+
+            Parameters:
+                - playlist_id - the id of the playlist
+                - fields - which fields to return
+                - limit - the maximum number of tracks to return
+                - offset - the index of the first track to return
+                - market - an ISO 3166-1 alpha-2 country code.
+        """
+        plid = self._get_id('playlist', playlist_id)
+        return self._get("playlists/%s/tracks" % (plid),
+                         limit=limit, offset=offset, fields=fields,
+                         market=market)
+
+    def user_playlist(self, user, playlist_id=None,
+                      fields=None, market=None):
+        warnings.warn(
+            "You should use `playlist(playlist_id)` instead",
+            DeprecationWarning)
+
         """ Gets playlist of a user
+
             Parameters:
                 - user - the id of the user
                 - playlist_id - the id of the playlist
                 - fields - which fields to return
         """
         if playlist_id is None:
-            return self._get("users/%s/starred" % (user), fields=fields)
-        plid = self._get_id('playlist', playlist_id)
-        return self._get("users/%s/playlists/%s" % (user, plid), fields=fields)
+            return self._get("users/%s/starred" % user)
+        return self.playlist(playlist_id, fields=fields, market=market)
 
-    def playlist(self, playlist_id, fields=None, market=None):
-        """ Gets playlist by id
-
-            Parameters:
-            - playlist - the id of the playlist
-            - fields - which fields to return
-            - market - An ISO 3166-1 alpha-2 country code or the string
-                       from_token.
-            """
-        plid = self._get_id('playlist', playlist_id)
-        return self._get("playlists/%s" % (plid), fields=fields)
-
-    def user_playlist_tracks(self, user, playlist_id=None, fields=None,
+    def user_playlist_tracks(self, user=None, playlist_id=None, fields=None,
                              limit=100, offset=0, market=None):
+        warnings.warn(
+            "You should use `playlist_tracks(playlist_id)` instead",
+            DeprecationWarning)
+
         """ Get full details of the tracks of a playlist owned by a user.
 
             Parameters:
@@ -418,10 +433,19 @@ class Spotify(object):
                 - offset - the index of the first track to return
                 - market - an ISO 3166-1 alpha-2 country code.
         """
-        plid = self._get_id('playlist', playlist_id)
-        return self._get("users/%s/playlists/%s/tracks" % (user, plid),
-                         limit=limit, offset=offset, fields=fields,
-                         market=market)
+        return self.playlist_tracks(playlist_id, limit=limit, offset=offset,
+                                    fields=fields, market=market)
+
+    def user_playlists(self, user, limit=50, offset=0):
+        """ Gets playlists of a user
+
+            Parameters:
+                - user - the id of the usr
+                - limit  - the number of items to return
+                - offset - the index of the first item to return
+        """
+        return self._get("users/%s/playlists" % user, limit=limit,
+                         offset=offset)
 
     def user_playlist_create(self, user, name, public=True, description=''):
         """ Creates a playlist for a user
