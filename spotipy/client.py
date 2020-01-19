@@ -406,6 +406,23 @@ class Spotify(object):
                          limit=limit, offset=offset, fields=fields,
                          market=market)
 
+    def playlist_upload_cover_image(self,
+                                    playlist_id,
+                                    image_b64):
+        """
+        Replace the image used to represent a specific playlist
+
+        Parameters:
+            - playlist_owner_id - the user id of the playlist owner
+            - playlist_id - the id of the playlist
+            - image_b64 - image data as a Base64 encoded JPEG image string
+                      (maximum payload size is 256 KB)
+        """
+        plid = self._get_id('playlist', playlist_id)
+        return self._put("playlists/{}/images".format(plid),
+                         payload=image_b64,
+                         content_type="image/jpeg")
+
     def user_playlist(self, user, playlist_id=None,
                       fields=None, market=None):
         warnings.warn(
@@ -632,24 +649,6 @@ class Spotify(object):
         return self._get(endpoint.format(playlist_owner_id,
                                          playlist_id,
                                          ','.join(user_ids)))
-
-    def user_playlist_upload_cover_image(self,
-                                         playlist_owner_id,
-                                         playlist_id,
-                                         image):
-        """
-        Replace the image used to represent a specific playlist
-
-        Parameters:
-            - playlist_owner_id - the user id of the playlist owner
-            - playlist_id - the id of the playlist
-            - image - image data as a base64-encoded string
-
-        """
-        return self._put("users/{}/playlists/{}/images".format(
-                            playlist_owner_id, playlist_id),
-                         payload=image,
-                         content_type="image/jpeg")
 
     def me(self):
         """ Get detailed profile information about the current user.

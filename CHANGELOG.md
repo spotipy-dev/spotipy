@@ -7,9 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
- 
- - Support for `user_playlist_upload_cover_image`
+
  - Support for `playlist_tracks`
+ - Support for `playlist_upload_cover_image`
 
 ### Changed
 
@@ -45,7 +45,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
  - `mock` no longer needed for install. Only used in `tox`.
->>>>>>> 44911f7285f0b57ef5b72275f8d82c09b6d9ae16
 
 ## [2.6.0] - 2020-01-12
 
