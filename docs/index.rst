@@ -27,7 +27,6 @@ released by the artist 'Birdy'::
 Here's another example showing how to get 30 second samples and cover art
 for the top 10 tracks for Led Zeppelin::
 
-    from __future__ import print_function
     import spotipy
 
     lz_uri = 'spotify:artist:36QJpDe2go2KgaRleHCDTp'
@@ -44,7 +43,6 @@ for the top 10 tracks for Led Zeppelin::
 Finally, here's an example that will get the URL for an artist image given the
 artist's name::
 
-    from __future__ import print_function
     import spotipy
     import sys
 
@@ -71,9 +69,9 @@ API <https://developer.spotify.com/web-api/>`_ documentation.
 
 Installation
 ============
-Install *Spotipy* with::
+Install or upgrade *Spotipy* with::
 
-    pip install spotipy
+    pip install spotipy --upgrade
 
 Or with::
 
@@ -84,37 +82,18 @@ Or you can get the source from github at https://github.com/plamere/spotipy
 Getting Started
 ===============
 
-Non-Authorized requests
-=======================
-For methods that do not require authorization, simply create a Spotify object
-and start making method calls like so::
-
-    from __future__ import print_function
-    import spotipy
-    spotify = spotipy.Spotify()
-    results = spotify.search(q='artist:' + name, type='artist')
-    print(results)
-
-Authorized requests
-=======================
-Many methods require user authentication. For these requests you will need to
-generate an authorization token that indicates that the user has granted
-permission for your application to perform the given task.  You will need to
+All methods require user authorization. You will need to
 register your app to get the credentials necessary to make authorized calls.
 
 Even if your script does not have an accessible URL you will need to specify one
 when registering your application which the Spotify authentication server will
 redirect to after successful login. The URL doesn't need to be publicly
-accessible, so you can specify "http://localhost/", and after succesfully 
-authenticating your app, you can simply copy the 
-"http://localhost/?code=..." URL from your browser and paste it to the 
-console where your script is running.
+accessible, so you can specify "http://localhost/".
 
 Register your app at
 `My Applications
 <https://developer.spotify.com/my-applications/#!/applications>`_ and register the
 redirect URI mentioned in the above paragragh.
-
 
 *spotipy* supports two authorization flows:
 
@@ -123,11 +102,18 @@ redirect URI mentioned in the above paragragh.
 
   - The **Client Credentials flow**  The method makes it possible
     to authenticate your requests to the Spotify Web API and to obtain
-    a higher rate limit than you would
+    a higher rate limit than you would with the Authorization Code flow.
 
 
 Authorization Code Flow
 =======================
+
+This flow is suitable for long-running applications in which the user grants
+permission only once. It provides an access token that can be refreshed.
+Since the token exchange involves sending your secret key, perform this on a
+secure location, like a backend service, and not from a client such as a
+browser or from a mobile app.
+
 To support the **Authorization Code Flow** *Spotipy* provides a
 utility method ``util.prompt_for_user_token`` that will attempt to authorize the
 user.  You can pass your app credentials directly into the method as arguments::
@@ -144,14 +130,16 @@ you can set environment variables like so::
 Call ``util.prompt_for_user_token`` method with the username and the
 desired scope (see `Using
 Scopes <https://developer.spotify.com/web-api/using-scopes/>`_ for information
-about scopes) and credentials. This will coordinate the user authorization via
+about scopes) and credentials. After succesfully
+authenticating your app, you can simply copy the
+"http://localhost/?code=..." URL from your browser and paste it to the
+console where your script is running. This will coordinate the user authorization via
 your web browser and callback to the SPOTIPY_REDIRECT_URI you were redirected to
 with the authorization token appended. The credentials are cached locally and
 are used to automatically re-authorized expired tokens.
 
 Here's an example of getting user authorization to read a user's saved tracks::
 
-    from __future__ import print_function
     import sys
     import spotipy
     import spotipy.util as util
@@ -177,6 +165,11 @@ Here's an example of getting user authorization to read a user's saved tracks::
 
 Client Credentials Flow
 =======================
+The Client Credentials flow is used in server-to-server authentication. Only
+endpoints that do not access user information can be accessed. The advantage here
+in comparison with requests to the Web API made without an access token,
+is that a higher rate limit is applied.
+
 To support the **Client Credentials Flow** *Spotipy* provides a
 class SpotifyClientCredentials that can be used to authenticate requests like so::
 
@@ -196,9 +189,6 @@ class SpotifyClientCredentials that can be used to authenticate requests like so
         else:
             playlists = None
 
-Client credentials flow is appropriate for requests that do not require access to a
-user's private data.  Even if you are only making calls that do not require
-authorization, using this flow yields the benefit of a higher rate limit
 
 IDs URIs and URLs
 =======================
@@ -223,8 +213,6 @@ Here are a few more examples of using *Spotipy*.
 
 Add tracks to a playlist::
 
-    from __future__ import print_function
-    import pprint
     import sys
 
     import spotipy
@@ -254,7 +242,6 @@ Shows the contents of every playlist owned by a user::
 
     # shows a user's playlists (need to be authenticated via oauth)
 
-    from __future__ import print_function
     import sys
     import spotipy
     import spotipy.util as util
@@ -284,7 +271,7 @@ Shows the contents of every playlist owned by a user::
                     print()
                     print(playlist['name'])
                     print ('  total tracks', playlist['tracks']['total'])
-                    results = sp.user_playlist(username, playlist['id'],
+                    results = sp.playlist(playlist['id'],
                         fields="tracks,next")
                     tracks = results['tracks']
                     show_tracks(tracks)
@@ -365,10 +352,12 @@ Spotipy authored by Paul Lamere (plamere) with contributions by:
   - Nathan Coleman // nathancoleman
   - Michael Birtwell // mbirtwell
   - Harrison Hayes // Harrison97
+  - Stephane Bruckert // stephanebruckert
+  - Ritiek Malhotra // ritiek
 
 License
 =======
-https://github.com/plamere/spotipy/blob/master/LICENSE.txt
+https://github.com/plamere/spotipy/blob/master/LICENSE.md
 
 
 Indices and tables

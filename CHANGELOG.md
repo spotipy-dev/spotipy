@@ -9,6 +9,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
  
  - Support for `user_playlist_upload_cover_image`
+ - Support for `playlist_tracks`
+
+### Changed
+
+ - `user_playlist_tracks` doesn't require a user anymore
+
+### Deprecated
+
+ - Deprecated `user_playlist` and `user_playlist_tracks`
+
+## [2.6.3] - 2020-01-16
+
+### Fixed
+
+ - Fixed broken doc in 2.6.2
+
+## [2.6.2] - 2020-01-16
+
+### Fixed
+
+ - Fixed broken examples in README, examples and doc
+
+### Changed
+
+ - Allow session keepalive
+ - Bump requests to 2.20.0
+
+## [2.6.1] - 2020-01-13
+
+### Fixed
+ - Fixed inconsistent behaviour with some API methods when
+   a full HTTP URL is passed.
+ - Fixed invalid calls to logging warn method
+
+### Removed
+ - `mock` no longer needed for install. Only used in `tox`.
+>>>>>>> 44911f7285f0b57ef5b72275f8d82c09b6d9ae16
 
 ## [2.6.0] - 2020-01-12
 

@@ -15,6 +15,7 @@ import time
 
 import requests
 import six
+import warnings
 
 
 class SpotifyException(Exception):
@@ -119,44 +120,39 @@ class Spotify(object):
 
         if self.trace_out:
             print(url)
-        r = self._session.request(
-            method,
-            url,
-            headers=headers,
-            proxies=self.proxies,
-            **args)
+
+        with self._session.request(method, url, headers=headers,
+                                   proxies=self.proxies, **args) as r:
+
+            if self.trace:  # pragma: no cover
+                print()
+                print('Request headers:', headers)
+                print('Response headers:', r.headers)
+                print('HTTP status', r.status_code)
+                print(method, r.url)
+                if payload:
+                    print("Data", json.dumps(payload))
+
+            try:
+                r.raise_for_status()
+            except BaseException:
+                try:
+                    msg = r.json()['error']['message']
+                except BaseException:
+                    msg = 'error'
+                raise SpotifyException(r.status_code,
+                                       -1, '%s:\n %s' % (r.url, msg),
+                                       headers=r.headers)
+
+            try:
+                results = r.json()
+            except BaseException:
+                results = None
 
         if self.trace:  # pragma: no cover
+            print('Response:', results)
             print()
-            print('headers', headers)
-            print('http status', r.status_code)
-            print(method, r.url)
-            if payload:
-                print("DATA", json.dumps(payload))
-
-        try:
-            r.raise_for_status()
-        except BaseException:
-            if r.text and len(r.text) > 0 and r.text != 'null':
-                msg = '%s:\n %s' % (r.url, r.json()['error']['message'])
-                raise SpotifyException(r.status_code,
-                                       -1, msg,
-                                       headers=r.headers)
-            else:
-                raise SpotifyException(r.status_code,
-                                       -1, '%s:\n %s' % (r.url, 'error'),
-                                       headers=r.headers)
-        finally:
-            if hasattr(r, "connection"):
-                r.connection.close()
-        if r.text and len(r.text) > 0 and r.text != 'null':
-            results = r.json()
-            if self.trace:  # pragma: no cover
-                print('RESP', results)
-                print()
-            return results
-        else:
-            return None
+        return results
 
     def _get(self, url, args=None, payload=None, **kwargs):
         if args:
@@ -382,43 +378,57 @@ class Spotify(object):
         """
         return self._get("me/playlists", limit=limit, offset=offset)
 
-    def user_playlists(self, user, limit=50, offset=0):
-        """ Gets playlists of a user
+    def playlist(self, playlist_id, fields=None, market=None):
+        """ Gets playlist by id.
 
             Parameters:
-                - user - the id of the usr
-                - limit  - the number of items to return
-                - offset - the index of the first item to return
+                - playlist - the id of the playlist
+                - fields - which fields to return
+                - market - An ISO 3166-1 alpha-2 country code or the
+                           string from_token.
         """
-        return self._get("users/%s/playlists" % user, limit=limit,
-                         offset=offset)
+        plid = self._get_id('playlist', playlist_id)
+        return self._get("playlists/%s" % (plid), fields=fields, market=market)
 
-    def user_playlist(self, user, playlist_id=None, fields=None):
+    def playlist_tracks(self, playlist_id, fields=None,
+                        limit=100, offset=0, market=None):
+        """ Get full details of the tracks of a playlist.
+
+            Parameters:
+                - playlist_id - the id of the playlist
+                - fields - which fields to return
+                - limit - the maximum number of tracks to return
+                - offset - the index of the first track to return
+                - market - an ISO 3166-1 alpha-2 country code.
+        """
+        plid = self._get_id('playlist', playlist_id)
+        return self._get("playlists/%s/tracks" % (plid),
+                         limit=limit, offset=offset, fields=fields,
+                         market=market)
+
+    def user_playlist(self, user, playlist_id=None,
+                      fields=None, market=None):
+        warnings.warn(
+            "You should use `playlist(playlist_id)` instead",
+            DeprecationWarning)
+
         """ Gets playlist of a user
+
             Parameters:
                 - user - the id of the user
                 - playlist_id - the id of the playlist
                 - fields - which fields to return
         """
         if playlist_id is None:
-            return self._get("users/%s/starred" % (user), fields=fields)
-        plid = self._get_id('playlist', playlist_id)
-        return self._get("users/%s/playlists/%s" % (user, plid), fields=fields)
+            return self._get("users/%s/starred" % user)
+        return self.playlist(playlist_id, fields=fields, market=market)
 
-    def playlist(self, playlist_id, fields=None, market=None):
-        """ Gets playlist by id
-
-            Parameters:
-            - playlist - the id of the playlist
-            - fields - which fields to return
-            - market - An ISO 3166-1 alpha-2 country code or the string
-                       from_token.
-            """
-        plid = self._get_id('playlist', playlist_id)
-        return self._get("playlists/%s" % (plid), fields=fields)
-
-    def user_playlist_tracks(self, user, playlist_id=None, fields=None,
+    def user_playlist_tracks(self, user=None, playlist_id=None, fields=None,
                              limit=100, offset=0, market=None):
+        warnings.warn(
+            "You should use `playlist_tracks(playlist_id)` instead",
+            DeprecationWarning)
+
         """ Get full details of the tracks of a playlist owned by a user.
 
             Parameters:
@@ -429,10 +439,19 @@ class Spotify(object):
                 - offset - the index of the first track to return
                 - market - an ISO 3166-1 alpha-2 country code.
         """
-        plid = self._get_id('playlist', playlist_id)
-        return self._get("users/%s/playlists/%s/tracks" % (user, plid),
-                         limit=limit, offset=offset, fields=fields,
-                         market=market)
+        return self.playlist_tracks(playlist_id, limit=limit, offset=offset,
+                                    fields=fields, market=market)
+
+    def user_playlists(self, user, limit=50, offset=0):
+        """ Gets playlists of a user
+
+            Parameters:
+                - user - the id of the usr
+                - limit  - the number of items to return
+                - offset - the index of the first item to return
+        """
+        return self._get("users/%s/playlists" % user, limit=limit,
+                         offset=offset)
 
     def user_playlist_create(self, user, name, public=True, description=''):
         """ Creates a playlist for a user
@@ -1152,7 +1171,7 @@ class Spotify(object):
             if type != itype:
                 self._warn('expected id of type %s but found type %s %s' %
                            (type, itype, id))
-            return fields[-1]
+            return fields[-1].split('?')[0]
         return id
 
     def _get_uri(self, type, id):
