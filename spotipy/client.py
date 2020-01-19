@@ -413,7 +413,6 @@ class Spotify(object):
         Replace the image used to represent a specific playlist
 
         Parameters:
-            - playlist_owner_id - the user id of the playlist owner
             - playlist_id - the id of the playlist
             - image_b64 - image data as a Base64 encoded JPEG image string
                       (maximum payload size is 256 KB)
