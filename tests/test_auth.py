@@ -24,6 +24,7 @@ import os
 import sys
 import unittest
 import warnings
+import requests
 
 sys.path.insert(0, os.path.abspath(os.pardir))
 
@@ -86,12 +87,29 @@ class AuthTestSpotipy(unittest.TestCase):
             'user-library-modify '
             'user-read-private '
             'user-top-read '
-            'user-follow-modify'
+            'user-follow-modify '
+            'ugc-image-upload'
         )
 
         self.token = prompt_for_user_token(self.username, scope=self.scope)
 
         self.spotify = Spotify(auth=self.token)
+
+    # Helper
+    def get_or_create_spotify_playlist(self, playlist_name):
+        playlists = self.spotify.user_playlists(self.username)
+        while playlists:
+            for item in playlists['items']:
+                if item['name'] == playlist_name:
+                    return item
+            playlists = self.spotify.next(playlists)
+        return self.spotify.user_playlist_create(
+            self.username, playlist_name)
+
+    # Helper
+    def get_as_base64(self, url):
+        import base64
+        return base64.b64encode(requests.get(url).content).decode("utf-8")
 
     def test_track_bad_id(self):
         try:
@@ -223,23 +241,12 @@ class AuthTestSpotipy(unittest.TestCase):
         items = response['items']
         self.assertTrue(len(items) > 0)
 
-    def get_or_create_spotify_playlist(self, playlist_name):
-        playlists = self.spotify.user_playlists(self.username)
-        while playlists:
-            for item in playlists['items']:
-                if item['name'] == playlist_name:
-                    return item['id']
-            playlists = self.spotify.next(playlists)
-        playlist = self.spotify.user_playlist_create(
-            self.username, playlist_name)
-        playlist_id = playlist['uri']
-        return playlist_id
-
     def test_user_playlist_ops(self):
         sp = self.spotify
         # create empty playlist
-        playlist_id = self.get_or_create_spotify_playlist(
+        playlist = self.get_or_create_spotify_playlist(
             'spotipy-testing-playlist-1')
+        playlist_id = playlist['id']
 
         # remove all tracks from it
         sp.user_playlist_replace_tracks(
@@ -291,6 +298,21 @@ class AuthTestSpotipy(unittest.TestCase):
         pl = self.spotify.playlist_tracks(self.playlist, limit=2)
         self.assertTrue(len(pl["items"]) == 2)
         self.assertTrue(pl["total"] > 0)
+
+    def test_playlist_upload_cover_image(self):
+        pl1 = self.get_or_create_spotify_playlist('spotipy-testing-playlist-1')
+        plid = pl1['uri']
+        old_b64 = pl1['images'][0]['url']
+
+        # Upload random dog image
+        r = requests.get('https://dog.ceo/api/breeds/image/random')
+        dog_base64 = self.get_as_base64(r.json()['message'])
+        self.spotify.playlist_upload_cover_image(plid, dog_base64)
+
+        # Image must be different
+        pl1 = self.spotify.playlist(plid)
+        new_b64 = self.get_as_base64(pl1['images'][0]['url'])
+        self.assertTrue(old_b64 != new_b64)
 
     def test_user_follows_and_unfollows_artist(self):
         # Initially follows 1 artist

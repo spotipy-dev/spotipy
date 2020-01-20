@@ -107,10 +107,16 @@ class Spotify(object):
         if not url.startswith('http'):
             url = self.prefix + url
         headers = self._auth_headers()
-        headers['Content-Type'] = 'application/json'
 
-        if payload:
-            args["data"] = json.dumps(payload)
+        if 'content_type' in args['params']:
+            headers['Content-Type'] = args['params']['content_type']
+            del args['params']['content_type']
+            if payload:
+                args["data"] = payload
+        else:
+            headers['Content-Type'] = 'application/json'
+            if payload:
+                args["data"] = json.dumps(payload)
 
         if self.trace_out:
             print(url)
@@ -399,6 +405,22 @@ class Spotify(object):
         return self._get("playlists/%s/tracks" % (plid),
                          limit=limit, offset=offset, fields=fields,
                          market=market)
+
+    def playlist_upload_cover_image(self,
+                                    playlist_id,
+                                    image_b64):
+        """
+        Replace the image used to represent a specific playlist
+
+        Parameters:
+            - playlist_id - the id of the playlist
+            - image_b64 - image data as a Base64 encoded JPEG image string
+                      (maximum payload size is 256 KB)
+        """
+        plid = self._get_id('playlist', playlist_id)
+        return self._put("playlists/{}/images".format(plid),
+                         payload=image_b64,
+                         content_type="image/jpeg")
 
     def user_playlist(self, user, playlist_id=None,
                       fields=None, market=None):
