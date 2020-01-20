@@ -4,35 +4,13 @@
 
 [![Documentation Status](https://readthedocs.org/projects/spotipy/badge/?version=latest)](https://spotipy.readthedocs.io/en/latest/?badge=latest)
 
-
 ## Documentation
 
 Spotipy's full documentation is online at [Spotipy Documentation](http://spotipy.readthedocs.org/).
 
-
 ## Installation
-If you already have [Python](http://www.python.org/) on your system you can install the library simply by downloading the distribution, unpack it and install in the usual fashion:
 
-```bash
-python setup.py install
-```
-
-You can also install it using a popular package manager with
-
-```bash
-pip install spotipy
-```
-
-or
-
-```bash
-easy_install spotipy
-```
-
-## Dependencies
-
-- [Requests](https://github.com/kennethreitz/requests) - spotipy requires the requests package to be installed
-
+    pip install spotipy
 
 ## Quick Start
 
@@ -46,16 +24,14 @@ Add your new ID and SECRET to your environment:
 
 Then, create a Spotify object and call methods:
 
-```python
-import spotipy
-from spotipy.oauth2 import SpotifyClientCredentials
+    import spotipy
+    from spotipy.oauth2 import SpotifyClientCredentials
 
-sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
+    sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
 
-results = sp.search(q='weezer', limit=20)
-for i, t in enumerate(results['tracks']['items']):
-    print(' ', i, t['name'])
-```
+    results = sp.search(q='weezer', limit=20)
+    for idx, track in enumerate(results['tracks']['items']):
+        print(idx, track['name'])
 
 ## Reporting Issues
 

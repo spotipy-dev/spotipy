@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.7.0] - 2020-01-20
+
 ### Added
 
  - Support for `playlist_tracks`
@@ -13,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
- - `user_playlist_tracks` doesn't require a user anymore
+ - `user_playlist_tracks` doesn't require a user anymore (accepts `None`)
 
 ### Deprecated
 
