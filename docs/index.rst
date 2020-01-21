@@ -7,13 +7,15 @@ Welcome to Spotipy!
 <https://developer.spotify.com/web-api/>`_. With *Spotipy*
 you get full access to all of the music data provided by the Spotify platform.
 
-Here's a quick example of using *Spotipy* to list the names of all the albums
-released by the artist 'Birdy'::
+Assuming you set the ``SPOTIPY_CLIENT_ID`` and ``SPOTIPY_CLIENT_SECRET``
+environment variables, here's a quick example of using *Spotipy* to list the
+names of all the albums released by the artist 'Birdy'::
 
     import spotipy
+    from spotipy.oauth2 import SpotifyClientCredentials
 
     birdy_uri = 'spotify:artist:2WX2uTcsvV5OnS0inACecP'
-    spotify = spotipy.Spotify()
+    spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
 
     results = spotify.artist_albums(birdy_uri, album_type='album')
     albums = results['items']
@@ -28,10 +30,11 @@ Here's another example showing how to get 30 second samples and cover art
 for the top 10 tracks for Led Zeppelin::
 
     import spotipy
+    from spotipy.oauth2 import SpotifyClientCredentials
 
     lz_uri = 'spotify:artist:36QJpDe2go2KgaRleHCDTp'
 
-    spotify = spotipy.Spotify()
+    spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
     results = spotify.artist_top_tracks(lz_uri)
 
     for track in results['tracks'][:10]:
@@ -45,8 +48,9 @@ artist's name::
 
     import spotipy
     import sys
+    from spotipy.oauth2 import SpotifyClientCredentials
 
-    spotify = spotipy.Spotify()
+    spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
 
     if len(sys.argv) > 1:
         name = ' '.join(sys.argv[1:])
@@ -62,6 +66,7 @@ artist's name::
 
 Features
 ========
+
 *Spotipy* supports all of the features of the Spotify Web API including access
 to all end points, and support for user authorization. For details on the
 capabilities you are encouraged to review the `Spotify Web
@@ -69,13 +74,10 @@ API <https://developer.spotify.com/web-api/>`_ documentation.
 
 Installation
 ============
+
 Install or upgrade *Spotipy* with::
 
     pip install spotipy --upgrade
-
-Or with::
-
-    easy_install spotipy
 
 Or you can get the source from github at https://github.com/plamere/spotipy
 
@@ -118,7 +120,11 @@ To support the **Authorization Code Flow** *Spotipy* provides a
 utility method ``util.prompt_for_user_token`` that will attempt to authorize the
 user.  You can pass your app credentials directly into the method as arguments::
 
-    util.prompt_for_user_token(username,scope,client_id='your-spotify-client-id',client_secret='your-spotify-client-secret',redirect_uri='your-app-redirect-url')
+    util.prompt_for_user_token(username,
+                               scope,
+                               client_id='your-spotify-client-id',
+                               client_secret='your-spotify-client-secret',
+                               redirect_uri='your-app-redirect-url')
 
 or if you are reluctant to immortalize your app credentials in your source code,
 you can set environment variables like so::
@@ -165,10 +171,17 @@ Here's an example of getting user authorization to read a user's saved tracks::
 
 Client Credentials Flow
 =======================
+
 The Client Credentials flow is used in server-to-server authentication. Only
 endpoints that do not access user information can be accessed. The advantage here
 in comparison with requests to the Web API made without an access token,
 is that a higher rate limit is applied.
+
+As opposed to the Authorization Code Flow, you will not need to set ``SPOTIPY_REDIRECT_URI``,
+which means you will never be redirected to the sign in page in your browser.
+
+    export SPOTIPY_CLIENT_ID='your-spotify-client-id'
+    export SPOTIPY_CLIENT_SECRET='your-spotify-client-secret'
 
 To support the **Client Credentials Flow** *Spotipy* provides a
 class SpotifyClientCredentials that can be used to authenticate requests like so::
@@ -209,7 +222,8 @@ will accept ids in any of the above form
 
 Examples
 ========
-Here are a few more examples of using *Spotipy*.
+Here are a few more examples of using *Spotipy*, this time using the Authorization Code Flow
+to access your personal Spotify account data.
 
 Add tracks to a playlist::
 
