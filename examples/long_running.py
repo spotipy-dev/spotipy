@@ -14,8 +14,16 @@ else:
     print("usage: python user_playlists.py [username]")
     sys.exit()
 
-SCOPE = 'user-modify-playback-state,user-read-playback-state,user-read-currently-playing'
-oauth = util.prompt_for_user_token(username, redirect_uri="http://localhost/", scope=SCOPE)
+SCOPE = ','.join([
+    'user-modify-playback-state',
+    'user-read-playback-state',
+    'user-read-currently-playing'
+])
+
+oauth = util.prompt_for_user_token(
+    username,
+    redirect_uri="http://localhost/",
+    scope=SCOPE)
 
 if oauth:
     sp = spotipy.Spotify(auth=oauth)
@@ -24,8 +32,10 @@ if oauth:
     start = datetime.now()
     while True:
         current_playback = sp.current_playback()
-        print(datetime.now() - start, "is_playing?",
-              None if current_playback is None else current_playback['is_playing'])
+        print(datetime.now() - start,
+              "is_playing?",
+              None if current_playback is None
+              else current_playback['is_playing'])
 
         time.sleep(60)
 else:
