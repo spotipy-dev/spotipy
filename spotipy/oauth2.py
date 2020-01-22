@@ -140,10 +140,7 @@ class SpotifyOAuth(object):
         ''' Gets a cached auth token
         '''
         if self.token_info is not None:
-            if self.is_token_expired(self.token_info):
-                self.token_info = self.refresh_access_token(
-                    self.token_info['refresh_token'])
-
+            self._refresh_token_if_expired()
             return self.token_info
 
         if self.cache_path:
@@ -158,14 +155,17 @@ class SpotifyOAuth(object):
                         self.scope, self.token_info['scope']):
                     return None
 
-                if self.is_token_expired(self.token_info):
-                    self.token_info = self.refresh_access_token(
-                        self.token_info['refresh_token'])
+                self._refresh_token_if_expired()
 
             except IOError:
                 pass
 
         return self.token_info
+
+    def _refresh_token_if_expired(self):
+        if self.is_token_expired(self.token_info):
+            self.token_info = self.refresh_access_token(
+                self.token_info['refresh_token'])
 
     def _save_token_info(self, token_info):
         self.token_info = token_info
