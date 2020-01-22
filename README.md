@@ -14,7 +14,7 @@ Spotipy's full documentation is online at [Spotipy Documentation](http://spotipy
 
 ## Quick Start
 
-A full set of examples can be found in the [online documentation](http://spotipy.readthedocs.org/) and in the [Spotipy examples directory](https://github.com/plamere/spotipy/tree/master/examples). Here are two basic examples.
+A full set of examples can be found in the [online documentation](http://spotipy.readthedocs.org/) and in the [Spotipy examples directory](https://github.com/plamere/spotipy/tree/master/examples).
 
 To get started, install spotipy and create an app on https://developers.spotify.com/.
 Add your new ID and SECRET to your environment:
