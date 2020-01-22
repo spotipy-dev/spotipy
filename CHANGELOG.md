@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+ - Auto-Refresh token in long-running apps when using Authorization Code Flow
+
 ## [2.7.1] - 2020-01-20
 
 ### Changed
