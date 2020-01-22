@@ -63,7 +63,7 @@ class Spotify(object):
         """
         Creates a Spotify API client.
 
-        :param auth: An authorization token (optional)
+        :param auth: An authenticated OAuth2 Instance
         :param requests_session:
             A Requests session object or a truthy value to create one.
             A falsy value disables sessions.
@@ -94,7 +94,8 @@ class Spotify(object):
 
     def _auth_headers(self):
         if self._auth:
-            return {'Authorization': 'Bearer {0}'.format(self._auth)}
+            token_info = self._auth.get_cached_token()
+            return {'Authorization': 'Bearer {0}'.format(token_info['access_token'])}
         elif self.client_credentials_manager:
             token = self.client_credentials_manager.get_access_token()
             return {'Authorization': 'Bearer {0}'.format(token)}
