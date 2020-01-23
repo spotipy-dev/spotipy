@@ -413,7 +413,7 @@ class Spotify(object):
                 - playlist_id - the id of the playlist
         """
         plid = self._get_id('playlist', playlist_id)
-        return self._get("playlists/%s/images" % (playlist_id))
+        return self._get("playlists/%s/images" % (plid))
 
     def playlist_upload_cover_image(self,
                                     playlist_id,
