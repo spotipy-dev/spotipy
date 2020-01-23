@@ -15,6 +15,8 @@ import time
 
 import requests
 import six
+import warnings
+
 
 class SpotifyException(Exception):
     def __init__(self, http_status, code, msg, headers=None):
@@ -416,18 +418,53 @@ class Spotify(object):
     def playlist_upload_cover_image(self,
                                     playlist_id,
                                     image_b64):
-        """
-        Replace the image used to represent a specific playlist
+        """ Replace the image used to represent a specific playlist
 
-        Parameters:
-            - playlist_id - the id of the playlist
-            - image_b64 - image data as a Base64 encoded JPEG image string
-                      (maximum payload size is 256 KB)
+            Parameters:
+                - playlist_id - the id of the playlist
+                - image_b64 - image data as a Base64 encoded JPEG image string
+                    (maximum payload size is 256 KB)
         """
         plid = self._get_id('playlist', playlist_id)
         return self._put("playlists/{}/images".format(plid),
                          payload=image_b64,
                          content_type="image/jpeg")
+
+    def user_playlist(self, user, playlist_id=None,
+                      fields=None, market=None):
+        warnings.warn(
+            "You should use `playlist(playlist_id)` instead",
+            DeprecationWarning)
+
+        """ Gets playlist of a user
+
+            Parameters:
+                - user - the id of the user
+                - playlist_id - the id of the playlist
+                - fields - which fields to return
+        """
+        if playlist_id is None:
+            return self._get("users/%s/starred" % user)
+        return self.playlist(playlist_id, fields=fields, market=market)
+
+    def user_playlist_tracks(self, user=None, playlist_id=None, fields=None,
+                             limit=100, offset=0, market=None):
+        warnings.warn(
+            "You should use `playlist_tracks(playlist_id)` instead",
+            DeprecationWarning)
+
+        """ Get full details of the tracks of a playlist owned by a user.
+
+            Parameters:
+                - user - the id of the user
+                - playlist_id - the id of the playlist
+                - fields - which fields to return
+                - limit - the maximum number of tracks to return
+                - offset - the index of the first track to return
+                - market - an ISO 3166-1 alpha-2 country code.
+        """
+        return self.playlist_tracks(playlist_id, limit=limit, offset=offset,
+                                    fields=fields, market=market)
 
     def user_playlists(self, user, limit=50, offset=0):
         """ Gets playlists of a user
