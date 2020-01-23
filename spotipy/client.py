@@ -426,42 +426,6 @@ class Spotify(object):
                          payload=image_b64,
                          content_type="image/jpeg")
 
-    def user_playlist(self, user, playlist_id=None,
-                      fields=None, market=None):
-        warnings.warn(
-            "You should use `playlist(playlist_id)` instead",
-            DeprecationWarning)
-
-        """ Gets playlist of a user
-
-            Parameters:
-                - user - the id of the user
-                - playlist_id - the id of the playlist
-                - fields - which fields to return
-        """
-        if playlist_id is None:
-            return self._get("users/%s/starred" % user)
-        return self.playlist(playlist_id, fields=fields, market=market)
-
-    def user_playlist_tracks(self, user=None, playlist_id=None, fields=None,
-                             limit=100, offset=0, market=None):
-        warnings.warn(
-            "You should use `playlist_tracks(playlist_id)` instead",
-            DeprecationWarning)
-
-        """ Get full details of the tracks of a playlist owned by a user.
-
-            Parameters:
-                - user - the id of the user
-                - playlist_id - the id of the playlist
-                - fields - which fields to return
-                - limit - the maximum number of tracks to return
-                - offset - the index of the first track to return
-                - market - an ISO 3166-1 alpha-2 country code.
-        """
-        return self.playlist_tracks(playlist_id, limit=limit, offset=offset,
-                                    fields=fields, market=market)
-
     def user_playlists(self, user, limit=50, offset=0):
         """ Gets playlists of a user
 
