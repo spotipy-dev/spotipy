@@ -405,7 +405,7 @@ class Spotify(object):
         return self._get("playlists/%s/tracks" % (plid),
                          limit=limit, offset=offset, fields=fields,
                          market=market)
-    
+
     def playlist_cover(self, playlist_id=None):
         """ Get cover of a playlist.
 
