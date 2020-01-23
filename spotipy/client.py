@@ -15,8 +15,6 @@ import time
 
 import requests
 import six
-import warnings
-
 
 class SpotifyException(Exception):
     def __init__(self, http_status, code, msg, headers=None):
