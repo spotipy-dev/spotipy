@@ -407,6 +407,11 @@ class Spotify(object):
                          market=market)
     
     def playlist_cover(self, playlist_id=None):
+        """ Get cover of a playlist.
+
+            Parameters:
+                - playlist_id - the id of the playlist
+        """
         plid = self._get_id('playlist', playlist_id)
         return self._get("playlists/%s/images" % (playlist_id))
 
