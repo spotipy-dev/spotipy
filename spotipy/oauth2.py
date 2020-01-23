@@ -16,6 +16,7 @@ import sys
 import time
 
 import requests
+
 # Workaround to support both python 2 & 3
 import six
 import six.moves.urllib.parse as urllibparse
@@ -134,41 +135,32 @@ class SpotifyOAuth(object):
         self.cache_path = cache_path
         self.scope = self._normalize_scope(scope)
         self.proxies = proxies
-        self.token_info = None
 
     def get_cached_token(self):
         ''' Gets a cached auth token
         '''
-        if self.token_info is not None:
-            self._refresh_token_if_expired()
-            return self.token_info
-
+        token_info = None
         if self.cache_path:
             try:
                 f = open(self.cache_path)
                 token_info_string = f.read()
                 f.close()
-                self.token_info = json.loads(token_info_string)
+                token_info = json.loads(token_info_string)
 
                 # if scopes don't match, then bail
-                if 'scope' not in self.token_info or not self._is_scope_subset(
-                        self.scope, self.token_info['scope']):
+                if 'scope' not in token_info or not self._is_scope_subset(
+                        self.scope, token_info['scope']):
                     return None
 
-                self._refresh_token_if_expired()
+                if self.is_token_expired(token_info):
+                    token_info = self.refresh_access_token(
+                        token_info['refresh_token'])
 
             except IOError:
                 pass
-
-        return self.token_info
-
-    def _refresh_token_if_expired(self):
-        if self.is_token_expired(self.token_info):
-            self.token_info = self.refresh_access_token(
-                self.token_info['refresh_token'])
+        return token_info
 
     def _save_token_info(self, token_info):
-        self.token_info = token_info
         if self.cache_path:
             try:
                 f = open(self.cache_path, 'w')
