@@ -762,7 +762,7 @@ class Spotify(object):
                           Cannot be used if before is specified.
                 - before - unix timestamp in milliseconds. Returns all items 
                            before (but not including) this cursor position.
-                           Cannot be used if after is specified 
+                           Cannot be used if after is specified
         '''
         return self._get('me/player/recently-played', limit=limit, after=after,
                          before=before)
