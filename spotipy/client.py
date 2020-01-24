@@ -757,10 +757,10 @@ class Spotify(object):
 
             Parameters:
                 - limit - the number of entities to return
-                - after - unix timestamp in milliseconds. Returns all items 
+                - after - unix timestamp in milliseconds. Returns all items
                           after (but not including) this cursor position.
                           Cannot be used if before is specified.
-                - before - unix timestamp in milliseconds. Returns all items 
+                - before - unix timestamp in milliseconds. Returns all items
                            before (but not including) this cursor position.
                            Cannot be used if after is specified
         '''
