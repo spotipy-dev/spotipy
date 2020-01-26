@@ -25,6 +25,7 @@ import sys
 import unittest
 import warnings
 import requests
+from pprint import pprint  # noqa
 
 sys.path.insert(0, os.path.abspath(os.pardir))
 
@@ -88,6 +89,7 @@ class AuthTestSpotipy(unittest.TestCase):
             'user-read-private '
             'user-top-read '
             'user-follow-modify '
+            'user-read-recently-played '
             'ugc-image-upload'
         )
 
@@ -240,6 +242,25 @@ class AuthTestSpotipy(unittest.TestCase):
         response = self.spotify.current_user_top_artists()
         items = response['items']
         self.assertTrue(len(items) > 0)
+
+    def test_current_user_recently_played(self):
+        # No cursor
+        res = self.spotify.current_user_recently_played()
+        self.assertTrue(len(res['items']) <= 50)
+        played_at = res['items'][0]['played_at']
+
+        # Using `before` gives tracks played before
+        res = self.spotify.current_user_recently_played(
+            before=res['cursors']['after'])
+        self.assertTrue(len(res['items']) <= 50)
+        self.assertTrue(res['items'][0]['played_at'] < played_at)
+        played_at = res['items'][0]['played_at']
+
+        # Using `after` gives tracks played after
+        res = self.spotify.current_user_recently_played(
+            after=res['cursors']['before'])
+        self.assertTrue(len(res['items']) <= 50)
+        self.assertTrue(res['items'][0]['played_at'] > played_at)
 
     def test_user_playlist_ops(self):
         sp = self.spotify
