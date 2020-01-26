@@ -335,6 +335,17 @@ class AuthTestSpotipy(unittest.TestCase):
         new_b64 = self.get_as_base64(pl1['images'][0]['url'])
         self.assertTrue(old_b64 != new_b64)
 
+    def test_playlist_cover_image(self):
+        pl = self.get_or_create_spotify_playlist('spotipy-testing-playlist-1')
+        plid = pl['uri']
+        res = self.spotify.playlist_cover_image(plid)
+
+        self.assertTrue(len(res) > 0)
+        first_image = res[0]
+        self.assertTrue('width' in first_image)
+        self.assertTrue('height' in first_image)
+        self.assertTrue('url' in first_image)
+
     def test_user_follows_and_unfollows_artist(self):
         # Initially follows 1 artist
         res = self.spotify.current_user_followed_artists()
