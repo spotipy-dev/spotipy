@@ -406,7 +406,7 @@ class Spotify(object):
                          limit=limit, offset=offset, fields=fields,
                          market=market)
 
-    def playlist_cover(self, playlist_id=None):
+    def playlist_cover_image(self, playlist_id):
         """ Get cover of a playlist.
 
             Parameters:
