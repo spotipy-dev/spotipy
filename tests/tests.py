@@ -12,6 +12,7 @@ from spotipy import (
     SpotifyException,
     SpotifyClientCredentials
 )
+from pprint import pprint  # noqa
 
 
 class TestSpotipy(unittest.TestCase):
@@ -97,6 +98,7 @@ class TestSpotipy(unittest.TestCase):
     def test_track_id(self):
         track = self.spotify.track(self.creep_id)
         self.assertTrue(track['name'] == 'Creep')
+        self.assertTrue(track['popularity'] > 0)
 
     def test_track_url(self):
         track = self.spotify.track(self.creep_url)
