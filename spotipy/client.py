@@ -406,16 +406,24 @@ class Spotify(object):
                          limit=limit, offset=offset, fields=fields,
                          market=market)
 
+    def playlist_cover_image(self, playlist_id):
+        """ Get cover of a playlist.
+
+            Parameters:
+                - playlist_id - the id of the playlist
+        """
+        plid = self._get_id('playlist', playlist_id)
+        return self._get("playlists/%s/images" % (plid))
+
     def playlist_upload_cover_image(self,
                                     playlist_id,
                                     image_b64):
-        """
-        Replace the image used to represent a specific playlist
+        """ Replace the image used to represent a specific playlist
 
-        Parameters:
-            - playlist_id - the id of the playlist
-            - image_b64 - image data as a Base64 encoded JPEG image string
-                      (maximum payload size is 256 KB)
+            Parameters:
+                - playlist_id - the id of the playlist
+                - image_b64 - image data as a Base64 encoded JPEG image string
+                    (maximum payload size is 256 KB)
         """
         plid = self._get_id('playlist', playlist_id)
         return self._put("playlists/{}/images".format(plid),
