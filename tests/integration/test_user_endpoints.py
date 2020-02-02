@@ -66,7 +66,7 @@ class AuthTestSpotipy(unittest.TestCase):
             # >= Python3.2 only
             warnings.filterwarnings(
                 "ignore",
-                category=ResourceWarning,
+                category=ResourceWarning,  # noqa 
                 message="unclosed.*<ssl.SSLSocket.*>")
 
         missing = list(filter(lambda var: not os.getenv(CCEV[var]), CCEV))
