@@ -4,11 +4,7 @@ import six.moves.urllib.parse as urllibparse
 from spotipy import SpotifyOAuth
 import io
 import json
-import os
-import sys
 import unittest
-
-sys.path.insert(0, os.path.abspath(os.pardir))
 
 
 try:
@@ -170,8 +166,3 @@ class TestSpotifyOAuth(unittest.TestCase):
         parsed_url = urllibparse.urlparse(url)
         parsed_qs = urllibparse.parse_qs(parsed_url.query)
         self.assertTrue(parsed_qs['show_dialog'])
-
-
-if __name__ == '__main__':
-
-    unittest.main()

@@ -27,8 +27,6 @@ import warnings
 import requests
 from pprint import pprint  # noqa
 
-sys.path.insert(0, os.path.abspath(os.pardir))
-
 
 class AuthTestSpotipy(unittest.TestCase):
     """
@@ -389,7 +387,3 @@ class AuthTestSpotipy(unittest.TestCase):
         pl = self.spotify.user_playlist_tracks(None, self.playlist, limit=2)
         self.assertTrue(len(pl["items"]) == 2)
         self.assertTrue(pl["total"] > 0)
-
-
-if __name__ == '__main__':
-    unittest.main()

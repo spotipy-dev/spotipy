@@ -1,33 +1,52 @@
 # -*- coding: utf-8 -*-
 
+"""
+These tests require user authentication - provide client credentials using the
+following environment variables
+
+::
+
+    'SPOTIPY_CLIENT_USERNAME'
+    'SPOTIPY_CLIENT_ID'
+    'SPOTIPY_CLIENT_SECRET'
+    'SPOTIPY_REDIRECT_URI'
+"""
+
+from spotipy import (
+    Spotify,
+    SpotifyClientCredentials,
+    SpotifyException
+)
+import spotipy
 import unittest
-import os
 import requests
 
-import spotipy
-from spotipy import (
-    CLIENT_CREDS_ENV_VARS as CCEV,
-    prompt_for_user_token,
-    Spotify,
-    SpotifyException,
-    SpotifyClientCredentials
-)
-from pprint import pprint  # noqa
 
-
-class TestSpotipy(unittest.TestCase):
-
+class AuthTestSpotipy(unittest.TestCase):
     """
-    These tests require user authentication - provide client credentials using
-    the following environment variables
+    These tests require client authentication - provide client credentials
+    using the following environment variables
 
     ::
 
-        'SPOTIPY_CLIENT_USERNAME'
         'SPOTIPY_CLIENT_ID'
         'SPOTIPY_CLIENT_SECRET'
-        'SPOTIPY_REDIRECT_URI'
     """
+
+    playlist = "spotify:user:plamere:playlist:2oCEWyyAPbZp9xhVSxZavx"
+    four_tracks = ["spotify:track:6RtPijgfPKROxEzTHNRiDp",
+                   "spotify:track:7IHOIqZUUInxjVkko181PB",
+                   "4VrWlk8IQxevMvERoX08iC",
+                   "http://open.spotify.com/track/3cySlItpiPiIAzU3NyHCJf"]
+
+    two_tracks = ["spotify:track:6RtPijgfPKROxEzTHNRiDp",
+                  "spotify:track:7IHOIqZUUInxjVkko181PB"]
+
+    other_tracks = ["spotify:track:2wySlB6vMzCbQrRnNGOYKa",
+                    "spotify:track:29xKs5BAHlmlX1u4gzQAbJ",
+                    "spotify:track:1PB7gRWcvefzu7t3LJLUlf"]
+
+    bad_id = 'BAD_ID'
 
     creep_urn = 'spotify:track:3HfB5hBU0dmBt8T0iCmH42'
     creep_id = '3HfB5hBU0dmBt8T0iCmH42'
@@ -40,21 +59,40 @@ class TestSpotipy(unittest.TestCase):
     radiohead_urn = 'spotify:artist:4Z8W4fKeB5YxbusRsdQVPb'
     angeles_haydn_urn = 'spotify:album:1vAbqAeuJVWNAe7UR00bdM'
 
-    bad_id = 'BAD_ID'
-
     @classmethod
     def setUpClass(self):
-        missing = list(filter(lambda var: not os.getenv(CCEV[var]), CCEV))
-        if missing:
-            raise Exception(
-                ('Please set the client credentials for the test '
-                 'the following environment variables: {}').format(
-                    CCEV.values()))
-        self.username = os.getenv(CCEV['client_username'])
-        self.scope = 'user-library-read'
-        self.token = prompt_for_user_token(self.username, scope=self.scope)
         self.spotify = Spotify(
             client_credentials_manager=SpotifyClientCredentials())
+        self.spotify.trace = False
+
+    def test_audio_analysis(self):
+        result = self.spotify.audio_analysis(self.four_tracks[0])
+        assert('beats' in result)
+
+    def test_audio_features(self):
+        results = self.spotify.audio_features(self.four_tracks)
+        self.assertTrue(len(results) == len(self.four_tracks))
+        for track in results:
+            assert('speechiness' in track)
+
+    def test_audio_features_with_bad_track(self):
+        bad_tracks = []
+        bad_tracks = ['spotify:track:bad']
+        input = self.four_tracks + bad_tracks
+        results = self.spotify.audio_features(input)
+        self.assertTrue(len(results) == len(input))
+        for track in results[:-1]:
+            if track is not None:
+                assert('speechiness' in track)
+        self.assertTrue(results[-1] is None)
+
+    def test_recommendations(self):
+        results = self.spotify.recommendations(
+            seed_tracks=self.four_tracks,
+            min_danceability=0,
+            max_loudness=0,
+            target_popularity=50)
+        self.assertTrue(len(results['tracks']) == 20)
 
     def test_artist_urn(self):
         artist = self.spotify.artist(self.radiohead_urn)
@@ -216,14 +254,3 @@ class TestSpotipy(unittest.TestCase):
         self.assertFalse(isinstance(with_no_session._session, Session))
         self.assertTrue(with_no_session.user(user="akx")
                         ["uri"] == "spotify:user:akx")
-
-
-'''
-    Need tests for:
-
-        - next
-        - previous
-'''
-
-if __name__ == '__main__':
-    unittest.main()
