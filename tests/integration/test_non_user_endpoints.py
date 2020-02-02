@@ -1,17 +1,5 @@
 # -*- coding: utf-8 -*-
 
-"""
-These tests require user authentication - provide client credentials using the
-following environment variables
-
-::
-
-    'SPOTIPY_CLIENT_USERNAME'
-    'SPOTIPY_CLIENT_ID'
-    'SPOTIPY_CLIENT_SECRET'
-    'SPOTIPY_REDIRECT_URI'
-"""
-
 from spotipy import (
     Spotify,
     SpotifyClientCredentials,
@@ -76,7 +64,6 @@ class AuthTestSpotipy(unittest.TestCase):
             assert('speechiness' in track)
 
     def test_audio_features_with_bad_track(self):
-        bad_tracks = []
         bad_tracks = ['spotify:track:bad']
         input = self.four_tracks + bad_tracks
         results = self.spotify.audio_features(input)

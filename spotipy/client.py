@@ -351,7 +351,8 @@ class Spotify(object):
         """ searches for an item
 
             Parameters:
-                - q - the search query
+                - q - the search query (see how to write a query in the
+                      official documentation https://developer.spotify.com/documentation/web-api/reference/search/search/)  # noqa
                 - limit  - the number of items to return
                 - offset - the index of the first item to return
                 - type - the type of item to return. One of 'artist', 'album',
