@@ -23,5 +23,4 @@ jobs:
         flake8 . --count --show-source --statistics
     - name: Run unit tests
       run: |
-        pip install unittest
         python -m unittest discover -v tests/unit
