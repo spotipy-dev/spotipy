@@ -88,7 +88,9 @@ class SpotifyClientCredentials(SpotifyAuthManager):
         """Gets client credentials access token """
         payload = {"grant_type": "client_credentials"}
 
-        headers = _make_authorization_headers(self.client_id, self.client_secret)
+        headers = _make_authorization_headers(
+            self.client_id, self.client_secret
+        )
 
         response = requests.post(
             self.OAUTH_TOKEN_URL,
@@ -174,7 +176,9 @@ class SpotifyOAuth(SpotifyAuthManager):
                     return None
 
                 if self.is_token_expired(token_info):
-                    token_info = self.refresh_access_token(token_info["refresh_token"])
+                    token_info = self.refresh_access_token(
+                        token_info["refresh_token"]
+                    )
 
             except IOError:
                 pass
@@ -192,7 +196,9 @@ class SpotifyOAuth(SpotifyAuthManager):
 
     def _is_scope_subset(self, needle_scope, haystack_scope):
         needle_scope = set(needle_scope.split()) if needle_scope else set()
-        haystack_scope = set(haystack_scope.split()) if haystack_scope else set()
+        haystack_scope = (
+            set(haystack_scope.split()) if haystack_scope else set()
+        )
         return needle_scope <= haystack_scope
 
     def is_token_expired(self, token_info):
@@ -276,7 +282,9 @@ class SpotifyOAuth(SpotifyAuthManager):
         token_info = self.get_cached_token()
         if token_info is not None:
             if is_token_expired(token_info):
-                token_info = self.refresh_access_token(token_info["refresh_token"])
+                token_info = self.refresh_access_token(
+                    token_info["refresh_token"]
+                )
                 return token_info["access_token"]
             return token_info["access_token"]
 
@@ -314,12 +322,18 @@ class SpotifyOAuth(SpotifyAuthManager):
             return None
 
     def refresh_access_token(self, refresh_token):
-        payload = {"refresh_token": refresh_token, "grant_type": "refresh_token"}
+        payload = {
+            "refresh_token": refresh_token,
+            "grant_type": "refresh_token",
+        }
 
         headers = self._make_authorization_headers()
 
         response = requests.post(
-            self.OAUTH_TOKEN_URL, data=payload, headers=headers, proxies=self.proxies
+            self.OAUTH_TOKEN_URL,
+            data=payload,
+            headers=headers,
+            proxies=self.proxies,
         )
         if response.status_code != 200:
             if False:  # debugging code
