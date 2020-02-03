@@ -2,6 +2,7 @@ import spotipy
 import os
 from pprint import pprint
 
+
 def main():
     auth_manager = spotipy.SpotifyOAuth(
         client_id=os.getenv("SPOTIPY_CLIENT_ID"),
@@ -12,6 +13,7 @@ def main():
     spotify = spotipy.Spotify(auth_manager=auth_manager)
     me = spotify.me()
     pprint(me)
+
 
 if __name__ == "__main__":
     main()

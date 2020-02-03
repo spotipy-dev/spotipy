@@ -44,6 +44,7 @@ class SpotifyAuthManager(ABC):
     def get_access_token(self) -> str:
         pass
 
+
 class SpotifyClientCredentials(SpotifyAuthManager):
     OAUTH_TOKEN_URL = "https://accounts.spotify.com/api/token"
 

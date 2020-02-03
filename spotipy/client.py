@@ -1278,4 +1278,3 @@ class Spotify(object):
 
     def _get_uri(self, type, id):
         return "spotify:" + type + ":" + self._get_id(type, id)
-
