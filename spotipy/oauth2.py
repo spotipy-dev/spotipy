@@ -9,7 +9,6 @@ __all__ = [
     "SpotifyOauthError",
 ]
 
-from abc import ABC, abstractmethod
 import base64
 import json
 import os
@@ -39,13 +38,7 @@ def is_token_expired(token_info):
     return token_info["expires_at"] - now < 60
 
 
-class SpotifyAuthManager(ABC):
-    @abstractmethod
-    def get_access_token(self):
-        pass
-
-
-class SpotifyClientCredentials(SpotifyAuthManager):
+class SpotifyClientCredentials(object):
     OAUTH_TOKEN_URL = "https://accounts.spotify.com/api/token"
 
     def __init__(self, client_id=None, client_secret=None, proxies=None):
@@ -116,7 +109,7 @@ class SpotifyClientCredentials(SpotifyAuthManager):
         return token_info
 
 
-class SpotifyOAuth(SpotifyAuthManager):
+class SpotifyOAuth(object):
     """
     Implements Authorization Code Flow for Spotify's OAuth implementation.
     """
