@@ -41,7 +41,7 @@ def is_token_expired(token_info):
 
 class SpotifyAuthManager(ABC):
     @abstractmethod
-    def get_access_token(self) -> str:
+    def get_access_token(self):
         pass
 
 
