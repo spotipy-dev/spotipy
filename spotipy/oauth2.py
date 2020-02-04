@@ -43,7 +43,10 @@ def _ensure_value(value, env_key):
     env_val = CLIENT_CREDS_ENV_VARS[env_key]
     _val = value or os.getenv(env_val)
     if _val is None:
-        msg = "No %s. Pass it or set a %s environment variable." % (env_key, env_val)
+        msg = "No %s. Pass it or set a %s environment variable." % (
+            env_key,
+            env_val,
+        )
         raise SpotifyOauthError(msg)
     return _val
 
@@ -184,7 +187,9 @@ class SpotifyOAuth(SpotifyAuthBase):
         if not self.cache_path and self.username:
             self.cache_path = ".cache-" + str(self.username)
         elif not self.cache_path and not self.username:
-            raise SpotifyOauthError("You must either set a cache_path or a username.")
+            raise SpotifyOauthError(
+                "You must either set a cache_path or a username."
+            )
 
         if self.cache_path:
             try:
