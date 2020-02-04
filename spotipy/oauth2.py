@@ -166,6 +166,7 @@ class SpotifyOAuth(SpotifyAuthBase):
                  - state - security state
                  - scope - the desired scope of the request
                  - cache_path - path to location to save tokens
+                 - username - username of current client
         """
 
         self.client_id = client_id
