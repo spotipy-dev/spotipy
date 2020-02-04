@@ -8,8 +8,6 @@ __all__ = ["CLIENT_CREDS_ENV_VARS", "prompt_for_user_token"]
 
 import os
 
-from . import oauth2
-
 import spotipy
 
 CLIENT_CREDS_ENV_VARS = {
@@ -72,7 +70,7 @@ def prompt_for_user_token(
 
         cache_path = cache_path or ".cache-" + username
 
-    sp_oauth = oauth_manager or oauth2.SpotifyOAuth(
+    sp_oauth = oauth_manager or spotipy.SpotifyOAuth(
         client_id,
         client_secret,
         redirect_uri,
