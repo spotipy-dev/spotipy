@@ -41,7 +41,7 @@ def prompt_for_user_token(
          - client_secret - the client secret of your app
          - redirect_uri - the redirect URI of your app
          - cache_path - path to location to save tokens
-         - oauth_manager - Oauth manger object.
+         - oauth_manager - Oauth manager object.
 
     """
     if not oauth_manager:
