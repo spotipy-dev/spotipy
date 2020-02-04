@@ -16,6 +16,7 @@ import sys
 import time
 
 import requests
+from spotipy.util import CLIENT_CREDS_ENV_VARS
 
 # Workaround to support both python 2 & 3
 import six
@@ -38,7 +39,42 @@ def is_token_expired(token_info):
     return token_info["expires_at"] - now < 60
 
 
-class SpotifyClientCredentials(object):
+def _ensure_value(value, env_key):
+    env_val = CLIENT_CREDS_ENV_VARS[env_key]
+    _val = value or os.getenv(env_val)
+    if _val is None:
+        msg = f"No {env_key}. Pass it or set a {env_val} environment variable."
+        raise SpotifyOauthError(msg)
+    return _val
+
+
+class SpotifyAuthBase(object):
+    @property
+    def client_id(self):
+        return self._client_id
+
+    @client_id.setter
+    def client_id(self, val):
+        self._client_id = _ensure_value(val, "client_id")
+
+    @property
+    def client_secret(self):
+        return self._client_secret
+
+    @client_secret.setter
+    def client_secret(self, val):
+        self._client_secret = _ensure_value(val, "client_secret")
+
+    @property
+    def redirect_uri(self):
+        return self._redirect_uri
+
+    @redirect_uri.setter
+    def redirect_uri(self, val):
+        self._redirect_uri = _ensure_value(val, "redirect_uri")
+
+
+class SpotifyClientCredentials(SpotifyAuthBase):
     OAUTH_TOKEN_URL = "https://accounts.spotify.com/api/token"
 
     def __init__(self, client_id=None, client_secret=None, proxies=None):
@@ -47,17 +83,6 @@ class SpotifyClientCredentials(object):
         constructor or set SPOTIPY_CLIENT_ID and SPOTIPY_CLIENT_SECRET
         environment variables
         """
-        if not client_id:
-            client_id = os.getenv("SPOTIPY_CLIENT_ID")
-
-        if not client_secret:
-            client_secret = os.getenv("SPOTIPY_CLIENT_SECRET")
-
-        if not client_id:
-            raise SpotifyOauthError("No client id")
-
-        if not client_secret:
-            raise SpotifyOauthError("No client secret")
 
         self.client_id = client_id
         self.client_secret = client_secret
@@ -109,7 +134,7 @@ class SpotifyClientCredentials(object):
         return token_info
 
 
-class SpotifyOAuth(object):
+class SpotifyOAuth(SpotifyAuthBase):
     """
     Implements Authorization Code Flow for Spotify's OAuth implementation.
     """
@@ -119,9 +144,9 @@ class SpotifyOAuth(object):
 
     def __init__(
         self,
-        client_id,
-        client_secret,
-        redirect_uri,
+        client_id=None,
+        client_secret=None,
+        redirect_uri=None,
         state=None,
         scope=None,
         cache_path=None,
@@ -145,7 +170,9 @@ class SpotifyOAuth(object):
         self.redirect_uri = redirect_uri
         self.state = state
         self.cache_path = cache_path
-        self.username = username
+        self.username = username or os.getenv(
+            CLIENT_CREDS_ENV_VARS["client_username"]
+        )
         self.scope = self._normalize_scope(scope)
         self.proxies = proxies
 
@@ -153,8 +180,14 @@ class SpotifyOAuth(object):
         """ Gets a cached auth token
         """
         token_info = None
+
         if not self.cache_path and self.username:
             self.cache_path = ".cache-" + str(self.username)
+        elif not self.cache_path and not self.username:
+            raise SpotifyOauthError(
+                f"You must either set a cache_path or a username."
+            )
+
         if self.cache_path:
             try:
                 f = open(self.cache_path)
