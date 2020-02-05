@@ -353,7 +353,7 @@ class Spotify(object):
             Parameters:
                 - q - the search query (see how to write a query in the
                       official documentation https://developer.spotify.com/documentation/web-api/reference/search/search/)  # noqa
-                - limit  - the number of items to return
+                - limit  - the number of items to return (min = 1, default = 10, max = 50)
                 - offset - the index of the first item to return
                 - type - the type of item to return. One of 'artist', 'album',
                          'track' or 'playlist'
