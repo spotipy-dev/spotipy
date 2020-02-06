@@ -290,14 +290,14 @@ class SpotifyOAuth(SpotifyAuthBase):
             print("Opened %s in your browser" % auth_url)
         except BaseException:
             print("Please navigate here: %s" % auth_url)
-        print()
-        print()
+        print("")
+        print("")
         try:
             response = raw_input("Enter the URL you were redirected to: ")
         except NameError:
             response = input("Enter the URL you were redirected to: ")
-        print()
-        print()
+        print("")
+        print("")
         return response
 
     def get_authorization_code(self, response=None):
