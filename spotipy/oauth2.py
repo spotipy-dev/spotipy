@@ -315,7 +315,6 @@ class SpotifyOAuth(SpotifyAuthBase):
                 token_info = self.refresh_access_token(
                     token_info["refresh_token"]
                 )
-                return token_info["access_token"]
             return token_info["access_token"]
 
         payload = {
