@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-
-import six.moves.urllib.parse as urllibparse
-from spotipy import SpotifyOAuth
 import io
 import json
 import unittest
 
+import six.moves.urllib.parse as urllibparse
+
+from spotipy import SpotifyOAuth
 
 try:
     import unittest.mock as mock

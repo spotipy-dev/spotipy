@@ -12,10 +12,10 @@ __all__ = [
 import json
 import sys
 import time
+import warnings
 
 import requests
 import six
-import warnings
 
 
 class SpotifyException(Exception):
