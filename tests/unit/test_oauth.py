@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
 
+import os
+import sys
+pkg_dir = os.path.dirname(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+sys.path.insert(0, pkg_dir)
+
 import six.moves.urllib.parse as urllibparse
 from spotipy import SpotifyOAuth
 import io

@@ -11,8 +11,12 @@ following environment variables
     'SPOTIPY_CLIENT_SECRET'
     'SPOTIPY_REDIRECT_URI'
 """
-
 from __future__ import print_function
+
+import os
+import sys
+pkg_dir = os.path.dirname(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+sys.path.insert(0, pkg_dir)
 
 from spotipy import (
     CLIENT_CREDS_ENV_VARS as CCEV,
@@ -20,8 +24,6 @@ from spotipy import (
     Spotify,
     SpotifyException,
 )
-import os
-import sys
 import unittest
 import warnings
 import requests
