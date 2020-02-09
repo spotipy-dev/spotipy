@@ -28,10 +28,6 @@ import requests
 from pprint import pprint  # noqa
 
 
-pkg_dir = os.path.dirname(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
-sys.path.insert(0, pkg_dir)
-
-
 class AuthTestSpotipy(unittest.TestCase):
     """
     These tests require user authentication - provide client credentials using

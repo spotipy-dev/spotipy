@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import os
-import sys
-
 from spotipy import (
     Spotify,
     SpotifyClientCredentials,
@@ -11,10 +8,6 @@ from spotipy import (
 import spotipy
 import unittest
 import requests
-
-
-pkg_dir = os.path.dirname(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
-sys.path.insert(0, pkg_dir)
 
 
 class AuthTestSpotipy(unittest.TestCase):
