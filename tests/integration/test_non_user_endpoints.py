@@ -2,8 +2,6 @@
 
 import os
 import sys
-pkg_dir = os.path.dirname(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
-sys.path.insert(0, pkg_dir)
 
 from spotipy import (
     Spotify,
@@ -13,6 +11,10 @@ from spotipy import (
 import spotipy
 import unittest
 import requests
+
+
+pkg_dir = os.path.dirname(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+sys.path.insert(0, pkg_dir)
 
 
 class AuthTestSpotipy(unittest.TestCase):
@@ -224,8 +226,7 @@ class AuthTestSpotipy(unittest.TestCase):
         with self.assertRaises(SpotifyException) as cm:
             self.spotify.user_playlist_create(
                 "spotify", "Best hits of the 90s")
-        self.assertTrue(cm.exception.http_status == 401 or
-                        cm.exception.http_status == 403)
+        self.assertTrue(cm.exception.http_status == 401 or cm.exception.http_status == 403)
 
     def test_custom_requests_session(self):
         sess = requests.Session()
