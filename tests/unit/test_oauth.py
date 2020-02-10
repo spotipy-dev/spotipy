@@ -159,9 +159,9 @@ class TestSpotifyOAuth(unittest.TestCase):
         self.assertNotIn('show_dialog', parsed_qs)
 
     def test_get_authorize_url_shows_dialog_when_requested(self):
-        oauth = SpotifyOAuth("CLID", "CLISEC", "REDIR")
+        oauth = SpotifyOAuth("CLID", "CLISEC", "REDIR", show_dialog=True)
 
-        url = oauth.get_authorize_url(show_dialog=True)
+        url = oauth.get_authorize_url()
 
         parsed_url = urllibparse.urlparse(url)
         parsed_qs = urllibparse.parse_qs(parsed_url.query)
