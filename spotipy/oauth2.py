@@ -156,6 +156,7 @@ class SpotifyOAuth(SpotifyAuthBase):
         cache_path=None,
         username=None,
         proxies=None,
+        show_dialog=False
     ):
         """
             Creates a SpotifyOAuth object
@@ -180,6 +181,7 @@ class SpotifyOAuth(SpotifyAuthBase):
         )
         self.scope = self._normalize_scope(scope)
         self.proxies = proxies
+        self.show_dialog = show_dialog
 
     def get_cached_token(self):
         """ Gets a cached auth token
@@ -235,7 +237,7 @@ class SpotifyOAuth(SpotifyAuthBase):
     def is_token_expired(self, token_info):
         return is_token_expired(token_info)
 
-    def get_authorize_url(self, state=None, show_dialog=False):
+    def get_authorize_url(self, state=None):
         """ Gets the URL to use to authorize this app
         """
         payload = {
@@ -249,7 +251,7 @@ class SpotifyOAuth(SpotifyAuthBase):
             state = self.state
         if state is not None:
             payload["state"] = state
-        if show_dialog:
+        if self.show_dialog:
             payload["show_dialog"] = True
 
         urlparams = urllibparse.urlencode(payload)
