@@ -121,7 +121,7 @@ class Spotify(object):
         if self._auth:
             return {"Authorization": "Bearer {0}".format(self._auth)}
         elif self.auth_manager:
-            token = self.auth_manager.get_access_token()
+            token = self.auth_manager.get_access_token(as_dict=False)
             return {"Authorization": "Bearer {0}".format(token)}
         else:
             return {}

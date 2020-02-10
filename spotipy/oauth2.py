@@ -14,6 +14,7 @@ import json
 import os
 import sys
 import time
+import warnings
 
 import requests
 from spotipy.util import CLIENT_CREDS_ENV_VARS
@@ -303,19 +304,33 @@ class SpotifyOAuth(SpotifyAuthBase):
     def get_authorization_code(self, response=None):
         return self.parse_response_code(response or self.get_auth_response())
 
-    def get_access_token(self, code=None):
+    def get_access_token(self, code=None, as_dict=True):
         """ Gets the access token for the app given the code
 
             Parameters:
                 - code - the response code
+                - as_dict - a boolean indicating if returning the access token
+                            as a token_info dictionary, otherwise it will be returned
+                            as a string.
         """
+        if as_dict:
+            print("")
+            warnings.warn(
+                "You're using 'as_dict = True'."
+                "get_access_token will return the token string directly in future "
+                "versions. Please adjust your code accordingly, or use "
+                "get_cached_token instead.",
+                DeprecationWarning,
+                stacklevel=2,
+            )
+            print("")
         token_info = self.get_cached_token()
         if token_info is not None:
             if is_token_expired(token_info):
                 token_info = self.refresh_access_token(
                     token_info["refresh_token"]
                 )
-            return token_info["access_token"]
+            return token_info if as_dict else token_info["access_token"]
 
         payload = {
             "redirect_uri": self.redirect_uri,
@@ -341,7 +356,7 @@ class SpotifyOAuth(SpotifyAuthBase):
         token_info = response.json()
         token_info = self._add_custom_values_to_token_info(token_info)
         self._save_token_info(token_info)
-        return token_info["access_token"]
+        return token_info if as_dict else token_info["access_token"]
 
     def _normalize_scope(self, scope):
         if scope:
