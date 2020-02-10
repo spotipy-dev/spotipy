@@ -219,8 +219,7 @@ class AuthTestSpotipy(unittest.TestCase):
         with self.assertRaises(SpotifyException) as cm:
             self.spotify.user_playlist_create(
                 "spotify", "Best hits of the 90s")
-        self.assertTrue(cm.exception.http_status == 401 or
-                        cm.exception.http_status == 403)
+        self.assertTrue(cm.exception.http_status == 401 or cm.exception.http_status == 403)
 
     def test_custom_requests_session(self):
         sess = requests.Session()
