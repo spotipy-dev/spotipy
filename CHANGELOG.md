@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.8.0] - 2020-02-12
+
 ### Added 
 
  - Support for `playlist_cover_image`
@@ -13,8 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
  - CI for unit tests
  - Automatic `token` refresh
  - `auth_manager` and `oauth_manager` optional parameters added to `Spotify`'s init.
- - Optional `username` parameter to be passed to SpotifyOAuth, to infer a `cache_path` automatically
+ - Optional `username` parameter to be passed to `SpotifyOAuth`, to infer a `cache_path` automatically
  - Optional `as_dict` parameter to control `SpotifyOAuth`'s `get_access_token` output type. However, this is going to be deprecated in the future, and the method will always return a token string
+ - Optional `show_dialog` parameter to be passed to `SpotifyOAuth`
 
 ### Changed
   - Both `SpotifyClientCredentials` and `SpotifyOAuth` inherit from a common `SpotifyAuthBase` which handles common parameters and logics.
