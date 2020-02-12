@@ -1170,7 +1170,7 @@ class Spotify(object):
         return self._put("me/player", payload=data)
 
     def start_playback(
-        self, device_id=None, context_uri=None, uris=None, offset=None
+        self, device_id=None, context_uri=None, uris=None, offset=None, position_ms=None
     ):
         """ Start or resume user's playback.
 
@@ -1188,6 +1188,10 @@ class Spotify(object):
                 - context_uri - spotify context uri to play
                 - uris - spotify track uris
                 - offset - offset into context by index or track
+                - position_ms - (optional) indicates from what position to start playback.
+                                Must be a positive number. Passing in a position that is
+                                greater than the length of the track will cause the player to
+                                start playing the next song.
         """
         if context_uri is not None and uris is not None:
             self._warn("specify either context uri or uris, not both")
@@ -1202,6 +1206,8 @@ class Spotify(object):
             data["uris"] = uris
         if offset is not None:
             data["offset"] = offset
+        if position_ms is not None:
+            data["position_ms"] = position_ms
         return self._put(
             self._append_device_id("me/player/play", device_id), payload=data
         )
