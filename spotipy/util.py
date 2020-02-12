@@ -26,6 +26,7 @@ def prompt_for_user_token(
     redirect_uri=None,
     cache_path=None,
     oauth_manager=None,
+    show_dialog=False
 ):
     """ prompts the user to login if necessary and returns
         the user token suitable for use with the spotipy.Spotify
@@ -76,6 +77,7 @@ def prompt_for_user_token(
         redirect_uri,
         scope=scope,
         cache_path=cache_path,
+        show_dialog=show_dialog
     )
 
     # try to get a valid token for this user, from the cache,
