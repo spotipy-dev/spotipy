@@ -93,13 +93,30 @@ class SpotifyClientCredentials(SpotifyAuthBase):
         self.token_info = None
         self.proxies = proxies
 
-    def get_access_token(self):
+    def get_access_token(self, as_dict=True):
         """
         If a valid access token is in memory, returns it
         Else feches a new token and returns it
+
+            Parameters:
+            - as_dict - a boolean indicating if returning the access token
+                as a token_info dictionary, otherwise it will be returned
+                as a string.
         """
+        if as_dict:
+            print("")
+            warnings.warn(
+                "You're using 'as_dict = True'."
+                "get_access_token will return the token string directly in future "
+                "versions. Please adjust your code accordingly, or use "
+                "get_cached_token instead.",
+                DeprecationWarning,
+                stacklevel=2,
+            )
+            print("")
+
         if self.token_info and not self.is_token_expired(self.token_info):
-            return self.token_info["access_token"]
+            return self.token_info if as_dict else self.token_info["access_token"]
 
         token_info = self._request_access_token()
         token_info = self._add_custom_values_to_token_info(token_info)
