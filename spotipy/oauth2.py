@@ -188,7 +188,8 @@ class SpotifyOAuth(SpotifyAuthBase):
                  - state - security state
                  - scope - the desired scope of the request
                  - cache_path - path to location to save tokens
-                 - requests_timeout - tell Requests to stop waiting for a response after a given number of seconds
+                 - requests_timeout - tell Requests to stop waiting for a response
+                                      after a given number of seconds
                  - username - username of current client
         """
 
