@@ -81,7 +81,7 @@ class SpotifyAuthBase(object):
 class SpotifyClientCredentials(SpotifyAuthBase):
     OAUTH_TOKEN_URL = "https://accounts.spotify.com/api/token"
 
-    def __init__(self, client_id=None, client_secret=None, proxies=None):
+    def __init__(self, client_id=None, client_secret=None, proxies=None, requests_timeout=None):
         """
         You can either provide a client_id and client_secret to the
         constructor or set SPOTIPY_CLIENT_ID and SPOTIPY_CLIENT_SECRET
@@ -92,6 +92,7 @@ class SpotifyClientCredentials(SpotifyAuthBase):
         self.client_secret = client_secret
         self.token_info = None
         self.proxies = proxies
+        self.requests_timeout = requests_timeout
 
     def get_access_token(self, as_dict=True):
         """
@@ -137,6 +138,7 @@ class SpotifyClientCredentials(SpotifyAuthBase):
             headers=headers,
             verify=True,
             proxies=self.proxies,
+            timeout=self.requests_timeout,
         )
         if response.status_code != 200:
             raise SpotifyOauthError(response.reason)
@@ -173,7 +175,8 @@ class SpotifyOAuth(SpotifyAuthBase):
         cache_path=None,
         username=None,
         proxies=None,
-        show_dialog=False
+        show_dialog=False,
+        requests_timeout=None
     ):
         """
             Creates a SpotifyOAuth object
@@ -185,6 +188,8 @@ class SpotifyOAuth(SpotifyAuthBase):
                  - state - security state
                  - scope - the desired scope of the request
                  - cache_path - path to location to save tokens
+                 - requests_timeout - tell Requests to stop waiting for a response
+                                      after a given number of seconds
                  - username - username of current client
         """
 
@@ -198,6 +203,7 @@ class SpotifyOAuth(SpotifyAuthBase):
         )
         self.scope = self._normalize_scope(scope)
         self.proxies = proxies
+        self.requests_timeout = requests_timeout
         self.show_dialog = show_dialog
 
     def get_cached_token(self):
@@ -369,6 +375,7 @@ class SpotifyOAuth(SpotifyAuthBase):
             headers=headers,
             verify=True,
             proxies=self.proxies,
+            timeout=self.requests_timeout,
         )
         if response.status_code != 200:
             raise SpotifyOauthError(response.reason)
@@ -397,6 +404,7 @@ class SpotifyOAuth(SpotifyAuthBase):
             data=payload,
             headers=headers,
             proxies=self.proxies,
+            timeout=self.requests_timeout,
         )
         if response.status_code != 200:
             if False:  # debugging code

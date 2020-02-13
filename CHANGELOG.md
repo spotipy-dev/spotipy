@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
  - Support `position_ms` optional parameter in `start_playback`
+ - Add `requests_timeout` parameter to authentication methods
 
 ## [2.8.0] - 2020-02-12
 
