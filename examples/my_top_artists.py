@@ -1,11 +1,9 @@
 # Shows the top artists for a user
 
-import pprint
 import sys
 
 import spotipy
 import spotipy.util as util
-import simplejson as json
 
 if len(sys.argv) > 1:
     username = sys.argv[1]
@@ -21,10 +19,10 @@ if token:
     sp.trace = False
     ranges = ['short_term', 'medium_term', 'long_term']
     for range in ranges:
-        print "range:", range
+        print("range:", range)
         results = sp.current_user_top_artists(time_range=range, limit=50)
         for i, item in enumerate(results['items']):
-            print i, item['name']
-        print
+            print(i, item['name'])
+        print()
 else:
     print("Can't get token for", username)

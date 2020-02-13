@@ -1,7 +1,6 @@
 
 # Adds tracks to a playlist
 
-import pprint
 import sys
 
 import spotipy

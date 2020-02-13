@@ -20,4 +20,4 @@ start = time.time()
 analysis = sp.audio_analysis(tid)
 delta = time.time() - start
 print(json.dumps(analysis, indent=4))
-print ("analysis retrieved in %.2f seconds" % (delta,))
+print("analysis retrieved in %.2f seconds" % (delta,))
