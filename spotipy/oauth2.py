@@ -329,7 +329,7 @@ class SpotifyOAuth(SpotifyAuthBase):
     def get_authorization_code(self, response=None):
         return self.parse_response_code(response or self.get_auth_response())
 
-    def get_access_token(self, code=None, as_dict=True):
+    def get_access_token(self, code=None, as_dict=True, check_cache=True):
         """ Gets the access token for the app given the code
 
             Parameters:
@@ -349,13 +349,14 @@ class SpotifyOAuth(SpotifyAuthBase):
                 stacklevel=2,
             )
             print("")
-        token_info = self.get_cached_token()
-        if token_info is not None:
-            if is_token_expired(token_info):
-                token_info = self.refresh_access_token(
-                    token_info["refresh_token"]
-                )
-            return token_info if as_dict else token_info["access_token"]
+        if check_cache:
+            token_info = self.get_cached_token()
+            if token_info is not None:
+                if is_token_expired(token_info):
+                    token_info = self.refresh_access_token(
+                        token_info["refresh_token"]
+                    )
+                return token_info if as_dict else token_info["access_token"]
 
         payload = {
             "redirect_uri": self.redirect_uri,
