@@ -22,7 +22,7 @@ Add your new ID and SECRET to your environment:
     export SPOTIPY_CLIENT_ID=client_id_here
     export SPOTIPY_CLIENT_SECRET=client_secret_here
 
-    // on Windows, use `SET` instead of `export`).
+    // on Windows, use `SET` instead of `export`
 
 Then, create a Spotify object and call methods:
 
