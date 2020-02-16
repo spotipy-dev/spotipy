@@ -187,39 +187,22 @@ class Spotify(object):
         if args:
             kwargs.update(args)
         retries = self.max_get_retries
-        delay = 1
+        delay = 0
         while retries > 0:
             try:
                 return self._internal_call("GET", url, payload, kwargs)
             except SpotifyException as e:
                 retries -= 1
+                delay += 1
                 status = e.http_status
-                # 429 means we hit a rate limit, backoff
-                if status == 429 or (status >= 500 and status < 600):
-                    if retries < 0:
-                        raise
-                    else:
-                        sleep_seconds = int(
-                            e.headers.get("Retry-After", delay)
-                        )
-                        print("retrying ..." + str(sleep_seconds) + "secs")
-                        time.sleep(sleep_seconds + 1)
-                        delay += 1
-                else:
+                # 429 means we hit a rate limit, back-off
+                if not (status == 429 or status >= 500 and status < 600):
                     raise
-            except Exception as e:
-                raise
-                print("exception", str(e))
-                # some other exception. Requests have
-                # been know to throw a BadStatusLine exception
-                retries -= 1
-                if retries >= 0:
-                    sleep_seconds = int(e.headers.get("Retry-After", delay))
-                    print("retrying ..." + str(delay) + "secs")
-                    time.sleep(sleep_seconds + 1)
-                    delay += 1
-                else:
-                    raise
+                sleep_seconds = int(
+                    e.headers.get("Retry-After", delay)
+                )
+                print("retrying after..." + str(sleep_seconds) + "secs")
+                time.sleep(sleep_seconds + 1)
 
     def _post(self, url, args=None, payload=None, **kwargs):
         if args:
