@@ -1,6 +1,6 @@
 import spotipy
-import os
 from pprint import pprint
+
 
 def main():
     spotify = spotipy.Spotify(auth_manager=spotipy.SpotifyOAuth())
