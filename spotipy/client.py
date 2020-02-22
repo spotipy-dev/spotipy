@@ -1031,12 +1031,12 @@ class Spotify(object):
         **kwargs
     ):
         """ Get a list of recommended tracks for one to five seeds.
+            (at least one of `seed_artists`, `seed_tracks` and `seed_genres`
+            are needed)
 
             Parameters:
                 - seed_artists - a list of artist IDs, URIs or URLs
-
                 - seed_tracks - a list of track IDs, URIs or URLs
-
                 - seed_genres - a list of genre names. Available genres for
                                 recommendations can be found by calling
                                 recommendation_genre_seeds
