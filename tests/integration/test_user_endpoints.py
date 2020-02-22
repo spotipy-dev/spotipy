@@ -387,3 +387,8 @@ class AuthTestSpotipy(unittest.TestCase):
         pl = self.spotify.user_playlist_tracks(None, self.playlist, limit=2)
         self.assertTrue(len(pl["items"]) == 2)
         self.assertTrue(pl["total"] > 0)
+
+    def test_devices(self):
+        # No devices playing by default
+        res = self.spotify.devices()
+        self.assertEqual(len(res["devices"]), 0)
