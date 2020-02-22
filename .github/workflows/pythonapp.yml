@@ -22,6 +22,7 @@ jobs:
         pip install -r requirements.txt
     - name: Lint with flake8
       run: |
+        pip install -Iv enum34==1.1.6 # https://bitbucket.org/stoneleaf/enum34/issues/27/enum34-118-broken
         pip install flake8
         flake8 . --count --show-source --statistics
     - name: Run unit tests
