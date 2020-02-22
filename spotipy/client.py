@@ -261,7 +261,7 @@ class Spotify(object):
         """ returns a list of tracks given a list of track IDs, URIs, or URLs
 
             Parameters:
-                - tracks - a list of spotify URIs, URLs or IDs
+                - tracks - a list of spotify URIs, URLs or IDs. Maximum: 50 IDs.
                 - market - an ISO 3166-1 alpha-2 country code.
         """
 
