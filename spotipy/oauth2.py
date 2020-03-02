@@ -105,7 +105,6 @@ class SpotifyClientCredentials(SpotifyAuthBase):
                 as a string.
         """
         if as_dict:
-            print("")
             warnings.warn(
                 "You're using 'as_dict = True'."
                 "get_access_token will return the token string directly in future "
@@ -114,7 +113,6 @@ class SpotifyClientCredentials(SpotifyAuthBase):
                 DeprecationWarning,
                 stacklevel=2,
             )
-            print("")
 
         if self.token_info and not self.is_token_expired(self.token_info):
             return self.token_info if as_dict else self.token_info["access_token"]
