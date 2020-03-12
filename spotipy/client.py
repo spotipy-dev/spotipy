@@ -1290,7 +1290,25 @@ class Spotify(object):
                 "me/player/shuffle?state=%s" % state, device_id
             )
         )
+    
+     def add_to_queue(self, uri, device_id=None):
+        """ Adds a song to the end of a user's queue
+        
+            :param uri: song uri, id, or url
+            :param device_id:
+                the id of a Spotify device.
+                If None, then the active device is used.
+        """
 
+        uri = self._get_uri("track", uri)
+
+        endpoint = "me/player/queue?uri=%s" % uri
+
+        if device_id is not None:
+            endpoint += "&device_id=%s" % device_id
+
+        return self._post(endpoint)
+    
     def _append_device_id(self, path, device_id):
         """ Append device ID to API path.
 
