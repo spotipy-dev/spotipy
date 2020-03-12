@@ -17,6 +17,5 @@ setup(
         'six>=1.10.0',
     ],
     license='LICENSE.md',
-    packages=['spotipy'])
-
-# this is a comment
+    packages=['spotipy']
+)
