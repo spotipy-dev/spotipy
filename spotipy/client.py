@@ -1290,7 +1290,7 @@ class Spotify(object):
                 "me/player/shuffle?state=%s" % state, device_id
             )
         )
-    
+
      def add_to_queue(self, uri, device_id=None):
         """ Adds a song to the end of a user's queue
             
