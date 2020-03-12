@@ -1293,11 +1293,17 @@ class Spotify(object):
     
      def add_to_queue(self, uri, device_id=None):
         """ Adds a song to the end of a user's queue
-        
+            
+            If device A is currently playing music and you try to add to the queue
+            and pass in the id for device B, you will get a
+            'Player command failed: Restriction violated' error
+            I therefore reccomend leaving device_id as None so that the active device is targeted
+       
             :param uri: song uri, id, or url
             :param device_id:
                 the id of a Spotify device.
                 If None, then the active device is used.
+            
         """
 
         uri = self._get_uri("track", uri)
