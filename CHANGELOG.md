@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+ - Support for `add_to_queue`
+     - **Parameters:**
+     - track uri, id, or url
+     - device id. If None, then the active device is used.
+
+
 ## [2.9.0] - 2020-02-15
 
 ### Added
