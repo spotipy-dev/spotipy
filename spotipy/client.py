@@ -1314,7 +1314,7 @@ class Spotify(object):
             endpoint += "&device_id=%s" % device_id
 
         return self._post(endpoint)
-    
+
     def _append_device_id(self, path, device_id):
         """ Append device ID to API path.
 
