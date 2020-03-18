@@ -5,7 +5,7 @@ with open("README.md", "r") as f:
 
 setup(
     name='spotipy',
-    version='2.9.0',
+    version='2.10.0',
     description='A light weight Python library for the Spotify Web API',
     long_description=long_description,
     long_description_content_type="text/markdown",
