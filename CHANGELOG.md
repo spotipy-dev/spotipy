@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
      - **Parameters:**
      - track uri, id, or url
      - device id. If None, then the active device is used.
+ - Add CHANGELOG and LICENSE to released package
 
 
 ## [2.9.0] - 2020-02-15
