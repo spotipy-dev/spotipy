@@ -8,10 +8,10 @@ __all__ = ["Spotify", "SpotifyException"]
 
 import json
 import sys
-import time
 import warnings
 
 import requests
+import urllib3
 import six
 
 
@@ -53,7 +53,8 @@ class Spotify(object):
 
     trace = False  # Enable tracing?
     trace_out = False
-    max_get_retries = 10
+    max_retries = 3
+    default_retry_codes = (429, 500, 502, 503, 504)
 
     def __init__(
         self,
@@ -63,7 +64,11 @@ class Spotify(object):
         oauth_manager=None,
         auth_manager=None,
         proxies=None,
-        requests_timeout=None,
+        requests_timeout=5,
+        status_forcelist=None,
+        retries=max_retries,
+        status_retries=max_retries,
+        backoff_factor=0.3,
     ):
         """
         Creates a Spotify API client.
@@ -86,6 +91,15 @@ class Spotify(object):
         :param requests_timeout:
             Tell Requests to stop waiting for a response after a given
             number of seconds
+        :param status_forcelist:
+            Tell requests what type of status codes retries should occur on
+        :param retries:
+            Total number of retries to allow
+        :param status_retries:
+            Number of times to retry on bad status codes
+        :param backoff_factor:
+            A backoff factor to apply between attempts after the second try
+            See urllib3 https://urllib3.readthedocs.io/en/latest/reference/urllib3.util.html
         """
         self.prefix = "https://api.spotify.com/v1/"
         self._auth = auth
@@ -94,16 +108,18 @@ class Spotify(object):
         self.auth_manager = auth_manager
         self.proxies = proxies
         self.requests_timeout = requests_timeout
+        self.status_forcelist = status_forcelist or self.default_retry_codes
+        self.backoff_factor = backoff_factor
+        self.retries = retries
+        self.status_retries = status_retries
 
         if isinstance(requests_session, requests.Session):
             self._session = requests_session
         else:
             if requests_session:  # Build a new session.
-                self._session = requests.Session()
+                self._build_session()
             else:  # Use the Requests API module as a "session".
-                from requests import api
-
-                self._session = api
+                self._session = requests.api
 
     @property
     def auth_manager(self):
@@ -118,6 +134,20 @@ class Spotify(object):
                 self.client_credentials_manager or self.oauth_manager
             )
 
+    def _build_session(self):
+        self._session = requests.Session()
+        retry = urllib3.Retry(
+            total=self.retries,
+            connect=None,
+            read=False,
+            status=self.status_retries,
+            backoff_factor=self.backoff_factor,
+            status_forcelist=self.status_forcelist)
+
+        adapter = requests.adapters.HTTPAdapter(max_retries=retry)
+        self._session.mount('http://', adapter)
+        self._session.mount('https://', adapter)
+
     def _auth_headers(self):
         if self._auth:
             return {"Authorization": "Bearer {0}".format(self._auth)}
@@ -129,7 +159,6 @@ class Spotify(object):
 
     def _internal_call(self, method, url, payload, params):
         args = dict(params=params)
-        args["timeout"] = self.requests_timeout
         if not url.startswith("http"):
             url = self.prefix + url
         headers = self._auth_headers()
@@ -147,37 +176,44 @@ class Spotify(object):
         if self.trace_out:
             print(url)
 
-        with self._session.request(
-            method, url, headers=headers, proxies=self.proxies, **args
-        ) as r:
+        try:
+            response = self._session.request(
+                method, url, headers=headers, proxies=self.proxies,
+                timeout=self.requests_timeout, **args
+            )
 
             if self.trace:  # pragma: no cover
                 print()
                 print("Request headers:", headers)
-                print("Response headers:", r.headers)
-                print("HTTP status", r.status_code)
-                print(method, r.url)
+                print("Response headers:", response.headers)
+                print("HTTP status", response.status_code)
+                print(method, response.url)
                 if payload:
                     print("Data", json.dumps(payload))
 
+            response.raise_for_status()
+            results = response.json()
+        except requests.exceptions.HTTPError:
             try:
-                r.raise_for_status()
-            except BaseException:
-                try:
-                    msg = r.json()["error"]["message"]
-                except BaseException:
-                    msg = "error"
-                raise SpotifyException(
-                    r.status_code,
-                    -1,
-                    "%s:\n %s" % (r.url, msg),
-                    headers=r.headers,
-                )
+                msg = response.json()["error"]["message"]
+            except (ValueError, KeyError):
+                msg = "error"
 
-            try:
-                results = r.json()
-            except BaseException:
-                results = None
+            raise SpotifyException(
+                response.status_code,
+                -1,
+                "%s:\n %s" % (response.url, msg),
+                headers=response.headers,
+            )
+        except requests.exceptions.RetryError:
+            raise SpotifyException(
+                599,
+                -1,
+                "%s:\n %s" % (response.url, "Max Retries"),
+                headers=response.headers,
+            )
+        except ValueError:
+            results = None
 
         if self.trace:  # pragma: no cover
             print("Response:", results)
@@ -187,23 +223,8 @@ class Spotify(object):
     def _get(self, url, args=None, payload=None, **kwargs):
         if args:
             kwargs.update(args)
-        retries = self.max_get_retries
-        delay = 0
-        while retries > 0:
-            try:
-                return self._internal_call("GET", url, payload, kwargs)
-            except SpotifyException as e:
-                retries -= 1
-                delay += 1
-                status = e.http_status
-                # 429 means we hit a rate limit, back-off
-                if not (status == 429 or status >= 500 and status < 600):
-                    raise
-                sleep_seconds = int(
-                    e.headers.get("Retry-After", delay)
-                )
-                print("retrying after..." + str(sleep_seconds) + "secs")
-                time.sleep(sleep_seconds + 1)
+
+        return self._internal_call("GET", url, payload, kwargs)
 
     def _post(self, url, args=None, payload=None, **kwargs):
         if args:
