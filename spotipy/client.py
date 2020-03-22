@@ -368,6 +368,85 @@ class Spotify(object):
         tlist = [self._get_id("album", a) for a in albums]
         return self._get("albums/?ids=" + ",".join(tlist))
 
+    def show(self, show_id, market=None):
+        """ returns a single show given the show's ID, URIs or URL
+
+            Parameters:
+                - show_id - the show ID, URI or URL
+                - market - an ISO 3166-1 alpha-2 country code.
+                           The show must be available in the given market.
+                           If user-based authorization is in use, the user's country
+                           takes precedence. If neither market nor user country are
+                           provided, the content is considered unavailable for the client.
+        """
+
+        trid = self._get_id("show", show_id)
+        return self._get("shows/" + trid, market=market)
+
+    def shows(self, shows, market=None):
+        """ returns a list of albums given the show IDs, URIs, or URLs
+
+            Parameters:
+                - shows - a list of show IDs, URIs or URLs
+                - market - an ISO 3166-1 alpha-2 country code.
+                           Only shows available in the given market will be returned.
+                           If user-based authorization is in use, the user's country
+                           takes precedence. If neither market nor user country are
+                           provided, the content is considered unavailable for the client.
+        """
+
+        tlist = [self._get_id("show", s) for s in shows]
+        return self._get("shows/?ids=" + ",".join(tlist), market=market)
+
+    def show_episodes(self, show_id, limit=50, offset=0, market=None):
+        """ Get Spotify catalog information about a show's episodes
+
+            Parameters:
+                - show_id - the show ID, URI or URL
+                - limit  - the number of items to return
+                - offset - the index of the first item to return
+                - market - an ISO 3166-1 alpha-2 country code.
+                           Only episodes available in the given market will be returned.
+                           If user-based authorization is in use, the user's country
+                           takes precedence. If neither market nor user country are
+                           provided, the content is considered unavailable for the client.
+        """
+
+        trid = self._get_id("show", show_id)
+        return self._get(
+            "shows/" + trid + "/episodes/", limit=limit, offset=offset, market=market
+        )
+
+    def episode(self, episode_id, market=None):
+        """ returns a single episode given the episode's ID, URIs or URL
+
+            Parameters:
+                - episode_id - the episode ID, URI or URL
+                - market - an ISO 3166-1 alpha-2 country code.
+                           The episode must be available in the given market.
+                           If user-based authorization is in use, the user's country
+                           takes precedence. If neither market nor user country are
+                           provided, the content is considered unavailable for the client.
+        """
+
+        trid = self._get_id("episode", episode_id)
+        return self._get("episodes/" + trid, market=market)
+
+    def episodes(self, episodes, market=None):
+        """ returns a list of episodes given the episode IDs, URIs, or URLs
+
+            Parameters:
+                - episodes - a list of episode IDs, URIs or URLs
+                - market - an ISO 3166-1 alpha-2 country code.
+                           Only episodes available in the given market will be returned.
+                           If user-based authorization is in use, the user's country
+                           takes precedence. If neither market nor user country are
+                           provided, the content is considered unavailable for the client.
+        """
+
+        tlist = [self._get_id("episode", e) for e in episodes]
+        return self._get("episodes/?ids=" + ",".join(tlist), market=market)
+
     def search(self, q, limit=10, offset=0, type="track", market=None):
         """ searches for an item
 
