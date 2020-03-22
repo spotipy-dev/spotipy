@@ -35,6 +35,23 @@ Then, create a Spotify object and call methods:
     for idx, track in enumerate(results['tracks']['items']):
         print(idx, track['name'])
 
+## Contributing
+If you would like to contribute to spotipy follow these steps:
+### Export the needed environment variables
+```bash
+    export SPOTIPY_CLIENT_ID=client_id_here
+    export SPOTIPY_CLIENT_SECRET=client_secret_here
+    export SPOTIPY_CLIENT_USERNAME=client_username_here # This is actually an id not spotify display name
+    export SPOTIPY_REDIRECT_URIa=http://localhost/ # Make url is set in app you created to get your ID and SECRET
+```
+
+### Create virtual enevironment, install dependencies, run tests:
+```bash
+$ virtualenv --python=python3.7 env
+(env) $ pip install requirements.txt
+(env) $ nosetests -xvs tests
+```
+
 ## Reporting Issues
 
 If you have suggestions, bugs or other issues specific to this library, file them [here](https://github.com/plamere/spotipy/issues). Or just send me a pull request.
