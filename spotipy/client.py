@@ -368,6 +368,85 @@ class Spotify(object):
         tlist = [self._get_id("album", a) for a in albums]
         return self._get("albums/?ids=" + ",".join(tlist))
 
+    def show(self, show_id, market=None):
+        """ returns a single show given the show's ID, URIs or URL
+
+            Parameters:
+                - show_id - the show ID, URI or URL
+                - market - an ISO 3166-1 alpha-2 country code.
+                           The show must be available in the given market.
+                           If user-based authorization is in use, the user's country
+                           takes precedence. If neither market nor user country are
+                           provided, the content is considered unavailable for the client.
+        """
+
+        trid = self._get_id("show", show_id)
+        return self._get("shows/" + trid, market=market)
+
+    def shows(self, shows, market=None):
+        """ returns a list of shows given the show IDs, URIs, or URLs
+
+            Parameters:
+                - shows - a list of show IDs, URIs or URLs
+                - market - an ISO 3166-1 alpha-2 country code.
+                           Only shows available in the given market will be returned.
+                           If user-based authorization is in use, the user's country
+                           takes precedence. If neither market nor user country are
+                           provided, the content is considered unavailable for the client.
+        """
+
+        tlist = [self._get_id("show", s) for s in shows]
+        return self._get("shows/?ids=" + ",".join(tlist), market=market)
+
+    def show_episodes(self, show_id, limit=50, offset=0, market=None):
+        """ Get Spotify catalog information about a show's episodes
+
+            Parameters:
+                - show_id - the show ID, URI or URL
+                - limit  - the number of items to return
+                - offset - the index of the first item to return
+                - market - an ISO 3166-1 alpha-2 country code.
+                           Only episodes available in the given market will be returned.
+                           If user-based authorization is in use, the user's country
+                           takes precedence. If neither market nor user country are
+                           provided, the content is considered unavailable for the client.
+        """
+
+        trid = self._get_id("show", show_id)
+        return self._get(
+            "shows/" + trid + "/episodes/", limit=limit, offset=offset, market=market
+        )
+
+    def episode(self, episode_id, market=None):
+        """ returns a single episode given the episode's ID, URIs or URL
+
+            Parameters:
+                - episode_id - the episode ID, URI or URL
+                - market - an ISO 3166-1 alpha-2 country code.
+                           The episode must be available in the given market.
+                           If user-based authorization is in use, the user's country
+                           takes precedence. If neither market nor user country are
+                           provided, the content is considered unavailable for the client.
+        """
+
+        trid = self._get_id("episode", episode_id)
+        return self._get("episodes/" + trid, market=market)
+
+    def episodes(self, episodes, market=None):
+        """ returns a list of episodes given the episode IDs, URIs, or URLs
+
+            Parameters:
+                - episodes - a list of episode IDs, URIs or URLs
+                - market - an ISO 3166-1 alpha-2 country code.
+                           Only episodes available in the given market will be returned.
+                           If user-based authorization is in use, the user's country
+                           takes precedence. If neither market nor user country are
+                           provided, the content is considered unavailable for the client.
+        """
+
+        tlist = [self._get_id("episode", e) for e in episodes]
+        return self._get("episodes/?ids=" + ",".join(tlist), market=market)
+
     def search(self, q, limit=10, offset=0, type="track", market=None):
         """ searches for an item
 
@@ -377,7 +456,7 @@ class Spotify(object):
                 - limit  - the number of items to return (min = 1, default = 10, max = 50)
                 - offset - the index of the first item to return
                 - type - the type of item to return. One of 'artist', 'album',
-                         'track' or 'playlist'
+                         'track', 'playlist', 'show', or 'episode'
                 - market - An ISO 3166-1 alpha-2 country code or the string
                            from_token.
         """
@@ -401,7 +480,7 @@ class Spotify(object):
         """
         return self._get("me/playlists", limit=limit, offset=offset)
 
-    def playlist(self, playlist_id, fields=None, market=None):
+    def playlist(self, playlist_id, fields=None, market=None, additional_types=("track",)):
         """ Gets playlist by id.
 
             Parameters:
@@ -409,12 +488,25 @@ class Spotify(object):
                 - fields - which fields to return
                 - market - An ISO 3166-1 alpha-2 country code or the
                            string from_token.
+                - additional_types - list of item types to return.
+                                     valid types are: track and episode
         """
         plid = self._get_id("playlist", playlist_id)
-        return self._get("playlists/%s" % (plid), fields=fields, market=market)
+        return self._get(
+            "playlists/%s" % (plid),
+            fields=fields,
+            market=market,
+            additional_types=",".join(additional_types),
+        )
 
     def playlist_tracks(
-        self, playlist_id, fields=None, limit=100, offset=0, market=None
+        self,
+        playlist_id,
+        fields=None,
+        limit=100,
+        offset=0,
+        market=None,
+        additional_types=("track",)
     ):
         """ Get full details of the tracks of a playlist.
 
@@ -424,6 +516,8 @@ class Spotify(object):
                 - limit - the maximum number of tracks to return
                 - offset - the index of the first track to return
                 - market - an ISO 3166-1 alpha-2 country code.
+                - additional_types - list of item types to return.
+                                     valid types are: track and episode
         """
         plid = self._get_id("playlist", playlist_id)
         return self._get(
@@ -432,6 +526,7 @@ class Spotify(object):
             offset=offset,
             fields=fields,
             market=market,
+            additional_types=",".join(additional_types)
         )
 
     def playlist_cover_image(self, playlist_id):
@@ -895,6 +990,46 @@ class Spotify(object):
         """
         alist = [self._get_id("album", a) for a in albums]
         return self._delete("me/albums/?ids=" + ",".join(alist))
+
+    def current_user_saved_shows(self, limit=50, offset=0):
+        """ Gets a list of the shows saved in the current authorized user's
+            "Your Music" library
+
+            Parameters:
+                - limit - the number of shows to return
+                - offset - the index of the first show to return
+
+        """
+        return self._get("me/shows", limit=limit, offset=offset)
+
+    def current_user_saved_shows_contains(self, shows=[]):
+        """ Check if one or more shows is already saved in
+            the current Spotify user’s “Your Music” library.
+
+            Parameters:
+                - shows - a list of show URIs, URLs or IDs
+        """
+        slist = [self._get_id("show", s) for s in shows]
+        return self._get("me/shows/contains?ids=" + ",".join(slist))
+
+    def current_user_saved_shows_add(self, shows=[]):
+        """ Add one or more albums to the current user's
+            "Your Music" library.
+            Parameters:
+                - shows - a list of show URIs, URLs or IDs
+        """
+        slist = [self._get_id("show", s) for s in shows]
+        return self._put("me/shows?ids=" + ",".join(slist))
+
+    def current_user_saved_shows_delete(self, shows=[]):
+        """ Remove one or more shows from the current user's
+            "Your Music" library.
+
+            Parameters:
+                - shows - a list of show URIs, URLs or IDs
+        """
+        slist = [self._get_id("show", s) for s in shows]
+        return self._delete("me/shows/?ids=" + ",".join(slist))
 
     def user_follow_artists(self, ids=[]):
         """ Follow one or more artists
