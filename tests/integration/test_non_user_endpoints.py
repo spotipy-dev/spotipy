@@ -189,15 +189,11 @@ class AuthTestSpotipy(unittest.TestCase):
 
     def test_search_timeout(self):
         client_credentials_manager = SpotifyClientCredentials()
-        sp = spotipy.Spotify(
-            client_credentials_manager=client_credentials_manager,
-            requests_timeout=.01)
+        sp = spotipy.Spotify(requests_timeout=0.01,
+                             client_credentials_manager=client_credentials_manager)
 
-        try:
+        with self.assertRaises(requests.exceptions.Timeout):
             sp.search(q='my*', type='track')
-            self.assertTrue(False, 'unexpected search timeout')
-        except requests.exceptions.Timeout:
-            self.assertTrue(True, 'expected search timeout')
 
     def test_album_search(self):
         results = self.spotify.search(q='weezer pinkerton', type='album')
@@ -302,10 +298,9 @@ class AuthTestSpotipy(unittest.TestCase):
         sess.close()
 
     def test_force_no_requests_session(self):
-        from requests import Session
         with_no_session = spotipy.Spotify(
             client_credentials_manager=SpotifyClientCredentials(),
             requests_session=False)
-        self.assertFalse(isinstance(with_no_session._session, Session))
-        self.assertTrue(with_no_session.user(user="akx")
-                        ["uri"] == "spotify:user:akx")
+        self.assertNotIsInstance(with_no_session._session, requests.Session)
+        user = with_no_session.user(user="akx")
+        self.assertEqual(user["uri"], "spotify:user:akx")
