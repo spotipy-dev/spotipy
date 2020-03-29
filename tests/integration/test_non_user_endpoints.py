@@ -46,6 +46,14 @@ class AuthTestSpotipy(unittest.TestCase):
     pablo_honey_urn = 'spotify:album:6AZv3m27uyRxi8KyJSfUxL'
     radiohead_urn = 'spotify:artist:4Z8W4fKeB5YxbusRsdQVPb'
     angeles_haydn_urn = 'spotify:album:1vAbqAeuJVWNAe7UR00bdM'
+    heavyweight_urn = 'spotify:show:5c26B28vZMN8PG0Nppmn5G'
+    heavyweight_id = '5c26B28vZMN8PG0Nppmn5G'
+    heavyweight_url = 'https://open.spotify.com/show/5c26B28vZMN8PG0Nppmn5G'
+    reply_all_urn = 'spotify:show:7gozmLqbcbr6PScMjc0Zl4'
+    heavyweight_ep1_urn = 'spotify:episode:68kq3bNz6hEuq8NtdfwERG'
+    heavyweight_ep1_id = '68kq3bNz6hEuq8NtdfwERG'
+    heavyweight_ep1_url = 'https://open.spotify.com/episode/68kq3bNz6hEuq8NtdfwERG'
+    reply_all_ep1_urn = 'spotify:episode:1KHjbpnmNpFmNTczQmTZlR'
 
     @classmethod
     def setUpClass(self):
@@ -210,6 +218,67 @@ class AuthTestSpotipy(unittest.TestCase):
             self.assertTrue(False)
         except SpotifyException:
             self.assertTrue(True)
+
+    def test_show_urn(self):
+        show = self.spotify.show(self.heavyweight_urn, market="US")
+        self.assertTrue(show['name'] == 'Heavyweight')
+
+    def test_show_id(self):
+        show = self.spotify.show(self.heavyweight_id, market="US")
+        self.assertTrue(show['name'] == 'Heavyweight')
+
+    def test_show_url(self):
+        show = self.spotify.show(self.heavyweight_url, market="US")
+        self.assertTrue(show['name'] == 'Heavyweight')
+
+    def test_show_bad_urn(self):
+        with self.assertRaises(SpotifyException):
+            self.spotify.show("bogus_urn", market="US")
+
+    def test_shows(self):
+        results = self.spotify.shows([self.heavyweight_urn, self.reply_all_urn], market="US")
+        self.assertTrue('shows' in results)
+        self.assertTrue(len(results['shows']) == 2)
+
+    def test_show_episodes(self):
+        results = self.spotify.show_episodes(self.heavyweight_urn, market="US")
+        self.assertTrue(len(results['items']) > 1)
+
+    def test_show_episodes_many(self):
+        results = self.spotify.show_episodes(self.reply_all_urn, market="US")
+        episodes = results['items']
+        total, received = results['total'], len(episodes)
+        while received < total:
+            results = self.spotify.show_episodes(
+                self.reply_all_urn, offset=received, market="US")
+            episodes.extend(results['items'])
+            received = len(episodes)
+
+        self.assertEqual(received, total)
+
+    def test_episode_urn(self):
+        episode = self.spotify.episode(self.heavyweight_ep1_urn, market="US")
+        self.assertTrue(episode['name'] == '#1 Buzz')
+
+    def test_episode_id(self):
+        episode = self.spotify.episode(self.heavyweight_ep1_id, market="US")
+        self.assertTrue(episode['name'] == '#1 Buzz')
+
+    def test_episode_url(self):
+        episode = self.spotify.episode(self.heavyweight_ep1_url, market="US")
+        self.assertTrue(episode['name'] == '#1 Buzz')
+
+    def test_episode_bad_urn(self):
+        with self.assertRaises(SpotifyException):
+            self.spotify.episode("bogus_urn", market="US")
+
+    def test_episodes(self):
+        results = self.spotify.episodes(
+            [self.heavyweight_ep1_urn, self.reply_all_ep1_urn],
+            market="US"
+        )
+        self.assertTrue('episodes' in results)
+        self.assertTrue(len(results['episodes']) == 2)
 
     def test_unauthenticated_post_fails(self):
         with self.assertRaises(SpotifyException) as cm:

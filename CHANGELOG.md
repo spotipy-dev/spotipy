@@ -6,12 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.10.0] - 2020-03-18
+
 ### Added
 
  - Support for `add_to_queue`
      - **Parameters:**
      - track uri, id, or url
      - device id. If None, then the active device is used.
+ - Add CHANGELOG and LICENSE to released package
 
 ### Changed
 - Client retry logic has changed as it now uses urllib3's `Retry` in conjunction with requests `Session`
