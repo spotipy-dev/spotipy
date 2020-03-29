@@ -13,6 +13,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
      - track uri, id, or url
      - device id. If None, then the active device is used.
 
+### Changed
+- Client retry logic has changed as it now uses urllib3's `Retry` in conjunction with requests `Session`
+- The session is customizable as it allows for:
+    - status_forcelist
+    - retries
+    - status_retries
+    - backoff_factor
 
 ## [2.9.0] - 2020-02-15
 
@@ -24,7 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.8.0] - 2020-02-12
 
-### Added 
+### Added
 
  - Support for `playlist_cover_image`
  - Support `after` and `before` parameter in `current_user_recently_played`
