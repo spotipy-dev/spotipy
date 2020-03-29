@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Client retry logic has changed as it now uses urllib3's `Retry` in conjunction with requests `Session`
+- The session is customizable as it allows for:
+    - status_forcelist
+    - retries
+    - status_retries
+    - backoff_factor
+
 ## [2.10.0] - 2020-03-18
 
 ### Added
