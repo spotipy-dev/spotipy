@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - status_retries
     - backoff_factor
  - Spin up a local webserver to auto-fill authentication URL
+ - Use session in SpotifyAuthBase
 
 ### Fixed
 

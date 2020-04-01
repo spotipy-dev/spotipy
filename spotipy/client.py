@@ -134,6 +134,11 @@ class Spotify(object):
                 self.client_credentials_manager or self.oauth_manager
             )
 
+    def __del__(self):
+        """Make sure the connection (pool) gets closed"""
+        if isinstance(self._session, requests.Session):
+            self._session.close()
+
     def _build_session(self):
         self._session = requests.Session()
         retry = urllib3.Retry(
@@ -147,11 +152,6 @@ class Spotify(object):
         adapter = requests.adapters.HTTPAdapter(max_retries=retry)
         self._session.mount('http://', adapter)
         self._session.mount('https://', adapter)
-
-    def __del__(self):
-        """Make sure the connection (pool) gets closed"""
-        if isinstance(self._session, requests.Session):
-            self._session.close()
 
     def _auth_headers(self):
         if self._auth:

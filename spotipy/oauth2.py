@@ -55,6 +55,16 @@ def _ensure_value(value, env_key):
 
 
 class SpotifyAuthBase(object):
+    def __init__(self, requests_session):
+        if isinstance(requests_session, requests.Session):
+            self._session = requests_session
+        else:
+            if requests_session:  # Build a new session.
+                self._session = requests.Session()
+            else:  # Use the Requests API module as a "session".
+                from requests import api
+                self._session = api
+
     @property
     def client_id(self):
         return self._client_id
@@ -79,16 +89,28 @@ class SpotifyAuthBase(object):
     def redirect_uri(self, val):
         self._redirect_uri = _ensure_value(val, "redirect_uri")
 
+    def __del__(self):
+        """Make sure the connection (pool) gets closed"""
+        if isinstance(self._session, requests.Session):
+            self._session.close()
+
 
 class SpotifyClientCredentials(SpotifyAuthBase):
     OAUTH_TOKEN_URL = "https://accounts.spotify.com/api/token"
 
-    def __init__(self, client_id=None, client_secret=None, proxies=None, requests_timeout=None):
+    def __init__(self,
+                 client_id=None,
+                 client_secret=None,
+                 proxies=None,
+                 requests_session=True,
+                 requests_timeout=None):
         """
         You can either provide a client_id and client_secret to the
         constructor or set SPOTIPY_CLIENT_ID and SPOTIPY_CLIENT_SECRET
         environment variables
         """
+
+        super(self.__class__, self).__init__(requests_session)
 
         self.client_id = client_id
         self.client_secret = client_secret
@@ -132,7 +154,7 @@ class SpotifyClientCredentials(SpotifyAuthBase):
             self.client_id, self.client_secret
         )
 
-        response = requests.post(
+        response = self._session.post(
             self.OAUTH_TOKEN_URL,
             data=payload,
             headers=headers,
@@ -176,6 +198,7 @@ class SpotifyOAuth(SpotifyAuthBase):
         username=None,
         proxies=None,
         show_dialog=False,
+        requests_session=True,
         requests_timeout=None
     ):
         """
@@ -192,6 +215,8 @@ class SpotifyOAuth(SpotifyAuthBase):
                                       after a given number of seconds
                  - username - username of current client
         """
+
+        super(self.__class__, self).__init__(requests_session)
 
         self.client_id = client_id
         self.client_secret = client_secret
@@ -399,7 +424,7 @@ class SpotifyOAuth(SpotifyAuthBase):
 
         headers = self._make_authorization_headers()
 
-        response = requests.post(
+        response = self._session.post(
             self.OAUTH_TOKEN_URL,
             data=payload,
             headers=headers,
@@ -429,7 +454,7 @@ class SpotifyOAuth(SpotifyAuthBase):
 
         headers = self._make_authorization_headers()
 
-        response = requests.post(
+        response = self._session.post(
             self.OAUTH_TOKEN_URL,
             data=payload,
             headers=headers,
