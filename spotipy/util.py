@@ -2,13 +2,14 @@
 
 """ Shows a user's playlists (need to be authenticated via oauth) """
 
-from __future__ import print_function
-
 __all__ = ["CLIENT_CREDS_ENV_VARS", "prompt_for_user_token"]
 
+import logging
 import os
 
 import spotipy
+
+LOGGER = logging.getLogger(__name__)
 
 CLIENT_CREDS_ENV_VARS = {
     "client_id": "SPOTIPY_CLIENT_ID",
@@ -54,7 +55,7 @@ def prompt_for_user_token(
             redirect_uri = os.getenv("SPOTIPY_REDIRECT_URI")
 
         if not client_id:
-            print(
+            LOGGER.warning(
                 """
                 You need to set your Spotify API credentials.
                 You can do this by setting environment variables like so:
