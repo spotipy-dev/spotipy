@@ -87,8 +87,7 @@ def prompt_for_user_token(
     token_info = sp_oauth.get_cached_token()
 
     if not token_info:
-        url = sp_oauth.get_auth_response()
-        code = sp_oauth.parse_response_code(url)
+        code = sp_oauth.get_auth_response()
         token = sp_oauth.get_access_token(code, as_dict=False)
     else:
         return token_info["access_token"]
@@ -98,3 +97,14 @@ def prompt_for_user_token(
         return token
     else:
         return None
+
+
+def get_host_port(netloc, default_port=80):
+    if ":" in netloc:
+        host, port = netloc.split(":", 1)
+        port = int(port)
+    else:
+        host = netloc
+        port = default_port
+
+    return (host, port)
