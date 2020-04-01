@@ -148,6 +148,11 @@ class Spotify(object):
         self._session.mount('http://', adapter)
         self._session.mount('https://', adapter)
 
+    def __del__(self):
+        """Make sure the connection (pool) gets closed"""
+        if isinstance(self._session, requests.Session):
+            self._session.close()
+
     def _auth_headers(self):
         if self._auth:
             return {"Authorization": "Bearer {0}".format(self._auth)}
