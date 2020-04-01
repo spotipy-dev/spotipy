@@ -2,10 +2,10 @@
 
 """ A simple and thin Python library for the Spotify Web API """
 
-from __future__ import print_function
+__all__ = ["Spotify", "SpotifyException"]
 
 import json
-import sys
+import logging
 import warnings
 
 import requests
@@ -13,6 +13,8 @@ import urllib3
 import six
 
 from spotipy.exceptions import SpotifyException
+
+LOGGER = logging.getLogger(__name__)
 
 
 class Spotify(object):
@@ -24,18 +26,12 @@ class Spotify(object):
             urn = 'spotify:artist:3jOstUTkEu2JkjvRdBA5Gu'
             sp = spotipy.Spotify()
 
-            sp.trace = True # turn on tracing
-            sp.trace_out = True # turn on trace out
-
             artist = sp.artist(urn)
             print(artist)
 
             user = sp.user('plamere')
             print(user)
     """
-
-    trace = False  # Enable tracing?
-    trace_out = False
     max_retries = 3
     default_retry_codes = (429, 500, 502, 503, 504)
 
@@ -161,23 +157,11 @@ class Spotify(object):
             if payload:
                 args["data"] = json.dumps(payload)
 
-        if self.trace_out:
-            print(url)
-
         try:
             response = self._session.request(
                 method, url, headers=headers, proxies=self.proxies,
                 timeout=self.requests_timeout, **args
             )
-
-            if self.trace:  # pragma: no cover
-                print()
-                print("Request headers:", headers)
-                print("Response headers:", response.headers)
-                print("HTTP status", response.status_code)
-                print(method, response.url)
-                if payload:
-                    print("Data", json.dumps(payload))
 
             response.raise_for_status()
             results = response.json()
@@ -187,6 +171,11 @@ class Spotify(object):
             except (ValueError, KeyError):
                 msg = "error"
 
+            LOGGER.error('Request sent DATA: %s to URL: %s with METHOD: %s '
+                         'and HEADERS: %s Returned STATUS CODE: %s REASON: %s',
+                         payload, url, method, headers, response.status_code,
+                         msg)
+
             raise SpotifyException(
                 response.status_code,
                 -1,
@@ -194,6 +183,7 @@ class Spotify(object):
                 headers=response.headers,
             )
         except requests.exceptions.RetryError:
+            LOGGER.error('Max Retries reached')
             raise SpotifyException(
                 599,
                 -1,
@@ -203,9 +193,7 @@ class Spotify(object):
         except ValueError:
             results = None
 
-        if self.trace:  # pragma: no cover
-            print("Response:", results)
-            print()
+        LOGGER.debug('RESULTS: %s', results)
         return results
 
     def _get(self, url, args=None, payload=None, **kwargs):
@@ -250,12 +238,6 @@ class Spotify(object):
             return self._get(result["previous"])
         else:
             return None
-
-    def _warn_old(self, msg):
-        print("warning:" + msg, file=sys.stderr)
-
-    def _warn(self, msg, *args):
-        print("warning:" + msg.format(*args), file=sys.stderr)
 
     def track(self, track_id):
         """ returns a single track given the track's ID, URI or URL
@@ -1322,10 +1304,10 @@ class Spotify(object):
                                 start playing the next song.
         """
         if context_uri is not None and uris is not None:
-            self._warn("specify either context uri or uris, not both")
+            LOGGER.warning("Specify either context uri or uris, not both")
             return
         if uris is not None and not isinstance(uris, list):
-            self._warn("uris must be a list")
+            LOGGER.warning("URIs must be a list")
             return
         data = {}
         if context_uri is not None:
@@ -1374,7 +1356,7 @@ class Spotify(object):
                 - device_id - device target for playback
         """
         if not isinstance(position_ms, int):
-            self._warn("position_ms must be an integer")
+            LOGGER.warning("Position_ms must be an integer")
             return
         return self._put(
             self._append_device_id(
@@ -1390,7 +1372,7 @@ class Spotify(object):
                 - device_id - device target for playback
         """
         if state not in ["track", "context", "off"]:
-            self._warn("invalid state")
+            LOGGER.warning("Invalid state")
             return
         self._put(
             self._append_device_id(
@@ -1406,10 +1388,10 @@ class Spotify(object):
                 - device_id - device target for playback
         """
         if not isinstance(volume_percent, int):
-            self._warn("volume must be an integer")
+            LOGGER.warning("Volume must be an integer")
             return
         if volume_percent < 0 or volume_percent > 100:
-            self._warn("volume must be between 0 and 100, inclusive")
+            LOGGER.warning("Volume must be between 0 and 100, inclusive")
             return
         self._put(
             self._append_device_id(
@@ -1426,7 +1408,7 @@ class Spotify(object):
                 - device_id - device target for playback
         """
         if not isinstance(state, bool):
-            self._warn("state must be a boolean")
+            LOGGER.warning("state must be a boolean")
             return
         state = str(state).lower()
         self._put(
@@ -1476,19 +1458,15 @@ class Spotify(object):
         fields = id.split(":")
         if len(fields) >= 3:
             if type != fields[-2]:
-                self._warn(
-                    "expected id of type %s but found type %s %s"
-                    % (type, fields[-2], id)
-                )
+                LOGGER.warning('Expected id of type %s but found type %s %s',
+                               type, fields[-2], id)
             return fields[-1]
         fields = id.split("/")
         if len(fields) >= 3:
             itype = fields[-2]
             if type != itype:
-                self._warn(
-                    "expected id of type %s but found type %s %s"
-                    % (type, itype, id)
-                )
+                LOGGER.warning('Expected id of type %s but found type %s %s',
+                               type, itype, id)
             return fields[-1].split("?")[0]
         return id
 
