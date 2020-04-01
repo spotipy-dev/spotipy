@@ -192,8 +192,9 @@ class AuthTestSpotipy(unittest.TestCase):
         sp = spotipy.Spotify(requests_timeout=0.01,
                              client_credentials_manager=client_credentials_manager)
 
-        with self.assertRaises(requests.exceptions.Timeout):
-            sp.search(q='my*', type='track')
+        # depending on the timing or bandwidth, this raises a timeout or connection error"
+        self.assertRaises((requests.exceptions.Timeout, requests.exceptions.ConnectionError),
+                          lambda: sp.search(q='my*', type='track'))
 
     def test_album_search(self):
         results = self.spotify.search(q='weezer pinkerton', type='album')

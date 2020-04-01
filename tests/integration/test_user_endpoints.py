@@ -59,7 +59,7 @@ class SpotipyPlaylistApiTest(unittest.TestCase):
             user = playlist['owner']['id']
             pid = playlist['id']
             results = self.spotify.user_playlist_tracks(user, pid)
-            self.assertEquals(len(results['items']), 0)
+            self.assertEqual(len(results['items']), 0)
 
     def test_current_user_playlists(self):
         playlists = self.spotify.current_user_playlists(limit=10)
@@ -134,7 +134,7 @@ class SpotipyPlaylistApiTest(unittest.TestCase):
         self.spotify.playlist_upload_cover_image(self.new_playlist_uri, dog_base64)
 
         res = self.spotify.playlist_cover_image(self.new_playlist_uri)
-        self.assertEquals(len(res), 1)
+        self.assertEqual(len(res), 1)
         first_image = res[0]
         self.assertIn('width', first_image)
         self.assertIn('height', first_image)
@@ -196,13 +196,13 @@ class SpotipyLibraryApiTests(unittest.TestCase):
 
         tracks = self.spotify.current_user_saved_tracks()
         new_total = tracks['total']
-        self.assertEquals(new_total - total, len(self.four_tracks))
+        self.assertEqual(new_total - total, len(self.four_tracks))
 
         tracks = self.spotify.current_user_saved_tracks_delete(
             self.four_tracks)
         tracks = self.spotify.current_user_saved_tracks()
         new_total = tracks['total']
-        self.assertEquals(new_total, total)
+        self.assertEqual(new_total, total)
 
     def test_current_user_saved_albums(self):
         # Add
@@ -212,12 +212,12 @@ class SpotipyLibraryApiTests(unittest.TestCase):
 
         # Contains
         resp = self.spotify.current_user_saved_albums_contains(self.album_ids)
-        self.assertEquals(resp, [True, True])
+        self.assertEqual(resp, [True, True])
 
         # Remove
         self.spotify.current_user_saved_albums_delete(self.album_ids)
         resp = self.spotify.current_user_saved_albums_contains(self.album_ids)
-        self.assertEquals(resp, [False, False])
+        self.assertEqual(resp, [False, False])
 
 
 class SpotipyUserApiTests(unittest.TestCase):
@@ -244,11 +244,11 @@ class SpotipyUserApiTests(unittest.TestCase):
 
     def test_basic_user_profile(self):
         user = self.spotify.user(self.username)
-        self.assertEquals(user['id'], self.username.lower())
+        self.assertEqual(user['id'], self.username.lower())
 
     def test_current_user(self):
         user = self.spotify.current_user()
-        self.assertEquals(user['id'], self.username.lower())
+        self.assertEqual(user['id'], self.username.lower())
 
     def test_me(self):
         user = self.spotify.me()
@@ -373,7 +373,7 @@ class SpotipyPlayerApiTests(unittest.TestCase):
     def test_devices(self):
         # No devices playing by default
         res = self.spotify.devices()
-        self.assertEquals(len(res["devices"]), 0)
+        self.assertEqual(len(res["devices"]), 0)
 
     def test_current_user_recently_played(self):
         # No cursor

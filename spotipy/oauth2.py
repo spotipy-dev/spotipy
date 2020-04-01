@@ -320,10 +320,9 @@ class SpotifyOAuth(SpotifyAuthBase):
         return self.parse_response_code(response)
 
     def _get_auth_response_local_server(self, redirect_port):
-
-        with start_local_http_server(redirect_port) as server:
-            self._open_auth_url()
-            server.handle_request()
+        server = start_local_http_server(redirect_port)
+        self._open_auth_url()
+        server.handle_request()
 
         if server.auth_code is not None:
             return server.auth_code
@@ -488,9 +487,12 @@ class RequestHandler(BaseHTTPRequestHandler):
             return
 
         self._write("""<html>
+<script>
+window.close()
+</script>
 <body>
 <h1>Authentication status: {}</h1>
-Now you can close this window or tab.
+This window can be closed.
 </body>
 </html>""".format(status))
 
