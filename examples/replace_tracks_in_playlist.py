@@ -1,4 +1,3 @@
-
 # Replaces all tracks in a playlist
 
 import pprint

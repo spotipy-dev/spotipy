@@ -1,13 +1,16 @@
-from spotipy.oauth2 import SpotifyOAuth
-import json
+# -*- coding: utf-8 -*-
 import io
+import json
 import unittest
+
+import six.moves.urllib.parse as urllibparse
+
+from spotipy import SpotifyOAuth
 
 try:
     import unittest.mock as mock
 except ImportError:
     import mock
-import six.moves.urllib.parse as urllibparse
 
 patch = mock.patch
 DEFAULT = mock.DEFAULT
@@ -156,14 +159,10 @@ class TestSpotifyOAuth(unittest.TestCase):
         self.assertNotIn('show_dialog', parsed_qs)
 
     def test_get_authorize_url_shows_dialog_when_requested(self):
-        oauth = SpotifyOAuth("CLID", "CLISEC", "REDIR")
+        oauth = SpotifyOAuth("CLID", "CLISEC", "REDIR", show_dialog=True)
 
-        url = oauth.get_authorize_url(show_dialog=True)
+        url = oauth.get_authorize_url()
 
         parsed_url = urllibparse.urlparse(url)
         parsed_qs = urllibparse.parse_qs(parsed_url.query)
         self.assertTrue(parsed_qs['show_dialog'])
-
-
-if __name__ == '__main__':
-    unittest.main()

@@ -1,0 +1,395 @@
+import os
+
+from spotipy import (
+    CLIENT_CREDS_ENV_VARS as CCEV,
+    prompt_for_user_token,
+    Spotify,
+    SpotifyException,
+)
+import unittest
+import requests
+from tests import helpers
+
+
+class SpotipyPlaylistApiTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.four_tracks = ["spotify:track:6RtPijgfPKROxEzTHNRiDp",
+                           "spotify:track:7IHOIqZUUInxjVkko181PB",
+                           "4VrWlk8IQxevMvERoX08iC",
+                           "http://open.spotify.com/track/3cySlItpiPiIAzU3NyHCJf"]
+        cls.other_tracks = ["spotify:track:2wySlB6vMzCbQrRnNGOYKa",
+                            "spotify:track:29xKs5BAHlmlX1u4gzQAbJ",
+                            "spotify:track:1PB7gRWcvefzu7t3LJLUlf"]
+        cls.username = os.getenv(CCEV['client_username'])
+
+        scope = (
+            'playlist-modify-public '
+            'user-library-read '
+            'user-follow-read '
+            'user-library-modify '
+            'user-read-private '
+            'user-top-read '
+            'user-follow-modify '
+            'user-read-recently-played '
+            'ugc-image-upload '
+            'user-read-playback-state'
+        )
+
+        token = prompt_for_user_token(cls.username, scope=scope)
+
+        cls.spotify = Spotify(auth=token)
+
+        cls.new_playlist_name = 'spotipy-playlist-test'
+        cls.new_playlist = helpers.get_spotify_playlist(
+            cls.spotify, cls.new_playlist_name, cls.username) or \
+            helpers.create_spotify_playlist(
+                cls.spotify, cls.new_playlist_name, cls.username)
+        cls.new_playlist_uri = cls.new_playlist['uri']
+
+    def test_user_playlists(self):
+        playlists = self.spotify.user_playlists(self.username, limit=5)
+        self.assertTrue('items' in playlists)
+        self.assertGreaterEqual(len(playlists['items']), 1)
+
+    def test_user_playlist_tracks(self):
+        playlists = self.spotify.user_playlists(self.username, limit=5)
+        self.assertTrue('items' in playlists)
+        for playlist in playlists['items']:
+            user = playlist['owner']['id']
+            pid = playlist['id']
+            results = self.spotify.user_playlist_tracks(user, pid)
+            self.assertEqual(len(results['items']), 0)
+
+    def test_current_user_playlists(self):
+        playlists = self.spotify.current_user_playlists(limit=10)
+        self.assertTrue('items' in playlists)
+        self.assertGreaterEqual(len(playlists['items']), 1)
+        self.assertLessEqual(len(playlists['items']), 10)
+
+    def test_user_playlist_follow(self):
+        user_to_follow = 'plamere'
+        user_to_follow_id = '4erXB04MxwRAVqcUEpu30O'
+        self.spotify.user_playlist_follow_playlist(
+            user_to_follow, user_to_follow_id)
+        follows = self.spotify.user_playlist_is_following(
+            user_to_follow, user_to_follow_id, [self.username])
+
+        self.assertTrue(len(follows) == 1, 'proper follows length')
+        self.assertTrue(follows[0], 'is following')
+        self.spotify.user_playlist_unfollow(
+            user_to_follow, user_to_follow_id)
+
+        follows = self.spotify.user_playlist_is_following(
+            user_to_follow, user_to_follow_id, [self.username])
+        self.assertTrue(len(follows) == 1, 'proper follows length')
+        self.assertFalse(follows[0], 'is no longer following')
+
+    def test_user_playlist_replace_tracks(self):
+        # add tracks to playlist
+        self.spotify.user_playlist_add_tracks(
+            self.username, self.new_playlist['id'], self.four_tracks)
+        playlist = self.spotify.user_playlist(self.username, self.new_playlist['id'])
+        self.assertEqual(playlist['tracks']['total'], 4)
+        self.assertEqual(len(playlist['tracks']['items']), 4)
+
+        # replace with 3 other tracks
+        self.spotify.user_playlist_replace_tracks(self.username,
+                                                  self.new_playlist['id'],
+                                                  self.other_tracks)
+        playlist = self.spotify.user_playlist(self.username,
+                                              self.new_playlist['id'])
+        self.assertEqual(playlist['tracks']['total'], 3)
+        self.assertEqual(len(playlist['tracks']['items']), 3)
+
+        self.spotify.user_playlist_remove_all_occurrences_of_tracks(
+            self.username, playlist['id'], self.other_tracks)
+        playlist = self.spotify.user_playlist(self.username, self.new_playlist['id'])
+        self.assertEqual(playlist["tracks"]["total"], 0)
+
+    def test_get_playlist_by_id(self):
+        pl = self.spotify.playlist(self.new_playlist['id'])
+        self.assertEqual(pl["tracks"]["total"], 0)
+
+    def test_playlist_add_tracks(self):
+        # add tracks to playlist
+        self.spotify.user_playlist_add_tracks(
+            self.username, self.new_playlist['id'], self.other_tracks)
+        playlist = self.spotify.user_playlist(self.username, self.new_playlist['id'])
+        self.assertEqual(playlist['tracks']['total'], 3)
+        self.assertEqual(len(playlist['tracks']['items']), 3)
+
+        pl = self.spotify.playlist_tracks(self.new_playlist['id'], limit=2)
+        self.assertEqual(len(pl["items"]), 2)
+
+        self.spotify.user_playlist_remove_all_occurrences_of_tracks(
+            self.username, playlist['id'], self.other_tracks)
+        playlist = self.spotify.user_playlist(self.username, self.new_playlist['id'])
+        self.assertEqual(playlist["tracks"]["total"], 0)
+
+    def test_playlist_cover_image(self):
+        # Upload random dog image
+        r = requests.get('https://dog.ceo/api/breeds/image/random')
+        dog_base64 = helpers.get_as_base64(r.json()['message'])
+        self.spotify.playlist_upload_cover_image(self.new_playlist_uri, dog_base64)
+
+        res = self.spotify.playlist_cover_image(self.new_playlist_uri)
+        self.assertEqual(len(res), 1)
+        first_image = res[0]
+        self.assertIn('width', first_image)
+        self.assertIn('height', first_image)
+        self.assertIn('url', first_image)
+
+    def test_deprecated_starred(self):
+        pl = self.spotify.user_playlist(self.username)
+        self.assertTrue(pl["tracks"] is None)
+        self.assertTrue(pl["owner"] is None)
+
+    def test_deprecated_user_playlist(self):
+        # Test without user due to change from
+        # https://developer.spotify.com/community/news/2018/06/12/changes-to-playlist-uris/
+        pl = self.spotify.user_playlist(None, self.new_playlist['id'])
+        self.assertEqual(pl["tracks"]["total"], 0)
+
+
+class SpotipyLibraryApiTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.four_tracks = ["spotify:track:6RtPijgfPKROxEzTHNRiDp",
+                           "spotify:track:7IHOIqZUUInxjVkko181PB",
+                           "4VrWlk8IQxevMvERoX08iC",
+                           "http://open.spotify.com/track/3cySlItpiPiIAzU3NyHCJf"]
+        cls.album_ids = ["spotify:album:6kL09DaURb7rAoqqaA51KU",
+                         "spotify:album:6RTzC0rDbvagTSJLlY7AKl"]
+        cls.username = os.getenv(CCEV['client_username'])
+
+        scope = (
+            'playlist-modify-public '
+            'user-library-read '
+            'user-follow-read '
+            'user-library-modify '
+            'user-read-private '
+            'user-top-read '
+            'user-follow-modify '
+            'user-read-recently-played '
+            'ugc-image-upload '
+            'user-read-playback-state'
+        )
+
+        token = prompt_for_user_token(cls.username, scope=scope)
+
+        cls.spotify = Spotify(auth=token)
+
+    def test_track_bad_id(self):
+        with self.assertRaises(SpotifyException):
+            self.spotify.track('BadID123')
+
+    def test_current_user_saved_tracks(self):
+        # TODO make this not fail if someone doesnthave saved tracks
+        tracks = self.spotify.current_user_saved_tracks()
+        self.assertGreater(len(tracks['items']), 0)
+
+    def test_current_user_save_and_unsave_tracks(self):
+        tracks = self.spotify.current_user_saved_tracks()
+        total = tracks['total']
+        self.spotify.current_user_saved_tracks_add(self.four_tracks)
+
+        tracks = self.spotify.current_user_saved_tracks()
+        new_total = tracks['total']
+        self.assertEqual(new_total - total, len(self.four_tracks))
+
+        tracks = self.spotify.current_user_saved_tracks_delete(
+            self.four_tracks)
+        tracks = self.spotify.current_user_saved_tracks()
+        new_total = tracks['total']
+        self.assertEqual(new_total, total)
+
+    def test_current_user_saved_albums(self):
+        # Add
+        self.spotify.current_user_saved_albums_add(self.album_ids)
+        albums = self.spotify.current_user_saved_albums()
+        self.assertGreaterEqual(len(albums['items']), 2)
+
+        # Contains
+        resp = self.spotify.current_user_saved_albums_contains(self.album_ids)
+        self.assertEqual(resp, [True, True])
+
+        # Remove
+        self.spotify.current_user_saved_albums_delete(self.album_ids)
+        resp = self.spotify.current_user_saved_albums_contains(self.album_ids)
+        self.assertEqual(resp, [False, False])
+
+
+class SpotipyUserApiTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.username = os.getenv(CCEV['client_username'])
+
+        scope = (
+            'playlist-modify-public '
+            'user-library-read '
+            'user-follow-read '
+            'user-library-modify '
+            'user-read-private '
+            'user-top-read '
+            'user-follow-modify '
+            'user-read-recently-played '
+            'ugc-image-upload '
+            'user-read-playback-state'
+        )
+
+        token = prompt_for_user_token(cls.username, scope=scope)
+
+        cls.spotify = Spotify(auth=token)
+
+    def test_basic_user_profile(self):
+        user = self.spotify.user(self.username)
+        self.assertEqual(user['id'], self.username.lower())
+
+    def test_current_user(self):
+        user = self.spotify.current_user()
+        self.assertEqual(user['id'], self.username.lower())
+
+    def test_me(self):
+        user = self.spotify.me()
+        self.assertTrue(user['id'] == self.username.lower())
+
+    def test_current_user_top_tracks(self):
+        response = self.spotify.current_user_top_tracks()
+        items = response['items']
+        self.assertGreater(len(items), 0)
+
+    def test_current_user_top_artists(self):
+        response = self.spotify.current_user_top_artists()
+        items = response['items']
+        self.assertGreater(len(items), 0)
+
+
+class SpotipyBrowseApiTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        username = os.getenv(CCEV['client_username'])
+        token = prompt_for_user_token(username)
+        cls.spotify = Spotify(auth=token)
+
+    def test_categories(self):
+        response = self.spotify.categories()
+        self.assertGreater(len(response['categories']), 0)
+
+    def test_category_playlists(self):
+        response = self.spotify.categories()
+        category = 'rock'
+        for cat in response['categories']['items']:
+            cat_id = cat['id']
+            if cat_id == category:
+                response = self.spotify.category_playlists(category_id=cat_id)
+                self.assertGreater(len(response['playlists']["items"]),  0)
+
+    def test_new_releases(self):
+        response = self.spotify.new_releases()
+        self.assertGreater(len(response['albums']), 0)
+
+    def test_featured_releases(self):
+        response = self.spotify.featured_playlists()
+        self.assertGreater(len(response['playlists']), 0)
+
+
+class SpotipyFollowApiTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.username = os.getenv(CCEV['client_username'])
+
+        scope = (
+            'playlist-modify-public '
+            'user-library-read '
+            'user-follow-read '
+            'user-library-modify '
+            'user-read-private '
+            'user-top-read '
+            'user-follow-modify '
+            'user-read-recently-played '
+            'ugc-image-upload '
+            'user-read-playback-state'
+        )
+
+        token = prompt_for_user_token(cls.username, scope=scope)
+
+        cls.spotify = Spotify(auth=token)
+
+    def test_current_user_follows(self):
+        response = self.spotify.current_user_followed_artists()
+        artists = response['artists']
+        self.assertGreater(len(artists['items']), 0)
+
+    def test_user_follows_and_unfollows_artist(self):
+        # Initially follows 1 artist
+        res = self.spotify.current_user_followed_artists()
+        self.assertEqual(res['artists']['total'], 1)
+
+        # Follow 2 more artists
+        artists = ["6DPYiyq5kWVQS4RGwxzPC7", "0NbfKEOTQCcwd6o7wSDOHI"]
+        self.spotify.user_follow_artists(artists)
+        res = self.spotify.current_user_followed_artists()
+        self.assertEqual(res['artists']['total'], 3)
+
+        # Unfollow these 2 artists
+        self.spotify.user_unfollow_artists(artists)
+        res = self.spotify.current_user_followed_artists()
+        self.assertEqual(res['artists']['total'], 1)
+
+    def test_user_follows_and_unfollows_user(self):
+        # TODO improve after implementing `me/following/contains`
+        users = ["11111204", "xlqeojt6n7on0j7coh9go8ifd"]
+
+        # Follow 2 more users
+        self.spotify.user_follow_users(users)
+
+        # Unfollow these 2 users
+        self.spotify.user_unfollow_users(users)
+
+
+class SpotipyPlayerApiTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.username = os.getenv(CCEV['client_username'])
+
+        scope = (
+            'playlist-modify-public '
+            'user-library-read '
+            'user-follow-read '
+            'user-library-modify '
+            'user-read-private '
+            'user-top-read '
+            'user-follow-modify '
+            'user-read-recently-played '
+            'ugc-image-upload '
+            'user-read-playback-state'
+        )
+
+        token = prompt_for_user_token(cls.username, scope=scope)
+
+        cls.spotify = Spotify(auth=token)
+
+    def test_devices(self):
+        # No devices playing by default
+        res = self.spotify.devices()
+        self.assertEqual(len(res["devices"]), 0)
+
+    def test_current_user_recently_played(self):
+        # No cursor
+        res = self.spotify.current_user_recently_played()
+        self.assertLessEqual(len(res['items']), 50)
+        played_at = res['items'][0]['played_at']
+
+        # Using `before` gives tracks played before
+        res = self.spotify.current_user_recently_played(
+            before=res['cursors']['after'])
+        self.assertLessEqual(len(res['items']), 50)
+        self.assertTrue(res['items'][0]['played_at'] < played_at)
+        played_at = res['items'][0]['played_at']
+
+        # Using `after` gives tracks played after
+        res = self.spotify.current_user_recently_played(
+            after=res['cursors']['before'])
+        self.assertLessEqual(len(res['items']), 50)
+        self.assertGreater(res['items'][0]['played_at'], played_at)

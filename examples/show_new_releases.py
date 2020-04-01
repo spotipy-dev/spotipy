@@ -2,7 +2,6 @@
 
 import spotipy
 import sys
-import pprint
 import spotipy.util as util
 
 if len(sys.argv) > 1:
@@ -22,7 +21,7 @@ if token:
     while response:
         albums = response['albums']
         for i, item in enumerate(albums['items']):
-            print(albums['offset'] + i,item['name'])
+            print(albums['offset'] + i, item['name'])
 
         if albums['next']:
             response = sp.next(albums)
