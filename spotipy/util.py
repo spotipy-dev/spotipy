@@ -100,7 +100,7 @@ def prompt_for_user_token(
         return None
 
 
-def get_host_port(netloc, default_port=80):
+def get_host_port(netloc, default_port=8080):
     if ":" in netloc:
         host, port = netloc.split(":", 1)
         port = int(port)
