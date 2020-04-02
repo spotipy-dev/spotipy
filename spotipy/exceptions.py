@@ -1,6 +1,5 @@
-
-
 class SpotifyException(Exception):
+
     def __init__(self, http_status, code, msg, headers=None):
         self.http_status = http_status
         self.code = code

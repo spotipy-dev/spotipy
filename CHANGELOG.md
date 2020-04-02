@@ -20,11 +20,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - backoff_factor
  - Spin up a local webserver to auto-fill authentication URL
  - Use session in SpotifyAuthBase
- - Propagate refresh token error
 
 ### Fixed
 
  - Close session when Spotipy object is unloaded
+ - Propagate refresh token error
 
 ## [2.10.0] - 2020-03-18
 
