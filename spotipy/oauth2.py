@@ -18,6 +18,7 @@ import warnings
 
 import requests
 from spotipy.util import CLIENT_CREDS_ENV_VARS, get_host_port
+from spotipy.exceptions import SpotifyException
 
 # Workaround to support both python 2 & 3
 import six
@@ -273,7 +274,6 @@ class SpotifyOAuth(SpotifyAuthBase):
                 f.close()
             except IOError:
                 self._warn("couldn't write token cache to " + self.cache_path)
-                pass
 
     def _is_scope_subset(self, needle_scope, haystack_scope):
         needle_scope = set(needle_scope.split()) if needle_scope else set()
@@ -461,15 +461,17 @@ class SpotifyOAuth(SpotifyAuthBase):
             proxies=self.proxies,
             timeout=self.requests_timeout,
         )
-        if response.status_code != 200:
-            if False:  # debugging code
-                print("headers", headers)
-                print("request", response.url)
-            self._warn(
-                "couldn't refresh token: code:%d reason:%s"
-                % (response.status_code, response.reason)
+        try:
+            response.raise_for_status()
+        except BaseException:
+            message = "Couldn't refresh token: code:%d reason:%s" % (
+                response.status_code,
+                response.reason,
             )
-            return None
+            raise SpotifyException(response.status_code,
+                                   -1,
+                                   message,
+                                   headers)
         token_info = response.json()
         token_info = self._add_custom_values_to_token_info(token_info)
         if "refresh_token" not in token_info:

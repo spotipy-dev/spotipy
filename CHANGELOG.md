@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
  - Close session when Spotipy object is unloaded
+ - Propagate refresh token error
 
 ## [2.10.0] - 2020-03-18
 
@@ -46,7 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.8.0] - 2020-02-12
 
-### Added 
+### Added
 
  - Support for `playlist_cover_image`
  - Support `after` and `before` parameter in `current_user_recently_played`
