@@ -7,7 +7,8 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 client_credentials_manager = SpotifyClientCredentials()
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
-sp.trace=False
+sp.trace = False
+
 
 def get_artist(name):
     results = sp.search(q='artist:' + name, type='artist')
@@ -17,11 +18,12 @@ def get_artist(name):
     else:
         return None
 
+
 def show_recommendations_for_artist(artist):
-    albums = []
-    results = sp.recommendations(seed_artists = [artist['id']])
+    results = sp.recommendations(seed_artists=[artist['id']])
     for track in results['tracks']:
-        print track['name'], '-', track['artists'][0]['name']
+        print(track['name'], '-', track['artists'][0]['name'])
+
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
@@ -32,4 +34,4 @@ if __name__ == '__main__':
         if artist:
             show_recommendations_for_artist(artist)
         else:
-            print "Can't find that artist", name
+            print("Can't find that artist", name)

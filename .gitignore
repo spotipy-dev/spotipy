@@ -30,7 +30,6 @@ pip-delete-this-directory.txt
 htmlcov/
 .tox/
 .coverage
-.cache
 nosetests.xml
 coverage.xml
 
@@ -52,6 +51,8 @@ coverage.xml
 # Sphinx documentation
 docs/_build/
 
+# Spotipy tokens
+.cache
 
 .*
 archive
