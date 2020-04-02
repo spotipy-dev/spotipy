@@ -18,7 +18,7 @@ import warnings
 
 import requests
 from spotipy.util import CLIENT_CREDS_ENV_VARS, get_host_port
-from spotipy.client import SpotifyException
+from spotipy.exceptions import SpotifyException
 
 # Workaround to support both python 2 & 3
 import six
@@ -463,7 +463,7 @@ class SpotifyOAuth(SpotifyAuthBase):
         )
         try:
             response.raise_for_status()
-        except:
+        except BaseException:
             message = "Couldn't refresh token: code:%d reason:%s" % (
                 response.status_code,
                 response.reason,

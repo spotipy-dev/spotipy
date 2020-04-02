@@ -283,7 +283,7 @@ class SpotipyBrowseApiTests(unittest.TestCase):
             cat_id = cat['id']
             if cat_id == category:
                 response = self.spotify.category_playlists(category_id=cat_id)
-                self.assertGreater(len(response['playlists']["items"]),  0)
+                self.assertGreater(len(response['playlists']["items"]), 0)
 
     def test_new_releases(self):
         response = self.spotify.new_releases()

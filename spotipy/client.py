@@ -4,8 +4,6 @@
 
 from __future__ import print_function
 
-__all__ = ["Spotify", "SpotifyException"]
-
 import json
 import sys
 import warnings
@@ -14,7 +12,7 @@ import requests
 import urllib3
 import six
 
-from spotipy.exceptions import *
+from spotipy.exceptions import SpotifyException
 
 
 class Spotify(object):
