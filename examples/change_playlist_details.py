@@ -1,42 +1,54 @@
-
-# Modify the details of a playlist (name, public, collaborative)
-
-import sys
+import argparse
+import logging
+import os
 
 import spotipy
 import spotipy.util as util
 
-if len(sys.argv) > 3:
-    username = sys.argv[1]
-    playlist_id = sys.argv[2]
-    name = sys.argv[3]
-
-    public = None
-    if len(sys.argv) > 4:
-        public = sys.argv[4].lower() == 'true'
-
-    collaborative = None
-    if len(sys.argv) > 5:
-        collaborative = sys.argv[5].lower() == 'true'
-
-    description = None
-    if len(sys.argv) > 6:
-        description = sys.argv[6]
-
-else:
-    print("Usage: %s username playlist_id name [public collaborative "
-          "description]" % (sys.argv[0]))
-    sys.exit()
+logger = logging.getLogger('examples.change_playlist_details')
+logging.basicConfig(level='DEBUG')
 
 scope = 'playlist-modify-public playlist-modify-private'
-token = util.prompt_for_user_token(username, scope)
 
-if token:
-    sp = spotipy.Spotify(auth=token)
-    sp.trace = False
-    results = sp.user_playlist_change_details(
-        username, playlist_id, name=name, public=public,
-        collaborative=collaborative, description=description)
-    print(results)
-else:
-    print("Can't get token for"), username
+
+def get_args():
+    parser = argparse.ArgumentParser(description='Modify details of playlist')
+    parser.add_argument('-u', '--username', required=False,
+                        default=os.environ.get('SPOTIPY_CLIENT_USERNAME'),
+                        help='Username id. Defaults to environment var')
+    parser.add_argument('-p', '--playlist', required=True,
+                        help='Playlist id to alter details')
+    parser.add_argument('-n', '--name', required=False,
+                        help='Name of playlist')
+    parser.add_argument('--public', action='store_true', required=False,
+                        help='Include param if playlist is public')
+    parser.add_argument('--private', action='store_false', required=False,
+                        default=None,
+                        help='Include param to make playlist is private')
+    parser.add_argument('-c', '--collaborative', action='store_true',
+                        required=False, default=None,
+                        help='Include param if playlist is collaborative')
+    parser.add_argument('-i', '--independent', action='store_false',
+                        required=False, default=None,
+                        help='Include param to make playlist non collaborative')
+    parser.add_argument('-d', '--description', default=None, required=False,
+                        help='Description of playlist')
+    return parser.parse_args()
+
+
+def main():
+    args = get_args()
+    token = util.prompt_for_user_token(args.username, scope)
+    if token:
+        sp = spotipy.Spotify(auth=token)
+        sp.user_playlist_change_details(
+            args.username, args.playlist, name=args.name,
+            public=args.public or args.private,
+            collaborative=args.collaborative or args.independent,
+            description=args.description)
+    else:
+        logger.error("Can't get token for %s", args.username)
+
+
+if __name__ == '__main__':
+    main()
