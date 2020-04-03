@@ -25,7 +25,7 @@ import six.moves.urllib.parse as urllibparse
 from six.moves.BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
 from six.moves.urllib_parse import urlparse, parse_qsl
 
-LOGGER = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class SpotifyOauthError(Exception):
@@ -274,7 +274,7 @@ class SpotifyOAuth(SpotifyAuthBase):
                 f.write(json.dumps(token_info))
                 f.close()
             except IOError:
-                LOGGER.warning('Couldn\'t write token to cache at: %s',
+                logger.warning('Couldn\'t write token to cache at: %s',
                                self.cache_path)
 
     def _is_scope_subset(self, needle_scope, haystack_scope):
@@ -327,9 +327,9 @@ class SpotifyOAuth(SpotifyAuthBase):
         auth_url = self.get_authorize_url()
         try:
             webbrowser.open(auth_url)
-            LOGGER.info("Opened %s in your browser", auth_url)
+            logger.info("Opened %s in your browser", auth_url)
         except webbrowser.Error:
-            LOGGER.error("Please navigate here: %s", auth_url)
+            logger.error("Please navigate here: %s", auth_url)
 
     def _get_auth_response_interactive(self):
         self._open_auth_url()
@@ -353,7 +353,7 @@ class SpotifyOAuth(SpotifyAuthBase):
             raise SpotifyOauthError("Server listening on localhost has not been accessed")
 
     def get_auth_response(self):
-        LOGGER.info('User authentication requires interaction with your '
+        logger.info('User authentication requires interaction with your '
                     'web browser. Once you enter your credentials and '
                     'give authorization, you will be redirected to '
                     'a url.  Paste that url you were directed to to '
@@ -365,7 +365,7 @@ class SpotifyOAuth(SpotifyAuthBase):
         if redirect_host in ("127.0.0.1", "localhost") and redirect_info.scheme == "http":
             return self._get_auth_response_local_server(redirect_port)
         else:
-            LOGGER.info('Paste that url you were directed to in order to '
+            logger.info('Paste that url you were directed to in order to '
                         'complete the authorization')
             return self._get_auth_response_interactive()
 
@@ -452,8 +452,9 @@ class SpotifyOAuth(SpotifyAuthBase):
         try:
             response.raise_for_status()
         except BaseException:
-            LOGGER.warning('Couldn\'t refresh token. Response STATUS CODE: %s '
-                           'REASON: %s', response.status_code, response.reason)
+            logger.error('Couldn\'t refresh token. Response Status Code: %s '
+                         'Reason: %s', response.status_code, response.reason)
+
             message = "Couldn't refresh token: code:%d reason:%s" % (
                 response.status_code,
                 response.reason,
