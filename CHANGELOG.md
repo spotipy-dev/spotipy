@@ -6,8 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.11.0] - 2020-04-11
+
 ### Added
 
+ - Support for shows/podcasts and episodes
  - Added CONTRIBUTING.md
 
 ### Changed
@@ -32,9 +35,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
  - Support for `add_to_queue`
-     - **Parameters:**
-     - track uri, id, or url
-     - device id. If None, then the active device is used.
+    - **Parameters:**
+        - track uri, id, or url
+        - device id. If None, then the active device is used.
  - Add CHANGELOG and LICENSE to released package
 
 
