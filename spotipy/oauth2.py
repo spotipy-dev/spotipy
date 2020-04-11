@@ -314,11 +314,11 @@ class SpotifyOAuth(SpotifyAuthBase):
             Parameters:
                 - url - the response url
         """
-
-        try:
-            return url.split("?code=")[1].split("&")[0]
-        except IndexError:
-            return None
+        url_split = url.split("?code=")
+        if len(url_split) <= 1:
+            return url
+        else:
+            return url_split[1].split("&")[0]
 
     def _make_authorization_headers(self):
         return _make_authorization_headers(self.client_id, self.client_secret)
@@ -370,7 +370,9 @@ class SpotifyOAuth(SpotifyAuthBase):
             return self._get_auth_response_interactive()
 
     def get_authorization_code(self, response=None):
-        return self.parse_response_code(response or self.get_auth_response())
+        if response:
+            return self.parse_response_code(response)
+        return self.get_auth_response()
 
     def get_access_token(self, code=None, as_dict=True, check_cache=True):
         """ Gets the access token for the app given the code
