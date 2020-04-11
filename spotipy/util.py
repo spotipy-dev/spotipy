@@ -108,4 +108,4 @@ def get_host_port(netloc, default_port=8080):
         host = netloc
         port = default_port
 
-    return (host, port)
+    return host, port
