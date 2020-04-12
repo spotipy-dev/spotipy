@@ -1232,7 +1232,7 @@ class Spotify(object):
     def audio_features(self, tracks=[]):
         """ Get audio features for one or multiple tracks based upon their Spotify IDs
             Parameters:
-                - tracks - a list of track URIs, URLs or IDs, maximum: 50 ids
+                - tracks - a list of track URIs, URLs or IDs, maximum: 100 ids
         """
         if isinstance(tracks, str):
             trackid = self._get_id("track", tracks)
