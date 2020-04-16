@@ -695,10 +695,10 @@ class Spotify(object):
                 - position - the position to add the tracks
         """
         plid = self._get_id("playlist", playlist_id)
-        ftracks = [self._get_uri("episode", tid) for tid in tracks]
+        fepisodes = [self._get_uri("episode", eid) for tid in episodes]
         return self._post(
             "users/%s/playlists/%s/tracks" % (user, plid),
-            payload=ftracks,
+            payload=fepisodes,
             position=position,
         )
 
