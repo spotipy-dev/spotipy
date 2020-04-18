@@ -372,7 +372,7 @@ class SpotifyOAuth(SpotifyAuthBase):
                                'automatic retrieval of authentication code '
                                'instead of having to copy and paste '
                                'the URL your browser is redirected to.',
-                                redirect_host, redirect_host)
+                               redirect_host, redirect_host)
 
         logger.info('Paste that url you were directed to in order to '
                     'complete the authorization')
