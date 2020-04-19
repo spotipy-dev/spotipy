@@ -363,11 +363,20 @@ class SpotifyOAuth(SpotifyAuthBase):
         redirect_host, redirect_port = get_host_port(redirect_info.netloc)
 
         if redirect_host in ("127.0.0.1", "localhost") and redirect_info.scheme == "http":
-            return self._get_auth_response_local_server(redirect_port)
-        else:
-            logger.info('Paste that url you were directed to in order to '
-                        'complete the authorization')
-            return self._get_auth_response_interactive()
+            # Only start a local http server if a port is specified
+            if redirect_port:
+                return self._get_auth_response_local_server(redirect_port)
+            else:
+                logger.warning('Using `%s` as redirect URI without a port. '
+                               'Specify a port (e.g. `%s:8080`) to allow '
+                               'automatic retrieval of authentication code '
+                               'instead of having to copy and paste '
+                               'the URL your browser is redirected to.',
+                               redirect_host, redirect_host)
+
+        logger.info('Paste that url you were directed to in order to '
+                    'complete the authorization')
+        return self._get_auth_response_interactive()
 
     def get_authorization_code(self, response=None):
         if response:

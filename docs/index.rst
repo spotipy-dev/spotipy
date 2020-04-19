@@ -84,23 +84,19 @@ Or you can get the source from github at https://github.com/plamere/spotipy
 Getting Started
 ===============
 
-All methods require user authorization. You will need to
-register your app to get the credentials necessary to make authorized calls.
+All methods require user authorization. You will need to register your app at 
+`My Dashboard <https://developer.spotify.com/dashboard/applications>`_ 
+to get the credentials necessary to make authorized calls
+(a *client id* and *client secret*).
 
-Even if your script does not have an accessible URL you will need to specify one
-when registering your application which the Spotify authentication server will
-redirect to after successful login. The URL doesn't need to be publicly
-accessible, so you can specify "http://localhost/".
-
-Register your app at
-`My Applications
-<https://developer.spotify.com/my-applications/#!/applications>`_ and register the
-redirect URI mentioned in the above paragragh.
-
-*spotipy* supports two authorization flows:
+*Spotipy* supports two authorization flows:
 
   - The **Authorization Code flow** This method is suitable for long-running applications
     which the user logs into once. It provides an access token that can be refreshed.
+
+    .. note:: Requires you to add a redirect URI to your application at 
+              `My Dashboard <https://developer.spotify.com/dashboard/applications>`_.
+              See `Redirect URI`_ for more details.
 
   - The **Client Credentials flow**  The method makes it possible
     to authenticate your requests to the Spotify Web API and to obtain
@@ -118,7 +114,7 @@ browser or from a mobile app.
 
 To support the **Authorization Code Flow** *Spotipy* provides a
 utility method ``util.prompt_for_user_token`` that will attempt to authorize the
-user.  You can pass your app credentials directly into the method as arguments::
+user. You can pass your app credentials directly into the method as arguments::
 
     util.prompt_for_user_token(username,
                                scope,
@@ -127,22 +123,49 @@ user.  You can pass your app credentials directly into the method as arguments::
                                redirect_uri='your-app-redirect-url')
 
 or if you are reluctant to immortalize your app credentials in your source code,
-you can set environment variables like so::
+you can set environment variables like so (use ``SET`` instead of ``export``
+on Windows)::
 
     export SPOTIPY_CLIENT_ID='your-spotify-client-id'
     export SPOTIPY_CLIENT_SECRET='your-spotify-client-secret'
     export SPOTIPY_REDIRECT_URI='your-app-redirect-url'
 
-Call ``util.prompt_for_user_token`` method with the username and the
+Call the ``util.prompt_for_user_token`` method with the username, the
 desired scope (see `Using
 Scopes <https://developer.spotify.com/web-api/using-scopes/>`_ for information
-about scopes) and credentials. After succesfully
-authenticating your app, you can simply copy the
-"http://localhost/?code=..." URL from your browser and paste it to the
-console where your script is running. This will coordinate the user authorization via
-your web browser and callback to the SPOTIPY_REDIRECT_URI you were redirected to
-with the authorization token appended. The credentials are cached locally and
-are used to automatically re-authorized expired tokens.
+about scopes) and credentials (passed directly or via environment variables)
+to start the authorization process. 
+
+Redirect URI
+------------
+For the **Authorization Code Flow** you need to add a **redirect URI**
+to your application at 
+`My Dashboard <https://developer.spotify.com/dashboard/applications>`_
+(navigate to your application and then *[Edit Settings]*).
+
+The ``redirect_uri`` argument or ``SPOTIPY_REDIRECT_URI`` environment variable
+must match the redirect URI added to your application in your Dashboard.
+The redirect URI can be any valid URI (it does not need to be accessible)
+such as ``http://example.com``, ``http://localhost`` or ``http://127.0.0.1:9090``. 
+
+Calling ``util.prompt_for_user_token`` will open Spotify's 
+application authorization page in your browser (and require you to log in
+if you are not already logged in to spotify.com), unless a locally cached
+access token exist from a previous authorization/authentication.
+
+After successful authentication your browser will be redirected to
+the redirect URI of your application, e.g. ``http://localhost:9090/?code=<code>``.
+
+If your request URI is set to ``http://127.0.0.1:<port>`` or ``http://localhost:<port>``
+Spotipy will automatically complete the authorization process 
+(obtain the ``<code>`` from the URI).
+
+If your request URI is set to any other URI you will need to manually copy the 
+URI from the browser's address bar and paste it into the terminal/console where
+your Spotipy script is running (Spotipy will instruct you to do so).
+
+Example
+-------
 
 Here's an example of getting user authorization to read a user's saved tracks::
 
@@ -178,7 +201,7 @@ in comparison with requests to the Web API made without an access token,
 is that a higher rate limit is applied.
 
 As opposed to the Authorization Code Flow, you will not need to set ``SPOTIPY_REDIRECT_URI``,
-which means you will never be redirected to the sign in page in your browser.
+which means you will never be redirected to the sign in page in your browser::
 
     export SPOTIPY_CLIENT_ID='your-spotify-client-id'
     export SPOTIPY_CLIENT_SECRET='your-spotify-client-secret'
