@@ -6,7 +6,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-...
+// add new changes here
+
+## [2.11.2] - 2020-04-19
+
+### Changed
+
+ - Updated the documentation to give more details on the authorization process and reflect
+   2020 Spotify Application jargon and practices.
+
+ - The local webserver is only started for localhost redirect_uri which specify a port,
+   i.e. it is started for `http://localhost:8080` or `http://127.0.0.1:8080`, not for `http://localhost`.
+
+### Fixed
+
+ - Issue where using `http://localhost` as redirect_uri would cause the authorization process to hang.
 
 ## [2.11.1] - 2020-04-11
 
