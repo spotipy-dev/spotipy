@@ -101,8 +101,7 @@ class Spotify(object):
             else:  # Use the Requests API module as a "session".
                 self._session = requests.api
 
-    @auth.setter
-    def auth(self, auth):
+    def set_auth(self, auth):
         self._auth = auth
 
     @property
