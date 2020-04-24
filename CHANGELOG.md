@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 // add new changes here
 
+  - Added a method to update the auth token.
+
 ## [2.11.2] - 2020-04-19
 
 ### Changed
