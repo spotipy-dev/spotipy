@@ -6,7 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-// add new changes here
+### Fixed
+
+ - Logging regression due to the addition of `logging.basicConfig()` which was unneeded.
 
   - Added a method to update the auth token.
 
