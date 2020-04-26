@@ -14,7 +14,6 @@ import six
 
 from spotipy.exceptions import SpotifyException
 
-logging.basicConfig()
 logger = logging.getLogger(__name__)
 
 

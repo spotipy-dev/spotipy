@@ -6,7 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-// add new changes here
+### Fixed
+
+ - Logging regression due to the addition of `logging.basicConfig()` which was unneeded.
 
 ## [2.11.2] - 2020-04-19
 
