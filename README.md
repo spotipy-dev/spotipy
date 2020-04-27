@@ -43,4 +43,5 @@ for idx, track in enumerate(results['tracks']['items']):
 
 ## Reporting Issues
 
-If you have suggestions, bugs or other issues specific to this library, file them [here](https://github.com/plamere/spotipy/issues). Or just send me a pull request.
+For common questions please check our [FAQ](FAQ.md).
+If you have suggestions, bugs or other issues specific to this library, file them [here](https://github.com/plamere/spotipy/issues). Or just send a pull request.
