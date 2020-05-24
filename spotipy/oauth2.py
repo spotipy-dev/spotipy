@@ -112,7 +112,7 @@ class SpotifyClientCredentials(SpotifyAuthBase):
         environment variables
         """
 
-        super(self.__class__, self).__init__(requests_session)
+        super(SpotifyClientCredentials, self).__init__(requests_session)
 
         self.client_id = client_id
         self.client_secret = client_secret
@@ -218,7 +218,7 @@ class SpotifyOAuth(SpotifyAuthBase):
                  - username - username of current client
         """
 
-        super(self.__class__, self).__init__(requests_session)
+        super(SpotifyOAuth, self).__init__(requests_session)
 
         self.client_id = client_id
         self.client_secret = client_secret
