@@ -32,7 +32,7 @@ class SpotifyOauthError(Exception):
     def __init__(self, message, error=None, error_description=None, *args, **kwargs):
         self.error = error
         self.error_description = error_description
-        super().__init__(message, *args, **kwargs)
+        super(SpotifyOauthError, self).__init__(message, *args, **kwargs)
 
 
 def _make_authorization_headers(client_id, client_secret):
