@@ -6,6 +6,7 @@ import unittest
 import six.moves.urllib.parse as urllibparse
 
 from spotipy import SpotifyOAuth
+from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOauthError
 
 try:
     import unittest.mock as mock
@@ -166,3 +167,9 @@ class TestSpotifyOAuth(unittest.TestCase):
         parsed_url = urllibparse.urlparse(url)
         parsed_qs = urllibparse.parse_qs(parsed_url.query)
         self.assertTrue(parsed_qs['show_dialog'])
+
+    def test_spotify_client_credentials_get_access_token(self):
+        oauth = SpotifyClientCredentials(client_id='ID', client_secret='SECRET')
+        with self.assertRaises(SpotifyOauthError) as error:
+            oauth.get_access_token()
+        self.assertEqual(error.exception.error, 'invalid_client')
