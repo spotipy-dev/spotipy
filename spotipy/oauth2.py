@@ -29,7 +29,10 @@ logger = logging.getLogger(__name__)
 
 
 class SpotifyOauthError(Exception):
-    pass
+    def __init__(self, message, error=None, error_description=None, *args, **kwargs):
+        self.error = error
+        self.error_description = error_description
+        super(SpotifyOauthError, self).__init__(message, *args, **kwargs)
 
 
 def _make_authorization_headers(client_id, client_secret):
@@ -165,7 +168,12 @@ class SpotifyClientCredentials(SpotifyAuthBase):
             timeout=self.requests_timeout,
         )
         if response.status_code != 200:
-            raise SpotifyOauthError(response.reason)
+            error_payload = response.json()
+            raise SpotifyOauthError(
+                'error: {0}, error_description: {1}'.format(
+                    error_payload['error'], error_payload['error_description']),
+                error=error_payload['error'],
+                error_description=error_payload['error_description'])
         token_info = response.json()
         return token_info
 
@@ -431,7 +439,12 @@ class SpotifyOAuth(SpotifyAuthBase):
             timeout=self.requests_timeout,
         )
         if response.status_code != 200:
-            raise SpotifyOauthError(response.reason)
+            error_payload = response.json()
+            raise SpotifyOauthError(
+                'error: {0}, error_description: {1}'.format(
+                    error_payload['error'], error_payload['error_description']),
+                error=error_payload['error'],
+                error_description=error_payload['error_description'])
         token_info = response.json()
         token_info = self._add_custom_values_to_token_info(token_info)
         self._save_token_info(token_info)
