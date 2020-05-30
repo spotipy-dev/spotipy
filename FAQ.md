@@ -4,6 +4,10 @@
 
 spotipy can only return fields documented on the Spotify web API https://developer.spotify.com/documentation/web-api/reference/
 
+### How to use spotipy in an API?
+
+Check out [this example Flask app](examples/app.py)
+
 ### Incorrect user
 
 Error:
