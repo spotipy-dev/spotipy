@@ -520,6 +520,195 @@ class SpotifyOAuth(SpotifyAuthBase):
         return token_info
 
 
+class SpotifyImplicitGrant(SpotifyAuthBase):
+    def __init__(self,
+                 client_id=None,
+                 scope=None,
+                 cache_path=None,
+                 username=None,
+                 requests_session=True,
+                 requests_timeout=None):
+        super(SpotifyClientCredentials, self).__init__(requests_session)
+
+        self.client_id = client_id
+        self.cache_path = cache_path
+        self.username = username or os.getenv(
+            CLIENT_CREDS_ENV_VARS["client_username"]
+        )
+        self.scope = self._normalize_scope(scope)
+        self.requests_timeout = requests_timeout
+
+    def get_cached_token(self):
+        """ Gets a cached auth token
+        """
+        token_info = None
+
+        if not self.cache_path and self.username:
+            self.cache_path = ".cache-" + str(self.username)
+        elif not self.cache_path and not self.username:
+            raise SpotifyOauthError(
+                "You must either set a cache_path or a username."
+            )
+
+        if self.cache_path:
+            try:
+                f = open(self.cache_path)
+                token_info_string = f.read()
+                f.close()
+                token_info = json.loads(token_info_string)
+
+                # if scopes don't match, then bail
+                if "scope" not in token_info or not self._is_scope_subset(
+                    self.scope, token_info["scope"]
+                ):
+                    return None
+
+                if self.is_token_expired(token_info):
+                    token_info = self.refresh_access_token(
+                        token_info["refresh_token"]
+                    )
+
+            except IOError:
+                pass
+        return token_info
+
+    def _save_token_info(self, token_info):
+        if not self.cache_path and self.username:
+            self.cache_path = ".cache-" + str(self.username)
+        if self.cache_path:
+            try:
+                f = open(self.cache_path, "w")
+                f.write(json.dumps(token_info))
+                f.close()
+            except IOError:
+                logger.warning('Couldn\'t write token to cache at: %s',
+                               self.cache_path)
+
+    def is_token_expired(self, token_info):
+        return is_token_expired(token_info)
+
+    def get_access_token(self, *, state=None, response=None, check_cache=True):
+        if check_cache:
+            token_info = self.get_cached_token()
+            if token_info is not None:
+                if is_token_expired(token_info):
+                    token_info = self.refresh_access_token(
+                        token_info["refresh_token"]
+                    )
+                return token_info if as_dict else token_info["access_token"]
+
+        if response:
+            token_with_info = self.parse_response_code(response)
+        token_info = self.get_auth_response()
+        token_info = self._add_custom_values_to_token_info(token_info)
+        self._save_token_info(token_info)
+
+        if state is None:
+            state = self.state
+        if state is not None:
+            assert token_info["state"] == self.state
+
+        return token_with_info["access_token"]
+
+    def get_authorize_url(self, state=None):
+        """ Gets the URL to use to authorize this app
+        """
+        payload = {
+            "client_id": self.client_id,
+            "response_type": "token",
+            "redirect_uri": self.redirect_uri,
+        }
+        if self.scope:
+            payload["scope"] = self.scope
+        if state is None:
+            state = self.state
+        if state is not None:
+            payload["state"] = state
+        if self.show_dialog:
+            payload["show_dialog"] = True
+
+        urlparams = urllibparse.urlencode(payload)
+
+        return "%s?%s" % (self.OAUTH_AUTHORIZE_URL, urlparams)
+
+    def parse_response_code(self, url):
+        """ Parse the response code in the given response url
+
+            Parameters:
+                - url - the response url
+        """
+        url_components = urlparse(url)
+        fragment_s = url_components.fragment
+        query_s = url_components.query
+        return dict(i.split('=') for i
+                    in (fragment_s or query_s or url).split('&'))
+
+
+    def _open_auth_url(self):
+        auth_url = self.get_authorize_url()
+        try:
+            webbrowser.open(auth_url)
+            logger.info("Opened %s in your browser", auth_url)
+        except webbrowser.Error:
+            logger.error("Please navigate here: %s", auth_url)
+
+    def _get_auth_response_interactive(self):
+        self._open_auth_url()
+        try:
+            response = raw_input("Enter the URL you were redirected to: ")
+        except NameError:
+            response = input("Enter the URL you were redirected to: ")
+
+        return self.parse_response_code(response)
+
+    def _get_auth_response_local_server(self, redirect_port):
+        server = start_local_http_server(redirect_port)
+        self._open_auth_url()
+        server.handle_request()
+
+        if server.auth_token_form is not None:
+            return server.auth_token_form
+        elif server.error is not None:
+            raise SpotifyOauthError("Received error from OAuth server: {}".format(server.error))
+        else:
+            raise SpotifyOauthError("Server listening on localhost has not been accessed")
+
+    def get_auth_response(self):
+        logger.info('User authentication requires interaction with your '
+                    'web browser. Once you enter your credentials and '
+                    'give authorization, you will be redirected to '
+                    'a url.  Paste that url you were directed to to '
+                    'complete the authorization.')
+
+        redirect_info = urlparse(self.redirect_uri)
+        redirect_host, redirect_port = get_host_port(redirect_info.netloc)
+
+        if redirect_host in ("127.0.0.1", "localhost") and redirect_info.scheme == "http":
+            # Only start a local http server if a port is specified
+            if redirect_port:
+                return self._get_auth_response_local_server(redirect_port)
+            else:
+                logger.warning('Using `%s` as redirect URI without a port. '
+                               'Specify a port (e.g. `%s:8080`) to allow '
+                               'automatic retrieval of authentication code '
+                               'instead of having to copy and paste '
+                               'the URL your browser is redirected to.',
+                               redirect_host, redirect_host)
+
+        logger.info('Paste that url you were directed to in order to '
+                    'complete the authorization')
+        return self._get_auth_response_interactive()
+
+    def _add_custom_values_to_token_info(self, token_info):
+        """
+        Store some values that aren't directly provided by a Web API
+        response.
+        """
+        token_info["expires_at"] = int(time.time()) + token_info["expires_in"]
+        token_info["scope"] = self.scope
+        return token_info
+
+
 class RequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         state, auth_code, error = SpotifyOAuth.parse_oauth_response_url(self.path)
