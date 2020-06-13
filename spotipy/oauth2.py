@@ -5,6 +5,7 @@ __all__ = [
     "SpotifyClientCredentials",
     "SpotifyOAuth",
     "SpotifyOauthError",
+    "SpotifyImplicitGrant"
 ]
 
 import base64
@@ -603,11 +604,11 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
     def get_access_token(self, *, state=None, response=None, check_cache=True):
         if check_cache:
             token_info = self.get_cached_token()
-            if token_info is not None and is_token_expired(token_info):
+            if not (token_info is None or is_token_expired(token_info)):
                 return token_info["access_token"]
 
         if response:
-            token_with_info = self.parse_response_code(response)
+            token_info = self.parse_response_code(response)
         token_info = self.get_auth_response()
         token_info = self._add_custom_values_to_token_info(token_info)
         self._save_token_info(token_info)
@@ -617,7 +618,7 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
         if state is not None:
             assert token_info["state"] == self.state
 
-        return token_with_info["access_token"]
+        return token_info["access_token"]
 
     def _normalize_scope(self, scope):
         if scope:
@@ -656,8 +657,11 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
         url_components = urlparse(url)
         fragment_s = url_components.fragment
         query_s = url_components.query
-        return dict(i.split('=') for i
-                    in (fragment_s or query_s or url).split('&'))
+        parsed = dict(i.split('=') for i
+                      in (fragment_s or query_s or url).split('&'))
+        if "expires_in" in parsed:
+            parsed["expires_in"] = int(parsed["expires_in"])
+        return parsed
 
 
     def _open_auth_url(self):
@@ -677,18 +681,6 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
 
         return self.parse_response_code(response)
 
-    def _get_auth_response_local_server(self, redirect_port):
-        server = start_local_http_server(redirect_port)
-        self._open_auth_url()
-        server.handle_request()
-
-        if server.auth_token_form is not None:
-            return server.auth_token_form
-        elif server.error is not None:
-            raise SpotifyOauthError("Received error from OAuth server: {}".format(server.error))
-        else:
-            raise SpotifyOauthError("Server listening on localhost has not been accessed")
-
     def get_auth_response(self):
         logger.info('User authentication requires interaction with your '
                     'web browser. Once you enter your credentials and '
@@ -699,17 +691,17 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
         redirect_info = urlparse(self.redirect_uri)
         redirect_host, redirect_port = get_host_port(redirect_info.netloc)
 
-        if redirect_host in ("127.0.0.1", "localhost") and redirect_info.scheme == "http":
-            # Only start a local http server if a port is specified
-            if redirect_port:
-                return self._get_auth_response_local_server(redirect_port)
-            else:
-                logger.warning('Using `%s` as redirect URI without a port. '
-                               'Specify a port (e.g. `%s:8080`) to allow '
-                               'automatic retrieval of authentication code '
-                               'instead of having to copy and paste '
-                               'the URL your browser is redirected to.',
-                               redirect_host, redirect_host)
+        # Implicit Grant tokens are returned in a hash fragment
+        # which is only available to the browser. Therefore, interactive
+        # URL retrival is required.
+        if (redirect_host in ("127.0.0.1", "localhost")
+                and redirect_info.scheme == "http" and redirect_port):
+            logger.warning('Using a local redirect URI with a '
+                           'port, likely expecting automatic '
+                           'retrieval. Due to technical limitations, '
+                           'the authentication token cannot be '
+                           'automatically retrieved and must be '
+                           'copied and pasted.')
 
         logger.info('Paste that url you were directed to in order to '
                     'complete the authorization')
@@ -765,5 +757,6 @@ def start_local_http_server(port, handler=RequestHandler):
     server = HTTPServer(("127.0.0.1", port), handler)
     server.allow_reuse_address = True
     server.auth_code = None
+    server.auth_token_form = None
     server.error = None
     return server
