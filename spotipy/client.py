@@ -63,7 +63,8 @@ class Spotify(object):
         :param oauth_manager:
             SpotifyOAuth object
         :param auth_manager:
-            SpotifyOauth object or SpotifyClientCredentials object
+            SpotifyOauth, SpotifyClientCredentials,
+            or SpotifyImplicitGrant object
         :param proxies:
             Definition of proxies (optional).
             See Requests doc https://2.python-requests.org/en/master/user/advanced/#proxies
