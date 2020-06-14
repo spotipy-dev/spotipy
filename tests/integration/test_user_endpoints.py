@@ -264,7 +264,7 @@ class SpotipyUserApiTests(unittest.TestCase):
     def test_current_user_top_artists(self):
         response = self.spotify.current_user_top_artists()
         items = response['items']
-        self.assertGreater(len(items), 0)
+        self.assertGreaterEqual(len(items), 0)
 
 
 class SpotipyBrowseApiTests(unittest.TestCase):

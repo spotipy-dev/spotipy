@@ -6,6 +6,7 @@ __all__ = ["CLIENT_CREDS_ENV_VARS", "prompt_for_user_token"]
 
 import logging
 import os
+import warnings
 
 import spotipy
 
@@ -29,6 +30,13 @@ def prompt_for_user_token(
     oauth_manager=None,
     show_dialog=False
 ):
+    warnings.warn(
+        "'prompt_for_user_token' is deprecated."
+        "Use the following instead: "
+        "    auth_manager=SpotifyOAuth(scope=scope)"
+        "    spotipy.Spotify(auth_manager=auth_manager)",
+        DeprecationWarning
+    )
     """ prompts the user to login if necessary and returns
         the user token suitable for use with the spotipy.Spotify
         constructor

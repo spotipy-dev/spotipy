@@ -1,8 +1,7 @@
-# shows a user's playlists (need to be authenticated via oauth)
+# Shows a user's playlists (need to be authenticated via oauth)
 
-import sys
 import spotipy
-import spotipy.util as util
+from spotipy.oauth2 import SpotifyOAuth
 
 
 def show_tracks(results):
@@ -14,28 +13,21 @@ def show_tracks(results):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) > 1:
-        username = sys.argv[1]
-    else:
-        print("Whoops, need your username!")
-        print("usage: python user_playlists_contents.py [username]")
-        sys.exit()
+    sp = spotipy.Spotify(auth_manager=SpotifyOAuth())
 
-    token = util.prompt_for_user_token(username)
+    playlists = sp.current_user_playlists()
+    user_id = sp.me()['id']
 
-    if token:
-        sp = spotipy.Spotify(auth=token)
-        playlists = sp.user_playlists(username)
-        for playlist in playlists['items']:
-            if playlist['owner']['id'] == username:
-                print()
-                print(playlist['name'])
-                print('  total tracks', playlist['tracks']['total'])
-                results = sp.playlist(playlist['id'], fields="tracks,next")
-                tracks = results['tracks']
+    for playlist in playlists['items']:
+        if playlist['owner']['id'] == user_id:
+            print()
+            print(playlist['name'])
+            print('  total tracks', playlist['tracks']['total'])
+
+            results = sp.playlist(playlist['id'], fields="tracks,next")
+            tracks = results['tracks']
+            show_tracks(tracks)
+
+            while tracks['next']:
+                tracks = sp.next(tracks)
                 show_tracks(tracks)
-                while tracks['next']:
-                    tracks = sp.next(tracks)
-                    show_tracks(tracks)
-    else:
-        print("Can't get token for", username)

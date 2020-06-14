@@ -3,7 +3,7 @@
 import sys
 
 import spotipy
-import spotipy.util as util
+from spotipy.oauth2 import SpotifyOAuth
 
 if len(sys.argv) > 1:
     username = sys.argv[1]
@@ -12,18 +12,13 @@ else:
     sys.exit()
 
 scope = 'user-top-read'
-token = util.prompt_for_user_token(username, scope)
+sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
 
-if token:
-    sp = spotipy.Spotify(auth=token)
-    sp.trace = False
-    ranges = ['short_term', 'medium_term', 'long_term']
-    for range in ranges:
-        print("range:", range)
-        results = sp.current_user_top_tracks(time_range=range, limit=50)
-        for i, item in enumerate(results['items']):
-            print(i, item['name'], '//', item['artists'][0]['name'])
-        print()
+ranges = ['short_term', 'medium_term', 'long_term']
 
-else:
-    print("Can't get token for", username)
+for sp_range in ranges:
+    print("range:", sp_range)
+    results = sp.current_user_top_tracks(time_range=sp_range, limit=50)
+    for i, item in enumerate(results['items']):
+        print(i, item['name'], '//', item['artists'][0]['name'])
+    print()

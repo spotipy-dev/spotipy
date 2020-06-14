@@ -19,7 +19,7 @@ Solution:
 
  - Verify that you are signed in with the correct account on https://spotify.com
  - Remove your current token: `rm .cache-{userid}`
- - Request a new token by adding `show_dialog=True` to `util.prompt_for_user_token(username,scope=scope,show_dialog=True)`
+ - Request a new token by adding `show_dialog=True` to `spotipy.Spotify(auth_manager=SpotifyOAuth(show_dialog=True))`
  - Check that `spotipy.me()` shows the correct user id
 
 ### 401 Unauthorized

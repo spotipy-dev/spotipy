@@ -1,4 +1,5 @@
 # Changelog
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
@@ -6,16 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-### ...
-
- - ...
-
-## [2.12.1] - 2020-05-28
-
-### Changed
+### Added
 
  - Added two new attributes: error and error_description to `SpotifyOauthError` exception class to show
    authorization/authentication web api errors details.
+ - Allow extending `SpotifyClientCredentials` and `SpotifyOAuth`
+
+### Deprecated
+
+ - Deprecated `util.prompt_for_user_token` in favor of `spotipy.Spotify(auth_manager=SpotifyOAuth())`
 
 ## [2.12.0] - 2020-04-26
 

@@ -14,12 +14,20 @@ Spotipy's full documentation is online at [Spotipy Documentation](http://spotipy
 pip install spotipy
 ```
 
+or upgrade
+
+```bash
+pip install spotipy --upgrade
+```
+
 ## Quick Start
 
 A full set of examples can be found in the [online documentation](http://spotipy.readthedocs.org/) and in the [Spotipy examples directory](https://github.com/plamere/spotipy/tree/master/examples).
 
 To get started, install spotipy and create an app on https://developers.spotify.com/.
 Add your new ID and SECRET to your environment:
+
+### Without user authentication
 
 ```bash
 export SPOTIPY_CLIENT_ID=client_id_here
@@ -28,17 +36,39 @@ export SPOTIPY_CLIENT_SECRET=client_secret_here
 // on Windows, use `SET` instead of `export`
 ```
 
-Then, create a Spotify object and call methods:
-
 ```python
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
-sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
+sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials())
 
 results = sp.search(q='weezer', limit=20)
 for idx, track in enumerate(results['tracks']['items']):
     print(idx, track['name'])
+```
+
+### With user authentication
+
+```bash
+export SPOTIPY_CLIENT_ID=client_id_here
+export SPOTIPY_CLIENT_SECRET=client_secret_here
+export SPOTIPY_REDIRECT_URI=redirect_uri_here
+
+// on Windows, use `SET` instead of `export`
+```
+
+```python
+import spotipy
+from spotipy.oauth2 import SpotifyOAuth
+
+scope = "user-library-read"
+
+sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
+
+results = sp.current_user_saved_tracks()
+for idx, item in enumerate(results['items']):
+    track = item['track']
+    print(idx, track['artists'][0]['name'], " – ", track['name'])
 ```
 
 ## Reporting Issues

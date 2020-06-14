@@ -1,31 +1,18 @@
 # shows artist info for a URN or URL
 
 import spotipy
-import sys
-import spotipy.util as util
+from spotipy.oauth2 import SpotifyOAuth
 
-if len(sys.argv) > 1:
-    username = sys.argv[1]
-else:
-    print("Whoops, need your username!")
-    print("usage: python new_releases.py [username]")
-    sys.exit()
+sp = spotipy.Spotify(auth_manager=SpotifyOAuth())
 
-token = util.prompt_for_user_token(username)
+response = sp.new_releases()
 
-if token:
-    sp = spotipy.Spotify(auth=token)
+while response:
+    albums = response['albums']
+    for i, item in enumerate(albums['items']):
+        print(albums['offset'] + i, item['name'])
 
-    response = sp.new_releases()
-
-    while response:
-        albums = response['albums']
-        for i, item in enumerate(albums['items']):
-            print(albums['offset'] + i, item['name'])
-
-        if albums['next']:
-            response = sp.next(albums)
-        else:
-            response = None
-else:
-    print("Can't get token for", username)
+    if albums['next']:
+        response = sp.next(albums)
+    else:
+        response = None

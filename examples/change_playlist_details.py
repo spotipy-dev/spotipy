@@ -1,9 +1,8 @@
 import argparse
 import logging
-import os
 
 import spotipy
-import spotipy.util as util
+from spotipy.oauth2 import SpotifyOAuth
 
 logger = logging.getLogger('examples.change_playlist_details')
 logging.basicConfig(level='DEBUG')
@@ -13,9 +12,6 @@ scope = 'playlist-modify-public playlist-modify-private'
 
 def get_args():
     parser = argparse.ArgumentParser(description='Modify details of playlist')
-    parser.add_argument('-u', '--username', required=False,
-                        default=os.environ.get('SPOTIPY_CLIENT_USERNAME'),
-                        help='Username id. Defaults to environment var')
     parser.add_argument('-p', '--playlist', required=True,
                         help='Playlist id to alter details')
     parser.add_argument('-n', '--name', required=False,
@@ -38,16 +34,14 @@ def get_args():
 
 def main():
     args = get_args()
-    token = util.prompt_for_user_token(args.username, scope)
-    if token:
-        sp = spotipy.Spotify(auth=token)
-        sp.user_playlist_change_details(
-            args.username, args.playlist, name=args.name,
-            public=args.public or args.private,
-            collaborative=args.collaborative or args.independent,
-            description=args.description)
-    else:
-        logger.error("Can't get token for %s", args.username)
+    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
+    sp.user_playlist_change_details(
+        args.username,
+        args.playlist,
+        name=args.name,
+        public=args.public or args.private,
+        collaborative=args.collaborative or args.independent,
+        description=args.description)
 
 
 if __name__ == '__main__':

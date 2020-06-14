@@ -1,17 +1,16 @@
-# removes tracks from a playlist
+# Removes tracks from a playlist
 
 import pprint
 import sys
 
 import spotipy
-import spotipy.util as util
+from spotipy.oauth2 import SpotifyOAuth
 
-if len(sys.argv) > 3:
-    username = sys.argv[1]
-    playlist_id = sys.argv[2]
-    track_ids_and_positions = sys.argv[3:]
+if len(sys.argv) > 2:
+    playlist_id = sys.argv[1]
+    track_ids_and_positions = sys.argv[2:]
     track_ids = []
-    for t_pos in sys.argv[3:]:
+    for t_pos in sys.argv[2:]:
         tid, pos = t_pos.split(',')
         track_ids.append({"uri": tid, "positions": [int(pos)]})
 else:
@@ -21,13 +20,10 @@ else:
     sys.exit()
 
 scope = 'playlist-modify-public'
-token = util.prompt_for_user_token(username, scope)
+sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
 
-if token:
-    sp = spotipy.Spotify(auth=token)
-    sp.trace = False
-    results = sp.user_playlist_remove_specific_occurrences_of_tracks(
-        username, playlist_id, track_ids)
-    pprint.pprint(results)
-else:
-    print("Can't get token for", username)
+user_id = sp.me()['id']
+
+results = sp.user_playlist_remove_specific_occurrences_of_tracks(
+    user_id, playlist_id, track_ids)
+pprint.pprint(results)
