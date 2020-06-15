@@ -74,4 +74,11 @@ for idx, item in enumerate(results['items']):
 ## Reporting Issues
 
 For common questions please check our [FAQ](FAQ.md).
-If you have suggestions, bugs or other issues specific to this library, file them [here](https://github.com/plamere/spotipy/issues). Or just send a pull request.
+
+You can ask questions about Spotipy on
+[Stack Overflow](http://stackoverflow.com/questions/ask).
+Don’t forget to add the *Spotipy* tag, and any other relevant tags as well, before posting.
+
+If you have suggestions, bugs or other issues specific to this library,
+file them [here](https://github.com/plamere/spotipy/issues).
+Or just send a pull request.
