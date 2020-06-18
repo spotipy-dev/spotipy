@@ -26,11 +26,9 @@ def prompt_for_user_token(
     client_id=None,
     client_secret=None,
     redirect_uri=None,
-    state=None,
     cache_path=None,
     oauth_manager=None,
-    show_dialog=False,
-    implicit_grant_manager=None
+    show_dialog=False
 ):
     warnings.warn(
         "'prompt_for_user_token' is deprecated."
@@ -53,10 +51,9 @@ def prompt_for_user_token(
          - cache_path - path to location to save tokens
          - oauth_manager - Oauth manager object.
          - show_dialog - If true, a login prompt always shows
-         - implicit_grant_manager - Auth manager for Implicit Grant flow
 
     """
-    if not (oauth_manager or implicit_grant_manager):
+    if not oauth_manager:
         if not client_id:
             client_id = os.getenv("SPOTIPY_CLIENT_ID")
 
@@ -88,7 +85,6 @@ def prompt_for_user_token(
         client_id,
         client_secret,
         redirect_uri,
-        state=state,
         scope=scope,
         cache_path=cache_path,
         show_dialog=show_dialog
@@ -98,15 +94,13 @@ def prompt_for_user_token(
     # if not in the cache, the create a new (this will send
     # the user to a web page where they can authorize this app)
 
-    token_info = sp_auth.get_cached_token()
+    token_info = sp_oauth.get_cached_token()
 
-    if token_info:
-        return token_info["access_token"]
-    if sp_oauth:
+    if not token_info:
         code = sp_oauth.get_auth_response()
         token = sp_oauth.get_access_token(code, as_dict=False)
     else:
-        token = sp_auth.get_access_token()
+        return token_info["access_token"]
 
     # Auth'ed API request
     if token:

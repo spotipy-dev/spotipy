@@ -5,6 +5,7 @@ from spotipy import (
     prompt_for_user_token,
     Spotify,
     SpotifyException,
+    SpotifyImplicitGrant
 )
 import unittest
 import requests
@@ -395,3 +396,148 @@ class SpotipyPlayerApiTests(unittest.TestCase):
             after=res['cursors']['before'])
         self.assertLessEqual(len(res['items']), 50)
         self.assertGreater(res['items'][0]['played_at'], played_at)
+
+
+class SpotipyPlaylistApiTestIG(SpotipyPlaylistApiTest):
+    @classmethod
+    def setUpClass(cls):
+        cls.four_tracks = ["spotify:track:6RtPijgfPKROxEzTHNRiDp",
+                           "spotify:track:7IHOIqZUUInxjVkko181PB",
+                           "4VrWlk8IQxevMvERoX08iC",
+                           "http://open.spotify.com/track/3cySlItpiPiIAzU3NyHCJf"]
+        cls.other_tracks = ["spotify:track:2wySlB6vMzCbQrRnNGOYKa",
+                            "spotify:track:29xKs5BAHlmlX1u4gzQAbJ",
+                            "spotify:track:1PB7gRWcvefzu7t3LJLUlf"]
+        cls.username = os.getenv(CCEV['client_username'])
+
+        scope = (
+            'playlist-modify-public '
+            'user-library-read '
+            'user-follow-read '
+            'user-library-modify '
+            'user-read-private '
+            'user-top-read '
+            'user-follow-modify '
+            'user-read-recently-played '
+            'ugc-image-upload '
+            'user-read-playback-state'
+        )
+
+        auth_manager = SpotifyImplicitGrant(username=cls.username, scope=scope)
+
+        cls.spotify = Spotify(auth_manager=auth_manager)
+
+        cls.new_playlist_name = 'spotipy-playlist-test'
+        cls.new_playlist = helpers.get_spotify_playlist(
+            cls.spotify, cls.new_playlist_name, cls.username) or \
+            helpers.create_spotify_playlist(
+                cls.spotify, cls.new_playlist_name, cls.username)
+        cls.new_playlist_uri = cls.new_playlist['uri']
+
+
+class SpotipyLibraryApiTestsIG(SpotipyLibraryApiTests):
+    @classmethod
+    def setUpClass(cls):
+        cls.four_tracks = ["spotify:track:6RtPijgfPKROxEzTHNRiDp",
+                           "spotify:track:7IHOIqZUUInxjVkko181PB",
+                           "4VrWlk8IQxevMvERoX08iC",
+                           "http://open.spotify.com/track/3cySlItpiPiIAzU3NyHCJf"]
+        cls.album_ids = ["spotify:album:6kL09DaURb7rAoqqaA51KU",
+                         "spotify:album:6RTzC0rDbvagTSJLlY7AKl"]
+        cls.username = os.getenv(CCEV['client_username'])
+
+        scope = (
+            'playlist-modify-public '
+            'user-library-read '
+            'user-follow-read '
+            'user-library-modify '
+            'user-read-private '
+            'user-top-read '
+            'user-follow-modify '
+            'user-read-recently-played '
+            'ugc-image-upload '
+            'user-read-playback-state'
+        )
+
+        auth_manager = SpotifyImplicitGrant(username=cls.username, scope=scope)
+
+        cls.spotify = Spotify(auth_manager=auth_manager)
+
+
+class SpotipyUserApiTestsIG(SpotipyUserApiTests):
+    @classmethod
+    def setUpClass(cls):
+        cls.username = os.getenv(CCEV['client_username'])
+
+        scope = (
+            'playlist-modify-public '
+            'user-library-read '
+            'user-follow-read '
+            'user-library-modify '
+            'user-read-private '
+            'user-top-read '
+            'user-follow-modify '
+            'user-read-recently-played '
+            'ugc-image-upload '
+            'user-read-playback-state'
+        )
+
+        auth_manager = SpotifyImplicitGrant(username=cls.username, scope=scope)
+
+        cls.spotify = Spotify(auth_manager=auth_manager)
+
+
+class SpotipyBrowseApiTestsIG(SpotipyBrowseApiTests):
+    @classmethod
+    def setUpClass(cls):
+        username = os.getenv(CCEV['client_username'])
+        os.remove(".cache-" + str(username))  # clear cache
+        auth_manager = SpotifyImplicitGrant(username=username)
+        cls.spotify = Spotify(auth_manager=auth_manager)
+
+
+class SpotipyFollowApiTestsIG(SpotipyFollowApiTests):
+    @classmethod
+    def setUpClass(cls):
+        cls.username = os.getenv(CCEV['client_username'])
+        os.remove(".cache-" + str(cls.username))  # clear cache
+
+        scope = (
+            'playlist-modify-public '
+            'user-library-read '
+            'user-follow-read '
+            'user-library-modify '
+            'user-read-private '
+            'user-top-read '
+            'user-follow-modify '
+            'user-read-recently-played '
+            'ugc-image-upload '
+            'user-read-playback-state'
+        )
+
+        auth_manager = SpotifyImplicitGrant(username=cls.username, scope=scope)
+
+        cls.spotify = Spotify(auth_manager=auth_manager)
+
+
+class SpotipyPlayerApiTestsIG(SpotipyPlayerApiTests):
+    @classmethod
+    def setUpClass(cls):
+        cls.username = os.getenv(CCEV['client_username'])
+
+        scope = (
+            'playlist-modify-public '
+            'user-library-read '
+            'user-follow-read '
+            'user-library-modify '
+            'user-read-private '
+            'user-top-read '
+            'user-follow-modify '
+            'user-read-recently-played '
+            'ugc-image-upload '
+            'user-read-playback-state'
+        )
+
+        auth_manager = SpotifyImplicitGrant(username=cls.username, scope=scope)
+
+        cls.spotify = Spotify(auth_manager=auth_manager)

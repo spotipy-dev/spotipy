@@ -601,7 +601,15 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
     def is_token_expired(self, token_info):
         return is_token_expired(token_info)
 
-    def get_access_token(self, *, state=None, response=None, check_cache=True):
+    def get_access_token(self,
+                         as_dict=False,
+                         *,
+                         state=None,
+                         response=None,
+                         check_cache=True):
+        if as_dict:
+            return NotImplemented
+        
         if check_cache:
             token_info = self.get_cached_token()
             if not (token_info is None or is_token_expired(token_info)):
