@@ -632,7 +632,6 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
 
     def get_access_token(self,
                          as_dict=False,
-                         *,
                          state=None,
                          response=None,
                          check_cache=True):
