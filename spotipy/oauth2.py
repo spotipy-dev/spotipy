@@ -522,6 +522,25 @@ class SpotifyOAuth(SpotifyAuthBase):
 
 
 class SpotifyImplicitGrant(SpotifyAuthBase):
+    """ Implements Implicit Grant Flow for client apps
+
+    This auth manager enables *user and non-user* endpoints with only
+    a client secret, redirect uri, and username. The user will need to
+    copy and paste a URI from the browser every hour.
+
+    Security Advisory
+    -----------------
+    The Implicit Grant Flow is part of the
+    [OAuth 2.0 standard](https://oauth.net/2/grant-types/implicit/).
+    It is intended for client-side (running in browser or a native app)
+    interactions where the client secret would have to be hard-coded and
+    exposed. OAuth no longer recommends its use because sensitive
+    info (the auth token) can be yanked from the browser address bar or
+    history, instead recommending the Auth Code flow with PKCE. However,
+    Spotify [does not support PKCE](https://community.spotify.com/t5/Spotify-for-Developers/Authentication-API-failing-in-production-right-now/m-p/4960693/highlight/true#M234),
+    so Implicit Grant is the only viable options for client-side Spotify
+    API requests.
+    """
     OAUTH_AUTHORIZE_URL = "https://accounts.spotify.com/authorize"
 
     def __init__(self,
@@ -531,11 +550,21 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
                  scope=None,
                  cache_path=None,
                  username=None,
-                 show_dialog=False,
-                 requests_session=True,
-                 requests_timeout=None):
-        super(SpotifyImplicitGrant, self).__init__(requests_session)
+                 show_dialog=False):
+        """ Creates Auth Manager using the Implicit Grant flow
 
+        **See help(SpotifyImplictGrant) for Security Advisory**
+
+        Parameters
+        ----------
+        * client_id: Must be supplied or set as environment variable
+        * redirect_uri: Must be supplied or set as environment variable
+        * state: May be supplied, no verification is performed
+        * scope: May be supplied, intuitively converted to proper format
+        * cache_path: May be supplied, will otherwise be generated
+        * username: Must be supplied or set as environment variable
+        * show_dialog: Interpreted as boolean
+        """
         self.client_id = client_id
         self.redirect_uri = redirect_uri
         self.state = state
@@ -544,8 +573,8 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
             CLIENT_CREDS_ENV_VARS["client_username"]
         )
         self.scope = self._normalize_scope(scope)
-        self.requests_timeout = requests_timeout
         self.show_dialog = show_dialog
+        self._session = None  # As to not break inherited __del__
 
     def get_cached_token(self):
         """ Gets a cached auth token
@@ -607,6 +636,15 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
                          state=None,
                          response=None,
                          check_cache=True):
+        """ Gets Auth Token from cache (preferred) or user interaction
+
+        Parameters
+        ----------
+        * as_dict: cannot be True, included for tests compatability
+        * state (keyword): May be supplied, overrides self.state
+        * response (kw): URI with token, can break expiration checks
+        * check_cache (kw): Interpreted as boolean
+        """
         if as_dict:
             return NotImplemented
         
@@ -617,7 +655,8 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
 
         if response:
             token_info = self.parse_response_code(response)
-        token_info = self.get_auth_response()
+        if not token_info:
+            token_info = self.get_auth_response(state)
         token_info = self._add_custom_values_to_token_info(token_info)
         self._save_token_info(token_info)
 
@@ -636,8 +675,7 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
             return None
 
     def get_authorize_url(self, state=None):
-        """ Gets the URL to use to authorize this app
-        """
+        """ Gets the URL to use to authorize this app """
         payload = {
             "client_id": self.client_id,
             "response_type": "token",
@@ -657,11 +695,7 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
         return "%s?%s" % (self.OAUTH_AUTHORIZE_URL, urlparams)
 
     def parse_response_code(self, url):
-        """ Parse the response code in the given response url
-
-            Parameters:
-                - url - the response url
-        """
+        """ Parse the response code in the given response url """
         url_components = urlparse(url)
         fragment_s = url_components.fragment
         query_s = url_components.query
@@ -672,16 +706,16 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
         return parsed
 
 
-    def _open_auth_url(self):
-        auth_url = self.get_authorize_url()
+    def _open_auth_url(self, state=None):
+        auth_url = self.get_authorize_url(state)
         try:
             webbrowser.open(auth_url)
             logger.info("Opened %s in your browser", auth_url)
         except webbrowser.Error:
             logger.error("Please navigate here: %s", auth_url)
 
-    def _get_auth_response_interactive(self):
-        self._open_auth_url()
+    def _get_auth_response_interactive(self, state=None):
+        self._open_auth_url(state)
         try:
             response = raw_input("Enter the URL you were redirected to: ")
         except NameError:
@@ -689,7 +723,8 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
 
         return self.parse_response_code(response)
 
-    def get_auth_response(self):
+    def get_auth_response(self, state=None):
+        """ Gets a new auth **token** with user interaction """
         logger.info('User authentication requires interaction with your '
                     'web browser. Once you enter your credentials and '
                     'give authorization, you will be redirected to '
@@ -713,7 +748,7 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
 
         logger.info('Paste that url you were directed to in order to '
                     'complete the authorization')
-        return self._get_auth_response_interactive()
+        return self._get_auth_response_interactive(state)
 
     def _add_custom_values_to_token_info(self, token_info):
         """
