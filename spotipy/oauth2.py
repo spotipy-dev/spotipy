@@ -537,7 +537,7 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
     exposed. OAuth no longer recommends its use because sensitive
     info (the auth token) can be yanked from the browser address bar or
     history, instead recommending the Auth Code flow with PKCE. However,
-    Spotify [does not support PKCE](https://community.spotify.com/t5/Spotify-for-Developers/Authentication-API-failing-in-production-right-now/m-p/4960693/highlight/true#M234),
+    Spotify [does not support PKCE](https://community.spotify.com/t5/Spotify-for-Developers/Authentication-API-failing-in-production-right-now/m-p/4960693/highlight/true#M234), <!---# noqa: E501-->
     so Implicit Grant is the only viable options for client-side Spotify
     API requests.
     """
