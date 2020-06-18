@@ -647,7 +647,7 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
         """
         if as_dict:
             return NotImplemented
-        
+
         if check_cache:
             token_info = self.get_cached_token()
             if not (token_info is None or is_token_expired(token_info)):
@@ -704,7 +704,6 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
         if "expires_in" in parsed:
             parsed["expires_in"] = int(parsed["expires_in"])
         return parsed
-
 
     def _open_auth_url(self, state=None):
         auth_url = self.get_authorize_url(state)
