@@ -13,11 +13,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
  user authentication without a client secret but sacrifices the ability
    to refresh the token without user input. (However, read the class
    docstring for security advisory.)
-
-## [2.12.1] - 2020-05-28
-
-### Changed
-
  - Added two new attributes: error and error_description to `SpotifyOauthError` exception class to show
    authorization/authentication web api errors details.
  - Allow extending `SpotifyClientCredentials` and `SpotifyOAuth`
