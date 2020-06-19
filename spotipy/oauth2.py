@@ -639,10 +639,10 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
 
         Parameters
         ----------
-        * as_dict: cannot be True, included for tests compatability
-        * state (keyword): May be supplied, overrides self.state
-        * response (kw): URI with token, can break expiration checks
-        * check_cache (kw): Interpreted as boolean
+        * as_dict: **DO NOT USE**, included for tests compatability
+        * state: May be supplied, overrides self.state
+        * response: URI with token, can break expiration checks
+        * check_cache: Interpreted as boolean
         """
         if as_dict:
             return NotImplemented
