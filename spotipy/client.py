@@ -339,18 +339,20 @@ class Spotify(object):
         trid = self._get_id("album", album_id)
         return self._get("albums/" + trid)
 
-    def album_tracks(self, album_id, limit=50, offset=0):
+    def album_tracks(self, album_id, limit=50, offset=0, market=None):
         """ Get Spotify catalog information about an album's tracks
 
             Parameters:
                 - album_id - the album ID, URI or URL
                 - limit  - the number of items to return
                 - offset - the index of the first item to return
+                - market - an ISO 3166-1 alpha-2 country code.
+
         """
 
         trid = self._get_id("album", album_id)
         return self._get(
-            "albums/" + trid + "/tracks/", limit=limit, offset=offset
+            "albums/" + trid + "/tracks/", limit=limit, offset=offset, market=market
         )
 
     def albums(self, albums):
