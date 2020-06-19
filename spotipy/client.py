@@ -346,6 +346,8 @@ class Spotify(object):
                 - album_id - the album ID, URI or URL
                 - limit  - the number of items to return
                 - offset - the index of the first item to return
+                - market - an ISO 3166-1 alpha-2 country code.
+
         """
 
         trid = self._get_id("album", album_id)

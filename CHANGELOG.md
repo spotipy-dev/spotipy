@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
  - Added two new attributes: error and error_description to `SpotifyOauthError` exception class to show
    authorization/authentication web api errors details.
  - Allow extending `SpotifyClientCredentials` and `SpotifyOAuth`
+ - Added the market paramter to `album_tracks`
 
 ### Deprecated
 
