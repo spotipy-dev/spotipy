@@ -316,6 +316,18 @@ class SpotifyOAuth(SpotifyAuthBase):
 
         return "%s?%s" % (self.OAUTH_AUTHORIZE_URL, urlparams)
 
+    def parse_response_code(self, url):
+        """ Parse the response code in the given response url
+
+            Parameters:
+                - url - the response url
+        """
+        url_split = url.split("?code=")
+        if len(url_split) <= 1:
+            return url
+        else:
+            return url_split[1].split("&")[0]
+
     @staticmethod
     def parse_oauth_response_url(url):
         query_s = urlparse(url).query
@@ -388,6 +400,11 @@ class SpotifyOAuth(SpotifyAuthBase):
         logger.info('Paste that url you were directed to in order to '
                     'complete the authorization')
         return self._get_auth_response_interactive()
+
+    def get_authorization_code(self, response=None):
+        if response:
+            return self.parse_response_code(response)
+        return self.get_auth_response()
 
     def get_access_token(self, code=None, as_dict=True, check_cache=True):
         """ Gets the access token for the app given the code
