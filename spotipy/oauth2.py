@@ -322,11 +322,11 @@ class SpotifyOAuth(SpotifyAuthBase):
             Parameters:
                 - url - the response url
         """
-        url_split = url.split("?code=")
-        if len(url_split) <= 1:
+        _, code, _ = self.parse_oauth_response_url(url)
+        if code is None:
             return url
         else:
-            return url_split[1].split("&")[0]
+            return code
 
     @staticmethod
     def parse_oauth_response_url(url):
