@@ -119,7 +119,7 @@ class OAuthCacheTest(unittest.TestCase):
         self.assertTrue(fi.write.called)
 
 
-class TestSpotifyOAuth(unittest.TestCase):
+class TestSpotifyOAuthGetAuthorizeUrl(unittest.TestCase):
 
     def test_get_authorize_url_doesnt_pass_state_by_default(self):
         oauth = SpotifyOAuth("CLID", "CLISEC", "REDIR")
@@ -167,6 +167,46 @@ class TestSpotifyOAuth(unittest.TestCase):
         parsed_url = urllibparse.urlparse(url)
         parsed_qs = urllibparse.parse_qs(parsed_url.query)
         self.assertTrue(parsed_qs['show_dialog'])
+
+
+class TestSpotifyOAuthGetAuthResponseInteractive(unittest.TestCase):
+
+    @patch('spotipy.oauth2.webbrowser')
+    @patch(
+        'spotipy.oauth2.SpotifyOAuth._get_user_input',
+        return_value="redir.io?code=abcde"
+    )
+    def test_get_auth_response_without_state(self, webbrowser_mock, get_user_input_mock):
+        oauth = SpotifyOAuth("CLID", "CLISEC", "redir.io")
+        code = oauth.get_auth_response()
+        self.assertEqual(code, "abcde")
+
+    @patch('spotipy.oauth2.webbrowser')
+    @patch(
+        'spotipy.oauth2.SpotifyOAuth._get_user_input',
+        return_value="redir.io?code=abcde&state=wxyz"
+    )
+    def test_get_auth_response_with_consistent_state(self, webbrowser_mock, get_user_input_mock):
+        oauth = SpotifyOAuth("CLID", "CLISEC", "redir.io", state='wxyz')
+        code = oauth.get_auth_response()
+        self.assertEqual(code, "abcde")
+
+    @patch('spotipy.oauth2.webbrowser')
+    @patch(
+        'spotipy.oauth2.SpotifyOAuth._get_user_input',
+        return_value="redir.io?code=abcde&state=someotherstate"
+    )
+    def test_get_auth_response_with_inconsistent_state(self, webbrowser_mock, get_user_input_mock):
+        oauth = SpotifyOAuth("CLID", "CLISEC", "redir.io", state='wxyz')
+
+        with self.assertRaisesRegexp(
+            SpotifyOauthError,
+            "Received inconsistent state from OAuth server."
+        ):
+            oauth.get_auth_response()
+
+
+class TestSpotifyClientCredentials(unittest.TestCase):
 
     def test_spotify_client_credentials_get_access_token(self):
         oauth = SpotifyClientCredentials(client_id='ID', client_secret='SECRET')

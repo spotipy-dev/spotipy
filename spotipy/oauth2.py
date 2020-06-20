@@ -322,11 +322,24 @@ class SpotifyOAuth(SpotifyAuthBase):
             Parameters:
                 - url - the response url
         """
-        url_split = url.split("?code=")
-        if len(url_split) <= 1:
+        _, code, _ = self.parse_oauth_response_url(url)
+        if code is None:
             return url
         else:
-            return url_split[1].split("&")[0]
+            return code
+
+    @staticmethod
+    def parse_oauth_response_url(url):
+        query_s = urlparse(url).query
+        form = dict(parse_qsl(query_s))
+        return tuple(form.get(param) for param in ['state', 'code', 'error'])
+
+    @staticmethod
+    def _get_user_input(prompt):
+        try:
+            return raw_input(prompt)
+        except NameError:
+            return input(prompt)
 
     def _make_authorization_headers(self):
         return _make_authorization_headers(self.client_id, self.client_secret)
@@ -341,17 +354,19 @@ class SpotifyOAuth(SpotifyAuthBase):
 
     def _get_auth_response_interactive(self):
         self._open_auth_url()
-        try:
-            response = raw_input("Enter the URL you were redirected to: ")
-        except NameError:
-            response = input("Enter the URL you were redirected to: ")
-
-        return self.parse_response_code(response)
+        response = SpotifyOAuth._get_user_input("Enter the URL you were redirected to: ")
+        state, code, _ = SpotifyOAuth.parse_oauth_response_url(response)
+        if self.state is not None and self.state != state:
+            raise SpotifyOauthError("Received inconsistent state from OAuth server.")
+        return code
 
     def _get_auth_response_local_server(self, redirect_port):
         server = start_local_http_server(redirect_port)
         self._open_auth_url()
         server.handle_request()
+
+        if self.state is not None and server.state != self.state:
+            raise SpotifyOauthError("Received inconsistent state from OAuth server.")
 
         if server.auth_code is not None:
             return server.auth_code
@@ -420,7 +435,7 @@ class SpotifyOAuth(SpotifyAuthBase):
 
         payload = {
             "redirect_uri": self.redirect_uri,
-            "code": code or self.get_authorization_code(),
+            "code": code or self.get_auth_response(),
             "grant_type": "authorization_code",
         }
         if self.scope:
@@ -507,21 +522,19 @@ class SpotifyOAuth(SpotifyAuthBase):
 
 class RequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
-        query_s = urlparse(self.path).query
-        form = dict(parse_qsl(query_s))
+        state, auth_code, error = SpotifyOAuth.parse_oauth_response_url(self.path)
+        self.server.state = state
+        self.server.auth_code = auth_code
+        self.server.error = error
 
         self.send_response(200)
         self.send_header("Content-Type", "text/html")
         self.end_headers()
 
-        if "code" in form:
-            self.server.auth_code = form["code"]
-            self.server.error = None
+        if self.server.auth_code:
             status = "successful"
-        elif "error" in form:
-            self.server.error = form["error"]
-            self.server.auth_code = None
-            status = "failed ({})".format(form["error"])
+        elif self.server.error:
+            status = "failed ({})".format(self.server.error)
         else:
             self._write("<html><body><h1>Invalid request</h1></body></html>")
             return
