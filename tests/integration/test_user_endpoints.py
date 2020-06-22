@@ -429,4 +429,3 @@ class SpotipyImplicitGrantTests(unittest.TestCase):
         c_user = self.spotify.current_user()
         user = self.spotify.user(c_user['id'])
         self.assertEqual(c_user['display_name'], user['display_name'])
-        
