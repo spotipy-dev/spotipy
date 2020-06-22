@@ -7,6 +7,7 @@ import six.moves.urllib.parse as urllibparse
 
 from spotipy import SpotifyOAuth, SpotifyImplicitGrant
 from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOauthError
+from spotipy.oauth2 import SpotifyStateError
 
 try:
     import unittest.mock as mock
@@ -203,10 +204,7 @@ class TestSpotifyOAuthGetAuthResponseInteractive(unittest.TestCase):
     def test_get_auth_response_with_inconsistent_state(self, webbrowser_mock, get_user_input_mock):
         oauth = SpotifyOAuth("CLID", "CLISEC", "redir.io", state='wxyz')
 
-        with self.assertRaisesRegexp(
-            SpotifyOauthError,
-            "Received inconsistent state from OAuth server."
-        ):
+        with self.assertRaises(SpotifyStateError):
             oauth.get_auth_response()
 
 

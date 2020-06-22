@@ -5,7 +5,8 @@ __all__ = [
     "SpotifyClientCredentials",
     "SpotifyOAuth",
     "SpotifyOauthError",
-    "SpotifyImplicitGrant"
+    "SpotifyStateError",
+    "SpotifyImplicitGrant",
 ]
 
 import base64
@@ -30,10 +31,24 @@ logger = logging.getLogger(__name__)
 
 
 class SpotifyOauthError(Exception):
+    """ Error during Auth Code or Implicit Grant flow """
     def __init__(self, message, error=None, error_description=None, *args, **kwargs):
         self.error = error
         self.error_description = error_description
+        self.__dict__.update(kwargs)
         super(SpotifyOauthError, self).__init__(message, *args, **kwargs)
+
+
+class SpotifyStateError(SpotifyOauthError):
+    """ The state sent and state recieved were different """
+    def __init__(self, local_state=None, remote_state=None, message=None,
+                 error=None, error_description=None, *args, **kwargs):
+        if not message:
+            message = ("Expected " + local_state + " but recieved "
+                       + remote_state)
+        super(SpotifyOauthError, self).__init__(message, error,
+                                                error_description, *args,
+                                                **kwargs)
 
 
 def _make_authorization_headers(client_id, client_secret):
@@ -94,6 +109,13 @@ class SpotifyAuthBase(object):
     @redirect_uri.setter
     def redirect_uri(self, val):
         self._redirect_uri = _ensure_value(val, "redirect_uri")
+
+    @staticmethod
+    def _get_user_input(prompt):
+        try:
+            return raw_input(prompt)
+        except NameError:
+            return input(prompt)
 
     def __del__(self):
         """Make sure the connection (pool) gets closed"""
@@ -323,24 +345,21 @@ class SpotifyOAuth(SpotifyAuthBase):
             Parameters:
                 - url - the response url
         """
-        _, code, _ = self.parse_oauth_response_url(url)
+        _, code = self.parse_auth_response_url(url)
         if code is None:
             return url
         else:
             return code
 
     @staticmethod
-    def parse_oauth_response_url(url):
+    def parse_auth_response_url(url):
         query_s = urlparse(url).query
         form = dict(parse_qsl(query_s))
-        return tuple(form.get(param) for param in ['state', 'code', 'error'])
-
-    @staticmethod
-    def _get_user_input(prompt):
-        try:
-            return raw_input(prompt)
-        except NameError:
-            return input(prompt)
+        if "error" in form:
+            raise SpotifyOauthError("Received error from auth server: "
+                                    "{}".format(form["error"]),
+                                    error=form["error"])
+        return tuple(form.get(param) for param in ["state", "code"])
 
     def _make_authorization_headers(self):
         return _make_authorization_headers(self.client_id, self.client_secret)
@@ -356,9 +375,9 @@ class SpotifyOAuth(SpotifyAuthBase):
     def _get_auth_response_interactive(self):
         self._open_auth_url()
         response = SpotifyOAuth._get_user_input("Enter the URL you were redirected to: ")
-        state, code, _ = SpotifyOAuth.parse_oauth_response_url(response)
+        state, code = SpotifyOAuth.parse_auth_response_url(response)
         if self.state is not None and self.state != state:
-            raise SpotifyOauthError("Received inconsistent state from OAuth server.")
+            raise SpotifyStateError(self.state, state)
         return code
 
     def _get_auth_response_local_server(self, redirect_port):
@@ -367,7 +386,7 @@ class SpotifyOAuth(SpotifyAuthBase):
         server.handle_request()
 
         if self.state is not None and server.state != self.state:
-            raise SpotifyOauthError("Received inconsistent state from OAuth server.")
+            raise SpotifyStateError(self.state, server.state)
 
         if server.auth_code is not None:
             return server.auth_code
@@ -638,7 +657,7 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
 
         Parameters
         ----------
-        * state: May be supplied, overrides self.state
+        * state: May be given, overrides (without changing) self.state
         * response: URI with token, can break expiration checks
         * check_cache: Interpreted as boolean
         """
@@ -648,16 +667,11 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
                 return token_info["access_token"]
 
         if response:
-            token_info = self.parse_response_code(response)
-        if not token_info:
+            token_info = self.parse_response_token(response)
+        else:
             token_info = self.get_auth_response(state)
         token_info = self._add_custom_values_to_token_info(token_info)
         self._save_token_info(token_info)
-
-        if state is None:
-            state = self.state
-        if state is not None:
-            assert token_info["state"] == self.state
 
         return token_info["access_token"]
 
@@ -688,16 +702,31 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
 
         return "%s?%s" % (self.OAUTH_AUTHORIZE_URL, urlparams)
 
-    def parse_response_code(self, url):
+    def parse_response_token(self, url, state=None):
         """ Parse the response code in the given response url """
+        remote_state, token, t_type, exp_in = self.parse_auth_response_url(url)
+        if state is None:
+            state = self.state
+        if state is not None and remote_state != state:
+            raise SpotifyStateError(state, remote_state)
+        return {"access_token": token, "token_type": t_type,
+                "expires_in": exp_in, "state": state}
+
+    @staticmethod
+    def parse_auth_response_url(url):
         url_components = urlparse(url)
         fragment_s = url_components.fragment
         query_s = url_components.query
-        parsed = dict(i.split('=') for i
-                      in (fragment_s or query_s or url).split('&'))
-        if "expires_in" in parsed:
-            parsed["expires_in"] = int(parsed["expires_in"])
-        return parsed
+        form = dict(i.split('=') for i
+                    in (fragment_s or query_s or url).split('&'))
+        if "error" in form:
+            raise SpotifyOauthError("Received error from auth server: "
+                                    "{}".format(form["error"]),
+                                    state=form["state"])
+        if "expires_in" in form:
+            form["expires_in"] = int(form["expires_in"])
+        return tuple(form.get(param) for param in ["state", "access_token",
+                                                   "token_type", "expires_in"])
 
     def _open_auth_url(self, state=None):
         auth_url = self.get_authorize_url(state)
@@ -706,15 +735,6 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
             logger.info("Opened %s in your browser", auth_url)
         except webbrowser.Error:
             logger.error("Please navigate here: %s", auth_url)
-
-    def _get_auth_response_interactive(self, state=None):
-        self._open_auth_url(state)
-        try:
-            response = raw_input("Enter the URL you were redirected to: ")
-        except NameError:
-            response = input("Enter the URL you were redirected to: ")
-
-        return self.parse_response_code(response)
 
     def get_auth_response(self, state=None):
         """ Gets a new auth **token** with user interaction """
@@ -726,7 +746,6 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
 
         redirect_info = urlparse(self.redirect_uri)
         redirect_host, redirect_port = get_host_port(redirect_info.netloc)
-
         # Implicit Grant tokens are returned in a hash fragment
         # which is only available to the browser. Therefore, interactive
         # URL retrival is required.
@@ -739,9 +758,12 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
                            'automatically retrieved and must be '
                            'copied and pasted.')
 
+        self._open_auth_url(state)
         logger.info('Paste that url you were directed to in order to '
                     'complete the authorization')
-        return self._get_auth_response_interactive(state)
+        response = SpotifyImplicitGrant._get_user_input("Enter the URL you "
+                                                        "were redirected to: ")
+        return self.parse_response_token(response, state)
 
     def _add_custom_values_to_token_info(self, token_info):
         """
@@ -755,10 +777,14 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
 
 class RequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
-        state, auth_code, error = SpotifyOAuth.parse_oauth_response_url(self.path)
-        self.server.state = state
-        self.server.auth_code = auth_code
-        self.server.error = error
+        self.server.auth_code = self.server.error = None
+        try:
+            state, auth_code = SpotifyOAuth.parse_auth_response_url(self.path)
+            self.server.state = state
+            self.server.auth_code = auth_code
+        except SpotifyOauthError as err:
+            self.server.state = err.state
+            self.server.error = err.error
 
         self.send_response(200)
         self.send_header("Content-Type", "text/html")

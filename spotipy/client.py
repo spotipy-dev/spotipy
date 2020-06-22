@@ -139,11 +139,13 @@ class Spotify(object):
     def _auth_headers(self):
         if self._auth:
             return {"Authorization": "Bearer {0}".format(self._auth)}
-        elif self.auth_manager:
-            token = self.auth_manager.get_access_token(as_dict=False)
-            return {"Authorization": "Bearer {0}".format(token)}
-        else:
+        if not self.auth_manager:
             return {}
+        try:
+            token = self.auth_manager.get_access_token(as_dict=False)
+        except TypeError:
+            token = self.auth_manager.get_access_token()
+        return {"Authorization": "Bearer {0}".format(token)}
 
     def _internal_call(self, method, url, payload, params):
         args = dict(params=params)
