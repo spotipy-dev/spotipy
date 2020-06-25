@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+// Add your changes here and then delete this line
+
+## [2.13.0] - 2020-06-25
+
 ### Added
 
  - Added `SpotifyImplicitGrant` as an auth manager option. It provides
