@@ -9,8 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+ - Added `SpotifyImplicitGrant` as an auth manager option. It provides
+ user authentication without a client secret but sacrifices the ability
+   to refresh the token without user input. (However, read the class
+   docstring for security advisory.)
+ - Added built-in verification of the `state` query parameter
  - Added two new attributes: error and error_description to `SpotifyOauthError` exception class to show
    authorization/authentication web api errors details.
+ - Added `SpotifyStateError` subclass of `SpotifyOauthError`
  - Allow extending `SpotifyClientCredentials` and `SpotifyOAuth`
  - Added the market paramter to `album_tracks`
 

@@ -26,7 +26,6 @@ def prompt_for_user_token(
     client_id=None,
     client_secret=None,
     redirect_uri=None,
-    state=None,
     cache_path=None,
     oauth_manager=None,
     show_dialog=False
@@ -51,6 +50,7 @@ def prompt_for_user_token(
          - redirect_uri - the redirect URI of your app
          - cache_path - path to location to save tokens
          - oauth_manager - Oauth manager object.
+         - show_dialog - If true, a login prompt always shows
 
     """
     if not oauth_manager:
@@ -85,7 +85,6 @@ def prompt_for_user_token(
         client_id,
         client_secret,
         redirect_uri,
-        state=state,
         scope=scope,
         cache_path=cache_path,
         show_dialog=show_dialog
