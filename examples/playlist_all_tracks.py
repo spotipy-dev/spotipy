@@ -20,4 +20,4 @@ for item in tracks:
 	if item["is_local"] == True:
 		tracks.remove(item)
 		
-return tracks
+pp(tracks)
