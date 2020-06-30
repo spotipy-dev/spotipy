@@ -1,5 +1,4 @@
 # get all non-local tracks of a playlist
-from pprint import pprint as pp
 from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy
 
@@ -20,9 +19,12 @@ while result['next']:
 	tracks.extend(result['items'])
 
 # remove all local songs
+i = 0 # just for counting how many tracks are local
 for item in tracks:
 	if item['is_local']:
 		tracks.remove(item)
+		i += 1
+
 
 # print result
-pp(tracks)
+print("Playlist length: " + str(len(tracks)) + "\nExcluding: " + str(i))
