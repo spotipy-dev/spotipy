@@ -174,6 +174,18 @@ class AuthTestSpotipy(unittest.TestCase):
         self.assertTrue('artists' in results)
         self.assertTrue(len(results['artists']['items']) > 0)
         self.assertTrue(results['artists']['items'][0]['name'] == 'Weezer')
+    
+    def test_artist_search_with_markets(self):
+        results = self.spotify.search(q='weezer', type='artist', market=['GB','US','AU'])
+        self.assertTrue('artists' in results)
+        self.assertTrue(len(results['artists']['items']) > 0)
+        self.assertTrue(results['artists']['items'][0]['name'] == 'Weezer')
+    
+    def test_artist_search_with_all_markets(self):
+        results = self.spotify.search(q='weezer', type='artist', market='ALL')
+        self.assertTrue('artists' in results)
+        self.assertTrue(len(results['artists']['items']) > 0)
+        self.assertTrue(results['artists']['items'][0]['name'] == 'Weezer')
 
     def test_artist_albums(self):
         results = self.spotify.artist_albums(self.weezer_urn)

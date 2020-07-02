@@ -34,6 +34,7 @@ class Spotify(object):
     """
     max_retries = 3
     default_retry_codes = (429, 500, 502, 503, 504)
+    country_codes=["AD","AR","AU","AT","BE","BO","BR","BG","CA","CL","CO","CR","CY","CZ","DK","DO","EC","SV","EE","FI","FR","DE","GR","GT","HN","HK","HU","IS","ID","IE","IT","JP","LV","LI","LT","LU","MY","MT","MX","MC","NL","NZ","NI","NO","PA","PY","PE","PH","PL","PT","SG","ES","SK","SE","CH","TW","TR","GB","US","UY"]
 
     def __init__(
         self,
@@ -447,7 +448,7 @@ class Spotify(object):
         tlist = [self._get_id("episode", e) for e in episodes]
         return self._get("episodes/?ids=" + ",".join(tlist), market=market)
 
-    def search(self, q, limit=10, offset=0, type="track", market=None):
+    def search(self, q, limit=10, offset=0, type="track", market=None, n=None):
         """ searches for an item
 
             Parameters:
@@ -458,12 +459,76 @@ class Spotify(object):
                 - type - the type of item to return. One of 'artist', 'album',
                          'track', 'playlist', 'show', or 'episode'
                 - market - An ISO 3166-1 alpha-2 country code or the string
-                           from_token.
+                           from_token. Can supply list of markets. Pass "ALL" for to search all country codes.
+                - n - return as soon as n options are found
         """
-        return self._get(
-            "search", q=q, limit=limit, offset=offset, type=type, market=market
+        # if string passed and equals "ALL"
+        if (isinstance(market,str) and market.upper() == "ALL"):
+            warnings.warn(
+            "Searching all markets is poorly performing. Try to limit search to a list of markets or a single market.",
+            UserWarning,
         )
+            results = {
+                type + 's': {
+                    'href': [],
+                    'items': [],
+                    'limit': limit,
+                    'next': None,
+                    'offset': 0,
+                    'previous': None,
+                    'total': 0
+                }
+            }
+            for country in self.country_codes:
+                result = self._get(
+                    "search", q=q, limit=limit, offset=offset, type=type, market=country
+                )
+                results[type + 's']['href'].append(result[type + 's']['href'])
+                results[type + 's']['items'] += result[type + 's']['items']
+                results[type + 's']['total'] += result[type + 's']['total']
+                if n and len(results[type + 's']['items']) >= n:
+                    return results
 
+            # raise warning
+            return results
+
+        # if list is passed
+        elif isinstance(market,list):
+            warnings.warn(
+            "Searching multiple markets is poorly performing. Try to limit search to a single market.",
+            UserWarning,
+        )
+            results = {
+                type + 's': {
+                    'href': [],
+                    'items': [],
+                    'limit': limit,
+                    'next': None,
+                    'offset': 0,
+                    'previous': None,
+                    'total': 0
+                }
+            }
+            for country in market:
+                result = self._get(
+                    "search", q=q, limit=limit, offset=offset, type=type, market=country
+                )
+                results[type + 's']['href'].append(result[type + 's']['href'])
+                results[type + 's']['items'] += result[type + 's']['items']
+                results[type + 's']['total'] += result[type + 's']['total']
+                if n and len(results[type + 's']['items']) >= n:
+                    return results
+
+            # raise warning
+            return results
+
+        # handle all other cases
+        else:
+            return self._get(
+                    "search", q=q, limit=limit, offset=offset, type=type, market=market
+                )
+
+               
     def user(self, user):
         """ Gets basic profile information about a Spotify User
 
