@@ -34,7 +34,67 @@ class Spotify(object):
     """
     max_retries = 3
     default_retry_codes = (429, 500, 502, 503, 504)
-    country_codes=["AD","AR","AU","AT","BE","BO","BR","BG","CA","CL","CO","CR","CY","CZ","DK","DO","EC","SV","EE","FI","FR","DE","GR","GT","HN","HK","HU","IS","ID","IE","IT","JP","LV","LI","LT","LU","MY","MT","MX","MC","NL","NZ","NI","NO","PA","PY","PE","PH","PL","PT","SG","ES","SK","SE","CH","TW","TR","GB","US","UY"]
+    country_codes = [
+        "AD",
+        "AR",
+        "AU",
+        "AT",
+        "BE",
+        "BO",
+        "BR",
+        "BG",
+        "CA",
+        "CL",
+        "CO",
+        "CR",
+        "CY",
+        "CZ",
+        "DK",
+        "DO",
+        "EC",
+        "SV",
+        "EE",
+        "FI",
+        "FR",
+        "DE",
+        "GR",
+        "GT",
+        "HN",
+        "HK",
+        "HU",
+        "IS",
+        "ID",
+        "IE",
+        "IT",
+        "JP",
+        "LV",
+        "LI",
+        "LT",
+        "LU",
+        "MY",
+        "MT",
+        "MX",
+        "MC",
+        "NL",
+        "NZ",
+        "NI",
+        "NO",
+        "PA",
+        "PY",
+        "PE",
+        "PH",
+        "PL",
+        "PT",
+        "SG",
+        "ES",
+        "SK",
+        "SE",
+        "CH",
+        "TW",
+        "TR",
+        "GB",
+        "US",
+        "UY"]
 
     def __init__(
         self,
@@ -463,11 +523,11 @@ class Spotify(object):
                 - n - return as soon as n options are found
         """
         # if string passed and equals "ALL"
-        if (isinstance(market,str) and market.upper() == "ALL"):
+        if (isinstance(market, str) and market.upper() == "ALL"):
             warnings.warn(
-            "Searching all markets is poorly performing. Try to limit search to a list of markets or a single market.",
-            UserWarning,
-        )
+                "Searching all markets is poorly performing.",
+                UserWarning,
+            )
             results = {
                 type + 's': {
                     'href': [],
@@ -493,11 +553,11 @@ class Spotify(object):
             return results
 
         # if list is passed
-        elif isinstance(market,list):
+        elif isinstance(market, list):
             warnings.warn(
-            "Searching multiple markets is poorly performing. Try to limit search to a single market.",
-            UserWarning,
-        )
+                "Searching multiple markets is poorly performing.",
+                UserWarning,
+            )
             results = {
                 type + 's': {
                     'href': [],
@@ -525,10 +585,9 @@ class Spotify(object):
         # handle all other cases
         else:
             return self._get(
-                    "search", q=q, limit=limit, offset=offset, type=type, market=market
-                )
+                "search", q=q, limit=limit, offset=offset, type=type, market=market
+            )
 
-               
     def user(self, user):
         """ Gets basic profile information about a Spotify User
 

@@ -32,6 +32,7 @@ logger = logging.getLogger(__name__)
 
 class SpotifyOauthError(Exception):
     """ Error during Auth Code or Implicit Grant flow """
+
     def __init__(self, message, error=None, error_description=None, *args, **kwargs):
         self.error = error
         self.error_description = error_description
@@ -41,6 +42,7 @@ class SpotifyOauthError(Exception):
 
 class SpotifyStateError(SpotifyOauthError):
     """ The state sent and state recieved were different """
+
     def __init__(self, local_state=None, remote_state=None, message=None,
                  error=None, error_description=None, *args, **kwargs):
         if not message:
