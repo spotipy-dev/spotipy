@@ -1583,7 +1583,7 @@ class Spotify(object):
             results[type + 's']['items'] += result[type + 's']['items']
             results[type + 's']['total'] += result[type + 's']['total']
             if total and len(results[type + 's']['items']) >= total:
-                # sice 'items' to only include number of results requested
+                # splice 'items' to only include number of results requested
                 results[type + 's']['items'] = results[type + 's']['items'][:total]
                 return results
         return results
