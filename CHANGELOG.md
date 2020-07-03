@@ -11,8 +11,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
  - Support to search multiple markets at once.
  - Support to search all available Spotify markets.
- - Added two unit tests to test the new feature.
-
 
 ## [2.13.0] - 2020-06-25
 

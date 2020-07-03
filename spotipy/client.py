@@ -508,19 +508,20 @@ class Spotify(object):
         tlist = [self._get_id("episode", e) for e in episodes]
         return self._get("episodes/?ids=" + ",".join(tlist), market=market)
 
-    def search(self, q, limit=10, offset=0, type="track", market=None, n=None):
+    def search(self, q, limit=10, offset=0, type="track", market=None, total=None):
         """ searches for an item
 
             Parameters:
                 - q - the search query (see how to write a query in the
                       official documentation https://developer.spotify.com/documentation/web-api/reference/search/search/)  # noqa
-                - limit  - the number of items to return (min = 1, default = 10, max = 50)
+                - limit  - the number of items to return (min = 1, default = 10, max = 50). If a search is to be done on multiple
+                            markets, then this limit is applied to each market. (e.g. search US, CA, MX each with a limit of 10).
                 - offset - the index of the first item to return
                 - type - the type of item to return. One of 'artist', 'album',
                          'track', 'playlist', 'show', or 'episode'
                 - market - An ISO 3166-1 alpha-2 country code or the string
-                           from_token. Can supply list of markets. Pass "ALL" for to search all country codes.
-                - n - return as soon as n options are found
+                           from_token. Can supply list of markets. Pass "ALL" to search all country codes.
+                - total - the total number of results to return if multiple markets are supplied in the search.
         """
         # if string passed and equals "ALL"
         if (isinstance(market, str) and market.upper() == "ALL"):
@@ -528,29 +529,7 @@ class Spotify(object):
                 "Searching all markets is poorly performing.",
                 UserWarning,
             )
-            results = {
-                type + 's': {
-                    'href': [],
-                    'items': [],
-                    'limit': limit,
-                    'next': None,
-                    'offset': 0,
-                    'previous': None,
-                    'total': 0
-                }
-            }
-            for country in self.country_codes:
-                result = self._get(
-                    "search", q=q, limit=limit, offset=offset, type=type, market=country
-                )
-                results[type + 's']['href'].append(result[type + 's']['href'])
-                results[type + 's']['items'] += result[type + 's']['items']
-                results[type + 's']['total'] += result[type + 's']['total']
-                if n and len(results[type + 's']['items']) >= n:
-                    return results
-
-            # raise warning
-            return results
+            return self._search_multiple_markets(q, limit, offset, type, self.country_codes, total)
 
         # if list is passed
         elif isinstance(market, list):
@@ -558,29 +537,7 @@ class Spotify(object):
                 "Searching multiple markets is poorly performing.",
                 UserWarning,
             )
-            results = {
-                type + 's': {
-                    'href': [],
-                    'items': [],
-                    'limit': limit,
-                    'next': None,
-                    'offset': 0,
-                    'previous': None,
-                    'total': 0
-                }
-            }
-            for country in market:
-                result = self._get(
-                    "search", q=q, limit=limit, offset=offset, type=type, market=country
-                )
-                results[type + 's']['href'].append(result[type + 's']['href'])
-                results[type + 's']['items'] += result[type + 's']['items']
-                results[type + 's']['total'] += result[type + 's']['total']
-                if n and len(results[type + 's']['items']) >= n:
-                    return results
-
-            # raise warning
-            return results
+            return self._search_multiple_markets(q, limit, offset, type, market, total)
 
         # handle all other cases
         else:
@@ -1605,3 +1562,30 @@ class Spotify(object):
 
     def _get_uri(self, type, id):
         return "spotify:" + type + ":" + self._get_id(type, id)
+    
+    def _search_multiple_markets(self, q, limit, offset, type, markets, total):
+        results = {
+                type + 's': {
+                    'href': [],
+                    'items': [],
+                    'limit': limit,
+                    'next': None,
+                    'offset': 0,
+                    'previous': None,
+                    'total': 0
+                }
+            }
+        for country in markets:
+            result = self._get(
+                "search", q=q, limit=limit, offset=offset, type=type, market=country
+            )
+            results[type + 's']['href'].append(result[type + 's']['href'])
+            results[type + 's']['items'] += result[type + 's']['items']
+            results[type + 's']['total'] += result[type + 's']['total']
+            if total and len(results[type + 's']['items']) >= total:
+                # sice 'items' to only include number of results requested
+                results[type + 's']['items'] = results[type + 's']['items'][:total]
+                return results
+        
+        return results
+

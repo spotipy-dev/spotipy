@@ -175,17 +175,30 @@ class AuthTestSpotipy(unittest.TestCase):
         self.assertTrue(len(results['artists']['items']) > 0)
         self.assertTrue(results['artists']['items'][0]['name'] == 'Weezer')
 
-    def test_artist_search_with_markets(self):
-        results = self.spotify.search(q='weezer', type='artist', market=['GB', 'US', 'AU'])
-        self.assertTrue('artists' in results)
-        self.assertTrue(len(results['artists']['items']) > 0)
-        self.assertTrue(results['artists']['items'][0]['name'] == 'Weezer')
+    def test_artist_search_with_multiple_markets(self):
+        TOTAL=3
+        results_single = self.spotify.search(q='weezer', type='artist', market='US')
+        results_multiple = self.spotify.search(q='weezer', type='artist', market=['GB', 'US', 'AU'])
+        results_all = self.spotify.search(q='weezer', type='artist', market="ALL")
+        results_limited = self.spotify.search(q='weezer', type='artist', market=['GB', 'US', 'AU'], total=TOTAL)
 
-    def test_artist_search_with_all_markets(self):
-        results = self.spotify.search(q='weezer', type='artist', market='ALL')
-        self.assertTrue('artists' in results)
-        self.assertTrue(len(results['artists']['items']) > 0)
-        self.assertTrue(results['artists']['items'][0]['name'] == 'Weezer')
+        self.assertTrue('artists' in results_multiple)
+        self.assertTrue('artists' in results_all)
+        self.assertTrue('artists' in results_limited)
+
+
+        self.assertTrue(len(results_multiple['artists']['items']) > 0)
+        self.assertTrue(len(results_all['artists']['items']) > 0)
+        self.assertTrue(len(results_limited['artists']['items']) > 0)
+
+        self.assertTrue(len(results_all['artists']['items']) > len(results_multiple['artists']['items']))
+        self.assertTrue(len(results_multiple['artists']['items']) > len(results_single['artists']['items']))
+
+        self.assertTrue(results_multiple['artists']['items'][0]['name'] == 'Weezer')
+        self.assertTrue(results_all['artists']['items'][0]['name'] == 'Weezer')
+        self.assertTrue(results_limited['artists']['items'][0]['name'] == 'Weezer')
+
+        self.assertTrue(len(results_limited['artists']['items']) <= TOTAL)
 
     def test_artist_albums(self):
         results = self.spotify.artist_albums(self.weezer_urn)
