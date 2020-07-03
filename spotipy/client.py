@@ -1562,26 +1562,16 @@ class Spotify(object):
         return "spotify:" + type + ":" + self._get_id(type, id)
 
     def _search_multiple_markets(self, q, limit, offset, type, markets, total):
-        results = {
-                type + 's': {
-                    'href': [],
-                    'items': [],
-                    'limit': limit,
-                    'next': None,
-                    'offset': 0,
-                    'previous': None,
-                    'total': 0
-                }
-            }
+        results = {}
         for country in markets:
             result = self._get(
                 "search", q=q, limit=limit, offset=offset, type=type, market=country
             )
-            results[type + 's']['href'].append(result[type + 's']['href'])
-            results[type + 's']['items'] += result[type + 's']['items']
-            results[type + 's']['total'] += result[type + 's']['total']
-            if total and len(results[type + 's']['items']) >= total:
+            results[country] = result
+            if total and len(results[country][type + 's']['items']) >= total:
                 # splice 'items' to only include number of results requested
-                results[type + 's']['items'] = results[type + 's']['items'][:total]
+                results[country][type +
+                                 's']['items'] = results[country][type +
+                                                                  's']['items'][:total]
                 return results
         return results
