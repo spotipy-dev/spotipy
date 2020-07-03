@@ -1562,7 +1562,7 @@ class Spotify(object):
 
     def _get_uri(self, type, id):
         return "spotify:" + type + ":" + self._get_id(type, id)
-    
+
     def _search_multiple_markets(self, q, limit, offset, type, markets, total):
         results = {
                 type + 's': {
@@ -1586,6 +1586,4 @@ class Spotify(object):
                 # sice 'items' to only include number of results requested
                 results[type + 's']['items'] = results[type + 's']['items'][:total]
                 return results
-        
         return results
-
