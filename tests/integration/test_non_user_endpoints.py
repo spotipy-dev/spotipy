@@ -184,13 +184,18 @@ class AuthTestSpotipy(unittest.TestCase):
         results_limited = self.spotify.search(q='weezer', type='artist',
                                                 market=['GB', 'US', 'AU'], total=TOTAL)
 
+        results_tuple = self.spotify.search(q='weezer', type='artist',
+                                            market=('GB', 'US', 'AU'), total=TOTAL)
+
         self.assertTrue('artists' in results_multiple)
         self.assertTrue('artists' in results_all)
         self.assertTrue('artists' in results_limited)
+        self.assertTrue('artists' in results_tuple)
 
         self.assertTrue(len(results_multiple['artists']['items']) > 0)
         self.assertTrue(len(results_all['artists']['items']) > 0)
         self.assertTrue(len(results_limited['artists']['items']) > 0)
+        self.assertTrue(len(results_tuple['artists']['items']) > 0)
 
         self.assertTrue(len(results_all['artists']['items']) >
                         len(results_multiple['artists']['items']))
@@ -200,6 +205,7 @@ class AuthTestSpotipy(unittest.TestCase):
         self.assertTrue(results_multiple['artists']['items'][0]['name'] == 'Weezer')
         self.assertTrue(results_all['artists']['items'][0]['name'] == 'Weezer')
         self.assertTrue(results_limited['artists']['items'][0]['name'] == 'Weezer')
+        self.assertTrue(results_tuple['artists']['items'][0]['name'] == 'Weezer')
 
         self.assertTrue(len(results_limited['artists']['items']) <= TOTAL)
 

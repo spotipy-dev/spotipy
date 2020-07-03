@@ -523,7 +523,7 @@ class Spotify(object):
                            from_token. Can supply list of markets. Pass "ALL" to search all country codes.
                 - total - the total number of results to return if multiple markets are supplied in the search.
         """
-        # if string passed and equals "ALL"
+
         if (isinstance(market, str) and market.upper() == "ALL"):
             warnings.warn(
                 "Searching all markets is poorly performing.",
@@ -531,15 +531,13 @@ class Spotify(object):
             )
             return self._search_multiple_markets(q, limit, offset, type, self.country_codes, total)
 
-        # if list is passed
-        elif isinstance(market, list):
+        elif isinstance(market, list) or isinstance(market, tuple):
             warnings.warn(
                 "Searching multiple markets is poorly performing.",
                 UserWarning,
             )
             return self._search_multiple_markets(q, limit, offset, type, market, total)
 
-        # handle all other cases
         else:
             return self._get(
                 "search", q=q, limit=limit, offset=offset, type=type, market=market
