@@ -1563,15 +1563,14 @@ class Spotify(object):
 
     def _search_multiple_markets(self, q, limit, offset, type, markets, total):
         results = {}
+        types = type + 's'
         for country in markets:
             result = self._get(
                 "search", q=q, limit=limit, offset=offset, type=type, market=country
             )
             results[country] = result
-            if total and len(results[country][type + 's']['items']) >= total:
-                # splice 'items' to only include number of results requested
-                results[country][type +
-                                 's']['items'] = results[country][type +
-                                                                  's']['items'][:total]
+            if total and len(results[country][types]['items']) >= total:
+                # slice 'items' to only include number of results requested
+                results[country][types]['items'] = results[country][types]['items'][:total]
                 return results
         return results
