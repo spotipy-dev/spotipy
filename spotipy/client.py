@@ -1591,7 +1591,7 @@ class Spotify(object):
 
             count += len(result[first_type]['items'])
             if total and count >= total:
-                return results
+                break
             if total and limit > total - count:
                 # when approaching `total` results, adjust `limit` to not request more
                 # items than needed
