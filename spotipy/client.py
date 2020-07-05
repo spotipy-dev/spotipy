@@ -508,7 +508,7 @@ class Spotify(object):
         tlist = [self._get_id("episode", e) for e in episodes]
         return self._get("episodes/?ids=" + ",".join(tlist), market=market)
 
-    def search(self, q, limit=10, offset=0, type="track", market=None, total=None):
+    def search(self, q, limit=10, offset=0, type="track", market=None):
         """ searches for an item
 
             Parameters:
@@ -520,7 +520,24 @@ class Spotify(object):
                 - type - the type of item to return. One of 'artist', 'album',
                          'track', 'playlist', 'show', or 'episode'
                 - market - An ISO 3166-1 alpha-2 country code or the string
-                           from_token. Can supply list of markets. Pass "ALL" to search all country codes.
+                           from_token.
+        """
+        return self._get(
+            "search", q=q, limit=limit, offset=offset, type=type, market=market
+        )
+
+    def search_markets(self, q, limit=10, offset=0, type="track", market=None, total=None):
+        """ searches multple markets for an item
+
+            Parameters:
+                - q - the search query (see how to write a query in the
+                      official documentation https://developer.spotify.com/documentation/web-api/reference/search/search/)  # noqa
+                - limit  - the number of items to return (min = 1, default = 10, max = 50). If a search is to be done on multiple
+                            markets, then this limit is applied to each market. (e.g. search US, CA, MX each with a limit of 10).
+                - offset - the index of the first item to return
+                - type - the type's of item's to return. One or more of 'artist', 'album',
+                         'track', 'playlist', 'show', or 'episode'. If multiple types are desired, pass in a comma separated list.
+                - market - A list of ISO 3166-1 alpha-2 country codes. Pass "ALL" to search all country markets.
                 - total - the total number of results to return if multiple markets are supplied in the search.
         """
 
@@ -538,6 +555,7 @@ class Spotify(object):
             )
             return self._search_multiple_markets(q, limit, offset, type, market, total)
 
+        # is this needed anymore?
         else:
             return self._get(
                 "search", q=q, limit=limit, offset=offset, type=type, market=market
@@ -1563,14 +1581,18 @@ class Spotify(object):
 
     def _search_multiple_markets(self, q, limit, offset, type, markets, total):
         results = {}
-        types = type + 's'
+        if total and limit > total:
+            limit = total
+            warnings.warn(
+                "limit was auto-adjusted to equal {} as it must not be higher than total".format(
+                    total),
+                UserWarning,
+            )
+
         for country in markets:
             result = self._get(
                 "search", q=q, limit=limit, offset=offset, type=type, market=country
             )
             results[country] = result
-            if total and len(results[country][types]['items']) >= total:
-                # slice 'items' to only include number of results requested
-                results[country][types]['items'] = results[country][types]['items'][:total]
-                return results
+
         return results

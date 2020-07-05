@@ -180,13 +180,13 @@ class AuthTestSpotipy(unittest.TestCase):
         countries_list = ['GB', 'US', 'AU']
         countries_tuple = ('GB', 'US', 'AU')
 
-        results_multiple = self.spotify.search(q='weezer', type='artist',
-                                               market=countries_list)
-        results_all = self.spotify.search(q='weezer', type='artist', market="ALL")
-        results_tuple = self.spotify.search(q='weezer', type='artist',
-                                            market=countries_tuple)
-        results_limited = self.spotify.search(q='weezer', type='artist',
-                                                market=countries_list, total=TOTAL)
+        results_multiple = self.spotify.search_markets(q='weezer', type='artist',
+                                                       market=countries_list)
+        results_all = self.spotify.search_markets(q='weezer', type='artist', market="ALL")
+        results_tuple = self.spotify.search_markets(q='weezer', type='artist',
+                                                    market=countries_tuple)
+        results_limited = self.spotify.search_markets(q='weezer', type='artist',
+                                                      market=countries_list, total=TOTAL)
 
         self.assertTrue(
             all('artists' in results_multiple[country] for country in results_multiple))
