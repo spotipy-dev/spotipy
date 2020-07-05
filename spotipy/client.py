@@ -1593,7 +1593,8 @@ class Spotify(object):
             if total and count >= total:
                 return results
             if total and limit > total - count:
-                # when approaching `total` results, adjust `limit` to not request more items than needed
+                # when approaching `total` results, adjust `limit` to not request more
+                # items than needed
                 limit = total - count
 
         return results
