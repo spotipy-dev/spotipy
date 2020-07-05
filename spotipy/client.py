@@ -525,7 +525,7 @@ class Spotify(object):
             "search", q=q, limit=limit, offset=offset, type=type, market=market
         )
 
-    def search_markets(self, q, limit=10, offset=0, type="track", market=None, total=None):
+    def search_markets(self, q, limit=10, offset=0, type="track", markets=None, total=None):
         """ searches multple markets for an item
 
             Parameters:
@@ -536,29 +536,21 @@ class Spotify(object):
                 - offset - the index of the first item to return
                 - type - the type's of item's to return. One or more of 'artist', 'album',
                          'track', 'playlist', 'show', or 'episode'. If multiple types are desired, pass in a comma separated list.
-                - market - A list of ISO 3166-1 alpha-2 country codes. Pass "ALL" to search all country markets.
+                - markets - A list of ISO 3166-1 alpha-2 country codes. Search all country markets by default.
                 - total - the total number of results to return if multiple markets are supplied in the search.
+                          If multiple types are specified, this only applies to the first type.
         """
+        if not markets:
+            markets = self.country_codes
 
-        if (isinstance(market, str) and market.upper() == "ALL"):
-            warnings.warn(
-                "Searching all markets is poorly performing.",
-                UserWarning,
-            )
-            return self._search_multiple_markets(q, limit, offset, type, self.country_codes, total)
+        if not (isinstance(markets, list) or isinstance(markets, tuple)):
+            markets = []
 
-        elif isinstance(market, list) or isinstance(market, tuple):
-            warnings.warn(
-                "Searching multiple markets is poorly performing.",
-                UserWarning,
-            )
-            return self._search_multiple_markets(q, limit, offset, type, market, total)
-
-        # is this needed anymore?
-        else:
-            return self._get(
-                "search", q=q, limit=limit, offset=offset, type=type, market=market
-            )
+        warnings.warn(
+            "Searching multiple markets is poorly performing.",
+            UserWarning,
+        )
+        return self._search_multiple_markets(q, limit, offset, type, markets, total)
 
     def user(self, user):
         """ Gets basic profile information about a Spotify User
@@ -1579,7 +1571,6 @@ class Spotify(object):
         return "spotify:" + type + ":" + self._get_id(type, id)
 
     def _search_multiple_markets(self, q, limit, offset, type, markets, total):
-        results = {}
         if total and limit > total:
             limit = total
             warnings.warn(
@@ -1588,10 +1579,21 @@ class Spotify(object):
                 UserWarning,
             )
 
+        results = {}
+        first_type = type.split(",")[0] + 's'
+        count = 0
+
         for country in markets:
             result = self._get(
                 "search", q=q, limit=limit, offset=offset, type=type, market=country
             )
             results[country] = result
+
+            count += len(result[first_type]['items'])
+            if total and count >= total:
+                return results
+            if total and limit > total - count:
+                # when approaching `total` results, adjust `limit` to not request more items than needed
+                limit = total - count
 
         return results

@@ -176,17 +176,17 @@ class AuthTestSpotipy(unittest.TestCase):
         self.assertTrue(results['artists']['items'][0]['name'] == 'Weezer')
 
     def test_artist_search_with_multiple_markets(self):
-        TOTAL = 3
+        total = 5
         countries_list = ['GB', 'US', 'AU']
         countries_tuple = ('GB', 'US', 'AU')
 
         results_multiple = self.spotify.search_markets(q='weezer', type='artist',
-                                                       market=countries_list)
-        results_all = self.spotify.search_markets(q='weezer', type='artist', market="ALL")
+                                                       markets=countries_list)
+        results_all = self.spotify.search_markets(q='weezer', type='artist')
         results_tuple = self.spotify.search_markets(q='weezer', type='artist',
-                                                    market=countries_tuple)
-        results_limited = self.spotify.search_markets(q='weezer', type='artist',
-                                                      market=countries_list, total=TOTAL)
+                                                    markets=countries_tuple)
+        results_limited = self.spotify.search_markets(q='weezer', limit=3, type='artist',
+                                                      markets=countries_list, total=total)
 
         self.assertTrue(
             all('artists' in results_multiple[country] for country in results_multiple))
@@ -217,7 +217,7 @@ class AuthTestSpotipy(unittest.TestCase):
         total_limited_results = 0
         for country in results_limited:
             total_limited_results += len(results_limited[country]['artists']['items'])
-        self.assertTrue(total_limited_results <= TOTAL)
+        self.assertTrue(total_limited_results <= total)
 
     def test_artist_albums(self):
         results = self.spotify.artist_albums(self.weezer_urn)
