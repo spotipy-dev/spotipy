@@ -1167,7 +1167,7 @@ class Spotify(object):
             "me/following", type="artist", limit=limit, after=after
         )
 
-    def current_user_followed_artists_contains(self, ids=None):
+    def current_user_following_artists(self, ids=None):
         """ Check if the current user is following certain artists
 
             Returns list of booleans respective to ids
@@ -1181,6 +1181,22 @@ class Spotify(object):
         return self._get(
             "me/following/contains", ids=",".join(idlist), type="artist"
         )
+
+    def current_user_following_users(self, ids=None):
+        """ Check if the current user is following certain artists
+
+            Returns list of booleans respective to ids
+        
+            Parameters:
+                - ids - a list of user URIs, URLs or IDs
+        """
+        idlist = []
+        if ids is not None:
+            idlist = [self._get_id("user", i) for i in ids]
+        return self._get(
+            "me/following/contains", ids=",".join(idlist), type="user"
+        )
+
 
     def current_user_saved_tracks_delete(self, tracks=None):
         """ Remove one or more tracks from the current user's
