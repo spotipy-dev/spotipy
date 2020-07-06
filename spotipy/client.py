@@ -1171,7 +1171,7 @@ class Spotify(object):
         """ Check if the current user is following certain artists
 
             Returns list of booleans respective to ids
-        
+
             Parameters:
                 - ids - a list of artist URIs, URLs or IDs
         """
@@ -1186,7 +1186,7 @@ class Spotify(object):
         """ Check if the current user is following certain artists
 
             Returns list of booleans respective to ids
-        
+
             Parameters:
                 - ids - a list of user URIs, URLs or IDs
         """
@@ -1196,7 +1196,6 @@ class Spotify(object):
         return self._get(
             "me/following/contains", ids=",".join(idlist), type="user"
         )
-
 
     def current_user_saved_tracks_delete(self, tracks=None):
         """ Remove one or more tracks from the current user's

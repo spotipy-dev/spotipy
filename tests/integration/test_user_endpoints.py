@@ -53,15 +53,14 @@ class SpotipyPlaylistApiTest(unittest.TestCase):
         self.assertTrue('items' in playlists)
         self.assertGreaterEqual(len(playlists['items']), 1)
 
-    def test_user_playlist_tracks(self):
+    def test_playlist_tracks(self):
         playlists = self.spotify.user_playlists(self.username, limit=5)
         self.assertTrue('items' in playlists)
         for playlist in playlists['items']:
             if playlist['uri'] != self.new_playlist_uri:
                 continue
-            user = playlist['owner']['id']
             pid = playlist['id']
-            results = self.spotify.user_playlist_tracks(user, pid)
+            results = self.spotify.playlist_tracks(pid)
             self.assertEqual(len(results['items']), 0)
 
     def test_current_user_playlists(self):
@@ -70,44 +69,39 @@ class SpotipyPlaylistApiTest(unittest.TestCase):
         self.assertGreaterEqual(len(playlists['items']), 1)
         self.assertLessEqual(len(playlists['items']), 10)
 
-    def test_user_playlist_follow(self):
-        user_to_follow = 'plamere'
-        user_to_follow_id = '4erXB04MxwRAVqcUEpu30O'
-        self.spotify.user_playlist_follow_playlist(
-            user_to_follow, user_to_follow_id)
-        follows = self.spotify.user_playlist_is_following(
-            user_to_follow, user_to_follow_id, [self.username])
+    def test_current_user_follow_playlist(self):
+        playlist_to_follow_id = '4erXB04MxwRAVqcUEpu30O'
+        self.spotify.current_user_follow_playlist(playlist_to_follow_id)
+        follows = self.spotify.playlist_is_following(
+            playlist_to_follow_id, [self.username])
 
         self.assertTrue(len(follows) == 1, 'proper follows length')
         self.assertTrue(follows[0], 'is following')
-        self.spotify.user_playlist_unfollow(
-            user_to_follow, user_to_follow_id)
+        self.spotify.current_user_unfollow_playlist(playlist_to_follow_id)
 
-        follows = self.spotify.user_playlist_is_following(
-            user_to_follow, user_to_follow_id, [self.username])
+        follows = self.spotify.playlist_is_following(
+            playlist_to_follow_id, [self.username])
         self.assertTrue(len(follows) == 1, 'proper follows length')
         self.assertFalse(follows[0], 'is no longer following')
 
-    def test_user_playlist_replace_tracks(self):
+    def test_playlist_replace_tracks(self):
         # add tracks to playlist
-        self.spotify.user_playlist_add_tracks(
-            self.username, self.new_playlist['id'], self.four_tracks)
-        playlist = self.spotify.user_playlist(self.username, self.new_playlist['id'])
+        self.spotify.playlist_add_tracks(
+            self.new_playlist['id'], self.four_tracks)
+        playlist = self.spotify.playlist(self.new_playlist['id'])
         self.assertEqual(playlist['tracks']['total'], 4)
         self.assertEqual(len(playlist['tracks']['items']), 4)
 
         # replace with 3 other tracks
-        self.spotify.user_playlist_replace_tracks(self.username,
-                                                  self.new_playlist['id'],
-                                                  self.other_tracks)
-        playlist = self.spotify.user_playlist(self.username,
-                                              self.new_playlist['id'])
+        self.spotify.playlist_replace_tracks(self.new_playlist['id'],
+                                             self.other_tracks)
+        playlist = self.spotify.playlist(self.new_playlist['id'])
         self.assertEqual(playlist['tracks']['total'], 3)
         self.assertEqual(len(playlist['tracks']['items']), 3)
 
-        self.spotify.user_playlist_remove_all_occurrences_of_tracks(
-            self.username, playlist['id'], self.other_tracks)
-        playlist = self.spotify.user_playlist(self.username, self.new_playlist['id'])
+        self.spotify.playlist_remove_all_occurrences_of_tracks(
+            playlist['id'], self.other_tracks)
+        playlist = self.spotify.playlist(self.new_playlist['id'])
         self.assertEqual(playlist["tracks"]["total"], 0)
 
     def test_get_playlist_by_id(self):
@@ -116,18 +110,18 @@ class SpotipyPlaylistApiTest(unittest.TestCase):
 
     def test_playlist_add_tracks(self):
         # add tracks to playlist
-        self.spotify.user_playlist_add_tracks(
-            self.username, self.new_playlist['id'], self.other_tracks)
-        playlist = self.spotify.user_playlist(self.username, self.new_playlist['id'])
+        self.spotify.playlist_add_tracks(
+            self.new_playlist['id'], self.other_tracks)
+        playlist = self.spotify.playlist(self.new_playlist['id'])
         self.assertEqual(playlist['tracks']['total'], 3)
         self.assertEqual(len(playlist['tracks']['items']), 3)
 
         pl = self.spotify.playlist_tracks(self.new_playlist['id'], limit=2)
         self.assertEqual(len(pl["items"]), 2)
 
-        self.spotify.user_playlist_remove_all_occurrences_of_tracks(
-            self.username, playlist['id'], self.other_tracks)
-        playlist = self.spotify.user_playlist(self.username, self.new_playlist['id'])
+        self.spotify.playlist_remove_all_occurrences_of_tracks(
+            playlist['id'], self.other_tracks)
+        playlist = self.spotify.playlist(self.new_playlist['id'])
         self.assertEqual(playlist["tracks"]["total"], 0)
 
     def test_playlist_cover_image(self):
@@ -332,23 +326,24 @@ class SpotipyFollowApiTests(unittest.TestCase):
         # Follow 2 more artists
         artists = ["6DPYiyq5kWVQS4RGwxzPC7", "0NbfKEOTQCcwd6o7wSDOHI"]
         self.spotify.user_follow_artists(artists)
-        res = self.spotify.current_user_followed_artists()
-        self.assertEqual(res['artists']['total'], current_user_followed_artists + len(artists))
+        self.assertTrue(all(self.spotify.current_user_following_artists(artists)))
 
         # Unfollow these 2 artists
         self.spotify.user_unfollow_artists(artists)
+        self.assertFalse(any(self.spotify.current_user_following_artists(artists)))
         res = self.spotify.current_user_followed_artists()
         self.assertEqual(res['artists']['total'], current_user_followed_artists)
 
     def test_user_follows_and_unfollows_user(self):
-        # TODO improve after implementing `me/following/contains`
         users = ["11111204", "xlqeojt6n7on0j7coh9go8ifd"]
 
         # Follow 2 more users
         self.spotify.user_follow_users(users)
+        self.assertTrue(all(self.spotify.current_user_following_users(users)))
 
         # Unfollow these 2 users
         self.spotify.user_unfollow_users(users)
+        self.assertFalse(any(self.spotify.current_user_following_users(users)))
 
 
 class SpotipyPlayerApiTests(unittest.TestCase):

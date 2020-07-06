@@ -16,8 +16,7 @@ else:
 scope = 'playlist-modify-public'
 
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
-user_id = sp.me()['id']
 
-results = sp.user_playlist_replace_tracks(user_id, playlist_id, track_ids)
+results = sp.playlist_replace_tracks(playlist_id, track_ids)
 pprint.pprint(results)
 
