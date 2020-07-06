@@ -5,6 +5,7 @@ Prerequisites
 
     export SPOTIPY_CLIENT_ID=client_id_here
     export SPOTIPY_CLIENT_SECRET=client_secret_here
+    export SPOTIPY_REDIRECT_URI='http://127.0.0.1:8080' // added to your [app settings](https://developer.spotify.com/dashboard/applications)
     // on Windows, use `SET` instead of `export`
 
 Run app.py
