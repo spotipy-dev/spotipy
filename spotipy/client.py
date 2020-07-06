@@ -715,6 +715,10 @@ class Spotify(object):
         collaborative=None,
         description=None,
     ):
+        warnings.warn(
+            "You should use `playlist_change_details(playlist_id, ...)` instead",
+            DeprecationWarning,
+        )
         """ Changes a playlist's name and/or public/private state
 
             Parameters:
@@ -746,6 +750,10 @@ class Spotify(object):
                 - user - the id of the user
                 - name - the name of the playlist
         """
+        warnings.warn(
+            "You should use `current_user_unfollow_playlist(playlist_id)` instead",
+            DeprecationWarning,
+        )
         return self._delete(
             "users/%s/playlists/%s/followers" % (user, playlist_id)
         )
@@ -753,6 +761,10 @@ class Spotify(object):
     def user_playlist_add_tracks(
         self, user, playlist_id, tracks, position=None
     ):
+        warnings.warn(
+            "You should use `playlist_add_tracks(playlist_id, tracks)` instead",
+            DeprecationWarning,
+        )
         """ Adds tracks to a playlist
 
             Parameters:
@@ -777,6 +789,10 @@ class Spotify(object):
                 - playlist_id - the id of the playlist
                 - tracks - the list of track ids to add to the playlist
         """
+        warnings.warn(
+            "You should use `playlist_replace_tracks(playlist_id, tracks)` instead",
+            DeprecationWarning,
+        )
         plid = self._get_id("playlist", playlist_id)
         ftracks = [self._get_uri("track", tid) for tid in tracks]
         payload = {"uris": ftracks}
@@ -805,6 +821,10 @@ class Spotify(object):
                                   inserted
                 - snapshot_id - optional playlist's snapshot ID
         """
+        warnings.warn(
+            "You should use `playlist_reorder_tracks(playlist_id, ...)` instead",
+            DeprecationWarning,
+        )
         plid = self._get_id("playlist", playlist_id)
         payload = {
             "range_start": range_start,
@@ -829,7 +849,11 @@ class Spotify(object):
                 - snapshot_id - optional id of the playlist snapshot
 
         """
-
+        warnings.warn(
+            "You should use `playlist_remove_all_occurrences_of_tracks"
+            "(playlist_id, tracks)` instead",
+            DeprecationWarning,
+        )
         plid = self._get_id("playlist", playlist_id)
         ftracks = [self._get_uri("track", tid) for tid in tracks]
         payload = {"tracks": [{"uri": track} for track in ftracks]}
@@ -854,7 +878,11 @@ class Spotify(object):
                         { "uri":"1301WleyT98MSxVHPZCA6M", "positions":[7] } ]
                 - snapshot_id - optional id of the playlist snapshot
         """
-
+        warnings.warn(
+            "You should use `playlist_remove_specific_occurrences_of_tracks"
+            "(playlist_id, tracks)` instead",
+            DeprecationWarning,
+        )
         plid = self._get_id("playlist", playlist_id)
         ftracks = []
         for tr in tracks:
@@ -880,6 +908,10 @@ class Spotify(object):
             - playlist_id - the id of the playlist
 
         """
+        warnings.warn(
+            "You should use `current_user_follow_playlist(playlist_id)` instead",
+            DeprecationWarning,
+        )
         return self._put(
             "users/{}/playlists/{}/followers".format(
                 playlist_owner_id, playlist_id
@@ -899,9 +931,199 @@ class Spotify(object):
                 if they follow the playlist. Maximum: 5 ids.
 
         """
+        warnings.warn(
+            "You should use `playlist_is_following(playlist_id, user_ids)` instead",
+            DeprecationWarning,
+        )
         endpoint = "users/{}/playlists/{}/followers/contains?ids={}"
         return self._get(
             endpoint.format(playlist_owner_id, playlist_id, ",".join(user_ids))
+        )
+
+    def playlist_change_details(
+        self,
+        playlist_id,
+        name=None,
+        public=None,
+        collaborative=None,
+        description=None,
+    ):
+        """ Changes a playlist's name and/or public/private state
+
+            Parameters:
+                - playlist_id - the id of the playlist
+                - name - optional name of the playlist
+                - public - optional is the playlist public
+                - collaborative - optional is the playlist collaborative
+                - description - optional description of the playlist
+        """
+
+        data = {}
+        if isinstance(name, six.string_types):
+            data["name"] = name
+        if isinstance(public, bool):
+            data["public"] = public
+        if isinstance(collaborative, bool):
+            data["collaborative"] = collaborative
+        if isinstance(description, six.string_types):
+            data["description"] = description
+        return self._put(
+            "playlists/%s" % (playlist_id), payload=data
+        )
+
+    def current_user_unfollow_playlist(self, playlist_id):
+        """ Unfollows (deletes) a playlist for the current authenticated
+            user
+
+            Parameters:
+                - name - the name of the playlist
+        """
+        return self._delete(
+            "playlists/%s/followers" % (playlist_id)
+        )
+
+    def playlist_add_tracks(
+        self, playlist_id, tracks, position=None
+    ):
+        """ Adds tracks to a playlist
+
+            Parameters:
+                - playlist_id - the id of the playlist
+                - tracks - a list of track URIs, URLs or IDs
+                - position - the position to add the tracks
+        """
+        plid = self._get_id("playlist", playlist_id)
+        ftracks = [self._get_uri("track", tid) for tid in tracks]
+        return self._post(
+            "playlists/%s/tracks" % (plid),
+            payload=ftracks,
+            position=position,
+        )
+
+    def playlist_replace_tracks(self, playlist_id, tracks):
+        """ Replace all tracks in a playlist
+
+            Parameters:
+                - playlist_id - the id of the playlist
+                - tracks - the list of track ids to add to the playlist
+        """
+        plid = self._get_id("playlist", playlist_id)
+        ftracks = [self._get_uri("track", tid) for tid in tracks]
+        payload = {"uris": ftracks}
+        return self._put(
+            "playlists/%s/tracks" % (plid), payload=payload
+        )
+
+    def playlist_reorder_tracks(
+        self,
+        playlist_id,
+        range_start,
+        insert_before,
+        range_length=1,
+        snapshot_id=None,
+    ):
+        """ Reorder tracks in a playlist
+
+            Parameters:
+                - playlist_id - the id of the playlist
+                - range_start - the position of the first track to be reordered
+                - range_length - optional the number of tracks to be reordered
+                                 (default: 1)
+                - insert_before - the position where the tracks should be
+                                  inserted
+                - snapshot_id - optional playlist's snapshot ID
+        """
+        plid = self._get_id("playlist", playlist_id)
+        payload = {
+            "range_start": range_start,
+            "range_length": range_length,
+            "insert_before": insert_before,
+        }
+        if snapshot_id:
+            payload["snapshot_id"] = snapshot_id
+        return self._put(
+            "playlists/%s/tracks" % (plid), payload=payload
+        )
+
+    def playlist_remove_all_occurrences_of_tracks(
+        self, playlist_id, tracks, snapshot_id=None
+    ):
+        """ Removes all occurrences of the given tracks from the given playlist
+
+            Parameters:
+                - playlist_id - the id of the playlist
+                - tracks - the list of track ids to remove from the playlist
+                - snapshot_id - optional id of the playlist snapshot
+
+        """
+
+        plid = self._get_id("playlist", playlist_id)
+        ftracks = [self._get_uri("track", tid) for tid in tracks]
+        payload = {"tracks": [{"uri": track} for track in ftracks]}
+        if snapshot_id:
+            payload["snapshot_id"] = snapshot_id
+        return self._delete(
+            "playlists/%s/tracks" % (plid), payload=payload
+        )
+
+    def playlist_remove_specific_occurrences_of_tracks(
+        self, playlist_id, tracks, snapshot_id=None
+    ):
+        """ Removes all occurrences of the given tracks from the given playlist
+
+            Parameters:
+                - playlist_id - the id of the playlist
+                - tracks - an array of objects containing Spotify URIs of the
+                    tracks to remove with their current positions in the
+                    playlist.  For example:
+                        [  { "uri":"4iV5W9uYEdYUVa79Axb7Rh", "positions":[2] },
+                        { "uri":"1301WleyT98MSxVHPZCA6M", "positions":[7] } ]
+                - snapshot_id - optional id of the playlist snapshot
+        """
+
+        plid = self._get_id("playlist", playlist_id)
+        ftracks = []
+        for tr in tracks:
+            ftracks.append(
+                {
+                    "uri": self._get_uri("track", tr["uri"]),
+                    "positions": tr["positions"],
+                }
+            )
+        payload = {"tracks": ftracks}
+        if snapshot_id:
+            payload["snapshot_id"] = snapshot_id
+        return self._delete(
+            "playlists/%s/tracks" % (plid), payload=payload
+        )
+
+    def current_user_follow_playlist(self, playlist_id):
+        """
+        Add the current authenticated user as a follower of a playlist.
+
+        Parameters:
+            - playlist_id - the id of the playlist
+
+        """
+        return self._put(
+            "playlists/{}/followers".format(playlist_id)
+        )
+
+    def playlist_is_following(
+        self, playlist_id, user_ids
+    ):
+        """
+        Check to see if the given users are following the given playlist
+
+        Parameters:
+            - playlist_id - the id of the playlist
+            - user_ids - the ids of the users that you want to check to see
+                if they follow the playlist. Maximum: 5 ids.
+
+        """
+        endpoint = "playlists/{}/followers/contains?ids={}"
+        return self._get(
+            endpoint.format(playlist_id, ",".join(user_ids))
         )
 
     def me(self):
@@ -943,6 +1165,21 @@ class Spotify(object):
         """
         return self._get(
             "me/following", type="artist", limit=limit, after=after
+        )
+
+    def current_user_followed_artists_contains(self, ids=None):
+        """ Check if the current user is following certain artists
+
+            Returns list of booleans respective to ids
+        
+            Parameters:
+                - ids - a list of artist URIs, URLs or IDs
+        """
+        idlist = []
+        if ids is not None:
+            idlist = [self._get_id("artist", i) for i in ids]
+        return self._get(
+            "me/following/contains", ids=",".join(idlist), type="artist"
         )
 
     def current_user_saved_tracks_delete(self, tracks=None):
