@@ -415,7 +415,11 @@ class SpotifyOAuth(SpotifyAuthBase):
         redirect_info = urlparse(self.redirect_uri)
         redirect_host, redirect_port = get_host_port(redirect_info.netloc)
 
-        if open_browser and redirect_host in ("127.0.0.1", "localhost") and redirect_info.scheme == "http":
+        if (
+            open_browser
+            and redirect_host in ("127.0.0.1", "localhost")
+            and redirect_info.scheme == "http"
+        ):
             # Only start a local http server if a port is specified
             if redirect_port:
                 return self._get_auth_response_local_server(redirect_port)
