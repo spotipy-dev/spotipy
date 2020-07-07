@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
  - Support to search multiple markets at once.
  - Support to search all available Spotify markets.
- - Allow for headless OAuth 2.0 authorization by instructing the user to open the URL in a browser.
+ - Allow for OAuth 2.0 authorization by instructing the user to open the URL in a browser instead of opening the browser.
 
 
 ## [2.13.0] - 2020-06-25
