@@ -112,17 +112,17 @@ class SpotipyPlaylistApiTest(unittest.TestCase):
         # add tracks to playlist
         self.spotify.playlist_add_items(
             self.new_playlist['id'], self.other_tracks)
-        playlist = self.spotify.playlist(self.new_playlist['id'])
-        self.assertEqual(playlist['tracks']['total'], 3)
-        self.assertEqual(len(playlist['tracks']['items']), 3)
+        playlist = self.spotify.playlist_items(self.new_playlist['id'])
+        self.assertEqual(playlist['total'], 3)
+        self.assertEqual(len(playlist['items']), 3)
 
         pl = self.spotify.playlist_items(self.new_playlist['id'], limit=2)
         self.assertEqual(len(pl["items"]), 2)
 
         self.spotify.playlist_remove_all_occurrences_of_items(
-            playlist['id'], self.other_tracks)
-        playlist = self.spotify.playlist(self.new_playlist['id'])
-        self.assertEqual(playlist["tracks"]["total"], 0)
+            self.new_playlist['id'], self.other_tracks)
+        playlist = self.spotify.playlist_items(self.new_playlist['id'])
+        self.assertEqual(playlist["total"], 0)
 
     def test_playlist_cover_image(self):
         # Upload random dog image
