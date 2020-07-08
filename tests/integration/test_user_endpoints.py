@@ -53,14 +53,14 @@ class SpotipyPlaylistApiTest(unittest.TestCase):
         self.assertTrue('items' in playlists)
         self.assertGreaterEqual(len(playlists['items']), 1)
 
-    def test_playlist_tracks(self):
+    def test_playlist_items(self):
         playlists = self.spotify.user_playlists(self.username, limit=5)
         self.assertTrue('items' in playlists)
         for playlist in playlists['items']:
             if playlist['uri'] != self.new_playlist_uri:
                 continue
             pid = playlist['id']
-            results = self.spotify.playlist_tracks(pid)
+            results = self.spotify.playlist_items(pid)
             self.assertEqual(len(results['items']), 0)
 
     def test_current_user_playlists(self):
@@ -116,7 +116,7 @@ class SpotipyPlaylistApiTest(unittest.TestCase):
         self.assertEqual(playlist['tracks']['total'], 3)
         self.assertEqual(len(playlist['tracks']['items']), 3)
 
-        pl = self.spotify.playlist_tracks(self.new_playlist['id'], limit=2)
+        pl = self.spotify.playlist_items(self.new_playlist['id'], limit=2)
         self.assertEqual(len(pl["items"]), 2)
 
         self.spotify.playlist_remove_all_occurrences_of_items(
