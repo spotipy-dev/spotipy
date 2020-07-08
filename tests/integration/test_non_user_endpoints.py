@@ -176,38 +176,48 @@ class AuthTestSpotipy(unittest.TestCase):
         self.assertTrue(results['artists']['items'][0]['name'] == 'Weezer')
 
     def test_artist_search_with_multiple_markets(self):
-        TOTAL = 3
-        results_single = self.spotify.search(q='weezer', type='artist', market='US')
-        results_multiple = self.spotify.search(q='weezer', type='artist',
-                                               market=['GB', 'US', 'AU'])
-        results_all = self.spotify.search(q='weezer', type='artist', market="ALL")
-        results_limited = self.spotify.search(q='weezer', type='artist',
-                                                market=['GB', 'US', 'AU'], total=TOTAL)
+        total = 5
+        countries_list = ['GB', 'US', 'AU']
+        countries_tuple = ('GB', 'US', 'AU')
 
-        results_tuple = self.spotify.search(q='weezer', type='artist',
-                                            market=('GB', 'US', 'AU'), total=TOTAL)
+        results_multiple = self.spotify.search_markets(q='weezer', type='artist',
+                                                       markets=countries_list)
+        results_all = self.spotify.search_markets(q='weezer', type='artist')
+        results_tuple = self.spotify.search_markets(q='weezer', type='artist',
+                                                    markets=countries_tuple)
+        results_limited = self.spotify.search_markets(q='weezer', limit=3, type='artist',
+                                                      markets=countries_list, total=total)
 
-        self.assertTrue('artists' in results_multiple)
-        self.assertTrue('artists' in results_all)
-        self.assertTrue('artists' in results_limited)
-        self.assertTrue('artists' in results_tuple)
+        self.assertTrue(
+            all('artists' in results_multiple[country] for country in results_multiple))
+        self.assertTrue(all('artists' in results_all[country] for country in results_all))
+        self.assertTrue(all('artists' in results_tuple[country] for country in results_tuple))
+        self.assertTrue(all('artists' in results_limited[country] for country in results_limited))
 
-        self.assertTrue(len(results_multiple['artists']['items']) > 0)
-        self.assertTrue(len(results_all['artists']['items']) > 0)
-        self.assertTrue(len(results_limited['artists']['items']) > 0)
-        self.assertTrue(len(results_tuple['artists']['items']) > 0)
+        self.assertTrue(
+            all(len(results_multiple[country]['artists']['items']) > 0 for country in
+                results_multiple))
+        self.assertTrue(all(len(results_all[country]['artists']
+                                ['items']) > 0 for country in results_all))
+        self.assertTrue(
+            all(len(results_tuple[country]['artists']['items']) > 0 for country in results_tuple))
+        self.assertTrue(
+            all(len(results_limited[country]['artists']['items']) > 0 for country in
+                results_limited))
 
-        self.assertTrue(len(results_all['artists']['items']) >
-                        len(results_multiple['artists']['items']))
-        self.assertTrue(len(results_multiple['artists']['items'])
-                        > len(results_single['artists']['items']))
+        self.assertTrue(all(results_multiple[country]['artists']['items']
+                            [0]['name'] == 'Weezer' for country in results_multiple))
+        self.assertTrue(all(results_all[country]['artists']['items']
+                            [0]['name'] == 'Weezer' for country in results_all))
+        self.assertTrue(all(results_tuple[country]['artists']['items']
+                            [0]['name'] == 'Weezer' for country in results_tuple))
+        self.assertTrue(all(results_limited[country]['artists']['items']
+                            [0]['name'] == 'Weezer' for country in results_limited))
 
-        self.assertTrue(results_multiple['artists']['items'][0]['name'] == 'Weezer')
-        self.assertTrue(results_all['artists']['items'][0]['name'] == 'Weezer')
-        self.assertTrue(results_limited['artists']['items'][0]['name'] == 'Weezer')
-        self.assertTrue(results_tuple['artists']['items'][0]['name'] == 'Weezer')
-
-        self.assertTrue(len(results_limited['artists']['items']) <= TOTAL)
+        total_limited_results = 0
+        for country in results_limited:
+            total_limited_results += len(results_limited[country]['artists']['items'])
+        self.assertTrue(total_limited_results <= total)
 
     def test_artist_albums(self):
         results = self.spotify.artist_albums(self.weezer_urn)

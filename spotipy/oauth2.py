@@ -374,9 +374,17 @@ class SpotifyOAuth(SpotifyAuthBase):
         except webbrowser.Error:
             logger.error("Please navigate here: %s", auth_url)
 
-    def _get_auth_response_interactive(self):
-        self._open_auth_url()
-        response = SpotifyOAuth._get_user_input("Enter the URL you were redirected to: ")
+    def _get_auth_response_interactive(self, open_browser=True):
+        if open_browser:
+            self._open_auth_url()
+            prompt = "Enter the URL you were redirected to: "
+        else:
+            url = self.get_authorize_url()
+            prompt = (
+                "Go to the following URL: {}\n"
+                "Enter the URL you were redirected to: ".format(url)
+            )
+        response = SpotifyOAuth._get_user_input(prompt)
         state, code = SpotifyOAuth.parse_auth_response_url(response)
         if self.state is not None and self.state != state:
             raise SpotifyStateError(self.state, state)
@@ -397,7 +405,7 @@ class SpotifyOAuth(SpotifyAuthBase):
         else:
             raise SpotifyOauthError("Server listening on localhost has not been accessed")
 
-    def get_auth_response(self):
+    def get_auth_response(self, open_browser=True):
         logger.info('User authentication requires interaction with your '
                     'web browser. Once you enter your credentials and '
                     'give authorization, you will be redirected to '
@@ -407,7 +415,11 @@ class SpotifyOAuth(SpotifyAuthBase):
         redirect_info = urlparse(self.redirect_uri)
         redirect_host, redirect_port = get_host_port(redirect_info.netloc)
 
-        if redirect_host in ("127.0.0.1", "localhost") and redirect_info.scheme == "http":
+        if (
+            open_browser
+            and redirect_host in ("127.0.0.1", "localhost")
+            and redirect_info.scheme == "http"
+        ):
             # Only start a local http server if a port is specified
             if redirect_port:
                 return self._get_auth_response_local_server(redirect_port)
@@ -419,9 +431,7 @@ class SpotifyOAuth(SpotifyAuthBase):
                                'the URL your browser is redirected to.',
                                redirect_host, redirect_host)
 
-        logger.info('Paste that url you were directed to in order to '
-                    'complete the authorization')
-        return self._get_auth_response_interactive()
+        return self._get_auth_response_interactive(open_browser=open_browser)
 
     def get_authorization_code(self, response=None):
         if response:
