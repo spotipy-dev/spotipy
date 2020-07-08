@@ -598,6 +598,34 @@ class Spotify(object):
                 - additional_types - list of item types to return.
                                      valid types are: track and episode
         """
+        warnings.warn(
+            "You should use `playlist_items(playlist_id, ...,"
+            "additional_types=('track',))` instead",
+            DeprecationWarning,
+        )
+        return self.playlist_items(playlist_id, fields, limit, offset,
+                                   market, additional_types)
+
+    def playlist_items(
+        self,
+        playlist_id,
+        fields=None,
+        limit=100,
+        offset=0,
+        market=None,
+        additional_types=("track", "episode")
+    ):
+        """ Get full details of the tracks and episodes of a playlist.
+
+            Parameters:
+                - playlist_id - the id of the playlist
+                - fields - which fields to return
+                - limit - the maximum number of tracks to return
+                - offset - the index of the first track to return
+                - market - an ISO 3166-1 alpha-2 country code.
+                - additional_types - list of item types to return.
+                                     valid types are: track and episode
+        """
         plid = self._get_id("playlist", playlist_id)
         return self._get(
             "playlists/%s/tracks" % (plid),

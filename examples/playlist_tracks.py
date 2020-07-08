@@ -8,9 +8,10 @@ pl_id = 'spotify:playlist:5RIbzhG2QqdkaP24iXLnZX'
 offset = 0
 
 while True:
-    response = sp.playlist_tracks(pl_id,
-                                  offset=offset,
-                                  fields='items.track.id,total')
+    response = sp.playlist_items(pl_id,
+                                 offset=offset,
+                                 fields='items.track.id,total',
+                                 additional_types=['track'])
     pprint(response['items'])
     offset = offset + len(response['items'])
     print(offset, "/", response['total'])

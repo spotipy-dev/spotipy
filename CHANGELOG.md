@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `user_playlist_follow_playlist` in favor of
  `current_user_follow_playlist`
 - `user_playlist_is_following` in favor of `playlist_is_following`
+- `playlist_tracks` in favor of `playlist_items`
 
 ## [2.13.0] - 2020-06-25
 
