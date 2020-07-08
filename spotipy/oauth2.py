@@ -431,8 +431,6 @@ class SpotifyOAuth(SpotifyAuthBase):
                                'the URL your browser is redirected to.',
                                redirect_host, redirect_host)
 
-        logger.info('Paste that url you were directed to in order to '
-                    'complete the authorization')
         return self._get_auth_response_interactive(open_browser=open_browser)
 
     def get_authorization_code(self, response=None):
