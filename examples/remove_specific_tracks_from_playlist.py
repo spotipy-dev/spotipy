@@ -22,6 +22,7 @@ else:
 scope = 'playlist-modify-public'
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
 
-results = sp.playlist_remove_specific_occurrences_of_tracks(
+results = sp.playlist_remove_specific_occurrences_of_items(
     playlist_id, track_ids)
 pprint.pprint(results)
+items

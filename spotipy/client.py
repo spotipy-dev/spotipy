@@ -758,18 +758,8 @@ class Spotify(object):
                 - description - optional description of the playlist
         """
 
-        data = {}
-        if isinstance(name, six.string_types):
-            data["name"] = name
-        if isinstance(public, bool):
-            data["public"] = public
-        if isinstance(collaborative, bool):
-            data["collaborative"] = collaborative
-        if isinstance(description, six.string_types):
-            data["description"] = description
-        return self._put(
-            "users/%s/playlists/%s" % (user, playlist_id), payload=data
-        )
+        return self.playlist_change_details(playlist_id, name, public,
+                                            collaborative, description)
 
     def user_playlist_unfollow(self, user, playlist_id):
         """ Unfollows (deletes) a playlist for a user
@@ -782,15 +772,13 @@ class Spotify(object):
             "You should use `current_user_unfollow_playlist(playlist_id)` instead",
             DeprecationWarning,
         )
-        return self._delete(
-            "users/%s/playlists/%s/followers" % (user, playlist_id)
-        )
+        return self.current_user_unfollow_playlist(playlist_id)
 
     def user_playlist_add_tracks(
         self, user, playlist_id, tracks, position=None
     ):
         warnings.warn(
-            "You should use `playlist_add_tracks(playlist_id, tracks)` instead",
+            "You should use `playlist_add_items(playlist_id, tracks)` instead",
             DeprecationWarning,
         )
         """ Adds tracks to a playlist
@@ -801,13 +789,7 @@ class Spotify(object):
                 - tracks - a list of track URIs, URLs or IDs
                 - position - the position to add the tracks
         """
-        plid = self._get_id("playlist", playlist_id)
-        ftracks = [self._get_uri("track", tid) for tid in tracks]
-        return self._post(
-            "users/%s/playlists/%s/tracks" % (user, plid),
-            payload=ftracks,
-            position=position,
-        )
+        return self.playlist_add_items(playlist_id, tracks, position)
 
     def user_playlist_replace_tracks(self, user, playlist_id, tracks):
         """ Replace all tracks in a playlist
@@ -818,15 +800,10 @@ class Spotify(object):
                 - tracks - the list of track ids to add to the playlist
         """
         warnings.warn(
-            "You should use `playlist_replace_tracks(playlist_id, tracks)` instead",
+            "You should use `playlist_replace_items(playlist_id, tracks)` instead",
             DeprecationWarning,
         )
-        plid = self._get_id("playlist", playlist_id)
-        ftracks = [self._get_uri("track", tid) for tid in tracks]
-        payload = {"uris": ftracks}
-        return self._put(
-            "users/%s/playlists/%s/tracks" % (user, plid), payload=payload
-        )
+        return self.playlist_replace_items(playlist_id, tracks)
 
     def user_playlist_reorder_tracks(
         self,
@@ -850,20 +827,12 @@ class Spotify(object):
                 - snapshot_id - optional playlist's snapshot ID
         """
         warnings.warn(
-            "You should use `playlist_reorder_tracks(playlist_id, ...)` instead",
+            "You should use `playlist_reorder_items(playlist_id, ...)` instead",
             DeprecationWarning,
         )
-        plid = self._get_id("playlist", playlist_id)
-        payload = {
-            "range_start": range_start,
-            "range_length": range_length,
-            "insert_before": insert_before,
-        }
-        if snapshot_id:
-            payload["snapshot_id"] = snapshot_id
-        return self._put(
-            "users/%s/playlists/%s/tracks" % (user, plid), payload=payload
-        )
+        return self.playlist_reorder_items(playlist_id, range_start,
+                                           range_length, insert_before,
+                                           snapshot_id)
 
     def user_playlist_remove_all_occurrences_of_tracks(
         self, user, playlist_id, tracks, snapshot_id=None
@@ -878,18 +847,13 @@ class Spotify(object):
 
         """
         warnings.warn(
-            "You should use `playlist_remove_all_occurrences_of_tracks"
+            "You should use `playlist_remove_all_occurrences_of_items"
             "(playlist_id, tracks)` instead",
             DeprecationWarning,
         )
-        plid = self._get_id("playlist", playlist_id)
-        ftracks = [self._get_uri("track", tid) for tid in tracks]
-        payload = {"tracks": [{"uri": track} for track in ftracks]}
-        if snapshot_id:
-            payload["snapshot_id"] = snapshot_id
-        return self._delete(
-            "users/%s/playlists/%s/tracks" % (user, plid), payload=payload
-        )
+        return self.playlist_remove_all_occurrences_of_items(playlist_id,
+                                                             tracks,
+                                                             snapshot_id)
 
     def user_playlist_remove_specific_occurrences_of_tracks(
         self, user, playlist_id, tracks, snapshot_id=None
@@ -907,7 +871,7 @@ class Spotify(object):
                 - snapshot_id - optional id of the playlist snapshot
         """
         warnings.warn(
-            "You should use `playlist_remove_specific_occurrences_of_tracks"
+            "You should use `playlist_remove_specific_occurrences_of_items"
             "(playlist_id, tracks)` instead",
             DeprecationWarning,
         )
@@ -940,11 +904,7 @@ class Spotify(object):
             "You should use `current_user_follow_playlist(playlist_id)` instead",
             DeprecationWarning,
         )
-        return self._put(
-            "users/{}/playlists/{}/followers".format(
-                playlist_owner_id, playlist_id
-            )
-        )
+        return self.current_user_follow_playlist(playlist_id)
 
     def user_playlist_is_following(
         self, playlist_owner_id, playlist_id, user_ids
@@ -963,10 +923,7 @@ class Spotify(object):
             "You should use `playlist_is_following(playlist_id, user_ids)` instead",
             DeprecationWarning,
         )
-        endpoint = "users/{}/playlists/{}/followers/contains?ids={}"
-        return self._get(
-            endpoint.format(playlist_owner_id, playlist_id, ",".join(user_ids))
-        )
+        return self.playlist_is_following(playlist_id, user_ids)
 
     def playlist_change_details(
         self,
@@ -1010,39 +967,39 @@ class Spotify(object):
             "playlists/%s/followers" % (playlist_id)
         )
 
-    def playlist_add_tracks(
-        self, playlist_id, tracks, position=None
+    def playlist_add_items(
+        self, playlist_id, items, position=None
     ):
-        """ Adds tracks to a playlist
+        """ Adds tracks/episodes to a playlist
 
             Parameters:
                 - playlist_id - the id of the playlist
-                - tracks - a list of track URIs, URLs or IDs
+                - items - a list of track/episode URIs, URLs or IDs
                 - position - the position to add the tracks
         """
         plid = self._get_id("playlist", playlist_id)
-        ftracks = [self._get_uri("track", tid) for tid in tracks]
+        ftracks = [self._get_uri("track", tid) for tid in items]
         return self._post(
             "playlists/%s/tracks" % (plid),
             payload=ftracks,
             position=position,
         )
 
-    def playlist_replace_tracks(self, playlist_id, tracks):
-        """ Replace all tracks in a playlist
+    def playlist_replace_items(self, playlist_id, items):
+        """ Replace all tracks/episodes in a playlist
 
             Parameters:
                 - playlist_id - the id of the playlist
-                - tracks - the list of track ids to add to the playlist
+                - items - list of track/episode ids to comprise playlist
         """
         plid = self._get_id("playlist", playlist_id)
-        ftracks = [self._get_uri("track", tid) for tid in tracks]
+        ftracks = [self._get_uri("track", tid) for tid in items]
         payload = {"uris": ftracks}
         return self._put(
             "playlists/%s/tracks" % (plid), payload=payload
         )
 
-    def playlist_reorder_tracks(
+    def playlist_reorder_items(
         self,
         playlist_id,
         range_start,
@@ -1073,20 +1030,20 @@ class Spotify(object):
             "playlists/%s/tracks" % (plid), payload=payload
         )
 
-    def playlist_remove_all_occurrences_of_tracks(
-        self, playlist_id, tracks, snapshot_id=None
+    def playlist_remove_all_occurrences_of_items(
+        self, playlist_id, items, snapshot_id=None
     ):
         """ Removes all occurrences of the given tracks from the given playlist
 
             Parameters:
                 - playlist_id - the id of the playlist
-                - tracks - the list of track ids to remove from the playlist
+                - items - list of track/episode ids to remove from the playlist
                 - snapshot_id - optional id of the playlist snapshot
 
         """
 
         plid = self._get_id("playlist", playlist_id)
-        ftracks = [self._get_uri("track", tid) for tid in tracks]
+        ftracks = [self._get_uri("track", tid) for tid in items]
         payload = {"tracks": [{"uri": track} for track in ftracks]}
         if snapshot_id:
             payload["snapshot_id"] = snapshot_id
@@ -1094,16 +1051,16 @@ class Spotify(object):
             "playlists/%s/tracks" % (plid), payload=payload
         )
 
-    def playlist_remove_specific_occurrences_of_tracks(
-        self, playlist_id, tracks, snapshot_id=None
+    def playlist_remove_specific_occurrences_of_items(
+        self, playlist_id, items, snapshot_id=None
     ):
         """ Removes all occurrences of the given tracks from the given playlist
 
             Parameters:
                 - playlist_id - the id of the playlist
-                - tracks - an array of objects containing Spotify URIs of the
-                    tracks to remove with their current positions in the
-                    playlist.  For example:
+                - items - an array of objects containing Spotify URIs of the
+                    tracks/episodes to remove with their current positions in
+                    the playlist.  For example:
                         [  { "uri":"4iV5W9uYEdYUVa79Axb7Rh", "positions":[2] },
                         { "uri":"1301WleyT98MSxVHPZCA6M", "positions":[7] } ]
                 - snapshot_id - optional id of the playlist snapshot
@@ -1111,7 +1068,7 @@ class Spotify(object):
 
         plid = self._get_id("playlist", playlist_id)
         ftracks = []
-        for tr in tracks:
+        for tr in items:
             ftracks.append(
                 {
                     "uri": self._get_uri("track", tr["uri"]),

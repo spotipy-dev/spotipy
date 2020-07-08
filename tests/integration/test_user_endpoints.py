@@ -84,22 +84,22 @@ class SpotipyPlaylistApiTest(unittest.TestCase):
         self.assertTrue(len(follows) == 1, 'proper follows length')
         self.assertFalse(follows[0], 'is no longer following')
 
-    def test_playlist_replace_tracks(self):
+    def test_playlist_replace_items(self):
         # add tracks to playlist
-        self.spotify.playlist_add_tracks(
+        self.spotify.playlist_add_items(
             self.new_playlist['id'], self.four_tracks)
         playlist = self.spotify.playlist(self.new_playlist['id'])
         self.assertEqual(playlist['tracks']['total'], 4)
         self.assertEqual(len(playlist['tracks']['items']), 4)
 
         # replace with 3 other tracks
-        self.spotify.playlist_replace_tracks(self.new_playlist['id'],
-                                             self.other_tracks)
+        self.spotify.playlist_replace_items(self.new_playlist['id'],
+                                            self.other_tracks)
         playlist = self.spotify.playlist(self.new_playlist['id'])
         self.assertEqual(playlist['tracks']['total'], 3)
         self.assertEqual(len(playlist['tracks']['items']), 3)
 
-        self.spotify.playlist_remove_all_occurrences_of_tracks(
+        self.spotify.playlist_remove_all_occurrences_of_items(
             playlist['id'], self.other_tracks)
         playlist = self.spotify.playlist(self.new_playlist['id'])
         self.assertEqual(playlist["tracks"]["total"], 0)
@@ -108,9 +108,9 @@ class SpotipyPlaylistApiTest(unittest.TestCase):
         pl = self.spotify.playlist(self.new_playlist['id'])
         self.assertEqual(pl["tracks"]["total"], 0)
 
-    def test_playlist_add_tracks(self):
+    def test_playlist_add_items(self):
         # add tracks to playlist
-        self.spotify.playlist_add_tracks(
+        self.spotify.playlist_add_items(
             self.new_playlist['id'], self.other_tracks)
         playlist = self.spotify.playlist(self.new_playlist['id'])
         self.assertEqual(playlist['tracks']['total'], 3)
@@ -119,7 +119,7 @@ class SpotipyPlaylistApiTest(unittest.TestCase):
         pl = self.spotify.playlist_tracks(self.new_playlist['id'], limit=2)
         self.assertEqual(len(pl["items"]), 2)
 
-        self.spotify.playlist_remove_all_occurrences_of_tracks(
+        self.spotify.playlist_remove_all_occurrences_of_items(
             playlist['id'], self.other_tracks)
         playlist = self.spotify.playlist(self.new_playlist['id'])
         self.assertEqual(playlist["tracks"]["total"], 0)

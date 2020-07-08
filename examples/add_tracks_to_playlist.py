@@ -22,7 +22,7 @@ def main():
     args = get_args()
 
     sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
-    sp.playlist_add_tracks(args.playlist, args.tids)
+    sp.playlist_add_items(args.playlist, args.tids)
 
 
 if __name__ == '__main__':
