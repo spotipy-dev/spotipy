@@ -11,8 +11,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
  - Support to search multiple markets at once.
  - Support to search all available Spotify markets.
- - Allow for OAuth 2.0 authorization by instructing the user to open the URL in a browser instead of opening the browser.
+ - Support to test whether the current user is following certain
+ users or artists
+ - Proper replacements for all deprecated playlist endpoints
+ (See https://developer.spotify.com/community/news/2018/06/12/changes-to-playlist-uris/ and below)
+- Allow for OAuth 2.0 authorization by instructing the user to open the URL in a browser instead of opening the browser.
 
+### Deprecated
+
+- `user_playlist_change_details` in favor of `playlist_change_details`
+- `user_playlist_unfollow` in favor of `current_user_unfollow_playlist`
+- `user_playlist_add_tracks` in favor of `playlist_add_items`
+- `user_playlist_replace_tracks` in favor of `playlist_replace_items`
+- `user_playlist_reorder_tracks` in favor of `playlist_reorder_items`
+- `user_playlist_remove_all_occurrences_of_tracks` in favor of
+ `playlist_remove_all_occurrences_of_items`
+- `user_playlist_remove_specific_occurrences_of_tracks` in favor of
+ `playlist_remove_specific_occurrences_of_items`
+- `user_playlist_follow_playlist` in favor of
+ `current_user_follow_playlist`
+- `user_playlist_is_following` in favor of `playlist_is_following`
+- `playlist_tracks` in favor of `playlist_items`
 
 ## [2.13.0] - 2020-06-25
 

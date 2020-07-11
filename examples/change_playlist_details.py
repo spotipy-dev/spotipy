@@ -35,8 +35,7 @@ def get_args():
 def main():
     args = get_args()
     sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
-    sp.user_playlist_change_details(
-        args.username,
+    sp.playlist_change_details(
         args.playlist,
         name=args.name,
         public=args.public or args.private,
