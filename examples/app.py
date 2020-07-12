@@ -31,14 +31,15 @@ caches_folder = './.spotify_caches/'
 if not os.path.exists(caches_folder):
     os.makedirs(caches_folder)
 
-
 @app.route('/')
 def index():
     if not session.get('uuid'):
         # Step 1. Visitor is unknown, give random ID
         session['uuid'] = str(uuid.uuid4())
 
-    auth_manager = spotipy.oauth2.SpotifyOAuth(cache_path=session_cache_path(), show_dialog=True)
+    auth_manager = spotipy.oauth2.SpotifyOAuth(scope='user-read-currently-playing',
+                                                cache_path=session_cache_path(), 
+                                                show_dialog=True)
     if request.args.get("code"):
         # Step 3. Being redirected from Spotify auth page
         auth_manager.get_access_token(request.args.get("code"))
