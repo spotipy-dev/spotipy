@@ -34,11 +34,12 @@ def index():
         session['token_info'] = auth_manager.get_access_token(request.args["code"], check_cache=False)
         return redirect('/')
 
-    if not session['token_info']:
+    token_info = session.get('token_info')
+    if not token_info:
         auth_url = auth_manager.get_authorize_url()
         return f'<h2><a href="{auth_url}">Sign in</a></h2>'
-    print(session['token_info'])
-    spotify = spotipy.Spotify(auth=session['token_info']['access_token'])
+
+    spotify = spotipy.Spotify(auth=token_info['access_token'])
     return f'<h2>Hi {spotify.me()["display_name"]}, ' \
            f'<small><a href="/sign_out">[sign out]<a/></small></h2>' \
            f'<a href="/playlists">my playlists</a>'
@@ -52,7 +53,7 @@ def sign_out():
 
 @app.route('/playlists')
 def playlists():
-    token_info = session['token_info']
+    token_info = session.get('token_info')
     if not token_info:
         return redirect('/')
     spotify = spotipy.Spotify(auth=token_info['access_token'])
