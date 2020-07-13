@@ -570,16 +570,16 @@ class SpotifyPKCE(SpotifyAuthBase):
         super(SpotifyPKCE, self).__init__(requests_session)
         self.client_id = client_id
         self.redirect_uri = redirect_uri
-        self._code_challenge_method = "S256" # Spotify requires SHA256
-        self.code_verifier = self._get_code_verifier()
-        self.code_challenge = self._get_code_challenge(self.code_verifier)
-        self.authorization_code = None
         self.state = state
         self.scope = self._normalize_scope(scope)
         self.cache_path = cache_path
         self.username = username        # Only used for naming the cache of the access token
         self.proxies = proxies
         self.requests_timeout = requests_timeout
+        self._code_challenge_method = "S256" # Spotify requires SHA256
+        self.code_verifier = self._get_code_verifier()
+        self.code_challenge = self._get_code_challenge(self.code_verifier)
+        self.authorization_code = self.get_authorization_code()
 
     def _normalize_scope(self, scope):
         if scope:
@@ -661,7 +661,6 @@ class SpotifyPKCE(SpotifyAuthBase):
             raise SpotifyStateError(self.state, server.state)
 
         if server.auth_code is not None:
-            self.authorization_code = server.auth_code
             return server.auth_code
         elif server.error is not None:
             raise SpotifyOauthError("Received error from OAuth server: {}".format(server.error))
@@ -682,7 +681,6 @@ class SpotifyPKCE(SpotifyAuthBase):
         state, code = SpotifyOAuth.parse_auth_response_url(response)
         if self.state is not None and self.state != state:
             raise SpotifyStateError(self.state, state)
-        self.authorization_code = code
         return code
 
     def get_authorization_code(self, response=None):
@@ -752,7 +750,7 @@ class SpotifyPKCE(SpotifyAuthBase):
         token_info["expires_at"] = int(time.time()) + token_info["expires_in"]
         return token_info
 
-    def get_access_token(self, auth_code=None, as_dict=False, check_cache=True):
+    def get_access_token(self, as_dict=False, check_cache=True):
         """ Gets the access token for the app given the code
 
             Parameters:
@@ -782,7 +780,7 @@ class SpotifyPKCE(SpotifyAuthBase):
         payload = {
             "client_id": self.client_id,
             "grant_type": "authorization_code",
-            "code": auth_code if auth_code is not None else self.authorization_code,
+            "code": self.authorization_code,
             "redirect_uri": self.redirect_uri,
             "code_verifier": self.code_verifier
         }
