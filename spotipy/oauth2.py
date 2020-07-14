@@ -590,11 +590,17 @@ class SpotifyPKCE(SpotifyAuthBase):
             return None
 
     def _get_code_verifier(self):
+        ''' Spotify PCKE code verifier - See step 1 of the reference guide below
+        Reference: https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-code-flow-with-proof-key-for-code-exchange-pkce
+        '''
         import secrets, random
         length = random.randint(33, 96)      # Range (33,96) is used to select between 44-128 base64 characters for the next operation
         return secrets.token_urlsafe(length) # The seeded length generates between a 44 and 128 base64 characters encoded string
 
     def _get_code_challenge(self, code_verifier):
+        ''' Spotify PCKE code challenge - See step 1 of the reference guide below
+        Reference: https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-code-flow-with-proof-key-for-code-exchange-pkce
+        '''
         import hashlib
         import base64
         code_challenge_digest = hashlib.sha256(code_verifier.encode('utf-8')).digest()
