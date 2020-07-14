@@ -578,7 +578,6 @@ class SpotifyPKCE(SpotifyAuthBase):
         self.requests_timeout = requests_timeout
         self._code_challenge_method = "S256" # Spotify requires SHA256
         self.code_verifier = self._get_code_verifier()
-        print(self.code_verifier + str(len(self.code_verifier)))
         self.code_challenge = self._get_code_challenge(self.code_verifier)
         self.authorization_code = None
 
