@@ -630,11 +630,11 @@ class SpotifyPKCE(SpotifyAuthBase):
         try:
             import secrets
             verifier = secrets.token_urlsafe(length)
-        except ImportError as e:    # For python 3.5 support
+        except ImportError:    # For python 3.5 support
             import os
             import base64
             rand_bytes = os.urandom(length)
-            verifier = base64.urlsafe_b64encode(rand_bytes).decode('utf-8').replace('=','')
+            verifier = base64.urlsafe_b64encode(rand_bytes).decode('utf-8').replace('=', '')
         return verifier
 
     def _get_code_challenge(self):
