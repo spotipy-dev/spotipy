@@ -7,6 +7,7 @@ __all__ = [
     "SpotifyOauthError",
     "SpotifyStateError",
     "SpotifyImplicitGrant",
+    "SpotifyPKCE"
 ]
 
 import base64
