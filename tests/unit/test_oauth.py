@@ -5,10 +5,9 @@ import unittest
 
 import six.moves.urllib.parse as urllibparse
 
-from spotipy import SpotifyOAuth, SpotifyImplicitGrant
+from spotipy import SpotifyOAuth, SpotifyImplicitGrant, SpotifyPKCE
 from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOauthError
 from spotipy.oauth2 import SpotifyStateError
-from spotipy.oauth2 import SpotifyPKCE
 
 try:
     import unittest.mock as mock

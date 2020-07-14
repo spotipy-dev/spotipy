@@ -5,7 +5,8 @@ from spotipy import (
     prompt_for_user_token,
     Spotify,
     SpotifyException,
-    SpotifyImplicitGrant
+    SpotifyImplicitGrant,
+    SpotifyPKCE
 )
 import unittest
 import requests
@@ -402,6 +403,38 @@ class SpotipyImplicitGrantTests(unittest.TestCase):
         )
         auth_manager = SpotifyImplicitGrant(scope=scope,
                                             cache_path=".cache-implicittest")
+        cls.spotify = Spotify(auth_manager=auth_manager)
+
+    def test_user_follows_and_unfollows_artist(self):
+        # Initially follows 1 artist
+        current_user_followed_artists = self.spotify.current_user_followed_artists()[
+            'artists']['total']
+
+        # Follow 2 more artists
+        artists = ["6DPYiyq5kWVQS4RGwxzPC7", "0NbfKEOTQCcwd6o7wSDOHI"]
+        self.spotify.user_follow_artists(artists)
+        res = self.spotify.current_user_followed_artists()
+        self.assertEqual(res['artists']['total'], current_user_followed_artists + len(artists))
+
+        # Unfollow these 2 artists
+        self.spotify.user_unfollow_artists(artists)
+        res = self.spotify.current_user_followed_artists()
+        self.assertEqual(res['artists']['total'], current_user_followed_artists)
+
+    def test_current_user(self):
+        c_user = self.spotify.current_user()
+        user = self.spotify.user(c_user['id'])
+        self.assertEqual(c_user['display_name'], user['display_name'])
+
+class SpotifyPKCETests(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        scope = (
+            'user-follow-read '
+            'user-follow-modify '
+        )
+        auth_manager = SpotifyPKCE(scope=scope, cache_path=".cache-implicittest")
         cls.spotify = Spotify(auth_manager=auth_manager)
 
     def test_user_follows_and_unfollows_artist(self):
