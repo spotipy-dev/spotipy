@@ -417,18 +417,21 @@ class SpotifyPKCECacheTest(unittest.TestCase):
 
 class TestSpotifyPKCE(unittest.TestCase):
 
-    def test_code_verifier_generates_during_construction(self):
+    def test_generate_code_verifier_for_pkce(self):
         auth = SpotifyPKCE()
+        auth.get_pkce_handshake_parameters()
         self.assertTrue(auth.code_verifier)
 
-    def test_code_challenge_generates_during_construction(self):
+    def test_generate_code_challenge_for_pkce(self):
         auth = SpotifyPKCE()
+        auth.get_pkce_handshake_parameters()
         self.assertTrue(auth.code_challenge)
 
     def test_code_verifier_and_code_challenge_are_correct(self):
         import hashlib
         import base64
         auth = SpotifyPKCE()
+        auth.get_pkce_handshake_parameters()
         self.assertEqual(auth.code_challenge, base64.urlsafe_b64encode(hashlib.sha256(auth.code_verifier.encode('utf-8')).digest()).decode('utf-8').replace('=',''))
 
     def test_get_authorize_url_doesnt_pass_state_by_default(self):
@@ -452,7 +455,7 @@ class TestSpotifyPKCE(unittest.TestCase):
 
     def test_get_authorize_url_passes_state_from_func_call(self):
         state = "STATE"
-        auth = _make_pkceauth()
+        auth = SpotifyPKCE("CLID", "REDIR")
 
         url = auth.get_authorize_url(state=state)
 
