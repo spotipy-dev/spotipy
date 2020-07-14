@@ -623,7 +623,8 @@ class SpotifyPKCE(SpotifyAuthBase):
         '''
         import secrets
         import random
-        # Range (33,96) is used to select between 44-128 base64 characters for the next operation
+        # Range (33,96) is used to select between 44-128 base64 characters for the
+        # next operation. The range looks weird because base64 is 6 bytes
         length = random.randint(33, 96)
         # The seeded length generates between a 44 and 128 base64 characters encoded string
         return secrets.token_urlsafe(length)
