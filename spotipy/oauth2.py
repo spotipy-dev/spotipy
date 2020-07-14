@@ -578,8 +578,9 @@ class SpotifyPKCE(SpotifyAuthBase):
         self.requests_timeout = requests_timeout
         self._code_challenge_method = "S256" # Spotify requires SHA256
         self.code_verifier = self._get_code_verifier()
+        print(self.code_verifier + str(len(self.code_verifier)))
         self.code_challenge = self._get_code_challenge(self.code_verifier)
-        self.authorization_code = self.get_authorization_code()
+        self.authorization_code = None
 
     def _normalize_scope(self, scope):
         if scope:
@@ -589,8 +590,9 @@ class SpotifyPKCE(SpotifyAuthBase):
             return None
 
     def _get_code_verifier(self):
-        import secrets
-        return secrets.token_urlsafe(80) # Spotify wants between 43 to 128 characters.
+        import secrets, random
+        length = random.randint(33, 96)      # Range (33,96) is used to select between 44-128 base64 characters for the next operation
+        return secrets.token_urlsafe(length) # The seeded length generates between a 44 and 128 base64 characters encoded string
 
     def _get_code_challenge(self, code_verifier):
         import hashlib
@@ -780,7 +782,7 @@ class SpotifyPKCE(SpotifyAuthBase):
         payload = {
             "client_id": self.client_id,
             "grant_type": "authorization_code",
-            "code": self.authorization_code,
+            "code": self.get_authorization_code(),
             "redirect_uri": self.redirect_uri,
             "code_verifier": self.code_verifier
         }
