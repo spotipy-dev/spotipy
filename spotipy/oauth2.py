@@ -605,8 +605,8 @@ class SpotifyPKCE(SpotifyAuthBase):
         self.requests_timeout = requests_timeout
 
         self._code_challenge_method = "S256"  # Spotify requires SHA256
-        self.code_verifier = self._get_code_verifier()
-        self.code_challenge = self._get_code_challenge(self.code_verifier)
+        self.code_verifier = None
+        self.code_challenge = None
         self.authorization_code = None
 
     def _normalize_scope(self, scope):
@@ -629,14 +629,14 @@ class SpotifyPKCE(SpotifyAuthBase):
         # The seeded length generates between a 44 and 128 base64 characters encoded string
         return secrets.token_urlsafe(length)
 
-    def _get_code_challenge(self, code_verifier):
+    def _get_code_challenge(self):
         ''' Spotify PCKE code challenge - See step 1 of the reference guide below
         Reference:
         https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-code-flow-with-proof-key-for-code-exchange-pkce
         '''
         import hashlib
         import base64
-        code_challenge_digest = hashlib.sha256(code_verifier.encode('utf-8')).digest()
+        code_challenge_digest = hashlib.sha256(self.code_verifier.encode('utf-8')).digest()
         code_challenge = base64.urlsafe_b64encode(code_challenge_digest).decode('utf-8')
         return code_challenge.replace('=', '')
 
@@ -791,6 +791,10 @@ class SpotifyPKCE(SpotifyAuthBase):
         token_info["expires_at"] = int(time.time()) + token_info["expires_in"]
         return token_info
 
+    def get_pkce_handshake_parameters(self):
+        self.code_verifier = self._get_code_verifier()
+        self.code_challenge = self._get_code_challenge()
+
     def get_access_token(self, as_dict=False, check_cache=True):
         """ Gets the access token for the app given the code
 
@@ -817,6 +821,9 @@ class SpotifyPKCE(SpotifyAuthBase):
                         token_info["refresh_token"]
                     )
                 return token_info if as_dict else token_info["access_token"]
+
+        if self.code_verifier is None or self.code_challenge is None:
+            self.get_pkce_handshake_parameters()
 
         payload = {
             "client_id": self.client_id,
