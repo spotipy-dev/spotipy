@@ -426,6 +426,7 @@ class SpotipyImplicitGrantTests(unittest.TestCase):
         user = self.spotify.user(c_user['id'])
         self.assertEqual(c_user['display_name'], user['display_name'])
 
+
 class SpotifyPKCETests(unittest.TestCase):
 
     @classmethod

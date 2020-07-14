@@ -45,6 +45,7 @@ def _make_oauth(*args, **kwargs):
 def _make_implicitgrantauth(*args, **kwargs):
     return SpotifyImplicitGrant("CLID", "REDIR", "STATE", *args, **kwargs)
 
+
 def _make_pkceauth(*args, **kwargs):
     return SpotifyPKCE("CLID", "REDIR", "STATE", *args, **kwargs)
 
@@ -337,6 +338,7 @@ class TestSpotifyImplicitGrant(unittest.TestCase):
         parsed_qs = urllibparse.parse_qs(parsed_url.query)
         self.assertTrue(parsed_qs['show_dialog'])
 
+
 class SpotifyPKCECacheTest(unittest.TestCase):
 
     @patch.multiple(SpotifyPKCE,
@@ -357,7 +359,6 @@ class SpotifyPKCECacheTest(unittest.TestCase):
         opener.assert_called_with(path)
         self.assertIsNotNone(cached_tok)
         self.assertEqual(refresh_access_token.call_count, 0)
-
 
     @patch.multiple(SpotifyPKCE,
                     is_token_expired=DEFAULT, refresh_access_token=DEFAULT)
@@ -415,6 +416,7 @@ class SpotifyPKCECacheTest(unittest.TestCase):
         opener.assert_called_with(path, 'w')
         self.assertTrue(fi.write.called)
 
+
 class TestSpotifyPKCE(unittest.TestCase):
 
     def test_generate_code_verifier_for_pkce(self):
@@ -432,7 +434,12 @@ class TestSpotifyPKCE(unittest.TestCase):
         import base64
         auth = SpotifyPKCE()
         auth.get_pkce_handshake_parameters()
-        self.assertEqual(auth.code_challenge, base64.urlsafe_b64encode(hashlib.sha256(auth.code_verifier.encode('utf-8')).digest()).decode('utf-8').replace('=',''))
+        self.assertEqual(auth.code_challenge,
+                         base64.urlsafe_b64encode(
+                                hashlib.sha256(auth.code_verifier.encode('utf-8'))
+                                .digest())
+                         .decode('utf-8')
+                         .replace('=', ''))
 
     def test_get_authorize_url_doesnt_pass_state_by_default(self):
         auth = SpotifyPKCE("CLID", "REDIR")
