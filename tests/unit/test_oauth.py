@@ -8,6 +8,7 @@ import six.moves.urllib.parse as urllibparse
 from spotipy import SpotifyOAuth, SpotifyImplicitGrant
 from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOauthError
 from spotipy.oauth2 import SpotifyStateError
+from spotipy.oauth2 import SpotifyPKCE
 
 try:
     import unittest.mock as mock
@@ -44,6 +45,9 @@ def _make_oauth(*args, **kwargs):
 
 def _make_implicitgrantauth(*args, **kwargs):
     return SpotifyImplicitGrant("CLID", "REDIR", "STATE", *args, **kwargs)
+
+def _make_pkceauth(*args, **kwargs):
+    return SpotifyPKCE("CLID", "REDIR", "STATE", *args, **kwargs)
 
 
 class OAuthCacheTest(unittest.TestCase):
@@ -333,3 +337,126 @@ class TestSpotifyImplicitGrant(unittest.TestCase):
         parsed_url = urllibparse.urlparse(url)
         parsed_qs = urllibparse.parse_qs(parsed_url.query)
         self.assertTrue(parsed_qs['show_dialog'])
+
+class SpotifyPKCECacheTest(unittest.TestCase):
+
+    @patch.multiple(SpotifyPKCE,
+                    is_token_expired=DEFAULT, refresh_access_token=DEFAULT)
+    @patch('spotipy.oauth2.open', create=True)
+    def test_gets_from_cache_path(self, opener,
+                                  is_token_expired, refresh_access_token):
+        scope = "playlist-modify-private"
+        path = ".cache-username"
+        tok = _make_fake_token(1, 1, scope)
+
+        opener.return_value = _token_file(json.dumps(tok, ensure_ascii=False))
+        is_token_expired.return_value = False
+
+        spot = _make_pkceauth(scope, path)
+        cached_tok = spot.get_cached_token()
+
+        opener.assert_called_with(path)
+        self.assertIsNotNone(cached_tok)
+        self.assertEqual(refresh_access_token.call_count, 0)
+
+
+    @patch.multiple(SpotifyPKCE,
+                    is_token_expired=DEFAULT, refresh_access_token=DEFAULT)
+    @patch('spotipy.oauth2.open', create=True)
+    def test_expired_token_refreshes(self, opener,
+                                     is_token_expired, refresh_access_token):
+        scope = "playlist-modify-private"
+        path = ".cache-username"
+        expired_tok = _make_fake_token(0, None, scope)
+        fresh_tok = _make_fake_token(1, 1, scope)
+
+        token_file = _token_file(json.dumps(expired_tok, ensure_ascii=False))
+        opener.return_value = token_file
+        refresh_access_token.return_value = fresh_tok
+
+        spot = _make_pkceauth(scope, path)
+        spot.get_cached_token()
+
+        is_token_expired.assert_called_with(expired_tok)
+        refresh_access_token.assert_called_with(expired_tok['refresh_token'])
+        opener.assert_any_call(path)
+
+    @patch.multiple(SpotifyPKCE,
+                    is_token_expired=DEFAULT, refresh_access_token=DEFAULT)
+    @patch('spotipy.oauth2.open', create=True)
+    def test_badly_scoped_token_bails(self, opener,
+                                      is_token_expired, refresh_access_token):
+        token_scope = "playlist-modify-public"
+        requested_scope = "playlist-modify-private"
+        path = ".cache-username"
+        tok = _make_fake_token(1, 1, token_scope)
+
+        opener.return_value = _token_file(json.dumps(tok, ensure_ascii=False))
+        is_token_expired.return_value = False
+
+        spot = _make_pkceauth(requested_scope, path)
+        cached_tok = spot.get_cached_token()
+
+        opener.assert_called_with(path)
+        self.assertIsNone(cached_tok)
+        self.assertEqual(refresh_access_token.call_count, 0)
+
+    @patch('spotipy.oauth2.open', create=True)
+    def test_saves_to_cache_path(self, opener):
+        scope = "playlist-modify-private"
+        path = ".cache-username"
+        tok = _make_fake_token(1, 1, scope)
+
+        fi = _fake_file()
+        opener.return_value = fi
+
+        spot = SpotifyPKCE("CLID", "REDIR", "STATE", scope, path)
+        spot._save_token_info(tok)
+
+        opener.assert_called_with(path, 'w')
+        self.assertTrue(fi.write.called)
+
+class TestSpotifyPKCE(unittest.TestCase):
+
+    def test_code_verifier_generates_during_construction(self):
+        auth = SpotifyPKCE()
+        self.assertTrue(auth.code_verifier)
+
+    def test_code_challenge_generates_during_construction(self):
+        auth = SpotifyPKCE()
+        self.assertTrue(auth.code_challenge)
+
+    def test_code_verifier_and_code_challenge_are_correct(self):
+        import hashlib
+        import base64
+        auth = SpotifyPKCE()
+        self.assertEqual(auth.code_challenge, base64.urlsafe_b64encode(hashlib.sha256(auth.code_verifier.encode('utf-8')).digest()).decode('utf-8').replace('=',''))
+
+    def test_get_authorize_url_doesnt_pass_state_by_default(self):
+        auth = SpotifyPKCE("CLID", "REDIR")
+
+        url = auth.get_authorize_url()
+
+        parsed_url = urllibparse.urlparse(url)
+        parsed_qs = urllibparse.parse_qs(parsed_url.query)
+        self.assertNotIn('state', parsed_qs)
+
+    def test_get_authorize_url_passes_state_from_constructor(self):
+        state = "STATE"
+        auth = SpotifyPKCE("CLID", "REDIR", state)
+
+        url = auth.get_authorize_url()
+
+        parsed_url = urllibparse.urlparse(url)
+        parsed_qs = urllibparse.parse_qs(parsed_url.query)
+        self.assertEqual(parsed_qs['state'][0], state)
+
+    def test_get_authorize_url_passes_state_from_func_call(self):
+        state = "STATE"
+        auth = _make_pkceauth()
+
+        url = auth.get_authorize_url(state=state)
+
+        parsed_url = urllibparse.urlparse(url)
+        parsed_qs = urllibparse.parse_qs(parsed_url.query)
+        self.assertEqual(parsed_qs['state'][0], state)
