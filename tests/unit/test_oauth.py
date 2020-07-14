@@ -420,19 +420,19 @@ class SpotifyPKCECacheTest(unittest.TestCase):
 class TestSpotifyPKCE(unittest.TestCase):
 
     def test_generate_code_verifier_for_pkce(self):
-        auth = SpotifyPKCE()
+        auth = SpotifyPKCE("CLID", "REDIR")
         auth.get_pkce_handshake_parameters()
         self.assertTrue(auth.code_verifier)
 
     def test_generate_code_challenge_for_pkce(self):
-        auth = SpotifyPKCE()
+        auth = SpotifyPKCE("CLID", "REDIR")
         auth.get_pkce_handshake_parameters()
         self.assertTrue(auth.code_challenge)
 
     def test_code_verifier_and_code_challenge_are_correct(self):
         import hashlib
         import base64
-        auth = SpotifyPKCE()
+        auth = SpotifyPKCE("CLID", "REDIR")
         auth.get_pkce_handshake_parameters()
         self.assertEqual(auth.code_challenge,
                          base64.urlsafe_b64encode(
