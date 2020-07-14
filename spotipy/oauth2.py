@@ -551,32 +551,59 @@ class SpotifyOAuth(SpotifyAuthBase):
         token_info["scope"] = self.scope
         return token_info
 
+
 class SpotifyPKCE(SpotifyAuthBase):
+    """ Implements PKCE Authorization Flow for client apps
+
+    This auth manager enables *user and non-user* endpoints with only
+    a client secret, redirect uri, and username. When the app requests
+    an an access token for the first time, the user is prompted to
+    authorize the new client app. After authorizing the app, the client
+    app is then given both access and refresh tokens. This is the
+    preferred way of authorizing a mobile/desktop client.
+
+    """
 
     OAUTH_AUTHORIZE_URL = "https://accounts.spotify.com/authorize"
     OAUTH_TOKEN_URL = "https://accounts.spotify.com/api/token"
 
-    def __init__(self, 
-                 client_id=None, 
-                 redirect_uri=None, 
-                 code_challenge=None, 
-                 state=None, 
+    def __init__(self,
+                 client_id=None,
+                 redirect_uri=None,
+                 state=None,
                  scope=None,
-                 requests_session=True,
                  cache_path=None,
                  username=None,
                  proxies=None,
-                 requests_timeout=None,):
+                 requests_timeout=None,
+                 requests_session=True,):
+        """
+            Creates Auth Manager with the PKCE Auth flow.
+
+            Parameters:
+                 - client_id - the client id of your app
+                 - redirect_uri - the redirect URI of your app
+                 - state - security state
+                 - scope - the desired scope of the request
+                 - cache_path - path to location to save tokens
+                 - username - username of current client
+                 - proxies - proxy for the requests library to route through
+                 - requests_timeout - tell Requests to stop waiting for a response
+                                      after a given number of seconds
+        """
         super(SpotifyPKCE, self).__init__(requests_session)
         self.client_id = client_id
         self.redirect_uri = redirect_uri
         self.state = state
         self.scope = self._normalize_scope(scope)
         self.cache_path = cache_path
-        self.username = username        # Only used for naming the cache of the access token
+        self.username = username or os.getenv(
+            CLIENT_CREDS_ENV_VARS["client_username"]
+        )
         self.proxies = proxies
         self.requests_timeout = requests_timeout
-        self._code_challenge_method = "S256" # Spotify requires SHA256
+
+        self._code_challenge_method = "S256"  # Spotify requires SHA256
         self.code_verifier = self._get_code_verifier()
         self.code_challenge = self._get_code_challenge(self.code_verifier)
         self.authorization_code = None
@@ -590,15 +617,20 @@ class SpotifyPKCE(SpotifyAuthBase):
 
     def _get_code_verifier(self):
         ''' Spotify PCKE code verifier - See step 1 of the reference guide below
-        Reference: https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-code-flow-with-proof-key-for-code-exchange-pkce
+        Reference:
+        https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-code-flow-with-proof-key-for-code-exchange-pkce
         '''
-        import secrets, random
-        length = random.randint(33, 96)      # Range (33,96) is used to select between 44-128 base64 characters for the next operation
-        return secrets.token_urlsafe(length) # The seeded length generates between a 44 and 128 base64 characters encoded string
+        import secrets
+        import random
+        # Range (33,96) is used to select between 44-128 base64 characters for the next operation
+        length = random.randint(33, 96)
+        # The seeded length generates between a 44 and 128 base64 characters encoded string
+        return secrets.token_urlsafe(length)
 
     def _get_code_challenge(self, code_verifier):
         ''' Spotify PCKE code challenge - See step 1 of the reference guide below
-        Reference: https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-code-flow-with-proof-key-for-code-exchange-pkce
+        Reference:
+        https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-code-flow-with-proof-key-for-code-exchange-pkce
         '''
         import hashlib
         import base64
@@ -804,8 +836,8 @@ class SpotifyPKCE(SpotifyAuthBase):
         )
         if response.status_code != 200:
             error_payload = response.json()
-            raise SpotifyOauthError('error: {0}, error_description: {1}'.format(error_payload['error'], 
-                                                                                error_payload['error_description']),
+            raise SpotifyOauthError('error: {0}, error_descr: {1}'.format(error_payload['error'],
+                                    error_payload['error_description']),
                                     error=error_payload['error'],
                                     error_description=error_payload['error_description'])
         token_info = response.json()
@@ -863,7 +895,6 @@ class SpotifyPKCE(SpotifyAuthBase):
             return url
         else:
             return code
-    
 
 
 class SpotifyImplicitGrant(SpotifyAuthBase):
