@@ -838,7 +838,7 @@ class SpotifyPKCE(SpotifyAuthBase):
         if response.status_code != 200:
             error_payload = response.json()
             raise SpotifyOauthError('error: {0}, error_descr: {1}'.format(error_payload['error'],
-                                    error_payload['error_description']),
+                                                                          error_payload['error_description']),
                                     error=error_payload['error'],
                                     error_description=error_payload['error_description'])
         token_info = response.json()
