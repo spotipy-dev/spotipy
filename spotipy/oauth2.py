@@ -803,24 +803,14 @@ class SpotifyPKCE(SpotifyAuthBase):
         self.code_verifier = self._get_code_verifier()
         self.code_challenge = self._get_code_challenge()
 
-    def get_access_token(self, as_dict=False, check_cache=True):
+    def get_access_token(self, check_cache=True):
         """ Gets the access token for the app given the code
 
             Parameters:
-                - auth_code - the response from get_authorization_code()
-                - as_dict - a boolean indicating if returning the access token
-                            as a token_info dictionary, otherwise it will be returned
-                            as a string.
+                - check_cache - check for locally stored token before request
+                                a new token if True
         """
-        if as_dict:
-            warnings.warn(
-                "You're using 'as_dict = True'."
-                "get_access_token will return the token string directly in future "
-                "versions. Please adjust your code accordingly, or use "
-                "get_cached_token instead.",
-                DeprecationWarning,
-                stacklevel=2,
-            )
+
         if check_cache:
             token_info = self.get_cached_token()
             if token_info is not None:
@@ -828,7 +818,7 @@ class SpotifyPKCE(SpotifyAuthBase):
                     token_info = self.refresh_access_token(
                         token_info["refresh_token"]
                     )
-                return token_info if as_dict else token_info["access_token"]
+                return token_info["access_token"]
 
         if self.code_verifier is None or self.code_challenge is None:
             self.get_pkce_handshake_parameters()
@@ -862,7 +852,7 @@ class SpotifyPKCE(SpotifyAuthBase):
         token_info = response.json()
         token_info = self._add_custom_values_to_token_info(token_info)
         self._save_token_info(token_info)
-        return token_info if as_dict else token_info["access_token"]
+        return token_info["access_token"]
 
     def refresh_access_token(self, refresh_token):
         payload = {
