@@ -240,7 +240,6 @@ class Spotify(object):
                 msg = response.json()["error"]["message"]
             except (ValueError, KeyError):
                 msg = "error"
-            
             try:
                 reason = response.json()["error"]["reason"]
             except (ValueError, KeyError):
