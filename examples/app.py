@@ -22,24 +22,34 @@ import uuid
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(64)
 app.config['SESSION_TYPE'] = 'filesystem'
-
+app.config['SESSION_FILE_DIR'] = './.flask_session/'
 Session(app)
+
+caches_folder = './.spotify_caches/'
+if not os.path.exists(caches_folder):
+    os.makedirs(caches_folder)
 
 
 @app.route('/')
 def index():
-    cache_path = '.cache-'.join(str(uuid.uuid4()))
-    auth_manager = spotipy.oauth2.SpotifyOAuth(cache_path=cache_path)
+    if not session.get('uuid'):
+        # Step 1. Visitor is unknown, give random ID
+        session['uuid'] = str(uuid.uuid4())
+
+    auth_manager = spotipy.oauth2.SpotifyOAuth(cache_path=session_cache_path(session.get('uuid')))
+
     if request.args.get("code"):
-        session['token_info'] = auth_manager.get_access_token(request.args["code"], check_cache=False)
+        # Step 3. Being redirected from Spotify auth page
+        session['token_info'] = auth_manager.get_access_token(request.args.get("code"))
         return redirect('/')
 
-    token_info = session.get('token_info')
-    if not token_info:
+    if not session.get('token_info'):
+        # Step 2. Display sign in link when no token
         auth_url = auth_manager.get_authorize_url()
         return f'<h2><a href="{auth_url}">Sign in</a></h2>'
 
-    spotify = spotipy.Spotify(auth=token_info['access_token'])
+    # Step 4. Signed in, display data
+    spotify = spotipy.Spotify(auth=session.get('token_info')['access_token'])
     return f'<h2>Hi {spotify.me()["display_name"]}, ' \
            f'<small><a href="/sign_out">[sign out]<a/></small></h2>' \
            f'<a href="/playlists">my playlists</a>'
@@ -47,6 +57,7 @@ def index():
 
 @app.route('/sign_out')
 def sign_out():
+    os.remove(session_cache_path(session.get('uuid')))
     session.clear()
     return redirect('/')
 
@@ -54,7 +65,13 @@ def sign_out():
 @app.route('/playlists')
 def playlists():
     token_info = session.get('token_info')
+
     if not token_info:
         return redirect('/')
+
     spotify = spotipy.Spotify(auth=token_info['access_token'])
     return spotify.current_user_playlists()
+
+
+def session_cache_path(session_uuid):
+    return caches_folder + session_uuid
