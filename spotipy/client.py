@@ -109,6 +109,7 @@ class Spotify(object):
         retries=max_retries,
         status_retries=max_retries,
         backoff_factor=0.3,
+        language=None,
     ):
         """
         Creates a Spotify API client.
@@ -141,6 +142,9 @@ class Spotify(object):
         :param backoff_factor:
             A backoff factor to apply between attempts after the second try
             See urllib3 https://urllib3.readthedocs.io/en/latest/reference/urllib3.util.html
+        :param language:
+            The language parameter advertises what language the user prefers to see.
+            See ISO-639 language code: https://www.loc.gov/standards/iso639-2/php/code_list.php
         """
         self.prefix = "https://api.spotify.com/v1/"
         self._auth = auth
@@ -153,6 +157,7 @@ class Spotify(object):
         self.backoff_factor = backoff_factor
         self.retries = retries
         self.status_retries = status_retries
+        self.language = language
 
         if isinstance(requests_session, requests.Session):
             self._session = requests_session
@@ -223,6 +228,9 @@ class Spotify(object):
             headers["Content-Type"] = "application/json"
             if payload:
                 args["data"] = json.dumps(payload)
+
+        if self.language is not None:
+            headers["Accept-Language"] = self.language
 
         logger.debug('Sending %s to %s with Headers: %s and Body: %r ',
                      method, url, headers, args.get('data'))
