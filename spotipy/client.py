@@ -248,6 +248,10 @@ class Spotify(object):
                 msg = response.json()["error"]["message"]
             except (ValueError, KeyError):
                 msg = "error"
+            try:
+                reason = response.json()["error"]["reason"]
+            except (ValueError, KeyError):
+                reason = None
 
             logger.error('HTTP Error for %s to %s returned %s due to %s',
                          method, url, response.status_code, msg)
@@ -256,6 +260,7 @@ class Spotify(object):
                 response.status_code,
                 -1,
                 "%s:\n %s" % (response.url, msg),
+                reason=reason,
                 headers=response.headers,
             )
         except requests.exceptions.RetryError:
