@@ -753,7 +753,12 @@ class Spotify(object):
                 - collaborative - is the created playlist collaborative
                 - description - the description of the playlist
         """
-        data = {"name": name, "public": public, "collaborative": collaborative, "description": description}
+        data = {
+            "name": name, 
+            "public": public, 
+            "collaborative": collaborative, 
+            "description": description
+        }
 
         return self._post("users/%s/playlists" % (user,), payload=data)
 
