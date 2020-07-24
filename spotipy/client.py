@@ -754,9 +754,9 @@ class Spotify(object):
                 - description - the description of the playlist
         """
         data = {
-            "name": name, 
-            "public": public, 
-            "collaborative": collaborative, 
+            "name": name,
+            "public": public,
+            "collaborative": collaborative,
             "description": description
         }
 
