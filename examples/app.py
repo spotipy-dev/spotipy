@@ -63,7 +63,8 @@ def index():
     return f'<h2>Hi {spotify.me()["display_name"]}, ' \
            f'<small><a href="/sign_out">[sign out]<a/></small></h2>' \
            f'<a href="/playlists">my playlists</a> | ' \
-           f'<a href="/currently_playing">currently playing</a>'
+           f'<a href="/currently_playing">currently playing</a> | ' \
+		   f'<a href="/current_user">me</a>' \
 
 
 @app.route('/sign_out')
@@ -93,6 +94,12 @@ def currently_playing():
         return track
     return "No track currently playing."
 
+@app.route('/current_user')
+def current_user():
+	if not session.get('token_info'):
+		return redirect('/')
+	return spotify.current_user()
+	
 '''
 Following lines allow application to be run more conveniently with
 `python app.py` (Make sure you're using python3)
