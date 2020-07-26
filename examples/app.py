@@ -7,6 +7,11 @@ Prerequisites
     export SPOTIPY_CLIENT_ID=client_id_here
     export SPOTIPY_CLIENT_SECRET=client_secret_here
     export SPOTIPY_REDIRECT_URI='http://127.0.0.1:8080' // must contain a port
+    OPTIONAL
+    // in development environment for debug output
+    export FLASK_ENV=development
+    // so that you can invoke the app outside of the file's directory include
+    export FLASK_APP=/path/to/spotipy/examples/app.py
     
     // on Windows, use `SET` instead of `export`
 
