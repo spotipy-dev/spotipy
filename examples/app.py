@@ -7,6 +7,7 @@ Prerequisites
     export SPOTIPY_CLIENT_ID=client_id_here
     export SPOTIPY_CLIENT_SECRET=client_secret_here
     export SPOTIPY_REDIRECT_URI='http://127.0.0.1:8080' // must contain a port
+    // SPOTIPY_REDIRECT_URI must be added to your [app settings](https://developer.spotify.com/dashboard/applications)
     OPTIONAL
     // in development environment for debug output
     export FLASK_ENV=development
@@ -18,6 +19,8 @@ Prerequisites
 Run app.py
 
     python3 -m flask run --port=8080
+    NOTE: If receiving "port already in use" error, try other ports: 5000, 8090, 8888, etc...
+        (will need to be updated in your Spotify app and SPOTIPY_REDIRECT_URI variable)
 """
 
 import os
@@ -82,7 +85,8 @@ def playlists():
 
     spotify = spotipy.Spotify(auth_manager=auth_manager)
     return spotify.current_user_playlists()
-    
+
+
 @app.route('/currently_playing')
 def currently_playing():
     auth_manager = spotipy.oauth2.SpotifyOAuth(cache_path=session_cache_path())
@@ -94,12 +98,14 @@ def currently_playing():
         return track
     return "No track currently playing."
 
+
 @app.route('/current_user')
 def current_user():
 	if not session.get('token_info'):
 		return redirect('/')
 	return spotify.current_user()
-	
+
+
 '''
 Following lines allow application to be run more conveniently with
 `python app.py` (Make sure you're using python3)
