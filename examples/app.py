@@ -36,6 +36,9 @@ caches_folder = './.spotify_caches/'
 if not os.path.exists(caches_folder):
     os.makedirs(caches_folder)
 
+def session_cache_path():
+    return caches_folder + session.get('uuid')
+
 @app.route('/')
 def index():
     if not session.get('uuid'):
@@ -73,20 +76,15 @@ def sign_out():
 @app.route('/playlists')
 def playlists():
     auth_manager = spotipy.oauth2.SpotifyOAuth(cache_path=session_cache_path())
-
     if not auth_manager.get_cached_token():
         return redirect('/')
 
     spotify = spotipy.Spotify(auth_manager=auth_manager)
     return spotify.current_user_playlists()
-
-def session_cache_path():
-    return caches_folder + session.get('uuid')
     
 @app.route('/currently_playing')
 def currently_playing():
     auth_manager = spotipy.oauth2.SpotifyOAuth(cache_path=session_cache_path())
-
     if not auth_manager.get_cached_token():
         return redirect('/')
     spotify = spotipy.Spotify(auth_manager=auth_manager)
