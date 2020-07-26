@@ -89,3 +89,10 @@ def currently_playing():
     if not track is None:
         return track
     return "No track currently playing."
+
+'''
+Following lines allow application to be run more conveniently with
+`python app.py` (Make sure you're using python3)
+'''
+if __name__ == '__main__':
+	app.run(port=int(os.environ.get("PORT", 8080)))
