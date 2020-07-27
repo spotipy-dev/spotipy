@@ -77,7 +77,7 @@ def sign_out():
     session.clear()
     try:
         # Remove the CACHE file (.cache-test) so that a new user can authorize.
-        os.remove(CACHE)
+        os.remove(session_cache_path())
     except OSError as e:
         print ("Error: %s - %s." % (e.filename, e.strerror))
     return redirect('/')
