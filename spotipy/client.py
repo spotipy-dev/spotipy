@@ -743,16 +743,22 @@ class Spotify(object):
             "users/%s/playlists" % user, limit=limit, offset=offset
         )
 
-    def user_playlist_create(self, user, name, public=True, description=""):
+    def user_playlist_create(self, user, name, public=True, collaborative=False, description=""):
         """ Creates a playlist for a user
 
             Parameters:
                 - user - the id of the user
                 - name - the name of the playlist
                 - public - is the created playlist public
+                - collaborative - is the created playlist collaborative
                 - description - the description of the playlist
         """
-        data = {"name": name, "public": public, "description": description}
+        data = {
+            "name": name,
+            "public": public,
+            "collaborative": collaborative,
+            "description": description
+        }
 
         return self._post("users/%s/playlists" % (user,), payload=data)
 
