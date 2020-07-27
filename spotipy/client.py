@@ -109,6 +109,7 @@ class Spotify(object):
         retries=max_retries,
         status_retries=max_retries,
         backoff_factor=0.3,
+        language=None,
     ):
         """
         Creates a Spotify API client.
@@ -141,6 +142,9 @@ class Spotify(object):
         :param backoff_factor:
             A backoff factor to apply between attempts after the second try
             See urllib3 https://urllib3.readthedocs.io/en/latest/reference/urllib3.util.html
+        :param language:
+            The language parameter advertises what language the user prefers to see.
+            See ISO-639 language code: https://www.loc.gov/standards/iso639-2/php/code_list.php
         """
         self.prefix = "https://api.spotify.com/v1/"
         self._auth = auth
@@ -153,6 +157,7 @@ class Spotify(object):
         self.backoff_factor = backoff_factor
         self.retries = retries
         self.status_retries = status_retries
+        self.language = language
 
         if isinstance(requests_session, requests.Session):
             self._session = requests_session
@@ -224,6 +229,9 @@ class Spotify(object):
             if payload:
                 args["data"] = json.dumps(payload)
 
+        if self.language is not None:
+            headers["Accept-Language"] = self.language
+
         logger.debug('Sending %s to %s with Headers: %s and Body: %r ',
                      method, url, headers, args.get('data'))
 
@@ -240,6 +248,10 @@ class Spotify(object):
                 msg = response.json()["error"]["message"]
             except (ValueError, KeyError):
                 msg = "error"
+            try:
+                reason = response.json()["error"]["reason"]
+            except (ValueError, KeyError):
+                reason = None
 
             logger.error('HTTP Error for %s to %s returned %s due to %s',
                          method, url, response.status_code, msg)
@@ -248,6 +260,7 @@ class Spotify(object):
                 response.status_code,
                 -1,
                 "%s:\n %s" % (response.url, msg),
+                reason=reason,
                 headers=response.headers,
             )
         except requests.exceptions.RetryError:
@@ -730,16 +743,22 @@ class Spotify(object):
             "users/%s/playlists" % user, limit=limit, offset=offset
         )
 
-    def user_playlist_create(self, user, name, public=True, description=""):
+    def user_playlist_create(self, user, name, public=True, collaborative=False, description=""):
         """ Creates a playlist for a user
 
             Parameters:
                 - user - the id of the user
                 - name - the name of the playlist
                 - public - is the created playlist public
+                - collaborative - is the created playlist collaborative
                 - description - the description of the playlist
         """
-        data = {"name": name, "public": public, "description": description}
+        data = {
+            "name": name,
+            "public": public,
+            "collaborative": collaborative,
+            "description": description
+        }
 
         return self._post("users/%s/playlists" % (user,), payload=data)
 

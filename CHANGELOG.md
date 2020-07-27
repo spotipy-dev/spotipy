@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
  - Proper replacements for all deprecated playlist endpoints
  (See https://developer.spotify.com/community/news/2018/06/12/changes-to-playlist-uris/ and below)
 - Allow for OAuth 2.0 authorization by instructing the user to open the URL in a browser instead of opening the browser.
+- Reason for 403 error in SpotifyException
+- Support for the PKCE Auth Flow
+- Support to advertise different language to Spotify
+- Added 'collaborative' parameter to user_playlist_create method.
 
 ### Deprecated
 

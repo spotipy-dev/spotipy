@@ -13,7 +13,7 @@ Prerequisites
     export FLASK_ENV=development
     // so that you can invoke the app outside of the file's directory include
     export FLASK_APP=/path/to/spotipy/examples/app.py
-    
+ 
     // on Windows, use `SET` instead of `export`
 
 Run app.py
@@ -39,7 +39,6 @@ caches_folder = './.spotify_caches/'
 if not os.path.exists(caches_folder):
     os.makedirs(caches_folder)
 
-
 def session_cache_path():
     return caches_folder + session.get('uuid')
 
@@ -52,6 +51,7 @@ def index():
     auth_manager = spotipy.oauth2.SpotifyOAuth(scope='user-read-currently-playing playlist-modify-private',
                                                 cache_path=session_cache_path(), 
                                                 show_dialog=True)
+
     if request.args.get("code"):
         # Step 3. Being redirected from Spotify auth page
         auth_manager.get_access_token(request.args.get("code"))
