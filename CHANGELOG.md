@@ -36,6 +36,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `user_playlist_is_following` in favor of `playlist_is_following`
 - `playlist_tracks` in favor of `playlist_items`
 
+## [2.14.0] - 2020-7-26
+
+### Added
+
+ - Added 'collaborative' parameter to user_playlist_create method.
+
 ## [2.13.0] - 2020-06-25
 
 ### Added
