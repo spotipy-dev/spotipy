@@ -803,12 +803,17 @@ class SpotifyPKCE(SpotifyAuthBase):
         self.code_verifier = self._get_code_verifier()
         self.code_challenge = self._get_code_challenge()
 
-    def get_access_token(self, check_cache=True):
-        """ Gets the access token for the app given the code
+    def get_access_token(self, code=None, check_cache=True):
+        """ Gets the access token for the app
+
+            If the code is not given and no cached token is used, an
+            authentication window will be shown to the user to get a new
+            code.
 
             Parameters:
-                - check_cache - check for locally stored token before request
-                                a new token if True
+                - code - the response code from authentication
+                - check_cache - if true, checks for locally stored token
+                                before requesting a new token if True
         """
 
         if check_cache:
@@ -826,7 +831,7 @@ class SpotifyPKCE(SpotifyAuthBase):
         payload = {
             "client_id": self.client_id,
             "grant_type": "authorization_code",
-            "code": self.get_authorization_code(),
+            "code": code or self.get_authorization_code(),
             "redirect_uri": self.redirect_uri,
             "code_verifier": self.code_verifier
         }
