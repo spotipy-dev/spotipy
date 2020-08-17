@@ -286,7 +286,6 @@ class SpotifyOAuth(SpotifyAuthBase):
                 f.close()
                 if token_info_string != '':
                     token_info = json.loads(token_info_string)
-                token_info = ''
 
                 # if scopes don't match, then bail
                 if "scope" not in token_info or not self._is_scope_subset(
