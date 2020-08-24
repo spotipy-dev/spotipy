@@ -435,7 +435,7 @@ class SpotifyPKCETests(unittest.TestCase):
             'user-follow-read '
             'user-follow-modify '
         )
-        auth_manager = SpotifyPKCE(scope=scope, cache_path=".cache-implicittest")
+        auth_manager = SpotifyPKCE(scope=scope, cache_path=".cache-pkcetest")
         cls.spotify = Spotify(auth_manager=auth_manager)
 
     def test_user_follows_and_unfollows_artist(self):
