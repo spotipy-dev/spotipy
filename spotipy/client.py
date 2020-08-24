@@ -1006,7 +1006,7 @@ class Spotify(object):
                 - position - the position to add the tracks
         """
         plid = self._get_id("playlist", playlist_id)
-        ftracks = [self._get_uri("track", tid) if not self._is_uri(tid) else tid for tid in items]
+        ftracks = [self._get_uri("track", tid) for tid in items]
         return self._post(
             "playlists/%s/tracks" % (plid),
             payload=ftracks,
@@ -1824,7 +1824,10 @@ class Spotify(object):
         return id
 
     def _get_uri(self, type, id):
-        return "spotify:" + type + ":" + self._get_id(type, id)
+        if self._is_uri(id):
+            return id
+        else:
+            return "spotify:" + type + ":" + self._get_id(type, id)
 
     def _is_uri(self, uri):
         return uri.startswith("spotify:") and len(uri.split(':')) == 3

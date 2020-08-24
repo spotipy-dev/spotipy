@@ -36,8 +36,8 @@ class AuthTestSpotipy(unittest.TestCase):
 
     bad_id = 'BAD_ID'
 
-    creep_urn = 'spotify:track:3HfB5hBU0dmBt8T0iCmH42'
-    creep_id = '3HfB5hBU0dmBt8T0iCmH42'
+    creep_urn = 'spotify:track:6b2oQwSGFkzsMtQruIWm2p'
+    creep_id = '6b2oQwSGFkzsMtQruIWm2p'
     creep_url = 'http://open.spotify.com/track/3HfB5hBU0dmBt8T0iCmH42'
     el_scorcho_urn = 'spotify:track:0Svkvt5I79wficMFgaqEQJ'
     el_scorcho_bad_urn = 'spotify:track:0Svkvt5I79wficMFgaqEQK'
