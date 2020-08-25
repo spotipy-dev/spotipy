@@ -37,6 +37,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `user_playlist_is_following` in favor of `playlist_is_following`
 - `playlist_tracks` in favor of `playlist_items`
 
+### Fixed
+- fixed issue where episode URIs were being converted to track URIs in playlist calls
+
 ## [2.13.0] - 2020-06-25
 
 ### Added

@@ -1824,7 +1824,13 @@ class Spotify(object):
         return id
 
     def _get_uri(self, type, id):
-        return "spotify:" + type + ":" + self._get_id(type, id)
+        if self._is_uri(id):
+            return id
+        else:
+            return "spotify:" + type + ":" + self._get_id(type, id)
+
+    def _is_uri(self, uri):
+        return uri.startswith("spotify:") and len(uri.split(':')) == 3
 
     def _search_multiple_markets(self, q, limit, offset, type, markets, total):
         if total and limit > total:

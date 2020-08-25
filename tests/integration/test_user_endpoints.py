@@ -25,6 +25,17 @@ class SpotipyPlaylistApiTest(unittest.TestCase):
                             "spotify:track:1PB7gRWcvefzu7t3LJLUlf"]
         cls.username = os.getenv(CCEV['client_username'])
 
+        # be wary here, episodes sometimes go away forever
+        # which could cause tests that rely on four_episodes
+        # to fail
+
+        cls.four_episodes = [
+            "spotify:episode:7f9e73vfXKRqR6uCggK2Xy",
+            "spotify:episode:4wA1RLFNOWCJ8iprngXmM0",
+            "spotify:episode:32vhLjJjT7m3f9DFCJUCVZ",
+            "spotify:episode:7cRcsGYYRUFo1OF3RgRzdx",
+        ]
+
         scope = (
             'playlist-modify-public '
             'user-library-read '
@@ -122,6 +133,22 @@ class SpotipyPlaylistApiTest(unittest.TestCase):
 
         self.spotify.playlist_remove_all_occurrences_of_items(
             self.new_playlist['id'], self.other_tracks)
+        playlist = self.spotify.playlist_items(self.new_playlist['id'])
+        self.assertEqual(playlist["total"], 0)
+
+    def test_playlist_add_episodes(self):
+        # add episodes to playlist
+        self.spotify.playlist_add_items(
+            self.new_playlist['id'], self.four_episodes)
+        playlist = self.spotify.playlist_items(self.new_playlist['id'])
+        self.assertEqual(playlist['total'], 4)
+        self.assertEqual(len(playlist['items']), 4)
+
+        pl = self.spotify.playlist_items(self.new_playlist['id'], limit=2)
+        self.assertEqual(len(pl["items"]), 2)
+
+        self.spotify.playlist_remove_all_occurrences_of_items(
+            self.new_playlist['id'], self.four_episodes)
         playlist = self.spotify.playlist_items(self.new_playlist['id'])
         self.assertEqual(playlist["total"], 0)
 
