@@ -297,6 +297,10 @@ class SpotipyBrowseApiTests(unittest.TestCase):
         token = prompt_for_user_token(username)
         cls.spotify = Spotify(auth=token)
 
+    def test_category(self):
+        response = self.spotify.category('rock')
+        self.assertTrue('name' in response)
+
     def test_categories(self):
         response = self.spotify.categories()
         self.assertGreater(len(response['categories']), 0)

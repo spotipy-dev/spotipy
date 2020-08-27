@@ -1453,8 +1453,25 @@ class Spotify(object):
             "browse/new-releases", country=country, limit=limit, offset=offset
         )
 
+    def category(self, category_id, country=None, locale=None):
+        """ Get info about a category
+
+            Parameters:
+                - category_id - The Spotify category ID for the category.
+
+                - country - An ISO 3166-1 alpha-2 country code.
+                - locale - The desired language, consisting of an ISO 639
+                  language code and an ISO 3166-1 alpha-2 country code, joined
+                  by an underscore.
+        """
+        return self._get(
+            "browse/categories/" + category_id,
+            country=country,
+            locale=locale,
+        )
+
     def categories(self, country=None, locale=None, limit=20, offset=0):
-        """ Get a list of new album releases featured in Spotify
+        """ Get a list of categories
 
             Parameters:
                 - country - An ISO 3166-1 alpha-2 country code.
@@ -1480,7 +1497,7 @@ class Spotify(object):
     def category_playlists(
         self, category_id=None, country=None, limit=20, offset=0
     ):
-        """ Get a list of new album releases featured in Spotify
+        """ Get a list of playlists for a specific Spotify category
 
             Parameters:
                 - category_id - The Spotify category ID for the category.
