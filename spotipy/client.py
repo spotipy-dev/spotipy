@@ -1465,7 +1465,7 @@ class Spotify(object):
                   by an underscore.
         """
         return self._get(
-            "browse/categories" + category_id,
+            "browse/categories/" + category_id,
             country=country,
             locale=locale,
         )
