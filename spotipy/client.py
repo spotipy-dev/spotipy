@@ -1636,7 +1636,8 @@ class Spotify(object):
                 - market - an ISO 3166-1 alpha-2 country code.
                 - additional_types - `episode` to get podcast track information
         """
-        return self._get("me/player/currently-playing", market=market, additional_types=additional_types)
+        return self._get("me/player/currently-playing", market=market,
+            additional_types=additional_types)
 
     def transfer_playback(self, device_id, force_play=True):
         """ Transfer playback to another device.
