@@ -1637,7 +1637,7 @@ class Spotify(object):
                 - additional_types - `episode` to get podcast track information
         """
         return self._get("me/player/currently-playing", market=market,
-            additional_types=additional_types)
+                         additional_types=additional_types)
 
     def transfer_playback(self, device_id, force_play=True):
         """ Transfer playback to another device.
