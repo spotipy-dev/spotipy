@@ -924,7 +924,7 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
     a client secret, redirect uri, and username. The user will need to
     copy and paste a URI from the browser every hour.
 
-    Security Advisory
+    Security Warning
     -----------------
     The OAuth standard no longer recommends the Implicit Grant Flow for
     client-side code. Spotify has implemented the OAuth-suggested PKCE
@@ -962,7 +962,7 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
                  show_dialog=False):
         """ Creates Auth Manager using the Implicit Grant flow
 
-        **See help(SpotifyImplictGrant) for Security Advisory**
+        **See help(SpotifyImplictGrant) for full Security Warning**
 
         Parameters
         ----------
@@ -974,6 +974,12 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
         * username: Must be supplied or set as environment variable
         * show_dialog: Interpreted as boolean
         """
+        logger.warning("The OAuth standard no longer recommends the Implicit "
+                       "Grant Flow for client-side code. Use the SpotifyPKCE "
+                       "auth manager instead of SpotifyImplicitGrant. For "
+                       "more details and a guide to switching, see "
+                       "help(SpotifyImplictGrant).")
+
         self.client_id = client_id
         self.redirect_uri = redirect_uri
         self.state = state
