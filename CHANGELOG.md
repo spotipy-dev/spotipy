@@ -7,10 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+// Add your changes here and then delete this line
+
+## [2.14.0] - 2020-08-29
+
 ### Added
 
- - Support to search multiple markets at once.
- - Support to search all available Spotify markets.
+ - (experimental) Support to search multiple/all markets at once.
  - Support to test whether the current user is following certain
  users or artists
  - Proper replacements for all deprecated playlist endpoints
@@ -21,6 +24,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support to advertise different language to Spotify
 - Added 'collaborative' parameter to user_playlist_create method.
 - Enforce CHANGELOG update on PR
+- Adds `additional_types` parameter to retrieve currently playing podcast episode
+- Support to get info about a single category
 
 ### Deprecated
 

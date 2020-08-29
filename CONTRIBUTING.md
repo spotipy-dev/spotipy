@@ -31,6 +31,6 @@ To verify the code style:
     pip install flake8
     flake8 .
 
-### README
+### Changelog
 
 Don't forget to add a short description of your change in the [CHANGELOG](CHANGELOG.md)

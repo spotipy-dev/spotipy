@@ -29,18 +29,12 @@ Add your new ID and SECRET to your environment:
 
 ### Without user authentication
 
-```bash
-export SPOTIPY_CLIENT_ID=client_id_here
-export SPOTIPY_CLIENT_SECRET=client_secret_here
-
-// on Windows, use `SET` instead of `export`
-```
-
 ```python
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
-sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials())
+sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id="YOUR_APP_CLIENT_ID",
+                                                           client_secret="YOUR_APP_CLIENT_SECRET"))
 
 results = sp.search(q='weezer', limit=20)
 for idx, track in enumerate(results['tracks']['items']):
@@ -49,21 +43,15 @@ for idx, track in enumerate(results['tracks']['items']):
 
 ### With user authentication
 
-```bash
-export SPOTIPY_CLIENT_ID=client_id_here
-export SPOTIPY_CLIENT_SECRET=client_secret_here
-export SPOTIPY_REDIRECT_URI=redirect_uri_here
-
-// on Windows, use `SET` instead of `export`
-```
-
 ```python
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 
-scope = "user-library-read"
-
-sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
+sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id="YOUR_APP_CLIENT_ID",
+                                               client_secret="YOUR_APP_CLIENT_SECRET",
+                                               redirect_uri="YOUR_APP_REDIRECT_URI",
+                                               username="YOUR_SPOTIFY_USERNAME",
+                                               scope="user-library-read"))
 
 results = sp.current_user_saved_tracks()
 for idx, item in enumerate(results['items']):

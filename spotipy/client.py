@@ -539,7 +539,7 @@ class Spotify(object):
         )
 
     def search_markets(self, q, limit=10, offset=0, type="track", markets=None, total=None):
-        """ searches multple markets for an item
+        """ (experimental) Searches multiple markets for an item
 
             Parameters:
                 - q - the search query (see how to write a query in the
@@ -553,6 +553,11 @@ class Spotify(object):
                 - total - the total number of results to return if multiple markets are supplied in the search.
                           If multiple types are specified, this only applies to the first type.
         """
+        warnings.warn(
+            "Searching multiple markets is an experimental feature. "
+            "Please be aware that this method's inputs and outputs can change in the future.",
+            UserWarning,
+        )
         if not markets:
             markets = self.country_codes
 

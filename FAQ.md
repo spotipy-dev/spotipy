@@ -22,7 +22,7 @@ Solution:
  - Request a new token by adding `show_dialog=True` to `spotipy.Spotify(auth_manager=SpotifyOAuth(show_dialog=True))`
  - Check that `spotipy.me()` shows the correct user id
 
-### 401 Unauthorized
+### Why do I get 401 Unauthorized?
 
 Error:
 
@@ -33,3 +33,11 @@ Solution:
 
  - You are likely missing a scope when requesting the endpoint, check
 https://developer.spotify.com/web-api/using-scopes/
+
+### Search doesn't find some tracks
+
+Problem: you can see a track on the Spotify app but searching for it using the API doesn't find it.
+ 
+Solution: by default `search("abba")` works in the US market.
+To search for in your current country, the [country indicator](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
+must be specified: `search("abba", market="DE")`.
