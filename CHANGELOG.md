@@ -9,8 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
- - Support to search multiple markets at once.
- - Support to search all available Spotify markets.
+ - (experimental) Support to search multiple/all markets at once.
  - Support to test whether the current user is following certain
  users or artists
  - Proper replacements for all deprecated playlist endpoints
