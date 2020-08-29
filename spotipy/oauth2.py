@@ -650,6 +650,8 @@ class SpotifyPKCE(SpotifyAuthBase):
 
     def get_authorize_url(self, state=None):
         """ Gets the URL to use to authorize this app """
+        if not self.code_challenge:
+            self.get_pkce_handshake_parameters()
         payload = {
             "client_id": self.client_id,
             "response_type": "code",
