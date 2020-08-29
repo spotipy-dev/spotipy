@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for the PKCE Auth Flow
 - Support to advertise different language to Spotify
 - Added 'collaborative' parameter to user_playlist_create method.
+- Enforce CHANGELOG update on PR
 
 ### Deprecated
 
