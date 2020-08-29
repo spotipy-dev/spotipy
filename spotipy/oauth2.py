@@ -926,16 +926,29 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
 
     Security Advisory
     -----------------
-    The Implicit Grant Flow is part of the
-    [OAuth 2.0 standard](https://oauth.net/2/grant-types/implicit/).
-    It is intended for client-side (running in browser or a native app)
-    interactions where the client secret would have to be hard-coded and
-    exposed. OAuth no longer recommends its use because sensitive
-    info (the auth token) can be yanked from the browser address bar or
-    history, instead recommending the Auth Code flow with PKCE. However,
-    Spotify [does not support PKCE](https://community.spotify.com/t5/Spotify-for-Developers/Authentication-API-failing-in-production-right-now/m-p/4960693/highlight/true#M234), <!---# noqa: E501-->
-    so Implicit Grant is the only viable options for client-side Spotify
-    API requests.
+    The OAuth standard no longer recommends the Implicit Grant Flow for
+    client-side code. Spotify has implemented the OAuth-suggested PKCE
+    extension that removes the need for a client secret in the
+    Authentication Code flow. Use the SpotifyPKCE auth manager instead
+    of SpotifyImplicitGrant.
+
+    SpotifyPKCE contains all of the functionality of
+    SpotifyImplicitGrant, plus automatic response retrieval and
+    refreshable tokens. Only a few replacements need to be made:
+
+    * get_auth_response()['access_token'] ->
+      get_access_token(get_authorization_code())
+    * get_auth_response() ->
+      get_access_token(get_authorization_code()); get_cached_token()
+    * parse_response_token(url)['access_token'] ->
+      get_access_token(parse_response_code(url))
+    * parse_response_token(url) ->
+      get_access_token(parse_response_code(url)); get_cached_token()
+
+    The security concern in the Implict Grant flow is that the token is
+    returned in the URL and can be intercepted through the browser. A
+    request with an authorization code and proof of origin could not be
+    easily intercepted without a compromised network.
     """
     OAUTH_AUTHORIZE_URL = "https://accounts.spotify.com/authorize"
 
