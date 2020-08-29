@@ -729,7 +729,7 @@ class SpotifyPKCE(SpotifyAuthBase):
                 "Enter the URL you were redirected to: ".format(url)
             )
         response = self._get_user_input(prompt)
-        state, code = SpotifyOAuth.parse_auth_response_url(response)
+        state, code = self.parse_auth_response_url(response)
         if self.state is not None and self.state != state:
             raise SpotifyStateError(self.state, state)
         return code
@@ -906,11 +906,15 @@ class SpotifyPKCE(SpotifyAuthBase):
             Parameters:
                 - url - the response url
         """
-        _, code = SpotifyOAuth.parse_auth_response_url(url)
+        _, code = self.parse_auth_response_url(url)
         if code is None:
             return url
         else:
             return code
+
+    @staticmethod
+    def parse_auth_response_url(url):
+        return SpotifyOAuth.parse_auth_response_url(url)
 
 
 class SpotifyImplicitGrant(SpotifyAuthBase):
