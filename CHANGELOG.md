@@ -21,6 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support to advertise different language to Spotify
 - Added 'collaborative' parameter to user_playlist_create method.
 - Enforce CHANGELOG update on PR
+- Adds `additional_types` parameter to retrieve currently playing podcast episode
+- Support to get info about a single category
 
 ### Deprecated
 
