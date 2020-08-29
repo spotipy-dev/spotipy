@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `SpotifyPKCE.parse_auth_response_url`, mirroring that method in
  `SpotifyOAuth`
+- `SpotifyImplicitGrant` warns of security considerations and recommends
+ `SpotifyPKCE`
 
 ### Fixed
 
