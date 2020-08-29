@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+// Add your changes here and then delete this line
+
+## [2.14.0] - 2020-08-29
+
 ### Added
 
  - (experimental) Support to search multiple/all markets at once.
