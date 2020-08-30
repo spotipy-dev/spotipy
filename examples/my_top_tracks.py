@@ -1,15 +1,7 @@
 # Shows the top tracks for a user
 
-import sys
-
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
-
-if len(sys.argv) > 1:
-    username = sys.argv[1]
-else:
-    print("Usage: %s username" % (sys.argv[0],))
-    sys.exit()
 
 scope = 'user-top-read'
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))

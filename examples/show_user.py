@@ -1,5 +1,4 @@
-
-# shows artist info for a URN or URL
+# Shows artist info for a URN or URL
 
 from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy

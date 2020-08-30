@@ -15,7 +15,7 @@ if len(sys.argv) > 2:
         track_ids.append({"uri": tid, "positions": [int(pos)]})
 else:
     print(
-        "Usage: %s username playlist_id track_id,pos track_id,pos ..." %
+        "Usage: %s playlist_id track_id,pos track_id,pos ..." %
         (sys.argv[0],))
     sys.exit()
 
