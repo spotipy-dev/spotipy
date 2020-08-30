@@ -304,7 +304,7 @@ class SpotifyOAuth(SpotifyAuthBase):
                 )
 
         except IOError:
-            pass
+            logger.warning("Couldn't read cache at: %s", self.cache_path)
 
         return token_info
 
@@ -774,7 +774,7 @@ class SpotifyPKCE(SpotifyAuthBase):
                 )
 
         except IOError:
-            pass
+            logger.warning("Couldn't read cache at: %s", self.cache_path)
 
         return token_info
 
@@ -1013,7 +1013,7 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
                 return None
 
         except IOError:
-            pass
+            logger.warning("Couldn't read cache at: %s", self.cache_path)
 
         return token_info
 
