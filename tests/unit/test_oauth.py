@@ -436,8 +436,8 @@ class TestSpotifyPKCE(unittest.TestCase):
         auth.get_pkce_handshake_parameters()
         self.assertEqual(auth.code_challenge,
                          base64.urlsafe_b64encode(
-                                hashlib.sha256(auth.code_verifier.encode('utf-8'))
-                                .digest())
+                             hashlib.sha256(auth.code_verifier.encode('utf-8'))
+                             .digest())
                          .decode('utf-8')
                          .replace('=', ''))
 

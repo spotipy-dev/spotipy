@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `SpotifyImplicitGrant` warns of security considerations and recommends
  `SpotifyPKCE`
 
+### Changed
+
+- Specifying a cache_path or username is now optional
+
 ### Fixed
 
 - Using `SpotifyPKCE.get_authorization_url` will now generate a code

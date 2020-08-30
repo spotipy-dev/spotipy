@@ -10,7 +10,7 @@ if len(sys.argv) > 3:
     playlist_id = sys.argv[1]
     track_ids = sys.argv[2:]
 else:
-    print("Usage: %s username playlist_id track_id ..." % (sys.argv[0],))
+    print("Usage: %s playlist_id track_id ..." % (sys.argv[0],))
     sys.exit()
 
 scope = 'playlist-modify-public'
