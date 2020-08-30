@@ -852,9 +852,9 @@ class SpotifyPKCE(SpotifyAuthBase):
             raise SpotifyOauthError('error: {0}, error_descr: {1}'.format(error_payload['error'],
                                                                           error_payload[
                                                                               'error_description'
-                                                                              ]),
-                                    error=error_payload['error'],
-                                    error_description=error_payload['error_description'])
+            ]),
+                error=error_payload['error'],
+                error_description=error_payload['error_description'])
         token_info = response.json()
         token_info = self._add_custom_values_to_token_info(token_info)
         self._save_token_info(token_info)
