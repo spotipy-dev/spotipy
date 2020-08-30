@@ -256,11 +256,14 @@ class SpotifyOAuth(SpotifyAuthBase):
              * redirect_uri: Must be supplied or set as environment variable
              * state: May be supplied, no verification is performed
              * scope: May be supplied, intuitively converted to proper format
-             * cache_path: May be supplied, will otherwise be generated (takes precedence over `username`)
-             * username: May be supplied or set as environment variable (will set `cache_path` to `.cache-{username}`)
+             * cache_path: May be supplied, will otherwise be generated
+                           (takes precedence over `username`)
+             * username: May be supplied or set as environment variable
+                         (will set `cache_path` to `.cache-{username}`)
              * proxies: Proxy for the requests library to route through
              * show_dialog: Interpreted as boolean
-             * requests_timeout: Tell Requests to stop waiting for a response after a given number of seconds
+             * requests_timeout: Tell Requests to stop waiting for a response after a given number
+                                 of seconds
         """
 
         super(SpotifyOAuth, self).__init__(requests_session)
@@ -591,11 +594,14 @@ class SpotifyPKCE(SpotifyAuthBase):
              * redirect_uri: Must be supplied or set as environment variable
              * state: May be supplied, no verification is performed
              * scope: May be supplied, intuitively converted to proper format
-             * cache_path: May be supplied, will otherwise be generated (takes precedence over `username`)
-             * username: May be supplied or set as environment variable (will set `cache_path` to `.cache-{username}`)
+             * cache_path: May be supplied, will otherwise be generated
+                           (takes precedence over `username`)
+             * username: May be supplied or set as environment variable
+                         (will set `cache_path` to `.cache-{username}`)
              * show_dialog: Interpreted as boolean
              * proxies: Proxy for the requests library to route through
-             * requests_timeout: Tell Requests to stop waiting for a response after a given number of seconds
+             * requests_timeout: Tell Requests to stop waiting for a response after a given number
+                                 of seconds
         """
 
         super(SpotifyPKCE, self).__init__(requests_session)
@@ -969,8 +975,10 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
         * redirect_uri: Must be supplied or set as environment variable
         * state: May be supplied, no verification is performed
         * scope: May be supplied, intuitively converted to proper format
-        * cache_path: May be supplied, will otherwise be generated (takes precedence over `username`)
-        * username: May be supplied or set as environment variable (will set `cache_path` to `.cache-{username}`)
+        * cache_path: May be supplied, will otherwise be generated
+                      (takes precedence over `username`)
+        * username: May be supplied or set as environment variable
+                    (will set `cache_path` to `.cache-{username}`)
         * show_dialog: Interpreted as boolean
         """
         self.client_id = client_id
