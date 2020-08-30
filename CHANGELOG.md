@@ -7,7 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-// Add your changes here and then delete this line
+### Added
+
+- `SpotifyPKCE.parse_auth_response_url`, mirroring that method in
+ `SpotifyOAuth`
+
+### Fixed
+
+- Using `SpotifyPKCE.get_authorization_url` will now generate a code
+ challenge if needed
 
 ## [2.14.0] - 2020-08-29
 

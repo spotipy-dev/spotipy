@@ -650,6 +650,8 @@ class SpotifyPKCE(SpotifyAuthBase):
 
     def get_authorize_url(self, state=None):
         """ Gets the URL to use to authorize this app """
+        if not self.code_challenge:
+            self.get_pkce_handshake_parameters()
         payload = {
             "client_id": self.client_id,
             "response_type": "code",
@@ -726,8 +728,8 @@ class SpotifyPKCE(SpotifyAuthBase):
                 "Go to the following URL: {}\n"
                 "Enter the URL you were redirected to: ".format(url)
             )
-        response = SpotifyOAuth._get_user_input(prompt)
-        state, code = SpotifyOAuth.parse_auth_response_url(response)
+        response = self._get_user_input(prompt)
+        state, code = self.parse_auth_response_url(response)
         if self.state is not None and self.state != state:
             raise SpotifyStateError(self.state, state)
         return code
@@ -904,11 +906,15 @@ class SpotifyPKCE(SpotifyAuthBase):
             Parameters:
                 - url - the response url
         """
-        _, code = SpotifyOAuth.parse_auth_response_url(url)
+        _, code = self.parse_auth_response_url(url)
         if code is None:
             return url
         else:
             return code
+
+    @staticmethod
+    def parse_auth_response_url(url):
+        return SpotifyOAuth.parse_auth_response_url(url)
 
 
 class SpotifyImplicitGrant(SpotifyAuthBase):
@@ -920,16 +926,29 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
 
     Security Advisory
     -----------------
-    The Implicit Grant Flow is part of the
-    [OAuth 2.0 standard](https://oauth.net/2/grant-types/implicit/).
-    It is intended for client-side (running in browser or a native app)
-    interactions where the client secret would have to be hard-coded and
-    exposed. OAuth no longer recommends its use because sensitive
-    info (the auth token) can be yanked from the browser address bar or
-    history, instead recommending the Auth Code flow with PKCE. However,
-    Spotify [does not support PKCE](https://community.spotify.com/t5/Spotify-for-Developers/Authentication-API-failing-in-production-right-now/m-p/4960693/highlight/true#M234), <!---# noqa: E501-->
-    so Implicit Grant is the only viable options for client-side Spotify
-    API requests.
+    The OAuth standard no longer recommends the Implicit Grant Flow for
+    client-side code. Spotify has implemented the OAuth-suggested PKCE
+    extension that removes the need for a client secret in the
+    Authentication Code flow. Use the SpotifyPKCE auth manager instead
+    of SpotifyImplicitGrant.
+
+    SpotifyPKCE contains all of the functionality of
+    SpotifyImplicitGrant, plus automatic response retrieval and
+    refreshable tokens. Only a few replacements need to be made:
+
+    * get_auth_response()['access_token'] ->
+      get_access_token(get_authorization_code())
+    * get_auth_response() ->
+      get_access_token(get_authorization_code()); get_cached_token()
+    * parse_response_token(url)['access_token'] ->
+      get_access_token(parse_response_code(url))
+    * parse_response_token(url) ->
+      get_access_token(parse_response_code(url)); get_cached_token()
+
+    The security concern in the Implict Grant flow is that the token is
+    returned in the URL and can be intercepted through the browser. A
+    request with an authorization code and proof of origin could not be
+    easily intercepted without a compromised network.
     """
     OAUTH_AUTHORIZE_URL = "https://accounts.spotify.com/authorize"
 
