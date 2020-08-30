@@ -78,6 +78,17 @@ def _ensure_value(value, env_key):
     return _val
 
 
+def _get_cache_path(cache_path, username):
+    if cache_path:
+        return cache_path
+
+    cache_path = ".cache"
+    if username:
+        cache_path += "-" + str(username)
+
+    return cache_path
+
+
 class SpotifyAuthBase(object):
     def __init__(self, requests_session):
         if isinstance(requests_session, requests.Session):
@@ -219,7 +230,6 @@ class SpotifyOAuth(SpotifyAuthBase):
     """
     Implements Authorization Code Flow for Spotify's OAuth implementation.
     """
-
     OAUTH_AUTHORIZE_URL = "https://accounts.spotify.com/authorize"
     OAUTH_TOKEN_URL = "https://accounts.spotify.com/api/token"
 
@@ -238,18 +248,19 @@ class SpotifyOAuth(SpotifyAuthBase):
         requests_timeout=None
     ):
         """
-            Creates a SpotifyOAuth object
+        Creates a SpotifyOAuth object
 
-            Parameters:
-                 - client_id - the client id of your app
-                 - client_secret - the client secret of your app
-                 - redirect_uri - the redirect URI of your app
-                 - state - security state
-                 - scope - the desired scope of the request
-                 - cache_path - path to location to save tokens
-                 - requests_timeout - tell Requests to stop waiting for a response
-                                      after a given number of seconds
-                 - username - username of current client
+        Parameters:
+             * client_id: Must be supplied or set as environment variable
+             * client_secret: Must be supplied or set as environment variable
+             * redirect_uri: Must be supplied or set as environment variable
+             * state: May be supplied, no verification is performed
+             * scope: May be supplied, intuitively converted to proper format
+             * cache_path: May be supplied, will otherwise be generated (takes precedence over `username`)
+             * username: May be supplied or set as environment variable (will set `cache_path` to `.cache-{username}`)
+             * proxies: Proxy for the requests library to route through
+             * show_dialog: Interpreted as boolean
+             * requests_timeout: Tell Requests to stop waiting for a response after a given number of seconds
         """
 
         super(SpotifyOAuth, self).__init__(requests_session)
@@ -258,10 +269,10 @@ class SpotifyOAuth(SpotifyAuthBase):
         self.client_secret = client_secret
         self.redirect_uri = redirect_uri
         self.state = state
-        self.cache_path = cache_path
         self.username = username or os.getenv(
             CLIENT_CREDS_ENV_VARS["client_username"]
         )
+        self.cache_path = _get_cache_path(cache_path, self.username)
         self.scope = self._normalize_scope(scope)
         self.proxies = proxies
         self.requests_timeout = requests_timeout
@@ -272,33 +283,26 @@ class SpotifyOAuth(SpotifyAuthBase):
         """
         token_info = None
 
-        if not self.cache_path and self.username:
-            self.cache_path = ".cache-" + str(self.username)
-        elif not self.cache_path and not self.username:
-            raise SpotifyOauthError(
-                "You must either set a cache_path or a username."
-            )
+        try:
+            f = open(self.cache_path)
+            token_info_string = f.read()
+            f.close()
+            token_info = json.loads(token_info_string)
 
-        if self.cache_path:
-            try:
-                f = open(self.cache_path)
-                token_info_string = f.read()
-                f.close()
-                token_info = json.loads(token_info_string)
+            # if scopes don't match, then bail
+            if "scope" not in token_info or not self._is_scope_subset(
+                self.scope, token_info["scope"]
+            ):
+                return None
 
-                # if scopes don't match, then bail
-                if "scope" not in token_info or not self._is_scope_subset(
-                    self.scope, token_info["scope"]
-                ):
-                    return None
+            if self.is_token_expired(token_info):
+                token_info = self.refresh_access_token(
+                    token_info["refresh_token"]
+                )
 
-                if self.is_token_expired(token_info):
-                    token_info = self.refresh_access_token(
-                        token_info["refresh_token"]
-                    )
+        except IOError:
+            pass
 
-            except IOError:
-                pass
         return token_info
 
     def _save_token_info(self, token_info):
@@ -579,28 +583,30 @@ class SpotifyPKCE(SpotifyAuthBase):
                  requests_timeout=None,
                  requests_session=True,):
         """
-            Creates Auth Manager with the PKCE Auth flow.
+        Creates Auth Manager with the PKCE Auth flow.
 
-            Parameters:
-                 - client_id - the client id of your app
-                 - redirect_uri - the redirect URI of your app
-                 - state - security state
-                 - scope - the desired scope of the request
-                 - cache_path - path to location to save tokens
-                 - username - username of current client
-                 - proxies - proxy for the requests library to route through
-                 - requests_timeout - tell Requests to stop waiting for a response
-                                      after a given number of seconds
+        Parameters:
+             * client_id: Must be supplied or set as environment variable
+             * client_secret: Must be supplied or set as environment variable
+             * redirect_uri: Must be supplied or set as environment variable
+             * state: May be supplied, no verification is performed
+             * scope: May be supplied, intuitively converted to proper format
+             * cache_path: May be supplied, will otherwise be generated (takes precedence over `username`)
+             * username: May be supplied or set as environment variable (will set `cache_path` to `.cache-{username}`)
+             * show_dialog: Interpreted as boolean
+             * proxies: Proxy for the requests library to route through
+             * requests_timeout: Tell Requests to stop waiting for a response after a given number of seconds
         """
+
         super(SpotifyPKCE, self).__init__(requests_session)
         self.client_id = client_id
         self.redirect_uri = redirect_uri
         self.state = state
         self.scope = self._normalize_scope(scope)
-        self.cache_path = cache_path
         self.username = username or os.getenv(
             CLIENT_CREDS_ENV_VARS["client_username"]
         )
+        self.cache_path = _get_cache_path(cache_path, self.username)
         self.proxies = proxies
         self.requests_timeout = requests_timeout
 
@@ -617,10 +623,10 @@ class SpotifyPKCE(SpotifyAuthBase):
             return None
 
     def _get_code_verifier(self):
-        ''' Spotify PCKE code verifier - See step 1 of the reference guide below
+        """ Spotify PCKE code verifier - See step 1 of the reference guide below
         Reference:
         https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-code-flow-with-proof-key-for-code-exchange-pkce
-        '''
+        """
         # Range (33,96) is used to select between 44-128 base64 characters for the
         # next operation. The range looks weird because base64 is 6 bytes
         import random
@@ -638,10 +644,10 @@ class SpotifyPKCE(SpotifyAuthBase):
         return verifier
 
     def _get_code_challenge(self):
-        ''' Spotify PCKE code challenge - See step 1 of the reference guide below
+        """ Spotify PCKE code challenge - See step 1 of the reference guide below
         Reference:
         https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-code-flow-with-proof-key-for-code-exchange-pkce
-        '''
+        """
         import hashlib
         import base64
         code_challenge_digest = hashlib.sha256(self.code_verifier.encode('utf-8')).digest()
@@ -744,33 +750,26 @@ class SpotifyPKCE(SpotifyAuthBase):
         """
         token_info = None
 
-        if not self.cache_path and self.username:
-            self.cache_path = ".cache-" + str(self.username)
-        elif not self.cache_path and not self.username:
-            raise SpotifyOauthError(
-                "You must either set a cache_path or a username."
-            )
+        try:
+            f = open(self.cache_path)
+            token_info_string = f.read()
+            f.close()
+            token_info = json.loads(token_info_string)
 
-        if self.cache_path:
-            try:
-                f = open(self.cache_path)
-                token_info_string = f.read()
-                f.close()
-                token_info = json.loads(token_info_string)
+            # if scopes don't match, then bail
+            if "scope" not in token_info or not self._is_scope_subset(
+                self.scope, token_info["scope"]
+            ):
+                return None
 
-                # if scopes don't match, then bail
-                if "scope" not in token_info or not self._is_scope_subset(
-                    self.scope, token_info["scope"]
-                ):
-                    return None
+            if self.is_token_expired(token_info):
+                token_info = self.refresh_access_token(
+                    token_info["refresh_token"]
+                )
 
-                if self.is_token_expired(token_info):
-                    token_info = self.refresh_access_token(
-                        token_info["refresh_token"]
-                    )
+        except IOError:
+            pass
 
-            except IOError:
-                pass
         return token_info
 
     def _is_scope_subset(self, needle_scope, haystack_scope):
@@ -970,17 +969,17 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
         * redirect_uri: Must be supplied or set as environment variable
         * state: May be supplied, no verification is performed
         * scope: May be supplied, intuitively converted to proper format
-        * cache_path: May be supplied, will otherwise be generated
-        * username: Must be supplied or set as environment variable
+        * cache_path: May be supplied, will otherwise be generated (takes precedence over `username`)
+        * username: May be supplied or set as environment variable (will set `cache_path` to `.cache-{username}`)
         * show_dialog: Interpreted as boolean
         """
         self.client_id = client_id
         self.redirect_uri = redirect_uri
         self.state = state
-        self.cache_path = cache_path
         self.username = username or os.getenv(
             CLIENT_CREDS_ENV_VARS["client_username"]
         )
+        self.cache_path = _get_cache_path(cache_path, self.username)
         self.scope = self._normalize_scope(scope)
         self.show_dialog = show_dialog
         self._session = None  # As to not break inherited __del__
@@ -990,44 +989,33 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
         """
         token_info = None
 
-        if not self.cache_path and self.username:
-            self.cache_path = ".cache-" + str(self.username)
-        elif not self.cache_path and not self.username:
-            raise SpotifyOauthError(
-                "You must either set a cache_path or a username."
-            )
+        try:
+            f = open(self.cache_path)
+            token_info_string = f.read()
+            f.close()
+            token_info = json.loads(token_info_string)
 
-        if self.cache_path:
-            try:
-                f = open(self.cache_path)
-                token_info_string = f.read()
-                f.close()
-                token_info = json.loads(token_info_string)
+            # if scopes don't match, then bail
+            if "scope" not in token_info or not self._is_scope_subset(
+                self.scope, token_info["scope"]
+            ):
+                return None
 
-                # if scopes don't match, then bail
-                if "scope" not in token_info or not self._is_scope_subset(
-                    self.scope, token_info["scope"]
-                ):
-                    return None
+            if self.is_token_expired(token_info):
+                return None
 
-                if self.is_token_expired(token_info):
-                    return None
+        except IOError:
+            pass
 
-            except IOError:
-                pass
         return token_info
 
     def _save_token_info(self, token_info):
-        if not self.cache_path and self.username:
-            self.cache_path = ".cache-" + str(self.username)
-        if self.cache_path:
-            try:
-                f = open(self.cache_path, "w")
-                f.write(json.dumps(token_info))
-                f.close()
-            except IOError:
-                logger.warning('Couldn\'t write token to cache at: %s',
-                               self.cache_path)
+        try:
+            f = open(self.cache_path, "w")
+            f.write(json.dumps(token_info))
+            f.close()
+        except IOError:
+            logger.warning("Couldn't write token to cache at: %s", self.cache_path)
 
     def _is_scope_subset(self, needle_scope, haystack_scope):
         needle_scope = set(needle_scope.split()) if needle_scope else set()

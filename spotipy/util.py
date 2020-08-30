@@ -21,7 +21,7 @@ CLIENT_CREDS_ENV_VARS = {
 
 
 def prompt_for_user_token(
-    username,
+    username=None,
     scope=None,
     client_id=None,
     client_secret=None,
@@ -43,14 +43,14 @@ def prompt_for_user_token(
 
         Parameters:
 
-         - username - the Spotify username
-         - scope - the desired scope of the request
-         - client_id - the client id of your app
-         - client_secret - the client secret of your app
-         - redirect_uri - the redirect URI of your app
-         - cache_path - path to location to save tokens
-         - oauth_manager - Oauth manager object.
-         - show_dialog - If true, a login prompt always shows
+         - username - the Spotify username (optional)
+         - scope - the desired scope of the request (optional)
+         - client_id - the client id of your app (required)
+         - client_secret - the client secret of your app (required)
+         - redirect_uri - the redirect URI of your app (required)
+         - cache_path - path to location to save tokens (optional)
+         - oauth_manager - Oauth manager object (optional)
+         - show_dialog - If true, a login prompt always shows (optional, defaults to False)
 
     """
     if not oauth_manager:
@@ -79,14 +79,13 @@ def prompt_for_user_token(
             )
             raise spotipy.SpotifyException(550, -1, "no credentials set")
 
-        cache_path = cache_path or ".cache-" + username
-
     sp_oauth = oauth_manager or spotipy.SpotifyOAuth(
         client_id,
         client_secret,
         redirect_uri,
         scope=scope,
         cache_path=cache_path,
+        username=username,
         show_dialog=show_dialog
     )
 

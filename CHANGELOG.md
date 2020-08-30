@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `SpotifyPKCE.parse_auth_response_url`, mirroring that method in
  `SpotifyOAuth`
 
+### Changed
+
+- Specifying a cache_path or username is now optional
+
 ### Fixed
 
 - Using `SpotifyPKCE.get_authorization_url` will now generate a code
