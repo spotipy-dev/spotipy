@@ -18,7 +18,7 @@ extra_reqs = {
 
 setup(
     name='spotipy',
-    version='2.14.0',
+    version='2.15.0',
     description='A light weight Python library for the Spotify Web API',
     long_description=long_description,
     long_description_content_type="text/markdown",

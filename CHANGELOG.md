@@ -7,12 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+// Add your changes here and then delete this line
+
+## [2.15.0] - 2020-09-08
+
 ### Added
 
 - `SpotifyPKCE.parse_auth_response_url`, mirroring that method in
  `SpotifyOAuth`
-- `SpotifyImplicitGrant` warns of security considerations and recommends
- `SpotifyPKCE`
 
 ### Changed
 
