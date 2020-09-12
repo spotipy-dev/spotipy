@@ -41,3 +41,10 @@ Problem: you can see a track on the Spotify app but searching for it using the A
 Solution: by default `search("abba")` works in the US market.
 To search for in your current country, the [country indicator](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
 must be specified: `search("abba", market="DE")`.
+
+### How do I obtain authorization in a headless/browserless environment?
+
+If you cannot open a browser, set `open_browser=False` when instantiating SpotifyOAuth or SpotifyPKCE. You will be
+prompted to open the authorization URI manually.  
+
+See the [headless auth example](examples/headless.py).
