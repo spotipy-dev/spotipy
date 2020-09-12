@@ -386,7 +386,7 @@ class SpotifyOAuth(SpotifyAuthBase):
             logger.error("Please navigate here: %s", auth_url)
 
     def _get_auth_response_interactive(self, open_browser=False):
-        if open_browser or self.open_browser:
+        if open_browser:
             self._open_auth_url()
             prompt = "Enter the URL you were redirected to: "
         else:
@@ -416,7 +416,7 @@ class SpotifyOAuth(SpotifyAuthBase):
         else:
             raise SpotifyOauthError("Server listening on localhost has not been accessed")
 
-    def get_auth_response(self, open_browser=False):
+    def get_auth_response(self, open_browser=None):
         logger.info('User authentication requires interaction with your '
                     'web browser. Once you enter your credentials and '
                     'give authorization, you will be redirected to '
@@ -425,6 +425,9 @@ class SpotifyOAuth(SpotifyAuthBase):
 
         redirect_info = urlparse(self.redirect_uri)
         redirect_host, redirect_port = get_host_port(redirect_info.netloc)
+
+        if open_browser is None:
+            open_browser = self.open_browser
 
         if (
                 (open_browser or self.open_browser)
@@ -694,7 +697,7 @@ class SpotifyPKCE(SpotifyAuthBase):
         except webbrowser.Error:
             logger.error("Please navigate here: %s", auth_url)
 
-    def _get_auth_response(self, open_browser=False):
+    def _get_auth_response(self, open_browser=None):
         logger.info('User authentication requires interaction with your '
                     'web browser. Once you enter your credentials and '
                     'give authorization, you will be redirected to '
@@ -704,8 +707,11 @@ class SpotifyPKCE(SpotifyAuthBase):
         redirect_info = urlparse(self.redirect_uri)
         redirect_host, redirect_port = get_host_port(redirect_info.netloc)
 
+        if open_browser is None:
+            open_browser = self.open_browser
+
         if (
-                (open_browser or self.open_browser)
+                open_browser
                 and redirect_host in ("127.0.0.1", "localhost")
                 and redirect_info.scheme == "http"
         ):
