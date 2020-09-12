@@ -234,18 +234,19 @@ class SpotifyOAuth(SpotifyAuthBase):
     OAUTH_TOKEN_URL = "https://accounts.spotify.com/api/token"
 
     def __init__(
-        self,
-        client_id=None,
-        client_secret=None,
-        redirect_uri=None,
-        state=None,
-        scope=None,
-        cache_path=None,
-        username=None,
-        proxies=None,
-        show_dialog=False,
-        requests_session=True,
-        requests_timeout=None
+            self,
+            client_id=None,
+            client_secret=None,
+            redirect_uri=None,
+            state=None,
+            scope=None,
+            cache_path=None,
+            username=None,
+            proxies=None,
+            show_dialog=False,
+            requests_session=True,
+            requests_timeout=None,
+            open_browser=True
     ):
         """
         Creates a SpotifyOAuth object
@@ -264,6 +265,7 @@ class SpotifyOAuth(SpotifyAuthBase):
              * show_dialog: Interpreted as boolean
              * requests_timeout: Tell Requests to stop waiting for a response after a given number
                                  of seconds
+             * open_browser: Whether or not the web browser should be opened to authorize a user
         """
 
         super(SpotifyOAuth, self).__init__(requests_session)
@@ -280,6 +282,7 @@ class SpotifyOAuth(SpotifyAuthBase):
         self.proxies = proxies
         self.requests_timeout = requests_timeout
         self.show_dialog = show_dialog
+        self.open_browser = open_browser
 
     def get_cached_token(self):
         """ Gets a cached auth token
@@ -294,7 +297,7 @@ class SpotifyOAuth(SpotifyAuthBase):
 
             # if scopes don't match, then bail
             if "scope" not in token_info or not self._is_scope_subset(
-                self.scope, token_info["scope"]
+                    self.scope, token_info["scope"]
             ):
                 return None
 
@@ -382,7 +385,7 @@ class SpotifyOAuth(SpotifyAuthBase):
         except webbrowser.Error:
             logger.error("Please navigate here: %s", auth_url)
 
-    def _get_auth_response_interactive(self, open_browser=True):
+    def _get_auth_response_interactive(self, open_browser=False):
         if open_browser:
             self._open_auth_url()
             prompt = "Enter the URL you were redirected to: "
@@ -413,7 +416,7 @@ class SpotifyOAuth(SpotifyAuthBase):
         else:
             raise SpotifyOauthError("Server listening on localhost has not been accessed")
 
-    def get_auth_response(self, open_browser=True):
+    def get_auth_response(self, open_browser=None):
         logger.info('User authentication requires interaction with your '
                     'web browser. Once you enter your credentials and '
                     'give authorization, you will be redirected to '
@@ -423,10 +426,13 @@ class SpotifyOAuth(SpotifyAuthBase):
         redirect_info = urlparse(self.redirect_uri)
         redirect_host, redirect_port = get_host_port(redirect_info.netloc)
 
+        if open_browser is None:
+            open_browser = self.open_browser
+
         if (
-            open_browser
-            and redirect_host in ("127.0.0.1", "localhost")
-            and redirect_info.scheme == "http"
+                (open_browser or self.open_browser)
+                and redirect_host in ("127.0.0.1", "localhost")
+                and redirect_info.scheme == "http"
         ):
             # Only start a local http server if a port is specified
             if redirect_port:
@@ -584,7 +590,8 @@ class SpotifyPKCE(SpotifyAuthBase):
                  username=None,
                  proxies=None,
                  requests_timeout=None,
-                 requests_session=True,):
+                 requests_session=True,
+                 open_browser=True):
         """
         Creates Auth Manager with the PKCE Auth flow.
 
@@ -602,6 +609,7 @@ class SpotifyPKCE(SpotifyAuthBase):
              * proxies: Proxy for the requests library to route through
              * requests_timeout: Tell Requests to stop waiting for a response after a given number
                                  of seconds
+             * open_browser: Whether or not the web browser should be opened to authorize a user
         """
 
         super(SpotifyPKCE, self).__init__(requests_session)
@@ -620,6 +628,7 @@ class SpotifyPKCE(SpotifyAuthBase):
         self.code_verifier = None
         self.code_challenge = None
         self.authorization_code = None
+        self.open_browser = open_browser
 
     def _normalize_scope(self, scope):
         if scope:
@@ -642,7 +651,7 @@ class SpotifyPKCE(SpotifyAuthBase):
         try:
             import secrets
             verifier = secrets.token_urlsafe(length)
-        except ImportError:    # For python 3.5 support
+        except ImportError:  # For python 3.5 support
             import os
             import base64
             rand_bytes = os.urandom(length)
@@ -688,7 +697,7 @@ class SpotifyPKCE(SpotifyAuthBase):
         except webbrowser.Error:
             logger.error("Please navigate here: %s", auth_url)
 
-    def _get_auth_response(self, open_browser=True):
+    def _get_auth_response(self, open_browser=None):
         logger.info('User authentication requires interaction with your '
                     'web browser. Once you enter your credentials and '
                     'give authorization, you will be redirected to '
@@ -698,10 +707,13 @@ class SpotifyPKCE(SpotifyAuthBase):
         redirect_info = urlparse(self.redirect_uri)
         redirect_host, redirect_port = get_host_port(redirect_info.netloc)
 
+        if open_browser is None:
+            open_browser = self.open_browser
+
         if (
-            open_browser
-            and redirect_host in ("127.0.0.1", "localhost")
-            and redirect_info.scheme == "http"
+                open_browser
+                and redirect_host in ("127.0.0.1", "localhost")
+                and redirect_info.scheme == "http"
         ):
             # Only start a local http server if a port is specified
             if redirect_port:
@@ -730,8 +742,8 @@ class SpotifyPKCE(SpotifyAuthBase):
         else:
             raise SpotifyOauthError("Server listening on localhost has not been accessed")
 
-    def _get_auth_response_interactive(self, open_browser=True):
-        if open_browser:
+    def _get_auth_response_interactive(self, open_browser=False):
+        if open_browser or self.open_browser:
             self._open_auth_url()
             prompt = "Enter the URL you were redirected to: "
         else:
@@ -764,7 +776,7 @@ class SpotifyPKCE(SpotifyAuthBase):
 
             # if scopes don't match, then bail
             if "scope" not in token_info or not self._is_scope_subset(
-                self.scope, token_info["scope"]
+                    self.scope, token_info["scope"]
             ):
                 return None
 
@@ -1011,7 +1023,7 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
 
             # if scopes don't match, then bail
             if "scope" not in token_info or not self._is_scope_subset(
-                self.scope, token_info["scope"]
+                    self.scope, token_info["scope"]
             ):
                 return None
 
