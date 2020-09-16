@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+// Add your changes here and then delete this line
+
+## [2.16.0] - 2020-09-16
+
 ### Added
 
 - `open_browser` can be passed to the constructors of `SpotifyOAuth` and `SpotifyPKCE` to make it easier to authorize in browserless environments
