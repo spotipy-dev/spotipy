@@ -127,9 +127,10 @@ class SpotifyAuthBase(object):
     @staticmethod
     def _get_user_input(prompt):
         try:
-            return raw_input(prompt)
-        except NameError:
             return input(prompt)
+        except NameError:
+            return raw_input(prompt)
+
 
     def __del__(self):
         """Make sure the connection (pool) gets closed"""
