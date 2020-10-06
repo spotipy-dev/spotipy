@@ -22,6 +22,7 @@ class AuthTestSpotipy(unittest.TestCase):
     """
 
     playlist = "spotify:user:plamere:playlist:2oCEWyyAPbZp9xhVSxZavx"
+    playlist_id = "2oCEWyyAPbZp9xhVSxZavx"
     four_tracks = ["spotify:track:6RtPijgfPKROxEzTHNRiDp",
                    "spotify:track:7IHOIqZUUInxjVkko181PB",
                    "4VrWlk8IQxevMvERoX08iC",
@@ -239,6 +240,13 @@ class AuthTestSpotipy(unittest.TestCase):
         # depending on the timing or bandwidth, this raises a timeout or connection error"
         self.assertRaises((requests.exceptions.Timeout, requests.exceptions.ConnectionError),
                           lambda: sp.search(q='my*', type='track'))
+
+    def test_max_retries_reached(self):
+        client_credentials_manager = SpotifyClientCredentials()
+        sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+        self.assertRaises((spotipy.exceptions.SpotifyException,),
+                          lambda: sp.playlist_is_following(playlist_id=AuthTestSpotipy.playlist_id,
+                                                           user_ids=[AuthTestSpotipy.bad_id]))
 
     def test_album_search(self):
         results = self.spotify.search(q='weezer pinkerton', type='album')
