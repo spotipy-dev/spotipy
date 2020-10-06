@@ -243,7 +243,8 @@ class Spotify(object):
 
             response.raise_for_status()
             results = response.json()
-        except requests.exceptions.HTTPError:
+        except requests.exceptions.HTTPError as http_error:
+            response = http_error.response
             try:
                 msg = response.json()["error"]["message"]
             except (ValueError, KeyError):
@@ -263,13 +264,18 @@ class Spotify(object):
                 reason=reason,
                 headers=response.headers,
             )
-        except requests.exceptions.RetryError:
+        except requests.exceptions.RetryError as retry_error:
+            request = retry_error.request
             logger.error('Max Retries reached')
+            try:
+                reason = retry_error.args[0].reason
+            except (IndexError, AttributeError):
+                reason = None
             raise SpotifyException(
                 599,
                 -1,
-                "%s:\n %s" % (response.url, "Max Retries"),
-                headers=response.headers,
+                "%s:\n %s" % (request.path_url, "Max Retries"),
+                reason=reason
             )
         except ValueError:
             results = None
