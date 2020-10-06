@@ -7,10 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-### Fixed
-
-- UnboundLocalError when a request fails ( #571 )
-
+// Add your changes here and then delete this line
 
 ## [2.16.0] - 2020-09-16
 
