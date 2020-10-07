@@ -22,7 +22,6 @@ class AuthTestSpotipy(unittest.TestCase):
     """
 
     playlist = "spotify:user:plamere:playlist:2oCEWyyAPbZp9xhVSxZavx"
-    playlist_id = "2oCEWyyAPbZp9xhVSxZavx"
     four_tracks = ["spotify:track:6RtPijgfPKROxEzTHNRiDp",
                    "spotify:track:7IHOIqZUUInxjVkko181PB",
                    "4VrWlk8IQxevMvERoX08iC",
