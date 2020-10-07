@@ -240,6 +240,20 @@ class AuthTestSpotipy(unittest.TestCase):
         self.assertRaises((requests.exceptions.Timeout, requests.exceptions.ConnectionError),
                           lambda: sp.search(q='my*', type='track'))
 
+    def test_max_retries_reached(self):
+        spotify_no_retry = Spotify(
+            client_credentials_manager=SpotifyClientCredentials(),
+            retries=0)
+        i = 0
+        while i < 100:
+            try:
+                spotify_no_retry.search(q='foo')
+            except spotipy.exceptions.SpotifyException as e:
+                self.assertIsInstance(e, spotipy.exceptions.SpotifyException)
+                return
+            i += 1
+        self.fail()
+
     def test_album_search(self):
         results = self.spotify.search(q='weezer pinkerton', type='album')
         self.assertTrue('albums' in results)
