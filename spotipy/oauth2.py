@@ -19,14 +19,14 @@ import warnings
 import webbrowser
 
 import requests
-from spotipy.util import CLIENT_CREDS_ENV_VARS, get_host_port
-from spotipy.exceptions import SpotifyException
-
 # Workaround to support both python 2 & 3
 import six
 import six.moves.urllib.parse as urllibparse
-from six.moves.BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
-from six.moves.urllib_parse import urlparse, parse_qsl
+from six.moves.BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
+from six.moves.urllib_parse import parse_qsl, urlparse
+
+from spotipy.exceptions import SpotifyException
+from spotipy.util import CLIENT_CREDS_ENV_VARS, get_host_port
 
 logger = logging.getLogger(__name__)
 
@@ -652,8 +652,8 @@ class SpotifyPKCE(SpotifyAuthBase):
             import secrets
             verifier = secrets.token_urlsafe(length)
         except ImportError:  # For python 3.5 support
-            import os
             import base64
+            import os
             rand_bytes = os.urandom(length)
             verifier = base64.urlsafe_b64encode(rand_bytes).decode('utf-8').replace('=', '')
         return verifier
@@ -663,8 +663,8 @@ class SpotifyPKCE(SpotifyAuthBase):
         Reference:
         https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-code-flow-with-proof-key-for-code-exchange-pkce
         """
-        import hashlib
         import base64
+        import hashlib
         code_challenge_digest = hashlib.sha256(self.code_verifier.encode('utf-8')).digest()
         code_challenge = base64.urlsafe_b64encode(code_challenge_digest).decode('utf-8')
         return code_challenge.replace('=', '')
