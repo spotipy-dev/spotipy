@@ -31,6 +31,11 @@ To verify the code style:
     pip install flake8
     flake8 .
 
+To make sure if the import lists are stored correctly:
+
+    pip install isort
+    isort . -c -v
+
 ### Changelog
 
 Don't forget to add a short description of your change in the [CHANGELOG](CHANGELOG.md)

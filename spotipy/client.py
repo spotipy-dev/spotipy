@@ -9,8 +9,8 @@ import logging
 import warnings
 
 import requests
-import urllib3
 import six
+import urllib3
 
 from spotipy.exceptions import SpotifyException
 
