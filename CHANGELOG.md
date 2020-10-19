@@ -12,8 +12,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - SpotifyException now thrown when a request fails & has no response ( fixes #571, #581 )
 
-## [2.16.0] - 2020-09-18
-
 ### Changed
 
 - both inline and starting import lists are sorted using `isort` module
