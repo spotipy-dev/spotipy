@@ -5,11 +5,17 @@
 __all__ = ["CLIENT_CREDS_ENV_VARS", "prompt_for_user_token"]
 
 import logging
+import logging.config
 import os
 import warnings
 
 import spotipy
 
+logging.basicConfig(
+    level=logging.WARNING,
+    format='%(asctime)s %(levelname)-8s %(name)-15s %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S',
+)
 LOGGER = logging.getLogger(__name__)
 
 CLIENT_CREDS_ENV_VARS = {
