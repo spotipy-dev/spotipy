@@ -15,7 +15,7 @@ export SPOTIPY_REDIRECT_URI=http://localhost:8080 # Make url is set in app you c
 
 ```bash
 $ virtualenv --python=python3.7 env
-(env) $ pip install --user -e .
+(env) $ pip install -e .
 (env) $ python -m unittest discover -v tests
 ```
 
