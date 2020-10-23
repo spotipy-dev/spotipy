@@ -3,7 +3,8 @@
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 
-sp = spotipy.Spotify(auth_manager=SpotifyOAuth())
+scope = 'playlist-read-private'
+sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
 playlists = sp.current_user_playlists()
 
 for playlist in playlists['items']:

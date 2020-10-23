@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - SpotifyException now thrown when a request fails & has no response ( fixes #571, #581 )
+- Added scope, 'playlist-read-private', to examples that access user playlists using the spotipy api: current_user_playlists() (fixes #591)
 
 ### Changed
 

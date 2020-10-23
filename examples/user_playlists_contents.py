@@ -13,7 +13,8 @@ def show_tracks(results):
 
 
 if __name__ == '__main__':
-    sp = spotipy.Spotify(auth_manager=SpotifyOAuth())
+    scope = 'playlist-read-private'
+    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
 
     playlists = sp.current_user_playlists()
     user_id = sp.me()['id']
