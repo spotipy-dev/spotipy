@@ -12,9 +12,10 @@ while True:
                                  offset=offset,
                                  fields='items.track.id,total',
                                  additional_types=['track'])
+    
+    if len(response['items']) == 0:
+        break
+    
     pprint(response['items'])
     offset = offset + len(response['items'])
     print(offset, "/", response['total'])
-
-    if len(response['items']) == 0:
-        break

@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 
 ### Fixed
-
+- playlist_tracks example code no longer prints extra characters on final loop iteration
 - SpotifyException now thrown when a request fails & has no response ( fixes #571, #581 )
 
 ### Changed
