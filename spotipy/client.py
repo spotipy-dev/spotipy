@@ -194,6 +194,7 @@ class Spotify(object):
             total=self.retries,
             connect=None,
             read=False,
+            method_whitelist=frozenset(['GET', 'POST', 'PUT', 'DELETE']),
             status=self.status_retries,
             backoff_factor=self.backoff_factor,
             status_forcelist=self.status_forcelist)
@@ -272,7 +273,7 @@ class Spotify(object):
             except (IndexError, AttributeError):
                 reason = None
             raise SpotifyException(
-                599,
+                429,
                 -1,
                 "%s:\n %s" % (request.path_url, "Max Retries"),
                 reason=reason

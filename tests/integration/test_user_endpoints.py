@@ -52,12 +52,11 @@ class SpotipyPlaylistApiTest(unittest.TestCase):
         token = prompt_for_user_token(cls.username, scope=scope)
 
         cls.spotify = Spotify(auth=token)
-
+        cls.spotify_no_retry = Spotify(auth=token, retries=0)
         cls.new_playlist_name = 'spotipy-playlist-test'
         cls.new_playlist = helpers.get_spotify_playlist(
             cls.spotify, cls.new_playlist_name, cls.username) or \
-            helpers.create_spotify_playlist(
-                cls.spotify, cls.new_playlist_name, cls.username)
+            cls.spotify.user_playlist_create(cls.username, cls.new_playlist_name)
         cls.new_playlist_uri = cls.new_playlist['uri']
 
     def test_user_playlists(self):
@@ -119,6 +118,19 @@ class SpotipyPlaylistApiTest(unittest.TestCase):
     def test_get_playlist_by_id(self):
         pl = self.spotify.playlist(self.new_playlist['id'])
         self.assertEqual(pl["tracks"]["total"], 0)
+
+    def test_max_retries_reached_post(self):
+        i = 0
+        while i < 100:
+            try:
+                self.spotify_no_retry.playlist_change_details(
+                    self.new_playlist['id'], description="test")
+            except SpotifyException as e:
+                self.assertIsInstance(e, SpotifyException)
+                self.assertEqual(e.http_status, 429)
+                return
+            i += 1
+        self.fail()
 
     def test_playlist_add_items(self):
         # add tracks to playlist
@@ -223,7 +235,7 @@ class SpotipyLibraryApiTests(unittest.TestCase):
         new_total = tracks['total']
         self.assertEqual(new_total - total, len(self.four_tracks))
 
-        tracks = self.spotify.current_user_saved_tracks_delete(
+        self.spotify.current_user_saved_tracks_delete(
             self.four_tracks)
         tracks = self.spotify.current_user_saved_tracks()
         new_total = tracks['total']
