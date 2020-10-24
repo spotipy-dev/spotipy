@@ -9,13 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 
 ### Fixed
+
 - playlist_tracks example code no longer prints extra characters on final loop iteration
 - SpotifyException now thrown when a request fails & has no response ( fixes #571, #581 )
 - Added scope, 'playlist-read-private', to examples that access user playlists using the spotipy api: current_user_playlists() (fixes #591)
+- Enable retries for POST, DELETE, PUT
 
 ### Changed
 
 - both inline and starting import lists are sorted using `isort` module
+- changed exception Max Retries exception code from 599 to 429
 
 ## [2.16.0] - 2020-09-16
 
