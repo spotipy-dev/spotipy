@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - both inline and starting import lists are sorted using `isort` module
 - changed Max Retries exception code from 599 to 429
+- moved deletion of cached file inside try block on app.py example file 
 
 ## [2.16.0] - 2020-09-16
 
