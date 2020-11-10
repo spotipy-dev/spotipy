@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-// Add your changes here and then delete this line
+- Support `market` optional parameter in `track`
 
 ## [2.16.1] - 2020-10-24
 
