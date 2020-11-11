@@ -11,6 +11,7 @@ __all__ = [
 ]
 
 import base64
+import errno
 import json
 import logging
 import os
@@ -305,9 +306,11 @@ class SpotifyOAuth(SpotifyAuthBase):
                 token_info = self.refresh_access_token(
                     token_info["refresh_token"]
                 )
-
-        except IOError:
-            logger.warning("Couldn't read cache at: %s", self.cache_path)
+        except IOError as error:
+            if error.errno == errno.ENOENT:
+                logger.debug("cache does not exist at: %s", self.cache_path)
+            else:
+                logger.warning("Couldn't read cache at: %s", self.cache_path)
 
         return token_info
 
@@ -784,9 +787,11 @@ class SpotifyPKCE(SpotifyAuthBase):
                 token_info = self.refresh_access_token(
                     token_info["refresh_token"]
                 )
-
-        except IOError:
-            logger.warning("Couldn't read cache at: %s", self.cache_path)
+        except IOError as error:
+            if error.errno == errno.ENOENT:
+                logger.debug("cache does not exist at: %s", self.cache_path)
+            else:
+                logger.warning("Couldn't read cache at: %s", self.cache_path)
 
         return token_info
 
@@ -1029,9 +1034,11 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
 
             if self.is_token_expired(token_info):
                 return None
-
-        except IOError:
-            logger.warning("Couldn't read cache at: %s", self.cache_path)
+        except IOError as error:
+            if error.errno == errno.ENOENT:
+                logger.debug("cache does not exist at: %s", self.cache_path)
+            else:
+                logger.warning("Couldn't read cache at: %s", self.cache_path)
 
         return token_info
 
