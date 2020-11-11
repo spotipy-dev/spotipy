@@ -8,7 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-// Add your changes here and then delete this line
+- A warning will no longer be emitted when the cache file does not exist at the specified path
+- The docs for the `auth` parameter of `Spotify.init` use the term "access token" instead of "authorization token"  
 
 ## [2.16.1] - 2020-10-24
 
