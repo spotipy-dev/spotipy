@@ -8,7 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-// Add your changes here and then delete this line
+### Changed
+- moved os.remove(session_cache_path()) inside try block to avoid TypeError on app.py example file
 
 ## [2.16.1] - 2020-10-24
 
