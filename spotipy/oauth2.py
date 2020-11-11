@@ -289,27 +289,27 @@ class SpotifyOAuth(SpotifyAuthBase):
         """
         token_info = None
 
-        try:
-            f = open(self.cache_path)
-            token_info_string = f.read()
-            f.close()
-            token_info = json.loads(token_info_string)
+        if os.path.exists(self.cache_path):
+            try:
+                f = open(self.cache_path)
+                token_info_string = f.read()
+                f.close()
+                token_info = json.loads(token_info_string)
 
-            # if scopes don't match, then bail
-            if "scope" not in token_info or not self._is_scope_subset(
-                    self.scope, token_info["scope"]
-            ):
-                return None
+                # if scopes don't match, then bail
+                if "scope" not in token_info or not self._is_scope_subset(
+                        self.scope, token_info["scope"]
+                ):
+                    return None
 
-            if self.is_token_expired(token_info):
-                token_info = self.refresh_access_token(
-                    token_info["refresh_token"]
-                )
-
-        except FileNotFoundError:
+                if self.is_token_expired(token_info):
+                    token_info = self.refresh_access_token(
+                        token_info["refresh_token"]
+                    )
+            except IOError:
+                logger.warning("Couldn't read cache at: %s", self.cache_path)
+        else:
             logger.debug("cache does not exist at: %s", self.cache_path)
-        except IOError:
-            logger.warning("Couldn't read cache at: %s", self.cache_path)
 
         return token_info
 
@@ -770,27 +770,27 @@ class SpotifyPKCE(SpotifyAuthBase):
         """
         token_info = None
 
-        try:
-            f = open(self.cache_path)
-            token_info_string = f.read()
-            f.close()
-            token_info = json.loads(token_info_string)
+        if os.path.exists(self.cache_path):
+            try:
+                f = open(self.cache_path)
+                token_info_string = f.read()
+                f.close()
+                token_info = json.loads(token_info_string)
 
-            # if scopes don't match, then bail
-            if "scope" not in token_info or not self._is_scope_subset(
-                    self.scope, token_info["scope"]
-            ):
-                return None
+                # if scopes don't match, then bail
+                if "scope" not in token_info or not self._is_scope_subset(
+                        self.scope, token_info["scope"]
+                ):
+                    return None
 
-            if self.is_token_expired(token_info):
-                token_info = self.refresh_access_token(
-                    token_info["refresh_token"]
-                )
-
-        except FileNotFoundError:
+                if self.is_token_expired(token_info):
+                    token_info = self.refresh_access_token(
+                        token_info["refresh_token"]
+                    )
+            except IOError:
+                logger.warning("Couldn't read cache at: %s", self.cache_path)
+        else:
             logger.debug("cache does not exist at: %s", self.cache_path)
-        except IOError:
-            logger.warning("Couldn't read cache at: %s", self.cache_path)
 
         return token_info
 
@@ -1019,25 +1019,25 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
         """
         token_info = None
 
-        try:
-            f = open(self.cache_path)
-            token_info_string = f.read()
-            f.close()
-            token_info = json.loads(token_info_string)
+        if os.path.exists(self.cache_path):
+            try:
+                f = open(self.cache_path)
+                token_info_string = f.read()
+                f.close()
+                token_info = json.loads(token_info_string)
 
-            # if scopes don't match, then bail
-            if "scope" not in token_info or not self._is_scope_subset(
-                    self.scope, token_info["scope"]
-            ):
-                return None
+                # if scopes don't match, then bail
+                if "scope" not in token_info or not self._is_scope_subset(
+                        self.scope, token_info["scope"]
+                ):
+                    return None
 
-            if self.is_token_expired(token_info):
-                return None
-
-        except FileNotFoundError:
+                if self.is_token_expired(token_info):
+                    return None
+            except IOError:
+                logger.warning("Couldn't read cache at: %s", self.cache_path)
+        else:
             logger.debug("cache does not exist at: %s", self.cache_path)
-        except IOError:
-            logger.warning("Couldn't read cache at: %s", self.cache_path)
 
         return token_info
 
