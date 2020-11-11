@@ -306,6 +306,8 @@ class SpotifyOAuth(SpotifyAuthBase):
                     token_info["refresh_token"]
                 )
 
+        except FileNotFoundError:
+            logger.debug("cache does not exist at: %s", self.cache_path)
         except IOError:
             logger.warning("Couldn't read cache at: %s", self.cache_path)
 
@@ -785,6 +787,8 @@ class SpotifyPKCE(SpotifyAuthBase):
                     token_info["refresh_token"]
                 )
 
+        except FileNotFoundError:
+            logger.debug("cache does not exist at: %s", self.cache_path)
         except IOError:
             logger.warning("Couldn't read cache at: %s", self.cache_path)
 
@@ -1030,6 +1034,8 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
             if self.is_token_expired(token_info):
                 return None
 
+        except FileNotFoundError:
+            logger.debug("cache does not exist at: %s", self.cache_path)
         except IOError:
             logger.warning("Couldn't read cache at: %s", self.cache_path)
 
