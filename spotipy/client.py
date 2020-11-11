@@ -114,7 +114,7 @@ class Spotify(object):
         """
         Creates a Spotify API client.
 
-        :param auth: An authorization token (optional)
+        :param auth: An access token (optional)
         :param requests_session:
             A Requests session object or a truthy value to create one.
             A falsy value disables sessions.
