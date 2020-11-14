@@ -18,9 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added log messages for when the access token and refresh tokens are retrieved and when they are refreshed
-
-    
+- Added log messages for when the access and refresh tokens are retrieved and when they are refreshed
 
 ## [2.16.1] - 2020-10-24
 
