@@ -12,7 +12,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - moved os.remove(session_cache_path()) inside try block to avoid TypeError on app.py example file
 - A warning will no longer be emitted when the cache file does not exist at the specified path
-- The docs for the `auth` parameter of `Spotify.init` use the term "access token" instead of "authorization token"  
+- The docs for the `auth` parameter of `Spotify.init` use the term "access token" instead of "authorization token"
+- Changed docs for `search` to mention that you can provide multiple multiple types to search for
+- The query parameters of requests are now logged
+
+### Added
+
+- Added log messages for when the access token and refresh tokens are retrieved and when they are refreshed
+
+    
 
 ## [2.16.1] - 2020-10-24
 

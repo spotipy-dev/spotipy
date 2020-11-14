@@ -233,8 +233,8 @@ class Spotify(object):
         if self.language is not None:
             headers["Accept-Language"] = self.language
 
-        logger.debug('Sending %s to %s with Headers: %s and Body: %r ',
-                     method, url, headers, args.get('data'))
+        logger.debug('Sending %s to %s with Params: %s Headers: %s and Body: %r ',
+                     method, url, args.get("params"), headers, args.get('data'))
 
         try:
             response = self._session.request(
@@ -534,10 +534,12 @@ class Spotify(object):
             Parameters:
                 - q - the search query (see how to write a query in the
                       official documentation https://developer.spotify.com/documentation/web-api/reference/search/search/)  # noqa
-                - limit  - the number of items to return (min = 1, default = 10, max = 50)
+                - limit - the number of items to return (min = 1, default = 10, max = 50). The limit is applied
+                          within each type, not on the total response.
                 - offset - the index of the first item to return
-                - type - the type of item to return. One of 'artist', 'album',
-                         'track', 'playlist', 'show', or 'episode'
+                - type - the types of items to return. One or more of 'artist', 'album',
+                         'track', 'playlist', 'show', and 'episode'.  If multiple types are desired,
+                         pass in a comma separated string; e.g., 'track,album,episode'.
                 - market - An ISO 3166-1 alpha-2 country code or the string
                            from_token.
         """
@@ -554,8 +556,8 @@ class Spotify(object):
                 - limit  - the number of items to return (min = 1, default = 10, max = 50). If a search is to be done on multiple
                             markets, then this limit is applied to each market. (e.g. search US, CA, MX each with a limit of 10).
                 - offset - the index of the first item to return
-                - type - the type's of item's to return. One or more of 'artist', 'album',
-                         'track', 'playlist', 'show', or 'episode'. If multiple types are desired, pass in a comma separated list.
+                - type - the types of items to return. One or more of 'artist', 'album',
+                         'track', 'playlist', 'show', or 'episode'. If multiple types are desired, pass in a comma separated string.
                 - markets - A list of ISO 3166-1 alpha-2 country codes. Search all country markets by default.
                 - total - the total number of results to return if multiple markets are supplied in the search.
                           If multiple types are specified, this only applies to the first type.

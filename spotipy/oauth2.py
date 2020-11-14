@@ -197,6 +197,11 @@ class SpotifyClientCredentials(SpotifyAuthBase):
             self.client_id, self.client_secret
         )
 
+        logger.debug(
+            "sending POST request to %s with Headers: %s and Body: %r",
+            self.OAUTH_TOKEN_URL, headers, payload
+        )
+
         response = self._session.post(
             self.OAUTH_TOKEN_URL,
             data=payload,
@@ -494,6 +499,11 @@ class SpotifyOAuth(SpotifyAuthBase):
 
         headers = self._make_authorization_headers()
 
+        logger.debug(
+            "sending POST request to %s with Headers: %s and Body: %r",
+            self.OAUTH_TOKEN_URL, headers, payload
+        )
+
         response = self._session.post(
             self.OAUTH_TOKEN_URL,
             data=payload,
@@ -528,6 +538,11 @@ class SpotifyOAuth(SpotifyAuthBase):
         }
 
         headers = self._make_authorization_headers()
+
+        logger.debug(
+            "sending POST request to %s with Headers: %s and Body: %r",
+            self.OAUTH_TOKEN_URL, headers, payload
+        )
 
         response = self._session.post(
             self.OAUTH_TOKEN_URL,
@@ -836,8 +851,8 @@ class SpotifyPKCE(SpotifyAuthBase):
 
             Parameters:
                 - code - the response code from authentication
-                - check_cache - if true, checks for locally stored token
-                                before requesting a new token if True
+                - check_cache - if true, checks for a locally stored token
+                                before requesting a new token
         """
 
         if check_cache:
@@ -861,6 +876,11 @@ class SpotifyPKCE(SpotifyAuthBase):
         }
 
         headers = {"Content-Type": "application/x-www-form-urlencoded"}
+
+        logger.debug(
+            "sending POST request to %s with Headers: %s and Body: %r",
+            self.OAUTH_TOKEN_URL, headers, payload
+        )
 
         response = self._session.post(
             self.OAUTH_TOKEN_URL,
@@ -891,6 +911,11 @@ class SpotifyPKCE(SpotifyAuthBase):
         }
 
         headers = {"Content-Type": "application/x-www-form-urlencoded"}
+
+        logger.debug(
+            "sending POST request to %s with Headers: %s and Body: %r",
+            self.OAUTH_TOKEN_URL, headers, payload
+        )
 
         response = self._session.post(
             self.OAUTH_TOKEN_URL,
