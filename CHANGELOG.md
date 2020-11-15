@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added log messages for when the access and refresh tokens are retrieved and when they are refreshed
+- Support `market` optional parameter in `track`  
 
 ## [2.16.1] - 2020-10-24
 
