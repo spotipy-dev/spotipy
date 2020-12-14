@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 __all__ = [
-    "is_token_expired",
     "SpotifyClientCredentials",
     "SpotifyOAuth",
     "SpotifyOauthError",
@@ -60,11 +59,6 @@ def _make_authorization_headers(client_id, client_secret):
         six.text_type(client_id + ":" + client_secret).encode("ascii")
     )
     return {"Authorization": "Basic %s" % auth_header.decode("ascii")}
-
-
-def is_token_expired(token_info):
-    now = int(time.time())
-    return token_info["expires_at"] - now < 60
 
 
 def _ensure_value(value, env_key):
@@ -131,6 +125,19 @@ class SpotifyAuthBase(object):
             return raw_input(prompt)
         except NameError:
             return input(prompt)
+
+    @staticmethod
+    def is_token_expired(token_info):
+        now = int(time.time())
+        return token_info["expires_at"] - now < 60
+
+    @staticmethod
+    def _is_scope_subset(needle_scope, haystack_scope):
+        needle_scope = set(needle_scope.split()) if needle_scope else set()
+        haystack_scope = (
+            set(haystack_scope.split()) if haystack_scope else set()
+        )
+        return needle_scope <= haystack_scope
 
     def __del__(self):
         """Make sure the connection (pool) gets closed"""
@@ -219,9 +226,6 @@ class SpotifyClientCredentials(SpotifyAuthBase):
                 error_description=error_payload['error_description'])
         token_info = response.json()
         return token_info
-
-    def is_token_expired(self, token_info):
-        return is_token_expired(token_info)
 
     def _add_custom_values_to_token_info(self, token_info):
         """
@@ -328,16 +332,6 @@ class SpotifyOAuth(SpotifyAuthBase):
             except IOError:
                 logger.warning('Couldn\'t write token to cache at: %s',
                                self.cache_path)
-
-    def _is_scope_subset(self, needle_scope, haystack_scope):
-        needle_scope = set(needle_scope.split()) if needle_scope else set()
-        haystack_scope = (
-            set(haystack_scope.split()) if haystack_scope else set()
-        )
-        return needle_scope <= haystack_scope
-
-    def is_token_expired(self, token_info):
-        return is_token_expired(token_info)
 
     def get_authorize_url(self, state=None):
         """ Gets the URL to use to authorize this app
@@ -481,7 +475,7 @@ class SpotifyOAuth(SpotifyAuthBase):
         if check_cache:
             token_info = self.get_cached_token()
             if token_info is not None:
-                if is_token_expired(token_info):
+                if self.is_token_expired(token_info):
                     token_info = self.refresh_access_token(
                         token_info["refresh_token"]
                     )
@@ -810,16 +804,6 @@ class SpotifyPKCE(SpotifyAuthBase):
 
         return token_info
 
-    def _is_scope_subset(self, needle_scope, haystack_scope):
-        needle_scope = set(needle_scope.split()) if needle_scope else set()
-        haystack_scope = (
-            set(haystack_scope.split()) if haystack_scope else set()
-        )
-        return needle_scope <= haystack_scope
-
-    def is_token_expired(self, token_info):
-        return is_token_expired(token_info)
-
     def _save_token_info(self, token_info):
         if self.cache_path:
             try:
@@ -858,7 +842,7 @@ class SpotifyPKCE(SpotifyAuthBase):
         if check_cache:
             token_info = self.get_cached_token()
             if token_info is not None:
-                if is_token_expired(token_info):
+                if self.is_token_expired(token_info):
                     token_info = self.refresh_access_token(
                         token_info["refresh_token"]
                     )
@@ -1075,16 +1059,6 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
         except IOError:
             logger.warning("Couldn't write token to cache at: %s", self.cache_path)
 
-    def _is_scope_subset(self, needle_scope, haystack_scope):
-        needle_scope = set(needle_scope.split()) if needle_scope else set()
-        haystack_scope = (
-            set(haystack_scope.split()) if haystack_scope else set()
-        )
-        return needle_scope <= haystack_scope
-
-    def is_token_expired(self, token_info):
-        return is_token_expired(token_info)
-
     def get_access_token(self,
                          state=None,
                          response=None,
@@ -1099,7 +1073,7 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
         """
         if check_cache:
             token_info = self.get_cached_token()
-            if not (token_info is None or is_token_expired(token_info)):
+            if not (token_info is None or self.is_token_expired(token_info)):
                 return token_info["access_token"]
 
         if response:
