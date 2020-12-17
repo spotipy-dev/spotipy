@@ -10,8 +10,6 @@ __all__ = [
 ]
 
 import base64
-import errno
-import json
 import logging
 import os
 import time
@@ -72,7 +70,6 @@ def _ensure_value(value, env_key):
         )
         raise SpotifyOauthError(msg)
     return _val
-
 
 
 class SpotifyAuthBase(object):

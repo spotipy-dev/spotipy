@@ -4,6 +4,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 class CacheHandler():
     """
     An abstraction layer for handling the caching and retrieval of
@@ -79,4 +80,3 @@ class CacheFileHandler(CacheHandler):
         except IOError:
             logger.warning('Couldn\'t write token to cache at: %s',
                            self.cache_path)
-
