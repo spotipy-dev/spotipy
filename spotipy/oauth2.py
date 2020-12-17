@@ -359,8 +359,8 @@ class SpotifyOAuth(SpotifyAuthBase):
         self.state = state
         self.scope = self._normalize_scope(scope)
         if cache_handler:
-            assert issubclass(type(cache_handler), CacheHandler), \
-                "Invalid cache_handler: " + str(type(cache_handler)) + " != " + str(CacheHandler)
+            assert issubclass(cache_handler.__class__, CacheHandler), \
+                "cache_handler must be a subclass of CacheHandler: " + str(type(cache_handler)) + " != " + str(CacheHandler)
             self.cache_handler = cache_handler
         else:
             self.cache_handler = CacheFileHandler(
