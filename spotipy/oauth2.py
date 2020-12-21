@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 __all__ = [
-    "is_token_expired",
     "SpotifyClientCredentials",
     "SpotifyOAuth",
     "SpotifyOauthError",
@@ -11,8 +10,6 @@ __all__ = [
 ]
 
 import base64
-import errno
-import json
 import logging
 import os
 import time
@@ -26,6 +23,7 @@ import six.moves.urllib.parse as urllibparse
 from six.moves.BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 from six.moves.urllib_parse import parse_qsl, urlparse
 
+from spotipy.cache_handler import CacheFileHandler, CacheHandler
 from spotipy.exceptions import SpotifyException
 from spotipy.util import CLIENT_CREDS_ENV_VARS, get_host_port
 
@@ -62,11 +60,6 @@ def _make_authorization_headers(client_id, client_secret):
     return {"Authorization": "Basic %s" % auth_header.decode("ascii")}
 
 
-def is_token_expired(token_info):
-    now = int(time.time())
-    return token_info["expires_at"] - now < 60
-
-
 def _ensure_value(value, env_key):
     env_val = CLIENT_CREDS_ENV_VARS[env_key]
     _val = value or os.getenv(env_val)
@@ -77,17 +70,6 @@ def _ensure_value(value, env_key):
         )
         raise SpotifyOauthError(msg)
     return _val
-
-
-def _get_cache_path(cache_path, username):
-    if cache_path:
-        return cache_path
-
-    cache_path = ".cache"
-    if username:
-        cache_path += "-" + str(username)
-
-    return cache_path
 
 
 class SpotifyAuthBase(object):
@@ -131,6 +113,19 @@ class SpotifyAuthBase(object):
             return raw_input(prompt)
         except NameError:
             return input(prompt)
+
+    @staticmethod
+    def is_token_expired(token_info):
+        now = int(time.time())
+        return token_info["expires_at"] - now < 60
+
+    @staticmethod
+    def _is_scope_subset(needle_scope, haystack_scope):
+        needle_scope = set(needle_scope.split()) if needle_scope else set()
+        haystack_scope = (
+            set(haystack_scope.split()) if haystack_scope else set()
+        )
+        return needle_scope <= haystack_scope
 
     def __del__(self):
         """Make sure the connection (pool) gets closed"""
@@ -220,9 +215,6 @@ class SpotifyClientCredentials(SpotifyAuthBase):
         token_info = response.json()
         return token_info
 
-    def is_token_expired(self, token_info):
-        return is_token_expired(token_info)
-
     def _add_custom_values_to_token_info(self, token_info):
         """
         Store some values that aren't directly provided by a Web API
@@ -252,7 +244,8 @@ class SpotifyOAuth(SpotifyAuthBase):
             show_dialog=False,
             requests_session=True,
             requests_timeout=None,
-            open_browser=True
+            open_browser=True,
+            cache_handler=None
     ):
         """
         Creates a SpotifyOAuth object
@@ -263,6 +256,10 @@ class SpotifyOAuth(SpotifyAuthBase):
              * redirect_uri: Must be supplied or set as environment variable
              * state: May be supplied, no verification is performed
              * scope: May be supplied, intuitively converted to proper format
+             * cache_handler: An instance of the `CacheHandler` class to handle
+                              getting and saving cached authorization tokens.
+                              May be supplied, will otherwise use `CacheFileHandler`.
+                              (takes precedence over `cache_path` and `username`)
              * cache_path: May be supplied, will otherwise be generated
                            (takes precedence over `username`)
              * username: May be supplied or set as environment variable
@@ -280,64 +277,38 @@ class SpotifyOAuth(SpotifyAuthBase):
         self.client_secret = client_secret
         self.redirect_uri = redirect_uri
         self.state = state
-        self.username = username or os.getenv(
-            CLIENT_CREDS_ENV_VARS["client_username"]
-        )
-        self.cache_path = _get_cache_path(cache_path, self.username)
         self.scope = self._normalize_scope(scope)
+        if cache_handler:
+            assert issubclass(cache_handler.__class__, CacheHandler), \
+                "cache_handler must be a subclass of CacheHandler: " + str(type(cache_handler)) \
+                + " != " + str(CacheHandler)
+            self.cache_handler = cache_handler
+        else:
+            self.cache_handler = CacheFileHandler(
+                username=(username or os.getenv(CLIENT_CREDS_ENV_VARS["client_username"])),
+                cache_path=cache_path
+            )
         self.proxies = proxies
         self.requests_timeout = requests_timeout
         self.show_dialog = show_dialog
         self.open_browser = open_browser
 
-    def get_cached_token(self):
-        """ Gets a cached auth token
-        """
-        token_info = None
+    def validate_token(self, token_info):
+        if token_info is None:
+            return None
 
-        try:
-            f = open(self.cache_path)
-            token_info_string = f.read()
-            f.close()
-            token_info = json.loads(token_info_string)
+        # if scopes don't match, then bail
+        if "scope" not in token_info or not self._is_scope_subset(
+                self.scope, token_info["scope"]
+        ):
+            return None
 
-            # if scopes don't match, then bail
-            if "scope" not in token_info or not self._is_scope_subset(
-                    self.scope, token_info["scope"]
-            ):
-                return None
-
-            if self.is_token_expired(token_info):
-                token_info = self.refresh_access_token(
-                    token_info["refresh_token"]
-                )
-        except IOError as error:
-            if error.errno == errno.ENOENT:
-                logger.debug("cache does not exist at: %s", self.cache_path)
-            else:
-                logger.warning("Couldn't read cache at: %s", self.cache_path)
+        if self.is_token_expired(token_info):
+            token_info = self.refresh_access_token(
+                token_info["refresh_token"]
+            )
 
         return token_info
-
-    def _save_token_info(self, token_info):
-        if self.cache_path:
-            try:
-                f = open(self.cache_path, "w")
-                f.write(json.dumps(token_info))
-                f.close()
-            except IOError:
-                logger.warning('Couldn\'t write token to cache at: %s',
-                               self.cache_path)
-
-    def _is_scope_subset(self, needle_scope, haystack_scope):
-        needle_scope = set(needle_scope.split()) if needle_scope else set()
-        haystack_scope = (
-            set(haystack_scope.split()) if haystack_scope else set()
-        )
-        return needle_scope <= haystack_scope
-
-    def is_token_expired(self, token_info):
-        return is_token_expired(token_info)
 
     def get_authorize_url(self, state=None):
         """ Gets the URL to use to authorize this app
@@ -479,9 +450,9 @@ class SpotifyOAuth(SpotifyAuthBase):
                 stacklevel=2,
             )
         if check_cache:
-            token_info = self.get_cached_token()
+            token_info = self.validate_token(self.cache_handler.get_cached_token())
             if token_info is not None:
-                if is_token_expired(token_info):
+                if self.is_token_expired(token_info):
                     token_info = self.refresh_access_token(
                         token_info["refresh_token"]
                     )
@@ -521,7 +492,7 @@ class SpotifyOAuth(SpotifyAuthBase):
                 error_description=error_payload['error_description'])
         token_info = response.json()
         token_info = self._add_custom_values_to_token_info(token_info)
-        self._save_token_info(token_info)
+        self.cache_handler.save_token_to_cache(token_info)
         return token_info if as_dict else token_info["access_token"]
 
     def _normalize_scope(self, scope):
@@ -571,7 +542,7 @@ class SpotifyOAuth(SpotifyAuthBase):
         token_info = self._add_custom_values_to_token_info(token_info)
         if "refresh_token" not in token_info:
             token_info["refresh_token"] = refresh_token
-        self._save_token_info(token_info)
+        self.cache_handler.save_token_to_cache(token_info)
         return token_info
 
     def _add_custom_values_to_token_info(self, token_info):
@@ -609,7 +580,8 @@ class SpotifyPKCE(SpotifyAuthBase):
                  proxies=None,
                  requests_timeout=None,
                  requests_session=True,
-                 open_browser=True):
+                 open_browser=True,
+                 cache_handler=None):
         """
         Creates Auth Manager with the PKCE Auth flow.
 
@@ -619,6 +591,10 @@ class SpotifyPKCE(SpotifyAuthBase):
              * redirect_uri: Must be supplied or set as environment variable
              * state: May be supplied, no verification is performed
              * scope: May be supplied, intuitively converted to proper format
+             * cache_handler: An instance of the `CacheHandler` class to handle
+                              getting and saving cached authorization tokens.
+                              May be supplied, will otherwise use `CacheFileHandler`.
+                              (takes precedence over `cache_path` and `username`)
              * cache_path: May be supplied, will otherwise be generated
                            (takes precedence over `username`)
              * username: May be supplied or set as environment variable
@@ -635,10 +611,15 @@ class SpotifyPKCE(SpotifyAuthBase):
         self.redirect_uri = redirect_uri
         self.state = state
         self.scope = self._normalize_scope(scope)
-        self.username = username or os.getenv(
-            CLIENT_CREDS_ENV_VARS["client_username"]
-        )
-        self.cache_path = _get_cache_path(cache_path, self.username)
+        if cache_handler:
+            assert issubclass(type(cache_handler), CacheHandler), \
+                "type(cache_handler): " + str(type(cache_handler)) + " != " + str(CacheHandler)
+            self.cache_handler = cache_handler
+        else:
+            self.cache_handler = CacheFileHandler(
+                username=(username or os.getenv(CLIENT_CREDS_ENV_VARS["client_username"])),
+                cache_path=cache_path
+            )
         self.proxies = proxies
         self.requests_timeout = requests_timeout
 
@@ -781,54 +762,22 @@ class SpotifyPKCE(SpotifyAuthBase):
             return self.parse_response_code(response)
         return self._get_auth_response()
 
-    def get_cached_token(self):
-        """ Gets a cached auth token
-        """
-        token_info = None
+    def validate_token(self, token_info):
+        if token_info is None:
+            return None
 
-        try:
-            f = open(self.cache_path)
-            token_info_string = f.read()
-            f.close()
-            token_info = json.loads(token_info_string)
+        # if scopes don't match, then bail
+        if "scope" not in token_info or not self._is_scope_subset(
+                self.scope, token_info["scope"]
+        ):
+            return None
 
-            # if scopes don't match, then bail
-            if "scope" not in token_info or not self._is_scope_subset(
-                    self.scope, token_info["scope"]
-            ):
-                return None
-
-            if self.is_token_expired(token_info):
-                token_info = self.refresh_access_token(
-                    token_info["refresh_token"]
-                )
-        except IOError as error:
-            if error.errno == errno.ENOENT:
-                logger.debug("cache does not exist at: %s", self.cache_path)
-            else:
-                logger.warning("Couldn't read cache at: %s", self.cache_path)
+        if self.is_token_expired(token_info):
+            token_info = self.refresh_access_token(
+                token_info["refresh_token"]
+            )
 
         return token_info
-
-    def _is_scope_subset(self, needle_scope, haystack_scope):
-        needle_scope = set(needle_scope.split()) if needle_scope else set()
-        haystack_scope = (
-            set(haystack_scope.split()) if haystack_scope else set()
-        )
-        return needle_scope <= haystack_scope
-
-    def is_token_expired(self, token_info):
-        return is_token_expired(token_info)
-
-    def _save_token_info(self, token_info):
-        if self.cache_path:
-            try:
-                f = open(self.cache_path, "w")
-                f.write(json.dumps(token_info))
-                f.close()
-            except IOError:
-                logger.warning('Couldn\'t write token to cache at: %s',
-                               self.cache_path)
 
     def _add_custom_values_to_token_info(self, token_info):
         """
@@ -856,9 +805,9 @@ class SpotifyPKCE(SpotifyAuthBase):
         """
 
         if check_cache:
-            token_info = self.get_cached_token()
+            token_info = self.validate_token(self.cache_handler.get_cached_token())
             if token_info is not None:
-                if is_token_expired(token_info):
+                if self.is_token_expired(token_info):
                     token_info = self.refresh_access_token(
                         token_info["refresh_token"]
                     )
@@ -900,7 +849,7 @@ class SpotifyPKCE(SpotifyAuthBase):
                 error_description=error_payload['error_description'])
         token_info = response.json()
         token_info = self._add_custom_values_to_token_info(token_info)
-        self._save_token_info(token_info)
+        self.cache_handler.save_token_to_cache(token_info)
         return token_info["access_token"]
 
     def refresh_access_token(self, refresh_token):
@@ -944,7 +893,7 @@ class SpotifyPKCE(SpotifyAuthBase):
         token_info = self._add_custom_values_to_token_info(token_info)
         if "refresh_token" not in token_info:
             token_info["refresh_token"] = refresh_token
-        self._save_token_info(token_info)
+        self.cache_handler.save_token_to_cache(token_info)
         return token_info
 
     def parse_response_code(self, url):
@@ -1006,7 +955,8 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
                  scope=None,
                  cache_path=None,
                  username=None,
-                 show_dialog=False):
+                 show_dialog=False,
+                 cache_handler=None):
         """ Creates Auth Manager using the Implicit Grant flow
 
         **See help(SpotifyImplictGrant) for full Security Warning**
@@ -1017,6 +967,10 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
         * redirect_uri: Must be supplied or set as environment variable
         * state: May be supplied, no verification is performed
         * scope: May be supplied, intuitively converted to proper format
+        * cache_handler: An instance of the `CacheHandler` class to handle
+                              getting and saving cached authorization tokens.
+                              May be supplied, will otherwise use `CacheFileHandler`.
+                              (takes precedence over `cache_path` and `username`)
         * cache_path: May be supplied, will otherwise be generated
                       (takes precedence over `username`)
         * username: May be supplied or set as environment variable
@@ -1032,58 +986,33 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
         self.client_id = client_id
         self.redirect_uri = redirect_uri
         self.state = state
-        self.username = username or os.getenv(
-            CLIENT_CREDS_ENV_VARS["client_username"]
-        )
-        self.cache_path = _get_cache_path(cache_path, self.username)
+        if cache_handler:
+            assert issubclass(type(cache_handler), CacheHandler), \
+                "type(cache_handler): " + str(type(cache_handler)) + " != " + str(CacheHandler)
+            self.cache_handler = cache_handler
+        else:
+            self.cache_handler = CacheFileHandler(
+                username=(username or os.getenv(CLIENT_CREDS_ENV_VARS["client_username"])),
+                cache_path=cache_path
+            )
         self.scope = self._normalize_scope(scope)
         self.show_dialog = show_dialog
         self._session = None  # As to not break inherited __del__
 
-    def get_cached_token(self):
-        """ Gets a cached auth token
-        """
-        token_info = None
+    def validate_token(self, token_info):
+        if token_info is None:
+            return None
 
-        try:
-            f = open(self.cache_path)
-            token_info_string = f.read()
-            f.close()
-            token_info = json.loads(token_info_string)
+        # if scopes don't match, then bail
+        if "scope" not in token_info or not self._is_scope_subset(
+                self.scope, token_info["scope"]
+        ):
+            return None
 
-            # if scopes don't match, then bail
-            if "scope" not in token_info or not self._is_scope_subset(
-                    self.scope, token_info["scope"]
-            ):
-                return None
-
-            if self.is_token_expired(token_info):
-                return None
-        except IOError as error:
-            if error.errno == errno.ENOENT:
-                logger.debug("cache does not exist at: %s", self.cache_path)
-            else:
-                logger.warning("Couldn't read cache at: %s", self.cache_path)
+        if self.is_token_expired(token_info):
+            return None
 
         return token_info
-
-    def _save_token_info(self, token_info):
-        try:
-            f = open(self.cache_path, "w")
-            f.write(json.dumps(token_info))
-            f.close()
-        except IOError:
-            logger.warning("Couldn't write token to cache at: %s", self.cache_path)
-
-    def _is_scope_subset(self, needle_scope, haystack_scope):
-        needle_scope = set(needle_scope.split()) if needle_scope else set()
-        haystack_scope = (
-            set(haystack_scope.split()) if haystack_scope else set()
-        )
-        return needle_scope <= haystack_scope
-
-    def is_token_expired(self, token_info):
-        return is_token_expired(token_info)
 
     def get_access_token(self,
                          state=None,
@@ -1098,8 +1027,8 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
         * check_cache: Interpreted as boolean
         """
         if check_cache:
-            token_info = self.get_cached_token()
-            if not (token_info is None or is_token_expired(token_info)):
+            token_info = self.validate_token(self.cache_handler.get_cached_token())
+            if not (token_info is None or self.is_token_expired(token_info)):
                 return token_info["access_token"]
 
         if response:
@@ -1107,7 +1036,7 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
         else:
             token_info = self.get_auth_response(state)
         token_info = self._add_custom_values_to_token_info(token_info)
-        self._save_token_info(token_info)
+        self.cache_handler.save_token_to_cache(token_info)
 
         return token_info["access_token"]
 
