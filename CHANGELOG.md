@@ -22,6 +22,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support `market` optional parameter in `track`
 - Added CacheHandler abstraction to allow users to cache tokens in any way they see fit
 
+### Fixed
+
+- Fixed Spotify.user_playlist_reorder_tracks calling Spotify.playlist_reorder_tracks with an incorrect parameter order
+
 ## [2.16.1] - 2020-10-24
 
 ### Fixed
