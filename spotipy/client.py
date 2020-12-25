@@ -874,7 +874,7 @@ class Spotify(object):
             DeprecationWarning,
         )
         return self.playlist_reorder_items(playlist_id, range_start,
-                                           range_length, insert_before,
+                                           insert_before, range_length,
                                            snapshot_id)
 
     def user_playlist_remove_all_occurrences_of_tracks(
