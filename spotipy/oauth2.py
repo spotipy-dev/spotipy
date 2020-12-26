@@ -1113,7 +1113,7 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
         redirect_host, redirect_port = get_host_port(redirect_info.netloc)
         # Implicit Grant tokens are returned in a hash fragment
         # which is only available to the browser. Therefore, interactive
-        # URL retrival is required.
+        # URL retrieval is required.
         if (redirect_host in ("127.0.0.1", "localhost")
                 and redirect_info.scheme == "http" and redirect_port):
             logger.warning('Using a local redirect URI with a '
