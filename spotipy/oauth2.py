@@ -284,8 +284,23 @@ class SpotifyOAuth(SpotifyAuthBase):
                 + " != " + str(CacheHandler)
             self.cache_handler = cache_handler
         else:
+            username = (username or os.getenv(CLIENT_CREDS_ENV_VARS["client_username"]))
+            if username or cache_path:
+                warnings.warn("Specifying cache_path or username as arguments to SpotifyOAuth " +
+                              "will be deprecated. Instead, please create a CacheFileHandler " +
+                              "instance with the desired cache_path and username and pass it " +
+                              "to SpotifyOAuth as the cache_handler. For example:\n\n" +
+                              "\tfrom spotipy.oauth2 import CacheFileHandler\n" +
+                              "\thandler = CacheFileHandler(cache_path=cache_path, " +
+                              "username=username)\n" +
+                              "\tsp = spotipy.SpotifyOAuth(client_id, client_secret, " +
+                              "redirect_uri," +
+                              " cache_handler=handler)",
+                              DeprecationWarning
+                              )
+
             self.cache_handler = CacheFileHandler(
-                username=(username or os.getenv(CLIENT_CREDS_ENV_VARS["client_username"])),
+                username=username,
                 cache_path=cache_path
             )
         self.proxies = proxies
@@ -616,8 +631,22 @@ class SpotifyPKCE(SpotifyAuthBase):
                 "type(cache_handler): " + str(type(cache_handler)) + " != " + str(CacheHandler)
             self.cache_handler = cache_handler
         else:
+            username = (username or os.getenv(CLIENT_CREDS_ENV_VARS["client_username"]))
+            if username or cache_path:
+                warnings.warn("Specifying cache_path or username as arguments to SpotifyPKCE " +
+                              "will be deprecated. Instead, please create a CacheFileHandler " +
+                              "instance with the desired cache_path and username and pass it " +
+                              "to SpotifyPKCE as the cache_handler. For example:\n\n" +
+                              "\tfrom spotipy.oauth2 import CacheFileHandler\n" +
+                              "\thandler = CacheFileHandler(cache_path=cache_path, " +
+                              "username=username)\n" +
+                              "\tsp = spotipy.SpotifyImplicitGrant(client_id, client_secret, " +
+                              "redirect_uri, cache_handler=handler)",
+                              DeprecationWarning
+                              )
+
             self.cache_handler = CacheFileHandler(
-                username=(username or os.getenv(CLIENT_CREDS_ENV_VARS["client_username"])),
+                username=username,
                 cache_path=cache_path
             )
         self.proxies = proxies
@@ -991,8 +1020,23 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
                 "type(cache_handler): " + str(type(cache_handler)) + " != " + str(CacheHandler)
             self.cache_handler = cache_handler
         else:
+            username = (username or os.getenv(CLIENT_CREDS_ENV_VARS["client_username"]))
+            if username or cache_path:
+                warnings.warn("Specifying cache_path or username as arguments to " +
+                              "SpotifyImplicitGrant will be deprecated. Instead, please create " +
+                              "a CacheFileHandler instance with the desired cache_path and " +
+                              "username and pass it to SpotifyImplicitGrant as the " +
+                              "cache_handler. For example:\n\n" +
+                              "\tfrom spotipy.oauth2 import CacheFileHandler\n" +
+                              "\thandler = CacheFileHandler(cache_path=cache_path, " +
+                              "username=username)\n" +
+                              "\tsp = spotipy.SpotifyImplicitGrant(client_id, client_secret, " +
+                              "redirect_uri, cache_handler=handler)",
+                              DeprecationWarning
+                              )
+
             self.cache_handler = CacheFileHandler(
-                username=(username or os.getenv(CLIENT_CREDS_ENV_VARS["client_username"])),
+                username=username,
                 cache_path=cache_path
             )
         self.scope = self._normalize_scope(scope)
