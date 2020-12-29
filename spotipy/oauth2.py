@@ -569,6 +569,26 @@ class SpotifyOAuth(SpotifyAuthBase):
         token_info["scope"] = self.scope
         return token_info
 
+    def get_cached_token(self):
+        warnings.warn("Calling get_cached_token directly on the SpotifyOAuth object will be " +
+                      "deprecated. Instead, please specify a CacheFileHandler instance as " +
+                      "the cache_handler in SpotifyOAuth and use the CacheFileHandler's " +
+                      "get_cached_token method. You can replace:\n\tsp.get_cached_token()" +
+                      "\n\nWith:\n\tsp.validate_token(sp.cache_handler.get_cached_token())",
+                      DeprecationWarning
+                      )
+        return self.validate_token(self.cache_handler.get_cached_token())
+
+    def _save_token_info(self, token_info):
+        warnings.warn("Calling _save_token_info directly on the SpotifyOAuth object will be " +
+                      "deprecated. Instead, please specify a CacheFileHandler instance as " +
+                      "the cache_handler in SpotifyOAuth and use the CacheFileHandler's " +
+                      "save_token_to_cache method.",
+                      DeprecationWarning
+                      )
+        self.cache_handler.save_token_to_cache(token_info)
+        return None
+
 
 class SpotifyPKCE(SpotifyAuthBase):
     """ Implements PKCE Authorization Flow for client apps
@@ -941,6 +961,26 @@ class SpotifyPKCE(SpotifyAuthBase):
     def parse_auth_response_url(url):
         return SpotifyOAuth.parse_auth_response_url(url)
 
+    def get_cached_token(self):
+        warnings.warn("Calling get_cached_token directly on the SpotifyPKCE object will be " +
+                      "deprecated. Instead, please specify a CacheFileHandler instance as " +
+                      "the cache_handler in SpotifyOAuth and use the CacheFileHandler's " +
+                      "get_cached_token method. You can replace:\n\tsp.get_cached_token()" +
+                      "\n\nWith:\n\tsp.validate_token(sp.cache_handler.get_cached_token())",
+                      DeprecationWarning
+                      )
+        return self.validate_token(self.cache_handler.get_cached_token())
+
+    def _save_token_info(self, token_info):
+        warnings.warn("Calling _save_token_info directly on the SpotifyOAuth object will be " +
+                      "deprecated. Instead, please specify a CacheFileHandler instance as " +
+                      "the cache_handler in SpotifyOAuth and use the CacheFileHandler's " +
+                      "save_token_to_cache method.",
+                      DeprecationWarning
+                      )
+        self.cache_handler.save_token_to_cache(token_info)
+        return None
+
 
 class SpotifyImplicitGrant(SpotifyAuthBase):
     """ Implements Implicit Grant Flow for client apps
@@ -1182,6 +1222,27 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
         token_info["expires_at"] = int(time.time()) + token_info["expires_in"]
         token_info["scope"] = self.scope
         return token_info
+
+    def get_cached_token(self):
+        warnings.warn("Calling get_cached_token directly on the SpotifyImplicitGrant " +
+                      "object will be deprecated. Instead, please specify a " +
+                      "CacheFileHandler instance as the cache_handler in SpotifyOAuth " +
+                      "and use the CacheFileHandler's get_cached_token method. " +
+                      "You can replace:\n\tsp.get_cached_token()" +
+                      "\n\nWith:\n\tsp.validate_token(sp.cache_handler.get_cached_token())",
+                      DeprecationWarning
+                      )
+        return self.validate_token(self.cache_handler.get_cached_token())
+
+    def _save_token_info(self, token_info):
+        warnings.warn("Calling _save_token_info directly on the SpotifyImplicitGrant " +
+                      "object will be deprecated. Instead, please specify a " +
+                      "CacheFileHandler instance as the cache_handler in SpotifyOAuth " +
+                      "and use the CacheFileHandler's save_token_to_cache method.",
+                      DeprecationWarning
+                      )
+        self.cache_handler.save_token_to_cache(token_info)
+        return None
 
 
 class RequestHandler(BaseHTTPRequestHandler):
