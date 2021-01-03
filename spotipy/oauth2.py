@@ -260,9 +260,9 @@ class SpotifyOAuth(SpotifyAuthBase):
                               getting and saving cached authorization tokens.
                               May be supplied, will otherwise use `CacheFileHandler`.
                               (takes precedence over `cache_path` and `username`)
-             * cache_path: May be supplied, will otherwise be generated
+             * cache_path: (deprecated) May be supplied, will otherwise be generated
                            (takes precedence over `username`)
-             * username: May be supplied or set as environment variable
+             * username: (deprecated) May be supplied or set as environment variable
                          (will set `cache_path` to `.cache-{username}`)
              * proxies: Proxy for the requests library to route through
              * show_dialog: Interpreted as boolean
@@ -630,9 +630,9 @@ class SpotifyPKCE(SpotifyAuthBase):
                               getting and saving cached authorization tokens.
                               May be supplied, will otherwise use `CacheFileHandler`.
                               (takes precedence over `cache_path` and `username`)
-             * cache_path: May be supplied, will otherwise be generated
+             * cache_path: (deprecated) May be supplied, will otherwise be generated
                            (takes precedence over `username`)
-             * username: May be supplied or set as environment variable
+             * username: (deprecated) May be supplied or set as environment variable
                          (will set `cache_path` to `.cache-{username}`)
              * show_dialog: Interpreted as boolean
              * proxies: Proxy for the requests library to route through
@@ -1040,9 +1040,9 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
                               getting and saving cached authorization tokens.
                               May be supplied, will otherwise use `CacheFileHandler`.
                               (takes precedence over `cache_path` and `username`)
-        * cache_path: May be supplied, will otherwise be generated
+        * cache_path: (deprecated) May be supplied, will otherwise be generated
                       (takes precedence over `username`)
-        * username: May be supplied or set as environment variable
+        * username: (deprecated) May be supplied or set as environment variable
                     (will set `cache_path` to `.cache-{username}`)
         * show_dialog: Interpreted as boolean
         """
