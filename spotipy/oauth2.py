@@ -260,9 +260,9 @@ class SpotifyOAuth(SpotifyAuthBase):
                               getting and saving cached authorization tokens.
                               May be supplied, will otherwise use `CacheFileHandler`.
                               (takes precedence over `cache_path` and `username`)
-             * cache_path: May be supplied, will otherwise be generated
+             * cache_path: (deprecated) May be supplied, will otherwise be generated
                            (takes precedence over `username`)
-             * username: May be supplied or set as environment variable
+             * username: (deprecated) May be supplied or set as environment variable
                          (will set `cache_path` to `.cache-{username}`)
              * proxies: Proxy for the requests library to route through
              * show_dialog: Interpreted as boolean
@@ -278,14 +278,32 @@ class SpotifyOAuth(SpotifyAuthBase):
         self.redirect_uri = redirect_uri
         self.state = state
         self.scope = self._normalize_scope(scope)
+        username = (username or os.getenv(CLIENT_CREDS_ENV_VARS["client_username"]))
+        if username or cache_path:
+            warnings.warn("Specifying cache_path or username as arguments to SpotifyOAuth " +
+                          "will be deprecated. Instead, please create a CacheFileHandler " +
+                          "instance with the desired cache_path and username and pass it " +
+                          "to SpotifyOAuth as the cache_handler. For example:\n\n" +
+                          "\tfrom spotipy.oauth2 import CacheFileHandler\n" +
+                          "\thandler = CacheFileHandler(cache_path=cache_path, " +
+                          "username=username)\n" +
+                          "\tsp = spotipy.SpotifyOAuth(client_id, client_secret, " +
+                          "redirect_uri," +
+                          " cache_handler=handler)",
+                          DeprecationWarning
+                          )
+            if cache_handler:
+                warnings.warn("A cache_handler has been specified along with a cache_path or " +
+                              "username. The cache_path and username arguments will be ignored.")
         if cache_handler:
             assert issubclass(cache_handler.__class__, CacheHandler), \
                 "cache_handler must be a subclass of CacheHandler: " + str(type(cache_handler)) \
                 + " != " + str(CacheHandler)
             self.cache_handler = cache_handler
         else:
+
             self.cache_handler = CacheFileHandler(
-                username=(username or os.getenv(CLIENT_CREDS_ENV_VARS["client_username"])),
+                username=username,
                 cache_path=cache_path
             )
         self.proxies = proxies
@@ -554,6 +572,26 @@ class SpotifyOAuth(SpotifyAuthBase):
         token_info["scope"] = self.scope
         return token_info
 
+    def get_cached_token(self):
+        warnings.warn("Calling get_cached_token directly on the SpotifyOAuth object will be " +
+                      "deprecated. Instead, please specify a CacheFileHandler instance as " +
+                      "the cache_handler in SpotifyOAuth and use the CacheFileHandler's " +
+                      "get_cached_token method. You can replace:\n\tsp.get_cached_token()" +
+                      "\n\nWith:\n\tsp.validate_token(sp.cache_handler.get_cached_token())",
+                      DeprecationWarning
+                      )
+        return self.validate_token(self.cache_handler.get_cached_token())
+
+    def _save_token_info(self, token_info):
+        warnings.warn("Calling _save_token_info directly on the SpotifyOAuth object will be " +
+                      "deprecated. Instead, please specify a CacheFileHandler instance as " +
+                      "the cache_handler in SpotifyOAuth and use the CacheFileHandler's " +
+                      "save_token_to_cache method.",
+                      DeprecationWarning
+                      )
+        self.cache_handler.save_token_to_cache(token_info)
+        return None
+
 
 class SpotifyPKCE(SpotifyAuthBase):
     """ Implements PKCE Authorization Flow for client apps
@@ -595,9 +633,9 @@ class SpotifyPKCE(SpotifyAuthBase):
                               getting and saving cached authorization tokens.
                               May be supplied, will otherwise use `CacheFileHandler`.
                               (takes precedence over `cache_path` and `username`)
-             * cache_path: May be supplied, will otherwise be generated
+             * cache_path: (deprecated) May be supplied, will otherwise be generated
                            (takes precedence over `username`)
-             * username: May be supplied or set as environment variable
+             * username: (deprecated) May be supplied or set as environment variable
                          (will set `cache_path` to `.cache-{username}`)
              * show_dialog: Interpreted as boolean
              * proxies: Proxy for the requests library to route through
@@ -611,13 +649,29 @@ class SpotifyPKCE(SpotifyAuthBase):
         self.redirect_uri = redirect_uri
         self.state = state
         self.scope = self._normalize_scope(scope)
+        username = (username or os.getenv(CLIENT_CREDS_ENV_VARS["client_username"]))
+        if username or cache_path:
+            warnings.warn("Specifying cache_path or username as arguments to SpotifyPKCE " +
+                          "will be deprecated. Instead, please create a CacheFileHandler " +
+                          "instance with the desired cache_path and username and pass it " +
+                          "to SpotifyPKCE as the cache_handler. For example:\n\n" +
+                          "\tfrom spotipy.oauth2 import CacheFileHandler\n" +
+                          "\thandler = CacheFileHandler(cache_path=cache_path, " +
+                          "username=username)\n" +
+                          "\tsp = spotipy.SpotifyImplicitGrant(client_id, client_secret, " +
+                          "redirect_uri, cache_handler=handler)",
+                          DeprecationWarning
+                          )
+            if cache_handler:
+                warnings.warn("A cache_handler has been specified along with a cache_path or " +
+                              "username. The cache_path and username arguments will be ignored.")
         if cache_handler:
             assert issubclass(type(cache_handler), CacheHandler), \
                 "type(cache_handler): " + str(type(cache_handler)) + " != " + str(CacheHandler)
             self.cache_handler = cache_handler
         else:
             self.cache_handler = CacheFileHandler(
-                username=(username or os.getenv(CLIENT_CREDS_ENV_VARS["client_username"])),
+                username=username,
                 cache_path=cache_path
             )
         self.proxies = proxies
@@ -912,6 +966,26 @@ class SpotifyPKCE(SpotifyAuthBase):
     def parse_auth_response_url(url):
         return SpotifyOAuth.parse_auth_response_url(url)
 
+    def get_cached_token(self):
+        warnings.warn("Calling get_cached_token directly on the SpotifyPKCE object will be " +
+                      "deprecated. Instead, please specify a CacheFileHandler instance as " +
+                      "the cache_handler in SpotifyOAuth and use the CacheFileHandler's " +
+                      "get_cached_token method. You can replace:\n\tsp.get_cached_token()" +
+                      "\n\nWith:\n\tsp.validate_token(sp.cache_handler.get_cached_token())",
+                      DeprecationWarning
+                      )
+        return self.validate_token(self.cache_handler.get_cached_token())
+
+    def _save_token_info(self, token_info):
+        warnings.warn("Calling _save_token_info directly on the SpotifyOAuth object will be " +
+                      "deprecated. Instead, please specify a CacheFileHandler instance as " +
+                      "the cache_handler in SpotifyOAuth and use the CacheFileHandler's " +
+                      "save_token_to_cache method.",
+                      DeprecationWarning
+                      )
+        self.cache_handler.save_token_to_cache(token_info)
+        return None
+
 
 class SpotifyImplicitGrant(SpotifyAuthBase):
     """ Implements Implicit Grant Flow for client apps
@@ -971,9 +1045,9 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
                               getting and saving cached authorization tokens.
                               May be supplied, will otherwise use `CacheFileHandler`.
                               (takes precedence over `cache_path` and `username`)
-        * cache_path: May be supplied, will otherwise be generated
+        * cache_path: (deprecated) May be supplied, will otherwise be generated
                       (takes precedence over `username`)
-        * username: May be supplied or set as environment variable
+        * username: (deprecated) May be supplied or set as environment variable
                     (will set `cache_path` to `.cache-{username}`)
         * show_dialog: Interpreted as boolean
         """
@@ -986,13 +1060,30 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
         self.client_id = client_id
         self.redirect_uri = redirect_uri
         self.state = state
+        username = (username or os.getenv(CLIENT_CREDS_ENV_VARS["client_username"]))
+        if username or cache_path:
+            warnings.warn("Specifying cache_path or username as arguments to " +
+                          "SpotifyImplicitGrant will be deprecated. Instead, please create " +
+                          "a CacheFileHandler instance with the desired cache_path and " +
+                          "username and pass it to SpotifyImplicitGrant as the " +
+                          "cache_handler. For example:\n\n" +
+                          "\tfrom spotipy.oauth2 import CacheFileHandler\n" +
+                          "\thandler = CacheFileHandler(cache_path=cache_path, " +
+                          "username=username)\n" +
+                          "\tsp = spotipy.SpotifyImplicitGrant(client_id, client_secret, " +
+                          "redirect_uri, cache_handler=handler)",
+                          DeprecationWarning
+                          )
+            if cache_handler:
+                warnings.warn("A cache_handler has been specified along with a cache_path or " +
+                              "username. The cache_path and username arguments will be ignored.")
         if cache_handler:
             assert issubclass(type(cache_handler), CacheHandler), \
                 "type(cache_handler): " + str(type(cache_handler)) + " != " + str(CacheHandler)
             self.cache_handler = cache_handler
         else:
             self.cache_handler = CacheFileHandler(
-                username=(username or os.getenv(CLIENT_CREDS_ENV_VARS["client_username"])),
+                username=username,
                 cache_path=cache_path
             )
         self.scope = self._normalize_scope(scope)
@@ -1138,6 +1229,27 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
         token_info["expires_at"] = int(time.time()) + token_info["expires_in"]
         token_info["scope"] = self.scope
         return token_info
+
+    def get_cached_token(self):
+        warnings.warn("Calling get_cached_token directly on the SpotifyImplicitGrant " +
+                      "object will be deprecated. Instead, please specify a " +
+                      "CacheFileHandler instance as the cache_handler in SpotifyOAuth " +
+                      "and use the CacheFileHandler's get_cached_token method. " +
+                      "You can replace:\n\tsp.get_cached_token()" +
+                      "\n\nWith:\n\tsp.validate_token(sp.cache_handler.get_cached_token())",
+                      DeprecationWarning
+                      )
+        return self.validate_token(self.cache_handler.get_cached_token())
+
+    def _save_token_info(self, token_info):
+        warnings.warn("Calling _save_token_info directly on the SpotifyImplicitGrant " +
+                      "object will be deprecated. Instead, please specify a " +
+                      "CacheFileHandler instance as the cache_handler in SpotifyOAuth " +
+                      "and use the CacheFileHandler's save_token_to_cache method.",
+                      DeprecationWarning
+                      )
+        self.cache_handler.save_token_to_cache(token_info)
+        return None
 
 
 class RequestHandler(BaseHTTPRequestHandler):
