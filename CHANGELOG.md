@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changed docs for `search` to mention that you can provide multiple types to search for
 - The query parameters of requests are now logged
 - Deprecate specifing `cache_path` or `username` directly to `SpotifyOAuth`, `SpotifyPKCE`, and `SpotifyImplicitGrant` constructors, instead directing users to use the `CacheFileHandler` cache handler
+- Removed requirement for examples/app.py to specify port multiple times (only SPOTIPY_REDIRECT_URI needs to contain the port)
 
 ### Added
 

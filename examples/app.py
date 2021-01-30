@@ -18,7 +18,7 @@ Prerequisites
 
 Run app.py
 
-    python3 -m flask run --port=8080
+    python3 app.py OR python3 -m flask run
     NOTE: If receiving "port already in use" error, try other ports: 5000, 8090, 8888, etc...
         (will need to be updated in your Spotify app and SPOTIPY_REDIRECT_URI variable)
 """
@@ -123,4 +123,5 @@ Following lines allow application to be run more conveniently with
 (Also includes directive to leverage pythons threading capacity.)
 '''
 if __name__ == '__main__':
-	app.run(threaded=True, port=int(os.environ.get("PORT", 8080)))
+    app.run(threaded=True, port=int(os.environ.get("PORT",
+                                                   os.environ.get("SPOTIPY_REDIRECT_URI", 8080).split(":")[-1])))
