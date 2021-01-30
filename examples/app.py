@@ -123,7 +123,5 @@ Following lines allow application to be run more conveniently with
 (Also includes directive to leverage pythons threading capacity.)
 '''
 if __name__ == '__main__':
-    app.run(threaded=True, port=int(os.environ.get("PORT", int(
-        os.environ.get("SPOTIPY_REDIRECT_URI").split(":")[-1]) if os.environ.get("SPOTIPY_REDIRECT_URI") is not None and
-                                                                  os.environ.get("SPOTIPY_REDIRECT_URI").split(":")[
-                                                                      -1] is not None else 8080)))
+    app.run(threaded=True, port=int(os.environ.get("PORT",
+                                                   os.environ.get("SPOTIPY_REDIRECT_URI", 8080).split(":")[-1])))
