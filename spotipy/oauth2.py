@@ -515,8 +515,16 @@ class SpotifyOAuth(SpotifyAuthBase):
 
     def _normalize_scope(self, scope):
         if scope:
-            scopes = sorted(scope.split())
-            return " ".join(scopes)
+            if isinstance(scope, str):
+                scopes = scope.split(',')
+            elif isinstance(scope, list) or isinstance(scope, tuple):
+                scopes = scope
+            else:
+                raise Exception(
+                    "Unsupported scope value, please either provide a list of scopes, "
+                    "or a string of scopes separated by commas"
+                )
+            return " ".join(sorted(scopes))
         else:
             return None
 
