@@ -534,7 +534,7 @@ class Spotify(object):
 
             Parameters:
                 - q - the search query (see how to write a query in the
-                      official documentation https://developer.spotify.com/documentation/web-api/reference/search/search/)  # noqa
+                      official documentation https://developer.spotify.com/documentation/web-api/reference/search/)  # noqa
                 - limit - the number of items to return (min = 1, default = 10, max = 50). The limit is applied
                           within each type, not on the total response.
                 - offset - the index of the first item to return
@@ -553,7 +553,7 @@ class Spotify(object):
 
             Parameters:
                 - q - the search query (see how to write a query in the
-                      official documentation https://developer.spotify.com/documentation/web-api/reference/search/search/)  # noqa
+                      official documentation https://developer.spotify.com/documentation/web-api/reference/search/)  # noqa
                 - limit  - the number of items to return (min = 1, default = 10, max = 50). If a search is to be done on multiple
                             markets, then this limit is applied to each market. (e.g. search US, CA, MX each with a limit of 10).
                 - offset - the index of the first item to return
