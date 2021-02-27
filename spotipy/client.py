@@ -194,7 +194,7 @@ class Spotify(object):
             total=self.retries,
             connect=None,
             read=False,
-            method_whitelist=frozenset(['GET', 'POST', 'PUT', 'DELETE']),
+            allowed_methods=frozenset(['GET', 'POST', 'PUT', 'DELETE']),
             status=self.status_retries,
             backoff_factor=self.backoff_factor,
             status_forcelist=self.status_forcelist)

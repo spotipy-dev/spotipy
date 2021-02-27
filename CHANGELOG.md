@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fixed Spotify.user_playlist_reorder_tracks calling Spotify.playlist_reorder_tracks with an incorrect parameter order
+- Fixed deprecated Urllib3 `Retry(method_whitelist=...)` in favor of `Retry(allowed_methods=...)`
 
 ## [2.16.1] - 2020-10-24
 
