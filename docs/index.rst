@@ -212,6 +212,23 @@ IDs URIs and URLs
 In general, any *Spotipy* method that needs an artist, album, track or playlist ID
 will accept ids in any of the above form
 
+
+Customized token caching
+========================
+
+Tokens are refreshed automatically and stored by default in the project main folder.
+As this might not suit everyone's needs, spotipy provides a way to create customized
+cache handlers.
+
+https://github.com/plamere/spotipy/blob/master/spotipy/cache_handler.py
+
+The custom cache handler would need to be a class that inherits from the base
+cache handler ``CacheHandler``. The default cache handler ``CacheFileHandler`` is a good example.
+An instance of that new class can then be passed as a parameter when
+creating ``SpotifyOAuth``, ``SpotifyPKCE`` or ``SpotifyImplicitGrant``.
+
+Feel free to contribute new cache handlers to the repo.
+
 Examples
 =======================
 
