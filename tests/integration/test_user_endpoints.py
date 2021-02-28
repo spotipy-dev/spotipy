@@ -9,7 +9,6 @@ from spotipy import (
     SpotifyPKCE
 )
 import unittest
-import requests
 from tests import helpers
 
 
