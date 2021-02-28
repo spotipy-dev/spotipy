@@ -10,6 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 // Add your changes here and then delete this line
 
+## [2.17.1] - 2021-02-28
+
+### Fixed
+
+- `allowed_methods` requires urllib3>=1.26.0
+
 ## [2.17.0] - 2021-02-28
 
 ### Changed
