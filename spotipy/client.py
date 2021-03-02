@@ -996,7 +996,7 @@ class Spotify(object):
         if isinstance(description, six.string_types):
             data["description"] = description
         return self._put(
-            "playlists/%s" % (playlist_id), payload=data
+            "playlists/%s" % (self._get_id("playlist", playlist_id)), payload=data
         )
 
     def current_user_unfollow_playlist(self, playlist_id):

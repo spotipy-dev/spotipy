@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-// Add your changes here and then delete this line
+- Enabled using both short and long IDs for playlist_change_details
 
 ## [2.17.1] - 2021-02-28
 
