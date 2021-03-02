@@ -117,3 +117,19 @@ def get_host_port(netloc):
         port = None
 
     return host, port
+
+
+def normalize_scope(scope):
+    if scope:
+        if isinstance(scope, str):
+            scopes = scope.split(',')
+        elif isinstance(scope, list) or isinstance(scope, tuple):
+            scopes = scope
+        else:
+            raise Exception(
+                "Unsupported scope value, please either provide a list of scopes, "
+                "or a string of scopes separated by commas"
+            )
+        return " ".join(sorted(scopes))
+    else:
+        return None
