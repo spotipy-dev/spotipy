@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Changed
+
+ - Unwrapped single-entry dictionaries returned by client.py functions whose corresponding API returns a JSON object with a single entry. Currently, some functions like `audio_features` already do this but others don't. This change conforms them all to unwrapping. Affected functions include those wrapping the following APIs:
+   - [Get Several Tracks](https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-several-tracks)
+   - [Get Multiple Artists](https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-multiple-artists)
+   - [Get an Artist's Top Tracks](https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-an-artists-top-tracks)
+   - [Get an Artist's Related ARtists](https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-an-artists-related-artists)
+   - [Get Multiple Albums](https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-multiple-albums)
+   - [Get Multiple Shows](https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-multiple-shows)
+   - [Get Multiple Episodes](https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-multiple-episodes)
+   - [Get Recommendation Genres](https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-recommendation-genres)
+   - [Get Audio Features for Several Tracks](https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-several-audio-features)
+   - [Get a User's Available Devices](https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-a-users-available-devices)
 
 ## Unreleased
 
