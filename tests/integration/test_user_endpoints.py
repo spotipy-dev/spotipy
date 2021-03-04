@@ -426,7 +426,7 @@ class SpotipyPlayerApiTests(unittest.TestCase):
     def test_devices(self):
         # No devices playing by default
         res = self.spotify.devices()
-        self.assertEqual(len(res["devices"]), 0)
+        self.assertEqual(len(res), 0)
 
     def test_current_user_recently_played(self):
         # No cursor

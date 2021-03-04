@@ -95,8 +95,7 @@ class AuthTestSpotipy(unittest.TestCase):
 
     def test_artists(self):
         results = self.spotify.artists([self.weezer_urn, self.radiohead_urn])
-        self.assertTrue('artists' in results)
-        self.assertTrue(len(results['artists']) == 2)
+        self.assertTrue(len(results) == 2)
 
     def test_album_urn(self):
         album = self.spotify.album(self.pinkerton_urn)
@@ -121,8 +120,7 @@ class AuthTestSpotipy(unittest.TestCase):
     def test_albums(self):
         results = self.spotify.albums(
             [self.pinkerton_urn, self.pablo_honey_urn])
-        self.assertTrue('albums' in results)
-        self.assertTrue(len(results['albums']) == 2)
+        self.assertTrue(len(results) == 2)
 
     def test_track_urn(self):
         track = self.spotify.track(self.creep_urn)
@@ -146,19 +144,16 @@ class AuthTestSpotipy(unittest.TestCase):
 
     def test_tracks(self):
         results = self.spotify.tracks([self.creep_url, self.el_scorcho_urn])
-        self.assertTrue('tracks' in results)
-        self.assertTrue(len(results['tracks']) == 2)
+        self.assertTrue(len(results) == 2)
 
     def test_artist_top_tracks(self):
         results = self.spotify.artist_top_tracks(self.weezer_urn)
-        self.assertTrue('tracks' in results)
-        self.assertTrue(len(results['tracks']) == 10)
+        self.assertTrue(len(results) == 10)
 
     def test_artist_related_artists(self):
         results = self.spotify.artist_related_artists(self.weezer_urn)
-        self.assertTrue('artists' in results)
-        self.assertTrue(len(results['artists']) == 20)
-        for artist in results['artists']:
+        self.assertTrue(len(results) == 20)
+        for artist in results:
             if artist['name'] == 'Jimmy Eat World':
                 found = True
         self.assertTrue(found)
@@ -297,8 +292,7 @@ class AuthTestSpotipy(unittest.TestCase):
 
     def test_shows(self):
         results = self.spotify.shows([self.heavyweight_urn, self.reply_all_urn], market="US")
-        self.assertTrue('shows' in results)
-        self.assertTrue(len(results['shows']) == 2)
+        self.assertTrue(len(results) == 2)
 
     def test_show_episodes(self):
         results = self.spotify.show_episodes(self.heavyweight_urn, market="US")
@@ -337,8 +331,7 @@ class AuthTestSpotipy(unittest.TestCase):
             [self.heavyweight_ep1_urn, self.reply_all_ep1_urn],
             market="US"
         )
-        self.assertTrue('episodes' in results)
-        self.assertTrue(len(results['episodes']) == 2)
+        self.assertTrue(len(results) == 2)
 
     def test_unauthenticated_post_fails(self):
         with self.assertRaises(SpotifyException) as cm:
