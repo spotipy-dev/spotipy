@@ -347,7 +347,8 @@ class Spotify(object):
         """
 
         tlist = [self._get_id("track", t) for t in tracks]
-        return self._get("tracks/?ids=" + ",".join(tlist), market=market)
+        results = self._get("tracks/?ids=" + ",".join(tlist), market=market)
+        return results["tracks"] if "tracks" in results else results
 
     def artist(self, artist_id):
         """ returns a single artist given the artist's ID, URI or URL
@@ -367,7 +368,8 @@ class Spotify(object):
         """
 
         tlist = [self._get_id("artist", a) for a in artists]
-        return self._get("artists/?ids=" + ",".join(tlist))
+        results = self._get("artists/?ids=" + ",".join(tlist))
+        return results["artists"] if "artists" in results else results
 
     def artist_albums(
         self, artist_id, album_type=None, country=None, limit=20, offset=0
@@ -401,7 +403,8 @@ class Spotify(object):
         """
 
         trid = self._get_id("artist", artist_id)
-        return self._get("artists/" + trid + "/top-tracks", country=country)
+        results = self._get("artists/" + trid + "/top-tracks", country=country)
+        return results["tracks"] if "tracks" in results else results
 
     def artist_related_artists(self, artist_id):
         """ Get Spotify catalog information about artists similar to an
@@ -412,7 +415,8 @@ class Spotify(object):
                 - artist_id - the artist ID, URI or URL
         """
         trid = self._get_id("artist", artist_id)
-        return self._get("artists/" + trid + "/related-artists")
+        results = self._get("artists/" + trid + "/related-artists")
+        return results["artists"] if "artists" in results else results
 
     def album(self, album_id):
         """ returns a single album given the album's ID, URIs or URL
@@ -448,7 +452,8 @@ class Spotify(object):
         """
 
         tlist = [self._get_id("album", a) for a in albums]
-        return self._get("albums/?ids=" + ",".join(tlist))
+        results self._get("albums/?ids=" + ",".join(tlist))
+        return results["albums"] if "albums" in results else results
 
     def show(self, show_id, market=None):
         """ returns a single show given the show's ID, URIs or URL
@@ -478,7 +483,8 @@ class Spotify(object):
         """
 
         tlist = [self._get_id("show", s) for s in shows]
-        return self._get("shows/?ids=" + ",".join(tlist), market=market)
+        results = self._get("shows/?ids=" + ",".join(tlist), market=market)
+        return results["shows"] if "shows" in results else results
 
     def show_episodes(self, show_id, limit=50, offset=0, market=None):
         """ Get Spotify catalog information about a show's episodes
@@ -527,7 +533,8 @@ class Spotify(object):
         """
 
         tlist = [self._get_id("episode", e) for e in episodes]
-        return self._get("episodes/?ids=" + ",".join(tlist), market=market)
+        results = self._get("episodes/?ids=" + ",".join(tlist), market=market)
+        return results["episodes"] if "episodes" in results else results
 
     def search(self, q, limit=10, offset=0, type="track", market=None):
         """ searches for an item
@@ -1602,7 +1609,8 @@ class Spotify(object):
     def recommendation_genre_seeds(self):
         """ Get a list of genres available for the recommendations function.
         """
-        return self._get("recommendations/available-genre-seeds")
+        result = self._get("recommendations/available-genre-seeds")
+        return results["genres"] if "genres" in results else results
 
     def audio_analysis(self, track_id):
         """ Get audio analysis for a track based upon its Spotify ID
@@ -1623,17 +1631,13 @@ class Spotify(object):
         else:
             tlist = [self._get_id("track", t) for t in tracks]
             results = self._get("audio-features/?ids=" + ",".join(tlist))
-        # the response has changed, look for the new style first, and if
-        # its not there, fallback on the old style
-        if "audio_features" in results:
-            return results["audio_features"]
-        else:
-            return results
+        return results["audio_features"] if "audio_features" in results else results
 
     def devices(self):
         """ Get a list of user's available devices.
         """
-        return self._get("me/player/devices")
+        results = self._get("me/player/devices")
+        return results["devices"] if "devices" in results else results
 
     def current_playback(self, market=None, additional_types=None):
         """ Get information about user's current playback.
