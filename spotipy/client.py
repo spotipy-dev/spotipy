@@ -452,7 +452,7 @@ class Spotify(object):
         """
 
         tlist = [self._get_id("album", a) for a in albums]
-        results self._get("albums/?ids=" + ",".join(tlist))
+        results = self._get("albums/?ids=" + ",".join(tlist))
         return results["albums"] if "albums" in results else results
 
     def show(self, show_id, market=None):
@@ -1609,7 +1609,7 @@ class Spotify(object):
     def recommendation_genre_seeds(self):
         """ Get a list of genres available for the recommendations function.
         """
-        result = self._get("recommendations/available-genre-seeds")
+        results = self._get("recommendations/available-genre-seeds")
         return results["genres"] if "genres" in results else results
 
     def audio_analysis(self, track_id):
