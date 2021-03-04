@@ -8,7 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
 - Enabled using both short and long IDs for playlist_change_details
+
+### Changed
+- Add support for a list of scopes rather than just a comma separated string of scopes
 
 ## [2.17.1] - 2021-02-28
 
@@ -27,7 +31,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The query parameters of requests are now logged
 - Deprecate specifing `cache_path` or `username` directly to `SpotifyOAuth`, `SpotifyPKCE`, and `SpotifyImplicitGrant` constructors, instead directing users to use the `CacheFileHandler` cache handler
 - Removed requirement for examples/app.py to specify port multiple times (only SPOTIPY_REDIRECT_URI needs to contain the port)
-- Add support for a list of scopes rather than just a comma separated string of scopes
 
 ### Added
 
