@@ -1623,12 +1623,7 @@ class Spotify(object):
         else:
             tlist = [self._get_id("track", t) for t in tracks]
             results = self._get("audio-features/?ids=" + ",".join(tlist))
-        # the response has changed, look for the new style first, and if
-        # its not there, fallback on the old style
-        if "audio_features" in results:
-            return results["audio_features"]
-        else:
-            return results
+        return results
 
     def devices(self):
         """ Get a list of user's available devices.
