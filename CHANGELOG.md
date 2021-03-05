@@ -5,7 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+
+## Unreleased [3.0.0-alpha]
+
+While this is unreleased, please only add v3 features here.
+Rebasing master onto v3 doesn't require a changelog update.
 
 ### Changed
 Modified the return structure of the `audio_features` function (wrapping the [Get Audio Features for Several Tracks](https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-several-audio-features) API) to conform to the return structure of similar APIs, such as:
@@ -14,8 +18,7 @@ Modified the return structure of the `audio_features` function (wrapping the [Ge
  - [Get Multiple Albums](https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-multiple-albums)
 The functions wrapping these APIs do not unwrap the single key JSON response, and this is currently the only function that does this.
 
-
-## Unreleased
+## Unreleased [2.x.x]
 
 ### Added
 - Enabled using both short and long IDs for playlist_change_details
