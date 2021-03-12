@@ -36,6 +36,28 @@ To make sure if the import lists are stored correctly:
     pip install isort
     isort . -c -v
 
+### Publishing (by maintainer)
+
+ - Bump version in setup.py
+ - Bump and date changelog
+ - Add to changelog:
+
+       ## Unreleased
+
+       // Add your changes here and then delete this line
+
+ - Commit changes
+ - Package to pypi:
+
+       python setup.py sdist bdist_wheel
+       python3 setup.py sdist bdist_wheel
+       twine check dist/*
+       twine upload --repository-url https://upload.pypi.org/legacy/ --skip-existing dist/*.(whl|gz|zip)~dist/*linux*.whl
+
+ - Create github release https://github.com/plamere/spotipy/releases with the changelog content
+   for the version and a short name that describes the main addition
+ - Verify doc uses latest https://readthedocs.org/projects/spotipy/
+
 ### Changelog
 
 Don't forget to add a short description of your change in the [CHANGELOG](CHANGELOG.md)

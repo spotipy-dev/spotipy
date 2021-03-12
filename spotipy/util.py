@@ -93,7 +93,7 @@ def prompt_for_user_token(
     # if not in the cache, the create a new (this will send
     # the user to a web page where they can authorize this app)
 
-    token_info = sp_oauth.get_cached_token()
+    token_info = sp_oauth.validate_token(sp_oauth.cache_handler.get_cached_token())
 
     if not token_info:
         code = sp_oauth.get_auth_response()
@@ -117,3 +117,19 @@ def get_host_port(netloc):
         port = None
 
     return host, port
+
+
+def normalize_scope(scope):
+    if scope:
+        if isinstance(scope, str):
+            scopes = scope.split(',')
+        elif isinstance(scope, list) or isinstance(scope, tuple):
+            scopes = scope
+        else:
+            raise Exception(
+                "Unsupported scope value, please either provide a list of scopes, "
+                "or a string of scopes separated by commas"
+            )
+        return " ".join(sorted(scopes))
+    else:
+        return None

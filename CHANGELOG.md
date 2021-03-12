@@ -8,6 +8,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
+- Enabled using both short and long IDs for playlist_change_details
+
+### Changed
+- Add support for a list of scopes rather than just a comma separated string of scopes
+
+## [2.17.1] - 2021-02-28
+
+### Fixed
+
+- `allowed_methods` requires urllib3>=1.26.0
+
+## [2.17.0] - 2021-02-28
+
 ### Changed
 
 - moved os.remove(session_cache_path()) inside try block to avoid TypeError on app.py example file
@@ -15,11 +29,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The docs for the `auth` parameter of `Spotify.init` use the term "access token" instead of "authorization token"
 - Changed docs for `search` to mention that you can provide multiple types to search for
 - The query parameters of requests are now logged
+- Deprecate specifing `cache_path` or `username` directly to `SpotifyOAuth`, `SpotifyPKCE`, and `SpotifyImplicitGrant` constructors, instead directing users to use the `CacheFileHandler` cache handler
+- Removed requirement for examples/app.py to specify port multiple times (only SPOTIPY_REDIRECT_URI needs to contain the port)
 
 ### Added
 
 - Added log messages for when the access and refresh tokens are retrieved and when they are refreshed
-- Support `market` optional parameter in `track`  
+- Support `market` optional parameter in `track`
+- Added CacheHandler abstraction to allow users to cache tokens in any way they see fit
+
+### Fixed
+
+- Fixed Spotify.user_playlist_reorder_tracks calling Spotify.playlist_reorder_tracks with an incorrect parameter order
+- Fixed deprecated Urllib3 `Retry(method_whitelist=...)` in favor of `Retry(allowed_methods=...)`
 
 ## [2.16.1] - 2020-10-24
 

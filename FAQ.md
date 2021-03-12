@@ -8,6 +8,10 @@ spotipy can only return fields documented on the Spotify web API https://develop
 
 Check out [this example Flask app](examples/app.py)
 
+### How can I store tokens in a database rather than on the filesystem?
+
+See https://spotipy.readthedocs.io/en/latest/#customized-token-caching
+
 ### Incorrect user
 
 Error:

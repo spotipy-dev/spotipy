@@ -194,7 +194,7 @@ class Spotify(object):
             total=self.retries,
             connect=None,
             read=False,
-            method_whitelist=frozenset(['GET', 'POST', 'PUT', 'DELETE']),
+            allowed_methods=frozenset(['GET', 'POST', 'PUT', 'DELETE']),
             status=self.status_retries,
             backoff_factor=self.backoff_factor,
             status_forcelist=self.status_forcelist)
@@ -534,7 +534,7 @@ class Spotify(object):
 
             Parameters:
                 - q - the search query (see how to write a query in the
-                      official documentation https://developer.spotify.com/documentation/web-api/reference/search/search/)  # noqa
+                      official documentation https://developer.spotify.com/documentation/web-api/reference/search/)  # noqa
                 - limit - the number of items to return (min = 1, default = 10, max = 50). The limit is applied
                           within each type, not on the total response.
                 - offset - the index of the first item to return
@@ -553,7 +553,7 @@ class Spotify(object):
 
             Parameters:
                 - q - the search query (see how to write a query in the
-                      official documentation https://developer.spotify.com/documentation/web-api/reference/search/search/)  # noqa
+                      official documentation https://developer.spotify.com/documentation/web-api/reference/search/)  # noqa
                 - limit  - the number of items to return (min = 1, default = 10, max = 50). If a search is to be done on multiple
                             markets, then this limit is applied to each market. (e.g. search US, CA, MX each with a limit of 10).
                 - offset - the index of the first item to return
@@ -874,7 +874,7 @@ class Spotify(object):
             DeprecationWarning,
         )
         return self.playlist_reorder_items(playlist_id, range_start,
-                                           range_length, insert_before,
+                                           insert_before, range_length,
                                            snapshot_id)
 
     def user_playlist_remove_all_occurrences_of_tracks(
@@ -996,7 +996,7 @@ class Spotify(object):
         if isinstance(description, six.string_types):
             data["description"] = description
         return self._put(
-            "playlists/%s" % (playlist_id), payload=data
+            "playlists/%s" % (self._get_id("playlist", playlist_id)), payload=data
         )
 
     def current_user_unfollow_playlist(self, playlist_id):

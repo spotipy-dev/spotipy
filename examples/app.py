@@ -18,7 +18,7 @@ Prerequisites
 
 Run app.py
 
-    python3 -m flask run --port=8080
+    python3 app.py OR python3 -m flask run
     NOTE: If receiving "port already in use" error, try other ports: 5000, 8090, 8888, etc...
         (will need to be updated in your Spotify app and SPOTIPY_REDIRECT_URI variable)
 """
@@ -48,8 +48,9 @@ def index():
         # Step 1. Visitor is unknown, give random ID
         session['uuid'] = str(uuid.uuid4())
 
+    cache_handler = spotipy.cache_handler.CacheFileHandler(cache_path=session_cache_path())
     auth_manager = spotipy.oauth2.SpotifyOAuth(scope='user-read-currently-playing playlist-modify-private',
-                                                cache_path=session_cache_path(), 
+                                                cache_handler=cache_handler, 
                                                 show_dialog=True)
 
     if request.args.get("code"):
@@ -57,7 +58,7 @@ def index():
         auth_manager.get_access_token(request.args.get("code"))
         return redirect('/')
 
-    if not auth_manager.get_cached_token():
+    if not auth_manager.validate_token(cache_handler.get_cached_token()):
         # Step 2. Display sign in link when no token
         auth_url = auth_manager.get_authorize_url()
         return f'<h2><a href="{auth_url}">Sign in</a></h2>'
@@ -84,8 +85,9 @@ def sign_out():
 
 @app.route('/playlists')
 def playlists():
-    auth_manager = spotipy.oauth2.SpotifyOAuth(cache_path=session_cache_path())
-    if not auth_manager.get_cached_token():
+    cache_handler = spotipy.cache_handler.CacheFileHandler(cache_path=session_cache_path())
+    auth_manager = spotipy.oauth2.SpotifyOAuth(cache_handler=cache_handler)
+    if not auth_manager.validate_token(cache_handler.get_cached_token()):
         return redirect('/')
 
     spotify = spotipy.Spotify(auth_manager=auth_manager)
@@ -94,8 +96,9 @@ def playlists():
 
 @app.route('/currently_playing')
 def currently_playing():
-    auth_manager = spotipy.oauth2.SpotifyOAuth(cache_path=session_cache_path())
-    if not auth_manager.get_cached_token():
+    cache_handler = spotipy.cache_handler.CacheFileHandler(cache_path=session_cache_path())
+    auth_manager = spotipy.oauth2.SpotifyOAuth(cache_handler=cache_handler)
+    if not auth_manager.validate_token(cache_handler.get_cached_token()):
         return redirect('/')
     spotify = spotipy.Spotify(auth_manager=auth_manager)
     track = spotify.current_user_playing_track()
@@ -106,8 +109,9 @@ def currently_playing():
 
 @app.route('/current_user')
 def current_user():
-    auth_manager = spotipy.oauth2.SpotifyOAuth(cache_path=session_cache_path())
-    if not auth_manager.get_cached_token():
+    cache_handler = spotipy.cache_handler.CacheFileHandler(cache_path=session_cache_path())
+    auth_manager = spotipy.oauth2.SpotifyOAuth(cache_handler=cache_handler)
+    if not auth_manager.validate_token(cache_handler.get_cached_token()):
         return redirect('/')
     spotify = spotipy.Spotify(auth_manager=auth_manager)
     return spotify.current_user()
@@ -119,4 +123,5 @@ Following lines allow application to be run more conveniently with
 (Also includes directive to leverage pythons threading capacity.)
 '''
 if __name__ == '__main__':
-	app.run(threaded=True, port=int(os.environ.get("PORT", 8080)))
+    app.run(threaded=True, port=int(os.environ.get("PORT",
+                                                   os.environ.get("SPOTIPY_REDIRECT_URI", 8080).split(":")[-1])))
