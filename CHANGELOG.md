@@ -5,14 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-
 ## Unreleased
 
 ### Added
+
 - Enabled using both short and long IDs for playlist_change_details
+- Added a cache handler to `SpotifyClientCredentials`
 
 ### Changed
+
 - Add support for a list of scopes rather than just a comma separated string of scopes
+
+### Fixed
+
+* Fixed the bugs in `SpotifyOAuth.refresh_access_token` and `SpotifyPKCE.refresh_access_token` which raised the incorrect exception upon receiving an error response from the server. This addresses #645.
+
+* Fixed a bug in `RequestHandler.do_GET` in which the non-existent `state` attribute of  `SpotifyOauthError` is accessed. This bug occurs when the user clicks "cancel" in the permissions dialog that opens in the browser.
+
+* Cleaned up the documentation for `SpotifyClientCredentials.__init__`, `SpotifyOAuth.__init__`, and `SpotifyPKCE.__init__`.
+
+    
 
 ## [2.17.1] - 2021-02-28
 
