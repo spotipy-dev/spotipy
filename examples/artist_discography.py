@@ -1,3 +1,4 @@
+#Shows the list of all songs sung by the artist or the band
 import argparse
 import logging
 
