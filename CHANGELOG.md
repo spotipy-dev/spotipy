@@ -11,6 +11,22 @@ While this is unreleased, please only add v3 features here.
 Rebasing master onto v3 doesn't require a changelog update.
 
 ### Changed
+
+* Made `CacheHandler` an abstract base class
+
+### Added
+
+* `Scope` - An enum which contains all of the authorization scopes (see [here](https://github.com/plamere/spotipy/issues/652#issuecomment-797461311)).
+
+* Added the following endpoints
+    * `Spotify.current_user_saved_episodes`
+    * `Spotify.current_user_saved_episodes_add`
+    * `Spotify.current_user_saved_episodes_delete`
+    * `Spotify.current_user_saved_episodes_contains`
+    * `Spotify.available_markets`
+
+### Changed
+
 Modified the return structure of the `audio_features` function (wrapping the [Get Audio Features for Several Tracks](https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-several-audio-features) API) to conform to the return structure of similar APIs, such as:
  - [Get Several Tracks](https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-several-tracks)
  - [Get Multiple Artists](https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-multiple-artists)

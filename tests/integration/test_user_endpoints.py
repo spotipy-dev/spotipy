@@ -209,6 +209,10 @@ class SpotipyLibraryApiTests(unittest.TestCase):
                            "http://open.spotify.com/track/3cySlItpiPiIAzU3NyHCJf"]
         cls.album_ids = ["spotify:album:6kL09DaURb7rAoqqaA51KU",
                          "spotify:album:6RTzC0rDbvagTSJLlY7AKl"]
+        cls.episode_ids = [
+            "spotify:episode:3OEdPEYB69pfXoBrhvQYeC",
+            "spotify:episode:5LEFdZ9pYh99wSz7Go2D0g"
+        ]
         cls.username = os.getenv(CCEV['client_username'])
 
         scope = (
@@ -266,6 +270,22 @@ class SpotipyLibraryApiTests(unittest.TestCase):
         self.spotify.current_user_saved_albums_delete(self.album_ids)
         resp = self.spotify.current_user_saved_albums_contains(self.album_ids)
         self.assertEqual(resp, [False, False])
+
+    def test_current_user_saved_episodes(self):
+        # Add
+        self.spotify.current_user_saved_episodes_add(self.episode_ids)
+        episodes = self.spotify.current_user_saved_episodes(market="US")
+        self.assertGreaterEqual(len(episodes['items']), 2)
+
+        # Contains
+        resp = self.spotify.current_user_saved_episodes_contains(self.episode_ids)
+        self.assertEqual(resp, [True, True])
+
+        # Remove
+        self.spotify.current_user_saved_episodes_delete(self.episode_ids)
+        resp = self.spotify.current_user_saved_episodes_contains(self.episode_ids)
+        self.assertEqual(resp, [False, False])
+
 
 
 class SpotipyUserApiTests(unittest.TestCase):

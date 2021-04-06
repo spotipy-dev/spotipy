@@ -364,3 +364,9 @@ class AuthTestSpotipy(unittest.TestCase):
         self.assertNotIsInstance(with_no_session._session, requests.Session)
         user = with_no_session.user(user="akx")
         self.assertEqual(user["uri"], "spotify:user:akx")
+
+    def test_available_markets(self):
+        markets = self.spotify.available_markets()["markets"]
+        self.assertTrue(isinstance(markets, list))
+        self.assertIn("US", markets)
+        self.assertIn("GB", markets)

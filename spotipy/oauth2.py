@@ -24,7 +24,10 @@ from six.moves.BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 from six.moves.urllib_parse import parse_qsl, urlparse
 
 from spotipy.cache_handler import CacheFileHandler, CacheHandler
-from spotipy.util import CLIENT_CREDS_ENV_VARS, get_host_port, normalize_scope
+from spotipy.util import CLIENT_CREDS_ENV_VARS, get_host_port
+from spotipy.scope import Scope
+from typing import Iterable
+import re
 
 logger = logging.getLogger(__name__)
 
@@ -72,6 +75,7 @@ def _ensure_value(value, env_key):
 
 
 class SpotifyAuthBase(object):
+
     def __init__(self, requests_session):
         if isinstance(requests_session, requests.Session):
             self._session = requests_session
@@ -83,7 +87,40 @@ class SpotifyAuthBase(object):
                 self._session = api
 
     def _normalize_scope(self, scope):
-        return normalize_scope(scope)
+        """
+        Accepts a string of scopes, or an iterable with elements of type
+        `Scope` or `str` and returns a space-separated string of scopes.
+        Returns `None` if the argument is `None`.
+        """
+
+        # TODO: do we need to sort the scopes?
+
+        if isinstance(scope, str):
+            # allow for any separator(s) between the scopes other than a word
+            # character or a hyphen
+            scopes = re.split(pattern=r"[^\w-]+", string=scope)
+            return " ".join(sorted(scopes))
+
+        if isinstance(scope, Iterable):
+
+            # Assume all of the iterable's elements are of the same type.
+            # If the iterable is empty, then return None.
+            first_element = next(iter(scope), None)
+
+            if isinstance(first_element, str):
+                return " ".join(sorted(scope))
+            if isinstance(first_element, Scope):
+                return Scope.make_string(scope)
+            if first_element is None:
+                return ""
+
+        elif scope is None:
+            return None
+
+        raise TypeError(
+            f"Unsupported type for scopes: {type(scope)}. Expected either a string of scopes, or "
+            "an Iterable with elements of type `Scope` or `str`."
+        )
 
     @property
     def client_id(self):
@@ -289,7 +326,11 @@ class SpotifyOAuth(SpotifyAuthBase):
              * client_secret: Must be supplied or set as environment variable
              * redirect_uri: Must be supplied or set as environment variable
              * state: Optional, no verification is performed
-             * scope: Optional, either a list of scopes or comma separated string of scopes.
+             * scope: Optional, either a string of scopes, or an iterable with elements of type
+                      `Scope` or `str`. E.g.,
+                      {Scope.user_modify_playback_state, Scope.user_library_read}
+
+             iterable of scopes or comma separated string of scopes.
                       e.g, "playlist-read-private,playlist-read-collaborative"
              * cache_path: (deprecated) Optional, will otherwise be generated
                            (takes precedence over `username`)
@@ -650,8 +691,9 @@ class SpotifyPKCE(SpotifyAuthBase):
              * client_id: Must be supplied or set as environment variable
              * redirect_uri: Must be supplied or set as environment variable
              * state: Optional, no verification is performed
-             * scope: Optional, either a list of scopes or comma separated string of scopes.
-                      e.g, "playlist-read-private,playlist-read-collaborative"
+             * scope: Optional, either a string of scopes, or an iterable with elements of type
+                      `Scope` or `str`. E.g.,
+                      {Scope.user_modify_playback_state, Scope.user_library_read}
              * cache_path: (deprecated) Optional, will otherwise be generated
                            (takes precedence over `username`)
              * username: (deprecated) Optional or set as environment variable
@@ -1050,8 +1092,9 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
         * client_id: Must be supplied or set as environment variable
         * redirect_uri: Must be supplied or set as environment variable
         * state: May be supplied, no verification is performed
-        * scope: Optional, either a list of scopes or comma separated string of scopes.
-                 e.g, "playlist-read-private,playlist-read-collaborative"
+        * scope: Optional, either a string of scopes, or an iterable with elements of type
+                      `Scope` or `str`. E.g.,
+                      {Scope.user_modify_playback_state, Scope.user_library_read}
         * cache_handler: An instance of the `CacheHandler` class to handle
                               getting and saving cached authorization tokens.
                               May be supplied, will otherwise use `CacheFileHandler`.
