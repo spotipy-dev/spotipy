@@ -287,7 +287,6 @@ class SpotipyLibraryApiTests(unittest.TestCase):
         self.assertEqual(resp, [False, False])
 
 
-
 class SpotipyUserApiTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

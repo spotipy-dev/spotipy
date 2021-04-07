@@ -1,7 +1,7 @@
-import unittest
 from unittest import TestCase
 from spotipy.scope import Scope
 from spotipy.oauth2 import SpotifyAuthBase
+
 
 class SpotipyScopeTest(TestCase):
 
@@ -25,7 +25,6 @@ class SpotipyScopeTest(TestCase):
 
         converted_scopes = Scope.from_string(scope_string)
         self.assertEqual(converted_scopes, set())
-
 
     def test_scopes(self):
         scopes = {
@@ -71,8 +70,6 @@ class SpotipyScopeTest(TestCase):
         self.assertEqual(parsed_scopes, expected_scopes)
         self.assertEqual(normalized_parsed_scopes, expected_scopes)
 
-
-
     def test_invalid_types(self):
 
         numbers = [1, 2, 3]
@@ -91,4 +88,3 @@ class SpotipyScopeTest(TestCase):
         self.assertEqual(normalized_scope_string_2, "")
 
         self.assertIsNone(self.normalize_scope(None))
-
