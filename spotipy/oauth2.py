@@ -118,8 +118,8 @@ class SpotifyAuthBase(object):
             return None
 
         raise TypeError(
-            f"Unsupported type for scopes: {type(scope)}. Expected either a string of scopes, or "
-            "an Iterable with elements of type `Scope` or `str`."
+            "Unsupported type for scopes: %s. Expected either a string of scopes, or "
+            "an Iterable with elements of type `Scope` or `str`." % type(scope)
         )
 
     @property
