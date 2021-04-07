@@ -4,7 +4,7 @@ __all__ = ["Scope"]
 
 from enum import Enum
 import re
-from typing import Iterable
+from typing import Iterable, Set
 
 
 class Scope(Enum):
@@ -45,10 +45,10 @@ class Scope(Enum):
     user_modify_playback_state = "user-modify-playback-state"
 
     @staticmethod
-    def all() -> set['Scope']:
+    def all() -> Set['Scope']:
         """Returns all of the authorization scopes"""
 
-        return set(scope.value for scope in Scope)
+        return set(Scope)
 
     @staticmethod
     def make_string(scopes: Iterable['Scope']) -> str:
@@ -62,7 +62,7 @@ class Scope(Enum):
         return " ".join([scope.value for scope in scopes])
 
     @staticmethod
-    def from_string(scope_string: str) -> set['Scope']:
+    def from_string(scope_string: str) -> Set['Scope']:
         """
         Converts a string of (usuallly space-separated) scopes into a
         set of scopes

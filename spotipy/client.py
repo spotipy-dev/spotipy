@@ -1190,10 +1190,7 @@ class Spotify(object):
                 - albums - a list of album URIs, URLs or IDs
         """
 
-        # print(f"default: {albums}")
-
         alist = [self._get_id("album", a) for a in albums]
-        print(f"alist: {alist}")
         return self._put("me/albums?ids=" + ",".join(alist))
 
     def current_user_saved_albums_delete(self, albums=[]):
