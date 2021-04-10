@@ -1171,16 +1171,184 @@ class Spotify(object):
         """
         return self._get("me/player/currently-playing")
 
-    def current_user_saved_tracks(self, limit=20, offset=0):
+    def current_user_saved_albums(self, limit=20, offset=0, market=None):
+        """ Gets a list of the albums saved in the current authorized user's
+            "Your Music" library
+
+            Parameters:
+                - limit - the number of albums to return
+                - offset - the index of the first album to return
+                - market - an ISO 3166-1 alpha-2 country code.
+
+        """
+        return self._get("me/albums", limit=limit, offset=offset, market=market)
+
+    def current_user_saved_albums_add(self, albums=[]):
+        """ Add one or more albums to the current user's
+            "Your Music" library.
+            Parameters:
+                - albums - a list of album URIs, URLs or IDs
+        """
+
+        alist = [self._get_id("album", a) for a in albums]
+        return self._put("me/albums?ids=" + ",".join(alist))
+
+    def current_user_saved_albums_delete(self, albums=[]):
+        """ Remove one or more albums from the current user's
+            "Your Music" library.
+
+            Parameters:
+                - albums - a list of album URIs, URLs or IDs
+        """
+        alist = [self._get_id("album", a) for a in albums]
+        return self._delete("me/albums/?ids=" + ",".join(alist))
+
+    def current_user_saved_albums_contains(self, albums=[]):
+        """ Check if one or more albums is already saved in
+            the current Spotify user’s “Your Music” library.
+
+            Parameters:
+                - albums - a list of album URIs, URLs or IDs
+        """
+        alist = [self._get_id("album", a) for a in albums]
+        return self._get("me/albums/contains?ids=" + ",".join(alist))
+
+    def current_user_saved_tracks(self, limit=20, offset=0, market=None):
         """ Gets a list of the tracks saved in the current authorized user's
             "Your Music" library
 
             Parameters:
                 - limit - the number of tracks to return
                 - offset - the index of the first track to return
+                - market - an ISO 3166-1 alpha-2 country code
 
         """
-        return self._get("me/tracks", limit=limit, offset=offset)
+        return self._get("me/tracks", limit=limit, offset=offset, market=market)
+
+    def current_user_saved_tracks_add(self, tracks=None):
+        """ Add one or more tracks to the current user's
+            "Your Music" library.
+
+            Parameters:
+                - tracks - a list of track URIs, URLs or IDs
+        """
+        tlist = []
+        if tracks is not None:
+            tlist = [self._get_id("track", t) for t in tracks]
+        return self._put("me/tracks/?ids=" + ",".join(tlist))
+
+    def current_user_saved_tracks_delete(self, tracks=None):
+        """ Remove one or more tracks from the current user's
+            "Your Music" library.
+
+            Parameters:
+                - tracks - a list of track URIs, URLs or IDs
+        """
+        tlist = []
+        if tracks is not None:
+            tlist = [self._get_id("track", t) for t in tracks]
+        return self._delete("me/tracks/?ids=" + ",".join(tlist))
+
+    def current_user_saved_tracks_contains(self, tracks=None):
+        """ Check if one or more tracks is already saved in
+            the current Spotify user’s “Your Music” library.
+
+            Parameters:
+                - tracks - a list of track URIs, URLs or IDs
+        """
+        tlist = []
+        if tracks is not None:
+            tlist = [self._get_id("track", t) for t in tracks]
+        return self._get("me/tracks/contains?ids=" + ",".join(tlist))
+
+    def current_user_saved_episodes(self, limit=20, offset=0, market=None):
+        """ Gets a list of the episodes saved in the current authorized user's
+            "Your Music" library
+
+            Parameters:
+                - limit - the number of episodes to return
+                - offset - the index of the first episode to return
+                - market - an ISO 3166-1 alpha-2 country code
+
+        """
+        return self._get("me/episodes", limit=limit, offset=offset, market=market)
+
+    def current_user_saved_episodes_add(self, episodes=None):
+        """ Add one or more episodes to the current user's
+            "Your Music" library.
+
+            Parameters:
+                - episodes - a list of episode URIs, URLs or IDs
+        """
+        elist = []
+        if episodes is not None:
+            elist = [self._get_id("episode", e) for e in episodes]
+        return self._put("me/episodes/?ids=" + ",".join(elist))
+
+    def current_user_saved_episodes_delete(self, episodes=None):
+        """ Remove one or more episodes from the current user's
+            "Your Music" library.
+
+            Parameters:
+                - episodes - a list of episode URIs, URLs or IDs
+        """
+        elist = []
+        if episodes is not None:
+            elist = [self._get_id("episode", e) for e in episodes]
+        return self._delete("me/episodes/?ids=" + ",".join(elist))
+
+    def current_user_saved_episodes_contains(self, episodes=None):
+        """ Check if one or more episodes is already saved in
+            the current Spotify user’s “Your Music” library.
+
+            Parameters:
+                - episodes - a list of episode URIs, URLs or IDs
+        """
+        elist = []
+        if episodes is not None:
+            elist = [self._get_id("episode", e) for e in episodes]
+        return self._get("me/episodes/contains?ids=" + ",".join(elist))
+
+    def current_user_saved_shows(self, limit=20, offset=0, market=None):
+        """ Gets a list of the shows saved in the current authorized user's
+            "Your Music" library
+
+            Parameters:
+                - limit - the number of shows to return
+                - offset - the index of the first show to return
+                - market - an ISO 3166-1 alpha-2 country code
+
+        """
+        return self._get("me/shows", limit=limit, offset=offset, market=market)
+
+    def current_user_saved_shows_add(self, shows=[]):
+        """ Add one or more albums to the current user's
+            "Your Music" library.
+            Parameters:
+                - shows - a list of show URIs, URLs or IDs
+        """
+        slist = [self._get_id("show", s) for s in shows]
+        return self._put("me/shows?ids=" + ",".join(slist))
+
+    def current_user_saved_shows_delete(self, shows=[]):
+        """ Remove one or more shows from the current user's
+            "Your Music" library.
+
+            Parameters:
+                - shows - a list of show URIs, URLs or IDs
+        """
+        slist = [self._get_id("show", s) for s in shows]
+        return self._delete("me/shows/?ids=" + ",".join(slist))
+
+    def current_user_saved_shows_contains(self, shows=[]):
+        """ Check if one or more shows is already saved in
+            the current Spotify user’s “Your Music” library.
+
+            Parameters:
+                - shows - a list of show URIs, URLs or IDs
+        """
+        slist = [self._get_id("show", s) for s in shows]
+        return self._get("me/shows/contains?ids=" + ",".join(slist))
 
     def current_user_followed_artists(self, limit=20, after=None):
         """ Gets a list of the artists followed by the current authorized user
@@ -1224,42 +1392,6 @@ class Spotify(object):
         return self._get(
             "me/following/contains", ids=",".join(idlist), type="user"
         )
-
-    def current_user_saved_tracks_delete(self, tracks=None):
-        """ Remove one or more tracks from the current user's
-            "Your Music" library.
-
-            Parameters:
-                - tracks - a list of track URIs, URLs or IDs
-        """
-        tlist = []
-        if tracks is not None:
-            tlist = [self._get_id("track", t) for t in tracks]
-        return self._delete("me/tracks/?ids=" + ",".join(tlist))
-
-    def current_user_saved_tracks_contains(self, tracks=None):
-        """ Check if one or more tracks is already saved in
-            the current Spotify user’s “Your Music” library.
-
-            Parameters:
-                - tracks - a list of track URIs, URLs or IDs
-        """
-        tlist = []
-        if tracks is not None:
-            tlist = [self._get_id("track", t) for t in tracks]
-        return self._get("me/tracks/contains?ids=" + ",".join(tlist))
-
-    def current_user_saved_tracks_add(self, tracks=None):
-        """ Add one or more tracks to the current user's
-            "Your Music" library.
-
-            Parameters:
-                - tracks - a list of track URIs, URLs or IDs
-        """
-        tlist = []
-        if tracks is not None:
-            tlist = [self._get_id("track", t) for t in tracks]
-        return self._put("me/tracks/?ids=" + ",".join(tlist))
 
     def current_user_top_artists(
         self, limit=20, offset=0, time_range="medium_term"
@@ -1309,86 +1441,6 @@ class Spotify(object):
             after=after,
             before=before,
         )
-
-    def current_user_saved_albums(self, limit=20, offset=0):
-        """ Gets a list of the albums saved in the current authorized user's
-            "Your Music" library
-
-            Parameters:
-                - limit - the number of albums to return
-                - offset - the index of the first album to return
-
-        """
-        return self._get("me/albums", limit=limit, offset=offset)
-
-    def current_user_saved_albums_contains(self, albums=[]):
-        """ Check if one or more albums is already saved in
-            the current Spotify user’s “Your Music” library.
-
-            Parameters:
-                - albums - a list of album URIs, URLs or IDs
-        """
-        alist = [self._get_id("album", a) for a in albums]
-        return self._get("me/albums/contains?ids=" + ",".join(alist))
-
-    def current_user_saved_albums_add(self, albums=[]):
-        """ Add one or more albums to the current user's
-            "Your Music" library.
-            Parameters:
-                - albums - a list of album URIs, URLs or IDs
-        """
-        alist = [self._get_id("album", a) for a in albums]
-        return self._put("me/albums?ids=" + ",".join(alist))
-
-    def current_user_saved_albums_delete(self, albums=[]):
-        """ Remove one or more albums from the current user's
-            "Your Music" library.
-
-            Parameters:
-                - albums - a list of album URIs, URLs or IDs
-        """
-        alist = [self._get_id("album", a) for a in albums]
-        return self._delete("me/albums/?ids=" + ",".join(alist))
-
-    def current_user_saved_shows(self, limit=50, offset=0):
-        """ Gets a list of the shows saved in the current authorized user's
-            "Your Music" library
-
-            Parameters:
-                - limit - the number of shows to return
-                - offset - the index of the first show to return
-
-        """
-        return self._get("me/shows", limit=limit, offset=offset)
-
-    def current_user_saved_shows_contains(self, shows=[]):
-        """ Check if one or more shows is already saved in
-            the current Spotify user’s “Your Music” library.
-
-            Parameters:
-                - shows - a list of show URIs, URLs or IDs
-        """
-        slist = [self._get_id("show", s) for s in shows]
-        return self._get("me/shows/contains?ids=" + ",".join(slist))
-
-    def current_user_saved_shows_add(self, shows=[]):
-        """ Add one or more albums to the current user's
-            "Your Music" library.
-            Parameters:
-                - shows - a list of show URIs, URLs or IDs
-        """
-        slist = [self._get_id("show", s) for s in shows]
-        return self._put("me/shows?ids=" + ",".join(slist))
-
-    def current_user_saved_shows_delete(self, shows=[]):
-        """ Remove one or more shows from the current user's
-            "Your Music" library.
-
-            Parameters:
-                - shows - a list of show URIs, URLs or IDs
-        """
-        slist = [self._get_id("show", s) for s in shows]
-        return self._delete("me/shows/?ids=" + ",".join(slist))
 
     def user_follow_artists(self, ids=[]):
         """ Follow one or more artists
@@ -1828,6 +1880,13 @@ class Spotify(object):
             endpoint += "&device_id=%s" % device_id
 
         return self._post(endpoint)
+
+    def available_markets(self):
+        """ Get the list of markets where Spotify is available.
+            Returns a list of the countries in which Spotify is available, identified by their
+            ISO 3166-1 alpha-2 country code with additional country codes for special territories.
+        """
+        return self._get("markets")
 
     def _append_device_id(self, path, device_id):
         """ Append device ID to API path.

@@ -11,6 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Enabled using both short and long IDs for playlist_change_details
 - Added a cache handler to `SpotifyClientCredentials`
+- Added the following endpoints
+    * `Spotify.current_user_saved_episodes`
+    * `Spotify.current_user_saved_episodes_add`
+    * `Spotify.current_user_saved_episodes_delete`
+    * `Spotify.current_user_saved_episodes_contains`
+    * `Spotify.available_markets`
 
 ### Changed
 
