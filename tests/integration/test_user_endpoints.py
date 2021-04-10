@@ -286,6 +286,7 @@ class SpotipyLibraryApiTests(unittest.TestCase):
         resp = self.spotify.current_user_saved_episodes_contains(self.episode_ids)
         self.assertEqual(resp, [False, False])
 
+
 class SpotipyUserApiTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
