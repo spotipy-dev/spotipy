@@ -14,13 +14,6 @@ Rebasing master onto v3 doesn't require a changelog update.
 
 * `Scope` - An enum which contains all of the authorization scopes (see [here](https://github.com/plamere/spotipy/issues/652#issuecomment-797461311)).
 
-* Added the following endpoints
-    * `Spotify.current_user_saved_episodes`
-    * `Spotify.current_user_saved_episodes_add`
-    * `Spotify.current_user_saved_episodes_delete`
-    * `Spotify.current_user_saved_episodes_contains`
-    * `Spotify.available_markets`
-
 ### Changed
 
 * Made `CacheHandler` an abstract base class
@@ -36,6 +29,12 @@ Rebasing master onto v3 doesn't require a changelog update.
 
 - Enabled using both short and long IDs for playlist_change_details
 - Added a cache handler to `SpotifyClientCredentials`
+- Added the following endpoints
+    * `Spotify.current_user_saved_episodes`
+    * `Spotify.current_user_saved_episodes_add`
+    * `Spotify.current_user_saved_episodes_delete`
+    * `Spotify.current_user_saved_episodes_contains`
+    * `Spotify.available_markets`
 
 ### Changed
 

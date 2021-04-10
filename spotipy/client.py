@@ -1221,7 +1221,6 @@ class Spotify(object):
                 - limit - the number of tracks to return
                 - offset - the index of the first track to return
                 - market - an ISO 3166-1 alpha-2 country code
-
         """
         return self._get("me/tracks", limit=limit, offset=offset, market=market)
 
@@ -1347,6 +1346,7 @@ class Spotify(object):
             Parameters:
                 - shows - a list of show URIs, URLs or IDs
         """
+
         slist = [self._get_id("show", s) for s in shows]
         return self._get("me/shows/contains?ids=" + ",".join(slist))
 
@@ -1878,7 +1878,6 @@ class Spotify(object):
 
     def available_markets(self):
         """ Get the list of markets where Spotify is available.
-
             Returns a list of the countries in which Spotify is available, identified by their
             ISO 3166-1 alpha-2 country code with additional country codes for special territories.
         """
