@@ -5,26 +5,51 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-
 ## Unreleased [3.0.0-alpha]
 
 While this is unreleased, please only add v3 features here.
 Rebasing master onto v3 doesn't require a changelog update.
 
+### Added
+
+* `Scope` - An enum which contains all of the authorization scopes (see [here](https://github.com/plamere/spotipy/issues/652#issuecomment-797461311)).
+
+* Added the following endpoints
+    * `Spotify.current_user_saved_episodes`
+    * `Spotify.current_user_saved_episodes_add`
+    * `Spotify.current_user_saved_episodes_delete`
+    * `Spotify.current_user_saved_episodes_contains`
+    * `Spotify.available_markets`
+
 ### Changed
-Modified the return structure of the `audio_features` function (wrapping the [Get Audio Features for Several Tracks](https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-several-audio-features) API) to conform to the return structure of similar APIs, such as:
- - [Get Several Tracks](https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-several-tracks)
- - [Get Multiple Artists](https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-multiple-artists)
- - [Get Multiple Albums](https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-multiple-albums)
-The functions wrapping these APIs do not unwrap the single key JSON response, and this is currently the only function that does this.
+
+* Made `CacheHandler` an abstract base class
+
+* Modified the return structure of the `audio_features` function (wrapping the [Get Audio Features for Several Tracks](https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-several-audio-features) API) to conform to the return structure of the similar methods listed below. The functions wrapping these APIs do not unwrap the single key JSON response, and this is currently the only function that does this.
+     * [Get Several Tracks](https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-several-tracks)
+     * [Get Multiple Artists](https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-multiple-artists)
+     * [Get Multiple Albums](https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-multiple-albums)
 
 ## Unreleased [2.x.x]
 
 ### Added
+
 - Enabled using both short and long IDs for playlist_change_details
+- Added a cache handler to `SpotifyClientCredentials`
 
 ### Changed
+
 - Add support for a list of scopes rather than just a comma separated string of scopes
+
+### Fixed
+
+* Fixed the bugs in `SpotifyOAuth.refresh_access_token` and `SpotifyPKCE.refresh_access_token` which raised the incorrect exception upon receiving an error response from the server. This addresses #645.
+
+* Fixed a bug in `RequestHandler.do_GET` in which the non-existent `state` attribute of  `SpotifyOauthError` is accessed. This bug occurs when the user clicks "cancel" in the permissions dialog that opens in the browser.
+
+* Cleaned up the documentation for `SpotifyClientCredentials.__init__`, `SpotifyOAuth.__init__`, and `SpotifyPKCE.__init__`.
+
+    
 
 ## [2.17.1] - 2021-02-28
 
