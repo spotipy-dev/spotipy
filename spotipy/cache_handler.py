@@ -14,33 +14,32 @@ import os
 from spotipy.util import CLIENT_CREDS_ENV_VARS
 
 from redis import RedisError
+from abc import ABC, abstractmethod
 
 logger = logging.getLogger(__name__)
 
 
-class CacheHandler():
+class CacheHandler(ABC):
     """
     An abstraction layer for handling the caching and retrieval of
     authorization tokens.
 
-    Custom extensions of this class must implement get_cached_token
-    and save_token_to_cache methods with the same input and output
-    structure as the CacheHandler class.
+    Clients are expected to subclass this class and override the
+    get_cached_token and save_token_to_cache methods with the same
+    type signatures of this class.
     """
 
+    @abstractmethod
     def get_cached_token(self):
         """
         Get and return a token_info dictionary object.
         """
-        # return token_info
-        raise NotImplementedError()
 
+    @abstractmethod
     def save_token_to_cache(self, token_info):
         """
         Save a token_info dictionary object to the cache and return None.
         """
-        raise NotImplementedError()
-        return None
 
 
 class CacheFileHandler(CacheHandler):

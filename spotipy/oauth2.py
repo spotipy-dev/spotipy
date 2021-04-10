@@ -277,7 +277,11 @@ class SpotifyOAuth(SpotifyAuthBase):
              * client_secret: Must be supplied or set as environment variable
              * redirect_uri: Must be supplied or set as environment variable
              * state: Optional, no verification is performed
-             * scope: Optional, either a list of scopes or comma separated string of scopes.
+             * scope: Optional, either a string of scopes, or an iterable with elements of type
+                      `Scope` or `str`. E.g.,
+                      {Scope.user_modify_playback_state, Scope.user_library_read}
+
+             iterable of scopes or comma separated string of scopes.
                       e.g, "playlist-read-private,playlist-read-collaborative"
              * cache_path: (deprecated) Optional, will otherwise be generated
                            (takes precedence over `username`)
@@ -1011,8 +1015,9 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
         * client_id: Must be supplied or set as environment variable
         * redirect_uri: Must be supplied or set as environment variable
         * state: May be supplied, no verification is performed
-        * scope: Optional, either a list of scopes or comma separated string of scopes.
-                 e.g, "playlist-read-private,playlist-read-collaborative"
+        * scope: Optional, either a string of scopes, or an iterable with elements of type
+                      `Scope` or `str`. E.g.,
+                      {Scope.user_modify_playback_state, Scope.user_library_read}
         * cache_handler: An instance of the `CacheHandler` class to handle
                               getting and saving cached authorization tokens.
                               May be supplied, will otherwise use `CacheFileHandler`.
