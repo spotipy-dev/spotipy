@@ -138,6 +138,10 @@ Add your changes below.
 - Fixed a bug in the initializers for the auth managers that produced a spurious warning message if you provide a cache handler, and you set a value for the "SPOTIPY_CLIENT_USERNAME" environment variable.
 - Use generated MIT license and fix license type in `pip show`
 
+### Fixed
+
+* Fixed a bug in `CacheFileHandler.__init__`: The documentation says that the username will be retrieved from the environment, but it wasn't.
+
 ## [2.18.0] - 2021-04-13
 
 ### Added
