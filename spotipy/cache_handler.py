@@ -1,8 +1,10 @@
-__all__ = ['CacheHandler', 'CacheFileHandler']
+__all__ = ['CacheHandler', 'CacheFileHandler', 'MemoryCacheHandler']
 
 import errno
 import json
 import logging
+import os
+from spotipy.util import CLIENT_CREDS_ENV_VARS
 
 logger = logging.getLogger(__name__)
 
@@ -53,6 +55,7 @@ class CacheFileHandler(CacheHandler):
             self.cache_path = cache_path
         else:
             cache_path = ".cache"
+            username = (username or os.getenv(CLIENT_CREDS_ENV_VARS["client_username"]))
             if username:
                 cache_path += "-" + str(username)
             self.cache_path = cache_path
@@ -82,3 +85,24 @@ class CacheFileHandler(CacheHandler):
         except IOError:
             logger.warning('Couldn\'t write token to cache at: %s',
                            self.cache_path)
+
+
+class MemoryCacheHandler(CacheHandler):
+    """
+    A cache handler that simply stores the token info in memory as an
+    instance attribute of this class. The token info will be lost when this
+    instance is freed.
+    """
+
+    def __init__(self, token_info=None):
+        """
+        Parameters:
+            * token_info: The token info to store in memory. Can be None.
+        """
+        self.token_info = token_info
+
+    def get_cached_token(self):
+        return self.token_info
+
+    def save_token_to_cache(self, token_info):
+        self.token_info = token_info

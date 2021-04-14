@@ -7,7 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-// Add your changes here and then delete this line
+### Added
+
+* Added `MemoryCacheHandler`, a cache handler that simply stores the token info in memory as an instance attribute of this class.
+
+### Fixed
+
+* Fixed a bug in `CacheFileHandler.__init__`: The documentation says that the username will be retrieved from the environment, but it wasn't.
 
 ## [2.18.0] - 2021-04-13
 
