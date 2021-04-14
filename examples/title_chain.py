@@ -9,8 +9,8 @@ import random
     usage: python title_chain.py [song name]
 '''
 
-client_credentials_manager = SpotifyClientCredentials()
-sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+auth_manager = SpotifyClientCredentials()
+sp = spotipy.Spotify(auth_manager=auth_manager)
 
 
 skiplist = set(['dm', 'remix'])

@@ -3,8 +3,8 @@ import spotipy
 
 birdy_uri = 'spotify:artist:2WX2uTcsvV5OnS0inACecP'
 
-client_credentials_manager = SpotifyClientCredentials()
-sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+auth_manager = SpotifyClientCredentials()
+sp = spotipy.Spotify(auth_manager=auth_manager)
 
 results = sp.artist_albums(birdy_uri, album_type='album')
 albums = results['items']
