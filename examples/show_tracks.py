@@ -15,8 +15,8 @@ if __name__ == '__main__':
         file = sys.stdin
     tids = file.read().split()
 
-    client_credentials_manager = SpotifyClientCredentials()
-    sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+    auth_manager = SpotifyClientCredentials()
+    sp = spotipy.Spotify(auth_manager=auth_manager)
     for start in range(0, len(tids), max_tracks_per_call):
         results = sp.tracks(tids[start: start + max_tracks_per_call])
         for track in results['tracks']:

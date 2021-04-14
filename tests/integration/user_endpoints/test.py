@@ -2,15 +2,30 @@ import os
 
 from spotipy import (
     CLIENT_CREDS_ENV_VARS as CCEV,
-    prompt_for_user_token,
     Spotify,
     SpotifyException,
-    SpotifyImplicitGrant,
-    SpotifyPKCE
+    SpotifyOAuth,
+    SpotifyPKCE,
+    CacheFileHandler
 )
 import unittest
 from tests import helpers
 
+def _make_spotify(scopes=None, retries=None):
+
+    retries = retries or Spotify.max_retries
+
+    auth_manager = SpotifyOAuth(
+        scope=scopes,
+        cache_handler=CacheFileHandler()
+    )
+
+    spotify = Spotify(
+        auth_manager=auth_manager,
+        retries=retries
+    )
+
+    return spotify
 
 class SpotipyPlaylistApiTest(unittest.TestCase):
     @classmethod
@@ -48,10 +63,10 @@ class SpotipyPlaylistApiTest(unittest.TestCase):
             'user-read-playback-state'
         )
 
-        token = prompt_for_user_token(cls.username, scope=scope)
+        cls.spotify = _make_spotify(scopes=scope)
+        cls.spotify_no_retry = _make_spotify(scopes=scope, retries=0)
 
-        cls.spotify = Spotify(auth=token)
-        cls.spotify_no_retry = Spotify(auth=token, retries=0)
+
         cls.new_playlist_name = 'spotipy-playlist-test'
         cls.new_playlist = helpers.get_spotify_playlist(
             cls.spotify, cls.new_playlist_name, cls.username) or \
@@ -201,17 +216,6 @@ class SpotipyPlaylistApiTest(unittest.TestCase):
             return
         self.fail()
 
-    def test_deprecated_starred(self):
-        pl = self.spotify.user_playlist(self.username)
-        self.assertTrue(pl["tracks"] is None)
-        self.assertTrue(pl["owner"] is None)
-
-    def test_deprecated_user_playlist(self):
-        # Test without user due to change from
-        # https://developer.spotify.com/community/news/2018/06/12/changes-to-playlist-uris/
-        pl = self.spotify.user_playlist(None, self.new_playlist['id'])
-        self.assertEqual(pl["tracks"]["total"], 0)
-
 
 class SpotipyLibraryApiTests(unittest.TestCase):
     @classmethod
@@ -240,10 +244,7 @@ class SpotipyLibraryApiTests(unittest.TestCase):
             'ugc-image-upload '
             'user-read-playback-state'
         )
-
-        token = prompt_for_user_token(cls.username, scope=scope)
-
-        cls.spotify = Spotify(auth=token)
+        cls.spotify = _make_spotify(scopes=scope)
 
     def test_track_bad_id(self):
         with self.assertRaises(SpotifyException):
@@ -330,9 +331,7 @@ class SpotipyUserApiTests(unittest.TestCase):
             'user-read-playback-state'
         )
 
-        token = prompt_for_user_token(cls.username, scope=scope)
-
-        cls.spotify = Spotify(auth=token)
+        cls.spotify = _make_spotify(scopes=scope)
 
     def test_basic_user_profile(self):
         user = self.spotify.user(self.username)
@@ -360,9 +359,7 @@ class SpotipyUserApiTests(unittest.TestCase):
 class SpotipyBrowseApiTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        username = os.getenv(CCEV['client_username'])
-        token = prompt_for_user_token(username)
-        cls.spotify = Spotify(auth=token)
+        cls.spotify = _make_spotify()
 
     def test_category(self):
         rock_cat_id = '0JQ5DAqbMKFDXXwE9BDJAr'
@@ -455,9 +452,7 @@ class SpotipyFollowApiTests(unittest.TestCase):
             'user-read-playback-state'
         )
 
-        token = prompt_for_user_token(cls.username, scope=scope)
-
-        cls.spotify = Spotify(auth=token)
+        cls.spotify = _make_spotify(scopes=scope)
 
     def test_current_user_follows(self):
         response = self.spotify.current_user_followed_artists()
@@ -510,9 +505,7 @@ class SpotipyPlayerApiTests(unittest.TestCase):
             'user-read-playback-state'
         )
 
-        token = prompt_for_user_token(cls.username, scope=scope)
-
-        cls.spotify = Spotify(auth=token)
+        cls.spotify = _make_spotify(scopes=scope)
 
     def test_devices(self):
         # No devices playing by default
@@ -526,23 +519,6 @@ class SpotipyPlayerApiTests(unittest.TestCase):
         # not much more to test if account is inactive and has no recently played tracks
 
 
-class SpotipyImplicitGrantTests(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        scope = (
-            'user-follow-read '
-            'user-follow-modify '
-        )
-        auth_manager = SpotifyImplicitGrant(scope=scope,
-                                            cache_path=".cache-implicittest")
-        cls.spotify = Spotify(auth_manager=auth_manager)
-
-    def test_current_user(self):
-        c_user = self.spotify.current_user()
-        user = self.spotify.user(c_user['id'])
-        self.assertEqual(c_user['display_name'], user['display_name'])
-
-
 class SpotifyPKCETests(unittest.TestCase):
 
     @classmethod
@@ -551,7 +527,8 @@ class SpotifyPKCETests(unittest.TestCase):
             'user-follow-read '
             'user-follow-modify '
         )
-        auth_manager = SpotifyPKCE(scope=scope, cache_path=".cache-pkcetest")
+        cache_handler = CacheFileHandler(cache_path=".cache-pkcetest")
+        auth_manager = SpotifyPKCE(scope=scope, cache_handler=cache_handler)
         cls.spotify = Spotify(auth_manager=auth_manager)
 
     def test_current_user(self):

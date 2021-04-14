@@ -8,8 +8,8 @@ from spotipy.oauth2 import SpotifyClientCredentials
 logger = logging.getLogger('examples.artist_recommendations')
 logging.basicConfig(level='INFO')
 
-client_credentials_manager = SpotifyClientCredentials()
-sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+auth_manager = SpotifyClientCredentials()
+sp = spotipy.Spotify(auth_manager=auth_manager)
 
 
 def get_args():

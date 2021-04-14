@@ -7,7 +7,7 @@ import spotipy
 logger = logging.getLogger('examples.artist_albums')
 logging.basicConfig(level='INFO')
 
-sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
+sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials())
 
 
 def get_args():

@@ -88,3 +88,28 @@ class SpotipyScopeTest(TestCase):
         self.assertEqual(normalized_scope_string_2, "")
 
         self.assertIsNone(self.normalize_scope(None))
+
+    def test_all_scopes(self):
+        expected_scopes = {
+            Scope.user_read_currently_playing,
+            Scope.playlist_read_collaborative,
+            Scope.playlist_modify_private,
+            Scope.user_read_playback_position,
+            Scope.user_library_modify,
+            Scope.user_top_read,
+            Scope.user_read_playback_state,
+            Scope.user_read_email,
+            Scope.ugc_image_upload,
+            Scope.user_read_private,
+            Scope.playlist_modify_public,
+            Scope.user_library_read,
+            Scope.streaming,
+            Scope.user_read_recently_played,
+            Scope.user_follow_read,
+            Scope.user_follow_modify,
+            Scope.app_remote_control,
+            Scope.playlist_read_private,
+            Scope.user_modify_playback_state,
+        }
+
+        self.assertEqual(expected_scopes, Scope.all())
