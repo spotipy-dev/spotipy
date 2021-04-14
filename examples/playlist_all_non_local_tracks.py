@@ -6,7 +6,7 @@ import spotipy
 PlaylistExample = '37i9dQZEVXbMDoHDwVN2tF'
 
 # create spotipy client
-sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
+sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials())
 
 # load the first 100 songs
 tracks = []
