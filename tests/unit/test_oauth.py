@@ -6,10 +6,9 @@ import unittest
 import six.moves.urllib.parse as urllibparse
 
 from spotipy import SpotifyOAuth, SpotifyPKCE
-from spotipy.cache_handler import CacheHandler
 from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOauthError
 from spotipy.oauth2 import SpotifyStateError
-from spotipy import CacheFileHandler
+from spotipy import MemoryCacheHandler, CacheFileHandler
 
 try:
     import unittest.mock as mock
@@ -232,6 +231,7 @@ class TestSpotifyClientCredentials(unittest.TestCase):
         with self.assertRaises(SpotifyOauthError) as error:
             oauth.get_access_token()
         self.assertEqual(error.exception.error, 'invalid_client')
+
 
 class SpotifyPKCECacheTest(unittest.TestCase):
 

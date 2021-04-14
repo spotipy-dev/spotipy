@@ -11,6 +11,7 @@ from spotipy import (
 import unittest
 from tests import helpers
 
+
 def _make_spotify(scopes=None, retries=None):
 
     retries = retries or Spotify.max_retries
@@ -26,6 +27,7 @@ def _make_spotify(scopes=None, retries=None):
     )
 
     return spotify
+
 
 class SpotipyPlaylistApiTest(unittest.TestCase):
     @classmethod
@@ -65,7 +67,6 @@ class SpotipyPlaylistApiTest(unittest.TestCase):
 
         cls.spotify = _make_spotify(scopes=scope)
         cls.spotify_no_retry = _make_spotify(scopes=scope, retries=0)
-
 
         cls.new_playlist_name = 'spotipy-playlist-test'
         cls.new_playlist = helpers.get_spotify_playlist(

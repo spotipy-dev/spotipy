@@ -12,7 +12,6 @@ import base64
 import logging
 import os
 import time
-import warnings
 import webbrowser
 
 import requests

@@ -5,9 +5,6 @@
 __all__ = ["CLIENT_CREDS_ENV_VARS"]
 
 import logging
-import os
-import warnings
-import spotipy
 
 LOGGER = logging.getLogger(__name__)
 
@@ -17,6 +14,7 @@ CLIENT_CREDS_ENV_VARS = {
     "client_username": "SPOTIPY_CLIENT_USERNAME",
     "redirect_uri": "SPOTIPY_REDIRECT_URI",
 }
+
 
 def get_host_port(netloc):
     if ":" in netloc:
