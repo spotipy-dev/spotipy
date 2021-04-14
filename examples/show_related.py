@@ -10,8 +10,8 @@ if len(sys.argv) > 1:
 else:
     artist_name = 'weezer'
 
-client_credentials_manager = SpotifyClientCredentials()
-sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+auth_manager = SpotifyClientCredentials()
+sp = spotipy.Spotify(auth_manager=auth_manager)
 result = sp.search(q='artist:' + artist_name, type='artist')
 try:
     name = result['artists']['items'][0]['name']

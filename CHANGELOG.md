@@ -16,11 +16,35 @@ While this is unreleased, please only add v3 features here. Rebasing master onto
 ### Changed
 
 * Made `CacheHandler` an abstract base class
-
 * Modified the return structure of the `audio_features` function (wrapping the [Get Audio Features for Several Tracks](https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-several-audio-features) API) to conform to the return structure of the similar methods listed below. The functions wrapping these APIs do not unwrap the single key JSON response, and this is currently the only function that does this.
     * [Get Several Tracks](https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-several-tracks)
     * [Get Multiple Artists](https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-multiple-artists)
     * [Get Multiple Albums](https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-multiple-albums)
+* Renamed the `auth` parameter of `Spotify.__init__` to `access_token` for better clarity.
+* Removed the `client_credentials_manager` and `oauth_manager` parameters because they are redundant.
+* Replaced the `set_auth` and `auth_manager` properties with standard attributes.
+
+### Removed
+
+* Removed the following deprecated methods from `Spotify`:
+    * `playlist_tracks`
+    * `user_playlist`
+    * `user_playlist_tracks`
+    * `user_playlist_change_details`
+    * `user_playlist_unfollow`
+    * `user_playlist_add_tracks`
+    * `user_playlist_replace_tracks`
+    * `user_playlist_reorder_tracks`
+    * `user_playlist_remove_all_occurrences_of_tracks`
+    * `user_playlist_remove_specific_occurrences_of_tracks`
+    * `user_playlist_follow_playlist`
+    * `user_playlist_is_following`
+
+* Removed the deprecated `as_dict` parameter from the `get_access_token` method of `SpotifyOAuth` and `SpotifyPKCE`.
+
+* Removed the deprecated `get_cached_token` and `_save_token_info` methods of `SpotifyOAuth` and `SpotifyPKCE`.
+* Removed `SpotifyImplicitGrant`.
+* Removed `prompt_for_user_token`.
 
 ## Unreleased [2.x.x]
 

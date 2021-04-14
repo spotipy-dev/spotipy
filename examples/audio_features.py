@@ -9,8 +9,8 @@ import time
 import sys
 
 
-client_credentials_manager = SpotifyClientCredentials()
-sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+auth_manager = SpotifyClientCredentials()
+sp = spotipy.Spotify(auth_manager=auth_manager)
 sp.trace = False
 
 if len(sys.argv) > 1:

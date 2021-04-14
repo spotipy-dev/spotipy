@@ -98,11 +98,9 @@ class Spotify(object):
 
     def __init__(
         self,
-        auth=None,
-        requests_session=True,
-        client_credentials_manager=None,
-        oauth_manager=None,
+        access_token=None,
         auth_manager=None,
+        requests_session=True,
         proxies=None,
         requests_timeout=5,
         status_forcelist=None,
@@ -114,19 +112,16 @@ class Spotify(object):
         """
         Creates a Spotify API client.
 
-        :param auth: An access token (optional)
+        :param access_token: An access token (optional). If not None, then this parameter
+            will override the auth_manager parameter. Prefer `auth_manager` over this parameter
+            because otherwise you cannot refresh the `access_token`.
+        :param auth_manager:
+            SpotifyOauth, SpotifyClientCredentials, or SpotifyPKCE object
         :param requests_session:
-            A Requests session object or a truthy value to create one.
-            A falsy value disables sessions.
+            A Requests session object or a true value to create one.
+            A false value disables sessions.
             It should generally be a good idea to keep sessions enabled
             for performance reasons (connection pooling).
-        :param client_credentials_manager:
-            SpotifyClientCredentials object
-        :param oauth_manager:
-            SpotifyOAuth object
-        :param auth_manager:
-            SpotifyOauth, SpotifyClientCredentials,
-            or SpotifyImplicitGrant object
         :param proxies:
             Definition of proxies (optional).
             See Requests doc https://2.python-requests.org/en/master/user/advanced/#proxies
@@ -146,17 +141,23 @@ class Spotify(object):
             The language parameter advertises what language the user prefers to see.
             See ISO-639 language code: https://www.loc.gov/standards/iso639-2/php/code_list.php
         """
+
+        if access_token is not None and auth_manager is not None:
+            warnings.warn(
+                "Either `access_token` or `auth_manager` should be provided, "
+                "not both. `auth_manager` will be ignored.",
+                UserWarning
+            )
+
         self.prefix = "https://api.spotify.com/v1/"
-        self._auth = auth
-        self.client_credentials_manager = client_credentials_manager
-        self.oauth_manager = oauth_manager
+        self.access_token = access_token
         self.auth_manager = auth_manager
         self.proxies = proxies
         self.requests_timeout = requests_timeout
         self.status_forcelist = status_forcelist or self.default_retry_codes
-        self.backoff_factor = backoff_factor
         self.retries = retries
         self.status_retries = status_retries
+        self.backoff_factor = backoff_factor
         self.language = language
 
         if isinstance(requests_session, requests.Session):
@@ -167,21 +168,6 @@ class Spotify(object):
             else:  # Use the Requests API module as a "session".
                 self._session = requests.api
 
-    def set_auth(self, auth):
-        self._auth = auth
-
-    @property
-    def auth_manager(self):
-        return self._auth_manager
-
-    @auth_manager.setter
-    def auth_manager(self, auth_manager):
-        if auth_manager is not None:
-            self._auth_manager = auth_manager
-        else:
-            self._auth_manager = (
-                self.client_credentials_manager or self.oauth_manager
-            )
 
     def __del__(self):
         """Make sure the connection (pool) gets closed"""
@@ -204,12 +190,12 @@ class Spotify(object):
         self._session.mount('https://', adapter)
 
     def _auth_headers(self):
-        if self._auth:
-            return {"Authorization": "Bearer {0}".format(self._auth)}
+        if self.access_token:
+            return {"Authorization": "Bearer {0}".format(self.access_token)}
         if not self.auth_manager:
             return {}
         try:
-            token = self.auth_manager.get_access_token(as_dict=False)
+            token = self.auth_manager.get_access_token()
         except TypeError:
             token = self.auth_manager.get_access_token()
         return {"Authorization": "Bearer {0}".format(token)}
@@ -615,34 +601,6 @@ class Spotify(object):
             additional_types=",".join(additional_types),
         )
 
-    def playlist_tracks(
-        self,
-        playlist_id,
-        fields=None,
-        limit=100,
-        offset=0,
-        market=None,
-        additional_types=("track",)
-    ):
-        """ Get full details of the tracks of a playlist.
-
-            Parameters:
-                - playlist_id - the id of the playlist
-                - fields - which fields to return
-                - limit - the maximum number of tracks to return
-                - offset - the index of the first track to return
-                - market - an ISO 3166-1 alpha-2 country code.
-                - additional_types - list of item types to return.
-                                     valid types are: track and episode
-        """
-        warnings.warn(
-            "You should use `playlist_items(playlist_id, ...,"
-            "additional_types=('track',))` instead",
-            DeprecationWarning,
-        )
-        return self.playlist_items(playlist_id, fields, limit, offset,
-                                   market, additional_types)
-
     def playlist_items(
         self,
         playlist_id,
@@ -697,55 +655,6 @@ class Spotify(object):
             content_type="image/jpeg",
         )
 
-    def user_playlist(self, user, playlist_id=None, fields=None, market=None):
-        warnings.warn(
-            "You should use `playlist(playlist_id)` instead",
-            DeprecationWarning,
-        )
-
-        """ Gets playlist of a user
-
-            Parameters:
-                - user - the id of the user
-                - playlist_id - the id of the playlist
-                - fields - which fields to return
-        """
-        if playlist_id is None:
-            return self._get("users/%s/starred" % user)
-        return self.playlist(playlist_id, fields=fields, market=market)
-
-    def user_playlist_tracks(
-        self,
-        user=None,
-        playlist_id=None,
-        fields=None,
-        limit=100,
-        offset=0,
-        market=None,
-    ):
-        warnings.warn(
-            "You should use `playlist_tracks(playlist_id)` instead",
-            DeprecationWarning,
-        )
-
-        """ Get full details of the tracks of a playlist owned by a user.
-
-            Parameters:
-                - user - the id of the user
-                - playlist_id - the id of the playlist
-                - fields - which fields to return
-                - limit - the maximum number of tracks to return
-                - offset - the index of the first track to return
-                - market - an ISO 3166-1 alpha-2 country code.
-        """
-        return self.playlist_tracks(
-            playlist_id,
-            limit=limit,
-            offset=offset,
-            fields=fields,
-            market=market,
-        )
-
     def user_playlists(self, user, limit=50, offset=0):
         """ Gets playlists of a user
 
@@ -776,197 +685,6 @@ class Spotify(object):
         }
 
         return self._post("users/%s/playlists" % (user,), payload=data)
-
-    def user_playlist_change_details(
-        self,
-        user,
-        playlist_id,
-        name=None,
-        public=None,
-        collaborative=None,
-        description=None,
-    ):
-        warnings.warn(
-            "You should use `playlist_change_details(playlist_id, ...)` instead",
-            DeprecationWarning,
-        )
-        """ Changes a playlist's name and/or public/private state
-
-            Parameters:
-                - user - the id of the user
-                - playlist_id - the id of the playlist
-                - name - optional name of the playlist
-                - public - optional is the playlist public
-                - collaborative - optional is the playlist collaborative
-                - description - optional description of the playlist
-        """
-
-        return self.playlist_change_details(playlist_id, name, public,
-                                            collaborative, description)
-
-    def user_playlist_unfollow(self, user, playlist_id):
-        """ Unfollows (deletes) a playlist for a user
-
-            Parameters:
-                - user - the id of the user
-                - name - the name of the playlist
-        """
-        warnings.warn(
-            "You should use `current_user_unfollow_playlist(playlist_id)` instead",
-            DeprecationWarning,
-        )
-        return self.current_user_unfollow_playlist(playlist_id)
-
-    def user_playlist_add_tracks(
-        self, user, playlist_id, tracks, position=None
-    ):
-        warnings.warn(
-            "You should use `playlist_add_items(playlist_id, tracks)` instead",
-            DeprecationWarning,
-        )
-        """ Adds tracks to a playlist
-
-            Parameters:
-                - user - the id of the user
-                - playlist_id - the id of the playlist
-                - tracks - a list of track URIs, URLs or IDs
-                - position - the position to add the tracks
-        """
-        return self.playlist_add_items(playlist_id, tracks, position)
-
-    def user_playlist_replace_tracks(self, user, playlist_id, tracks):
-        """ Replace all tracks in a playlist
-
-            Parameters:
-                - user - the id of the user
-                - playlist_id - the id of the playlist
-                - tracks - the list of track ids to add to the playlist
-        """
-        warnings.warn(
-            "You should use `playlist_replace_items(playlist_id, tracks)` instead",
-            DeprecationWarning,
-        )
-        return self.playlist_replace_items(playlist_id, tracks)
-
-    def user_playlist_reorder_tracks(
-        self,
-        user,
-        playlist_id,
-        range_start,
-        insert_before,
-        range_length=1,
-        snapshot_id=None,
-    ):
-        """ Reorder tracks in a playlist
-
-            Parameters:
-                - user - the id of the user
-                - playlist_id - the id of the playlist
-                - range_start - the position of the first track to be reordered
-                - range_length - optional the number of tracks to be reordered
-                                 (default: 1)
-                - insert_before - the position where the tracks should be
-                                  inserted
-                - snapshot_id - optional playlist's snapshot ID
-        """
-        warnings.warn(
-            "You should use `playlist_reorder_items(playlist_id, ...)` instead",
-            DeprecationWarning,
-        )
-        return self.playlist_reorder_items(playlist_id, range_start,
-                                           insert_before, range_length,
-                                           snapshot_id)
-
-    def user_playlist_remove_all_occurrences_of_tracks(
-        self, user, playlist_id, tracks, snapshot_id=None
-    ):
-        """ Removes all occurrences of the given tracks from the given playlist
-
-            Parameters:
-                - user - the id of the user
-                - playlist_id - the id of the playlist
-                - tracks - the list of track ids to remove from the playlist
-                - snapshot_id - optional id of the playlist snapshot
-
-        """
-        warnings.warn(
-            "You should use `playlist_remove_all_occurrences_of_items"
-            "(playlist_id, tracks)` instead",
-            DeprecationWarning,
-        )
-        return self.playlist_remove_all_occurrences_of_items(playlist_id,
-                                                             tracks,
-                                                             snapshot_id)
-
-    def user_playlist_remove_specific_occurrences_of_tracks(
-        self, user, playlist_id, tracks, snapshot_id=None
-    ):
-        """ Removes all occurrences of the given tracks from the given playlist
-
-            Parameters:
-                - user - the id of the user
-                - playlist_id - the id of the playlist
-                - tracks - an array of objects containing Spotify URIs of the
-                    tracks to remove with their current positions in the
-                    playlist.  For example:
-                        [  { "uri":"4iV5W9uYEdYUVa79Axb7Rh", "positions":[2] },
-                        { "uri":"1301WleyT98MSxVHPZCA6M", "positions":[7] } ]
-                - snapshot_id - optional id of the playlist snapshot
-        """
-        warnings.warn(
-            "You should use `playlist_remove_specific_occurrences_of_items"
-            "(playlist_id, tracks)` instead",
-            DeprecationWarning,
-        )
-        plid = self._get_id("playlist", playlist_id)
-        ftracks = []
-        for tr in tracks:
-            ftracks.append(
-                {
-                    "uri": self._get_uri("track", tr["uri"]),
-                    "positions": tr["positions"],
-                }
-            )
-        payload = {"tracks": ftracks}
-        if snapshot_id:
-            payload["snapshot_id"] = snapshot_id
-        return self._delete(
-            "users/%s/playlists/%s/tracks" % (user, plid), payload=payload
-        )
-
-    def user_playlist_follow_playlist(self, playlist_owner_id, playlist_id):
-        """
-        Add the current authenticated user as a follower of a playlist.
-
-        Parameters:
-            - playlist_owner_id - the user id of the playlist owner
-            - playlist_id - the id of the playlist
-
-        """
-        warnings.warn(
-            "You should use `current_user_follow_playlist(playlist_id)` instead",
-            DeprecationWarning,
-        )
-        return self.current_user_follow_playlist(playlist_id)
-
-    def user_playlist_is_following(
-        self, playlist_owner_id, playlist_id, user_ids
-    ):
-        """
-        Check to see if the given users are following the given playlist
-
-        Parameters:
-            - playlist_owner_id - the user id of the playlist owner
-            - playlist_id - the id of the playlist
-            - user_ids - the ids of the users that you want to check to see
-                if they follow the playlist. Maximum: 5 ids.
-
-        """
-        warnings.warn(
-            "You should use `playlist_is_following(playlist_id, user_ids)` instead",
-            DeprecationWarning,
-        )
-        return self.playlist_is_following(playlist_id, user_ids)
 
     def playlist_change_details(
         self,
