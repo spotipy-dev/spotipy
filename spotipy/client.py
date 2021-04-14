@@ -195,7 +195,6 @@ class Spotify:
             else:  # Use the Requests API module as a "session".
                 self._session = requests.api
 
-
     def __del__(self):
         """Make sure the connection (pool) gets closed"""
         try:
