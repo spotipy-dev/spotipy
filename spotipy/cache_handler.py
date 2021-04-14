@@ -3,6 +3,8 @@ __all__ = ['CacheHandler', 'CacheFileHandler', 'MemoryCacheHandler']
 import errno
 import json
 import logging
+import os
+from spotipy.util import CLIENT_CREDS_ENV_VARS
 
 logger = logging.getLogger(__name__)
 
@@ -53,6 +55,7 @@ class CacheFileHandler(CacheHandler):
             self.cache_path = cache_path
         else:
             cache_path = ".cache"
+            username = (username or os.getenv(CLIENT_CREDS_ENV_VARS["client_username"]))
             if username:
                 cache_path += "-" + str(username)
             self.cache_path = cache_path
