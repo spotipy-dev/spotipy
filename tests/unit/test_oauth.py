@@ -6,7 +6,7 @@ import unittest
 import six.moves.urllib.parse as urllibparse
 
 from spotipy import SpotifyOAuth, SpotifyImplicitGrant, SpotifyPKCE
-from spotipy.cache_handler import CacheHandler
+from spotipy.cache_handler import MemoryCacheHandler
 from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOauthError
 from spotipy.oauth2 import SpotifyStateError
 
@@ -49,18 +49,6 @@ def _make_implicitgrantauth(*args, **kwargs):
 
 def _make_pkceauth(*args, **kwargs):
     return SpotifyPKCE("CLID", "REDIR", "STATE", *args, **kwargs)
-
-
-class MemoryCache(CacheHandler):
-    def __init__(self, token_info=None):
-        self.token_info = token_info
-
-    def get_cached_token(self):
-        return self.token_info
-
-    def save_token_to_cache(self, token_info):
-        self.token_info = token_info
-        return None
 
 
 class OAuthCacheTest(unittest.TestCase):
@@ -161,7 +149,7 @@ class OAuthCacheTest(unittest.TestCase):
         scope = "playlist-modify-private"
         tok = _make_fake_token(1, 1, scope)
 
-        spot = _make_oauth(scope, cache_handler=MemoryCache())
+        spot = _make_oauth(scope, cache_handler=MemoryCacheHandler())
         spot.cache_handler.save_token_to_cache(tok)
         cached_tok = spot.cache_handler.get_cached_token()
 
