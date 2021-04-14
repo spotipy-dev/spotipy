@@ -5,7 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## Unreleased [3.0.0-alpha]
+
+While this is unreleased, please only add v3 features here. Rebasing master onto v3 doesn't require a changelog update.
+
+### Added
+
+* `Scope` - An enum which contains all of the authorization scopes (see [here](https://github.com/plamere/spotipy/issues/652#issuecomment-797461311)).
+
+### Changed
+
+* Made `CacheHandler` an abstract base class
+
+* Modified the return structure of the `audio_features` function (wrapping the [Get Audio Features for Several Tracks](https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-several-audio-features) API) to conform to the return structure of the similar methods listed below. The functions wrapping these APIs do not unwrap the single key JSON response, and this is currently the only function that does this.
+    * [Get Several Tracks](https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-several-tracks)
+    * [Get Multiple Artists](https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-multiple-artists)
+    * [Get Multiple Albums](https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-multiple-albums)
+
+## Unreleased [2.x.x]
 
 ### Added
 
@@ -92,7 +109,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - `SpotifyPKCE.parse_auth_response_url`, mirroring that method in
- `SpotifyOAuth`
+    `SpotifyOAuth`
 
 ### Changed
 
@@ -101,7 +118,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Using `SpotifyPKCE.get_authorization_url` will now generate a code
- challenge if needed
+    challenge if needed
 
 ## [2.14.0] - 2020-08-29
 
@@ -109,9 +126,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
  - (experimental) Support to search multiple/all markets at once.
  - Support to test whether the current user is following certain
- users or artists
+    users or artists
  - Proper replacements for all deprecated playlist endpoints
- (See https://developer.spotify.com/community/news/2018/06/12/changes-to-playlist-uris/ and below)
+    (See https://developer.spotify.com/community/news/2018/06/12/changes-to-playlist-uris/ and below)
 - Allow for OAuth 2.0 authorization by instructing the user to open the URL in a browser instead of opening the browser.
 - Reason for 403 error in SpotifyException
 - Support for the PKCE Auth Flow
@@ -129,15 +146,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `user_playlist_replace_tracks` in favor of `playlist_replace_items`
 - `user_playlist_reorder_tracks` in favor of `playlist_reorder_items`
 - `user_playlist_remove_all_occurrences_of_tracks` in favor of
- `playlist_remove_all_occurrences_of_items`
+    `playlist_remove_all_occurrences_of_items`
 - `user_playlist_remove_specific_occurrences_of_tracks` in favor of
- `playlist_remove_specific_occurrences_of_items`
+    `playlist_remove_specific_occurrences_of_items`
 - `user_playlist_follow_playlist` in favor of
- `current_user_follow_playlist`
+    `current_user_follow_playlist`
 - `user_playlist_is_following` in favor of `playlist_is_following`
 - `playlist_tracks` in favor of `playlist_items`
 
 ### Fixed
+
 - fixed issue where episode URIs were being converted to track URIs in playlist calls
 
 ## [2.13.0] - 2020-06-25
@@ -145,12 +163,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
  - Added `SpotifyImplicitGrant` as an auth manager option. It provides
- user authentication without a client secret but sacrifices the ability
-   to refresh the token without user input. (However, read the class
-   docstring for security advisory.)
+    user authentication without a client secret but sacrifices the ability
+    to refresh the token without user input. (However, read the class
+    docstring for security advisory.)
  - Added built-in verification of the `state` query parameter
  - Added two new attributes: error and error_description to `SpotifyOauthError` exception class to show
-   authorization/authentication web api errors details.
+    authorization/authentication web api errors details.
  - Added `SpotifyStateError` subclass of `SpotifyOauthError`
  - Allow extending `SpotifyClientCredentials` and `SpotifyOAuth`
  - Added the market paramter to `album_tracks`
@@ -174,10 +192,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
  - Updated the documentation to give more details on the authorization process and reflect
-   2020 Spotify Application jargon and practices.
+    2020 Spotify Application jargon and practices.
 
  - The local webserver is only started for localhost redirect_uri which specify a port,
-   i.e. it is started for `http://localhost:8080` or `http://127.0.0.1:8080`, not for `http://localhost`.
+    i.e. it is started for `http://localhost:8080` or `http://127.0.0.1:8080`, not for `http://localhost`.
 
 ### Fixed
 
@@ -246,6 +264,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
  - Optional `show_dialog` parameter to be passed to `SpotifyOAuth`
 
 ### Changed
+
   - Both `SpotifyClientCredentials` and `SpotifyOAuth` inherit from a common `SpotifyAuthBase` which handles common parameters and logics.
 
 ## [2.7.1] - 2020-01-20
@@ -289,16 +308,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.6.1] - 2020-01-13
 
 ### Fixed
+
  - Fixed inconsistent behaviour with some API methods when
-   a full HTTP URL is passed.
+    a full HTTP URL is passed.
  - Fixed invalid calls to logging warn method
 
 ### Removed
+
  - `mock` no longer needed for install. Only used in `tox`.
 
 ## [2.6.0] - 2020-01-12
 
 ### Added
+
  - Support for `playlist` to get a playlist without specifying a user
  - Support for `current_user_saved_albums_delete`
  - Support for `current_user_saved_albums_contains`
@@ -307,95 +329,126 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
  - Lint with flake8 using Github action
 
 ### Changed
+
  - Fix typos in doc
  - Start following [SemVer](https://semver.org) properly
 
 ## [2.5.0] - 2020-01-11
+
 Added follow and player endpoints
 
 ## [2.4.4] - 2017-01-04
+
 Python 3 fix
 
 ## [2.4.3] - 2017-01-02
+
 Fixed proxy issue in standard auth flow
 
 ## [2.4.2] - 2017-01-02
+
 Support getting audio features for a single track
 
 ## [2.4.1] - 2017-01-02
+
 Incorporated proxy support
 
 ## [2.4.0] - 2016-12-31
+
 Incorporated a number of PRs
 
 ## [2.3.8] - 2016-03-31
+
 Added recs, audio features, user top lists
 
 ## [2.3.7] - 2015-08-10
+
 Added current_user_followed_artists
 
 ## [2.3.6] - 2015-06-03
+
 Support for offset/limit with album_tracks API
 
 ## [2.3.5] - 2015-04-28
+
 Fixed bug in auto retry logic
 
 ## [2.3.3] - 2015-04-01
+
 Aadded client credential flow
 
 ## [2.3.2] - 2015-03-31
+
 Added auto retry logic
 
 ## [2.3.0] - 2015-01-05
+
 Added session support added by akx.
 
 ## [2.2.0] - 2014-11-15
+
 Added support for user_playlist_tracks
 
 ## [2.1.0] - 2014-10-25
+
 Added support for new_releases and featured_playlists
 
 ## [2.0.2] - 2014-08-25
+
 Moved to spotipy at pypi
 
 ## [1.2.0] - 2014-08-22
+
 Upgraded APIs and docs to make it be a real library
 
 ## [1.310.0] - 2014-08-20
+
 Added playlist replace and remove methods. Added auth tests. Improved API docs
 
 ## [1.301.0] - 2014-08-19
+
 Upgraded version number to take precedence over previously botched release (sigh)
 
 ## [1.50.0] - 2014-08-14
+
 Refactored util out of examples and into the main package
 
 ## [1.49.0] - 2014-07-23
+
 Support for "Your Music" tracks (add, delete, get), with examples
 
 ## [1.45.0] - 2014-07-07
+
 Support for related artists endpoint. Don't use cache auth codes when scope changes
 
 ## [1.44.0] - 2014-07-03
+
 Added show tracks.py example
 
 ## [1.43.0] - 2014-06-27
+
 Fixed JSON handling issue
 
 ## [1.42.0] - 2014-06-19
+
 Removed dependency on simplejson
 
 ## [1.40.0] - 2014-06-12
+
 Initial public release.
 
 ## [1.4.2] - 2014-06-21
+
 Added support for retrieving starred playlists
 
 ## [1.1.0] - 2014-06-17
+
 Updates to match released API
 
 ## [1.1.0] - 2014-05-18
+
 Repackaged for saner imports
 
 ## [1.0.0] - 2017-04-05
+
 Initial release
