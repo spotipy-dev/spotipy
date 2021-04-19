@@ -246,14 +246,7 @@ class Spotify(object):
             results = response.json()
         except requests.exceptions.HTTPError as http_error:
             response = http_error.response
-            try:
-                msg = response.json()["error"]["message"]
-            except (ValueError, KeyError):
-                msg = "error"
-            try:
-                reason = response.json()["error"]["reason"]
-            except (ValueError, KeyError):
-                reason = None
+            msg, reason = self._get_msg_and_reason_from_response(response)
 
             logger.error('HTTP Error for %s to %s returned %s due to %s',
                          method, url, response.status_code, msg)
@@ -283,6 +276,31 @@ class Spotify(object):
 
         logger.debug('RESULTS: %s', results)
         return results
+
+    def _get_msg_and_reason_from_response(self, response):
+        try:
+            response_json = response.json()
+        except json.decoder.JSONDecodeError:
+            msg, reason = self._get_msg_and_reason_from_response_raw(response.raw)
+        else:
+            msg, reason = self._get_msg_and_reason_from_response_json(response_json)
+        return msg, reason
+
+    def _get_msg_and_reason_from_response_json(self, response_json):
+        try:
+            msg = response_json["error"]["message"]
+        except (ValueError, KeyError):
+            msg = "error"
+        try:
+            reason = response_json["error"]["reason"]
+        except (ValueError, KeyError):
+            reason = None
+        return msg, reason
+
+    def _get_msg_and_reason_from_response_raw(self, response_raw):
+        msg = response_raw.msg if response_raw.msg else "error"
+        reason = response_raw.reason
+        return msg, reason
 
     def _get(self, url, args=None, payload=None, **kwargs):
         if args:
