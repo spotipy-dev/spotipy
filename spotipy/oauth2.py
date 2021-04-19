@@ -315,7 +315,6 @@ class SpotifyOAuth(SpotifyAuthBase):
         self.redirect_uri = redirect_uri
         self.state = state
         self.scope = self._normalize_scope(scope)
-        username = (username or os.getenv(CLIENT_CREDS_ENV_VARS["client_username"]))
         if username or cache_path:
             warnings.warn("Specifying cache_path or username as arguments to SpotifyOAuth " +
                           "will be deprecated. Instead, please create a CacheFileHandler " +
@@ -338,7 +337,7 @@ class SpotifyOAuth(SpotifyAuthBase):
                 + " != " + str(CacheHandler)
             self.cache_handler = cache_handler
         else:
-
+            username = (username or os.getenv(CLIENT_CREDS_ENV_VARS["client_username"]))
             self.cache_handler = CacheFileHandler(
                 username=username,
                 cache_path=cache_path
@@ -673,7 +672,6 @@ class SpotifyPKCE(SpotifyAuthBase):
         self.redirect_uri = redirect_uri
         self.state = state
         self.scope = self._normalize_scope(scope)
-        username = (username or os.getenv(CLIENT_CREDS_ENV_VARS["client_username"]))
         if username or cache_path:
             warnings.warn("Specifying cache_path or username as arguments to SpotifyPKCE " +
                           "will be deprecated. Instead, please create a CacheFileHandler " +
@@ -694,6 +692,7 @@ class SpotifyPKCE(SpotifyAuthBase):
                 "type(cache_handler): " + str(type(cache_handler)) + " != " + str(CacheHandler)
             self.cache_handler = cache_handler
         else:
+            username = (username or os.getenv(CLIENT_CREDS_ENV_VARS["client_username"]))
             self.cache_handler = CacheFileHandler(
                 username=username,
                 cache_path=cache_path
@@ -1071,7 +1070,6 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
         self.client_id = client_id
         self.redirect_uri = redirect_uri
         self.state = state
-        username = (username or os.getenv(CLIENT_CREDS_ENV_VARS["client_username"]))
         if username or cache_path:
             warnings.warn("Specifying cache_path or username as arguments to " +
                           "SpotifyImplicitGrant will be deprecated. Instead, please create " +
@@ -1093,6 +1091,7 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
                 "type(cache_handler): " + str(type(cache_handler)) + " != " + str(CacheHandler)
             self.cache_handler = cache_handler
         else:
+            username = (username or os.getenv(CLIENT_CREDS_ENV_VARS["client_username"]))
             self.cache_handler = CacheFileHandler(
                 username=username,
                 cache_path=cache_path
