@@ -439,13 +439,12 @@ class SpotifyOAuth(SpotifyAuthBase):
         self._open_auth_url()
         server.handle_request()
 
-        if self.state is not None and server.state != self.state:
-            raise SpotifyStateError(self.state, server.state)
-
-        if server.auth_code is not None:
-            return server.auth_code
-        elif server.error is not None:
+        if server.error is not None:
             raise server.error
+        elif self.state is not None and server.state != self.state:
+            raise SpotifyStateError(self.state, server.state)
+        elif server.auth_code is not None:
+            return server.auth_code
         else:
             raise SpotifyOauthError("Server listening on localhost has not been accessed")
 
