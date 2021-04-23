@@ -58,6 +58,10 @@ class SpotipyPlaylistApiTest(unittest.TestCase):
             cls.spotify.user_playlist_create(cls.username, cls.new_playlist_name)
         cls.new_playlist_uri = cls.new_playlist['uri']
 
+    @classmethod
+    def tearDownClass(cls):
+        cls.spotify.current_user_unfollow_playlist(cls.new_playlist['id'])
+
     def test_user_playlists(self):
         playlists = self.spotify.user_playlists(self.username, limit=5)
         self.assertTrue('items' in playlists)
