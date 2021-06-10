@@ -245,18 +245,21 @@ class Spotify(object):
             response.raise_for_status()
             results = response.json()
         except requests.exceptions.HTTPError as http_error:
-            response = http_error.response
             try:
-                msg = response.json()["error"]["message"]
-            except (ValueError, KeyError):
-                msg = "error"
-            try:
-                reason = response.json()["error"]["reason"]
-            except (ValueError, KeyError):
+                json_response = response.json()
+                error = json_response.get("error", {})
+                msg = error.get("message")
+                reason = error.get("reason")
+            except ValueError:
+                # if the response cannnot be decoded into JSON (which raises a ValueError),
+                # then try to decode it into text
+                msg = response.text
                 reason = None
 
-            logger.error('HTTP Error for %s to %s returned %s due to %s',
-                         method, url, response.status_code, msg)
+            logger.error(
+                'HTTP Error for %s to %s with Params: %s returned %s due to %s',
+                 method, url, args.get("params"), response.status_code, msg
+            )
 
             raise SpotifyException(
                 response.status_code,
