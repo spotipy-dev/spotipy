@@ -245,6 +245,7 @@ class Spotify(object):
             response.raise_for_status()
             results = response.json()
         except requests.exceptions.HTTPError as http_error:
+            response = http_error.response
             try:
                 json_response = response.json()
                 error = json_response.get("error", {})
@@ -260,7 +261,7 @@ class Spotify(object):
 
             logger.error(
                 'HTTP Error for %s to %s with Params: %s returned %s due to %s',
-                 method, url, args.get("params"), response.status_code, msg
+                method, url, args.get("params"), response.status_code, msg
             )
 
             raise SpotifyException(
