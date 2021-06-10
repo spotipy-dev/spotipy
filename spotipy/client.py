@@ -253,7 +253,9 @@ class Spotify(object):
             except ValueError:
                 # if the response cannnot be decoded into JSON (which raises a ValueError),
                 # then try to decode it into text
-                msg = response.text
+
+                # if we receive an empty string (which is falsy), then replace it with `None`
+                msg = response.text or None
                 reason = None
 
             logger.error(
