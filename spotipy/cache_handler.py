@@ -1,4 +1,4 @@
-__all__ = ['CacheHandler', 'CacheFileHandler', 'MemoryCacheHandler', 'DjangoSessionCacheHandler']
+__all__ = ['CacheHandler', 'CacheFileHandler', 'DjangoSessionCacheHandler', 'MemoryCacheHandler']
 
 import errno
 import json
@@ -110,9 +110,9 @@ class MemoryCacheHandler(CacheHandler):
 
 class DjangoSessionCacheHandler(CacheHandler):
     """
-    A cache handler that stores the token info in the session framework 
-    provided by Django. 
-    
+    A cache handler that stores the token info in the session framework
+    provided by Django.
+
     Read more at https://docs.djangoproject.com/en/3.2/topics/http/sessions/
     """
 
@@ -130,7 +130,7 @@ class DjangoSessionCacheHandler(CacheHandler):
             token_info = self.request.session['token_info']
         except KeyError:
             logger.debug("Token not found in the session")
-        
+
         return token_info
 
     def save_token_to_cache(self, token_info):
