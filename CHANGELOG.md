@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 * Added `MemoryCacheHandler`, a cache handler that simply stores the token info in memory as an instance attribute of this class.
+* Added `DjangoSessionCacheHandler`, a cache handler that stores the token in the session framework provided by Django. Web apps using spotipy with Django can directly use this for cache handling.
 
 ### Fixed
 
