@@ -11,8 +11,10 @@ __all__ = [
 import base64
 import logging
 import os
+import re
 import time
 import webbrowser
+from typing import Dict, Iterable, Optional, Tuple, Type, Union
 
 import requests
 # Workaround to support both python 2 & 3
@@ -22,10 +24,9 @@ from six.moves.BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 from six.moves.urllib_parse import parse_qsl, urlparse
 
 from spotipy.cache_handler import CacheFileHandler, CacheHandler
-from spotipy.util import CLIENT_CREDS_ENV_VARS, get_host_port
+from spotipy.json_types import TokenInfo
 from spotipy.scope import Scope
-from typing import Iterable
-import re
+from spotipy.util import CLIENT_CREDS_ENV_VARS, get_host_port
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +34,7 @@ logger = logging.getLogger(__name__)
 class SpotifyOauthError(Exception):
     """ Error during Auth Code or Implicit Grant flow """
 
-    def __init__(self, message, error=None, error_description=None, *args, **kwargs):
+    def __init__(self, message: str, error: Optional[str] = None, error_description: Optional[str] = None, *args, **kwargs):
         self.error = error
         self.error_description = error_description
         self.__dict__.update(kwargs)
@@ -43,8 +44,8 @@ class SpotifyOauthError(Exception):
 class SpotifyStateError(SpotifyOauthError):
     """ The state sent and state recieved were different """
 
-    def __init__(self, local_state=None, remote_state=None, message=None,
-                 error=None, error_description=None, *args, **kwargs):
+    def __init__(self, local_state: Optional[str] = None, remote_state: Optional[str] = None, message: Optional[str] = None,
+                 error: Optional[str] = None, error_description: Optional[str] = None, *args, **kwargs):
         if not message:
             message = ("Expected " + local_state + " but recieved "
                        + remote_state)
@@ -74,7 +75,7 @@ def _ensure_value(value, env_key):
 
 class SpotifyAuthBase(object):
 
-    def __init__(self, requests_session):
+    def __init__(self, requests_session: requests.Session):
         if isinstance(requests_session, requests.Session):
             self._session = requests_session
         else:
@@ -121,27 +122,27 @@ class SpotifyAuthBase(object):
         )
 
     @property
-    def client_id(self):
+    def client_id(self) -> str:
         return self._client_id
 
     @client_id.setter
-    def client_id(self, val):
+    def client_id(self, val: str):
         self._client_id = _ensure_value(val, "client_id")
 
     @property
-    def client_secret(self):
+    def client_secret(self) -> str:
         return self._client_secret
 
     @client_secret.setter
-    def client_secret(self, val):
+    def client_secret(self, val: str):
         self._client_secret = _ensure_value(val, "client_secret")
 
     @property
-    def redirect_uri(self):
+    def redirect_uri(self) -> str:
         return self._redirect_uri
 
     @redirect_uri.setter
-    def redirect_uri(self, val):
+    def redirect_uri(self, val: str):
         self._redirect_uri = _ensure_value(val, "redirect_uri")
 
     @staticmethod
@@ -152,7 +153,7 @@ class SpotifyAuthBase(object):
             return input(prompt)
 
     @staticmethod
-    def is_token_expired(token_info):
+    def is_token_expired(token_info: TokenInfo) -> bool:
         now = int(time.time())
         return token_info["expires_at"] - now < 60
 
@@ -175,12 +176,12 @@ class SpotifyClientCredentials(SpotifyAuthBase):
 
     def __init__(
         self,
-        client_id=None,
-        client_secret=None,
-        cache_handler=None,
-        proxies=None,
-        requests_session=True,
-        requests_timeout=None
+        client_id: Optional[str] = None,
+        client_secret: Optional[str] = None,
+        cache_handler: CacheHandler = None,
+        proxies: Optional[Dict[str, str]] = None,
+        requests_session: Union[requests.Session, bool] = True,
+        requests_timeout: Optional[int] = None
     ):
         """
         Creates a Client Credentials Flow Manager.
@@ -225,7 +226,7 @@ class SpotifyClientCredentials(SpotifyAuthBase):
         else:
             self.cache_handler = CacheFileHandler()
 
-    def get_access_token(self, check_cache=True):
+    def get_access_token(self, check_cache: bool = True) -> TokenInfo:
         """
         If a valid access token is in memory, returns it
         Else feches a new token and returns it
@@ -294,17 +295,17 @@ class SpotifyOAuth(SpotifyAuthBase):
 
     def __init__(
             self,
-            client_id=None,
-            client_secret=None,
-            redirect_uri=None,
-            state=None,
-            scope=None,
-            cache_handler=None,
-            proxies=None,
-            show_dialog=False,
-            requests_session=True,
-            requests_timeout=None,
-            open_browser=True
+            client_id: Optional[str] = None,
+            client_secret: Optional[str] = None,
+            redirect_uri: Optional[str] = None,
+            state: Optional[str] = None,
+            scope: Optional[Union[str, Iterable[Union[Scope, str]]]] = None,
+            cache_handler: Optional[CacheHandler] = None,
+            proxies: Optional[Dict[str, str]] = None,
+            show_dialog: bool = False,
+            requests_session: Union[requests.Session, bool] = True,
+            requests_timeout: Optional[int] = None,
+            open_browser: bool = True
     ):
         """
         Creates a SpotifyOAuth object
@@ -351,7 +352,7 @@ class SpotifyOAuth(SpotifyAuthBase):
         self.show_dialog = show_dialog
         self.open_browser = open_browser
 
-    def validate_token(self, token_info):
+    def validate_token(self, token_info: TokenInfo) -> Optional[TokenInfo]:
         if token_info is None:
             return None
 
@@ -368,7 +369,7 @@ class SpotifyOAuth(SpotifyAuthBase):
 
         return token_info
 
-    def get_authorize_url(self, state=None):
+    def get_authorize_url(self, state: Optional[str] = None) -> str:
         """ Gets the URL to use to authorize this app
         """
         payload = {
@@ -389,7 +390,7 @@ class SpotifyOAuth(SpotifyAuthBase):
 
         return "%s?%s" % (self.OAUTH_AUTHORIZE_URL, urlparams)
 
-    def parse_response_code(self, url):
+    def parse_response_code(self, url: str) -> str:
         """ Parse the response code in the given response url
 
             Parameters:
@@ -402,7 +403,7 @@ class SpotifyOAuth(SpotifyAuthBase):
             return code
 
     @staticmethod
-    def parse_auth_response_url(url):
+    def parse_auth_response_url(url: str) -> Tuple[Optional[str], ...]:
         query_s = urlparse(url).query
         form = dict(parse_qsl(query_s))
         if "error" in form:
@@ -453,7 +454,7 @@ class SpotifyOAuth(SpotifyAuthBase):
         else:
             raise SpotifyOauthError("Server listening on localhost has not been accessed")
 
-    def get_auth_response(self, open_browser=None):
+    def get_auth_response(self, open_browser: Optional[bool] = None) -> str:
         logger.info('User authentication requires interaction with your '
                     'web browser. Once you enter your credentials and '
                     'give authorization, you will be redirected to '
@@ -484,12 +485,12 @@ class SpotifyOAuth(SpotifyAuthBase):
 
         return self._get_auth_response_interactive(open_browser=open_browser)
 
-    def get_authorization_code(self, response=None):
+    def get_authorization_code(self, response: Optional[str] = None) -> str:
         if response:
             return self.parse_response_code(response)
         return self.get_auth_response()
 
-    def get_access_token(self, code=None, check_cache=True):
+    def get_access_token(self, code: Optional[str] = None, check_cache: bool = True) -> str:
         """ Gets the access token for the app given the code
 
             Parameters:
@@ -543,7 +544,7 @@ class SpotifyOAuth(SpotifyAuthBase):
         self.cache_handler.save_token_to_cache(token_info)
         return token_info["access_token"]
 
-    def refresh_access_token(self, refresh_token):
+    def refresh_access_token(self, refresh_token: str) -> TokenInfo:
         payload = {
             "refresh_token": refresh_token,
             "grant_type": "refresh_token",
@@ -606,15 +607,15 @@ class SpotifyPKCE(SpotifyAuthBase):
 
     def __init__(
         self,
-        client_id=None,
-        redirect_uri=None,
-        state=None,
-        scope=None,
-        cache_handler=None,
-        proxies=None,
-        requests_timeout=None,
-        requests_session=True,
-        open_browser=True
+        client_id: Optional[str] = None,
+        redirect_uri: Optional[str] = None,
+        state: Optional[str] = None,
+        scope: Optional[Union[str, Iterable[Union[Scope, str]]]] = None,
+        cache_handler: Optional[CacheHandler] = None,
+        proxies: Optional[Dict[str, str]] = None,
+        requests_timeout: Optional[int] = None,
+        requests_session: Union[requests.Session, bool] = True,
+        open_browser: bool = True
     ):
         """
         Creates Auth Manager with the PKCE Auth flow.
@@ -693,7 +694,7 @@ class SpotifyPKCE(SpotifyAuthBase):
         code_challenge = base64.urlsafe_b64encode(code_challenge_digest).decode('utf-8')
         return code_challenge.replace('=', '')
 
-    def get_authorize_url(self, state=None):
+    def get_authorize_url(self, state: Optional[str] = None) -> str:
         """ Gets the URL to use to authorize this app """
         if not self.code_challenge:
             self.get_pkce_handshake_parameters()
@@ -782,12 +783,12 @@ class SpotifyPKCE(SpotifyAuthBase):
             raise SpotifyStateError(self.state, state)
         return code
 
-    def get_authorization_code(self, response=None):
+    def get_authorization_code(self, response: str = None) -> str:
         if response:
             return self.parse_response_code(response)
         return self._get_auth_response()
 
-    def validate_token(self, token_info):
+    def validate_token(self, token_info: TokenInfo) -> Optional[TokenInfo]:
         if token_info is None:
             return None
 
@@ -812,11 +813,11 @@ class SpotifyPKCE(SpotifyAuthBase):
         token_info["expires_at"] = int(time.time()) + token_info["expires_in"]
         return token_info
 
-    def get_pkce_handshake_parameters(self):
+    def get_pkce_handshake_parameters(self) -> None:
         self.code_verifier = self._get_code_verifier()
         self.code_challenge = self._get_code_challenge()
 
-    def get_access_token(self, code=None, check_cache=True):
+    def get_access_token(self, code: Optional[str] = None, check_cache: bool = True):
         """ Gets the access token for the app
 
             If the code is not given and no cached token is used, an
@@ -877,7 +878,7 @@ class SpotifyPKCE(SpotifyAuthBase):
         self.cache_handler.save_token_to_cache(token_info)
         return token_info["access_token"]
 
-    def refresh_access_token(self, refresh_token):
+    def refresh_access_token(self, refresh_token: str) -> TokenInfo:
         payload = {
             "refresh_token": refresh_token,
             "grant_type": "refresh_token",
@@ -914,7 +915,7 @@ class SpotifyPKCE(SpotifyAuthBase):
         self.cache_handler.save_token_to_cache(token_info)
         return token_info
 
-    def parse_response_code(self, url):
+    def parse_response_code(self, url: str) -> str:
         """ Parse the response code in the given response url
 
             Parameters:
@@ -927,7 +928,7 @@ class SpotifyPKCE(SpotifyAuthBase):
             return code
 
     @staticmethod
-    def parse_auth_response_url(url):
+    def parse_auth_response_url(url: str) -> Tuple[Optional[str], ...]:
         return SpotifyOAuth.parse_auth_response_url(url)
 
 
@@ -974,7 +975,7 @@ window.close()
         return
 
 
-def start_local_http_server(port, handler=RequestHandler):
+def start_local_http_server(port: int, handler: Type[BaseHTTPRequestHandler] = RequestHandler) -> HTTPServer:
     server = HTTPServer(("127.0.0.1", port), handler)
     server.allow_reuse_address = True
     server.auth_code = None

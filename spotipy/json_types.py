@@ -9,7 +9,7 @@ else:
 _T = TypeVar("_T", covariant=True)
 
 
-Token = TypedDict("Token", {
+TokenInfo = TypedDict("Token", {
     "access_token": str,
     "token_type": str,
     "scope": str,

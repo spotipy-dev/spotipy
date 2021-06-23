@@ -9,7 +9,7 @@ import os
 from abc import ABC, abstractmethod
 from typing import Optional
 
-from spotipy.json_types import Token
+from spotipy.json_types import TokenInfo
 from spotipy.util import CLIENT_CREDS_ENV_VARS
 
 logger = logging.getLogger(__name__)
@@ -26,13 +26,13 @@ class CacheHandler(ABC):
     """
 
     @abstractmethod
-    def get_cached_token(self) -> Optional[Token]:
+    def get_cached_token(self) -> Optional[TokenInfo]:
         """
         Get and return a token_info dictionary object.
         """
 
     @abstractmethod
-    def save_token_to_cache(self, token_info: Token):
+    def save_token_to_cache(self, token_info: TokenInfo):
         """
         Save a token_info dictionary object to the cache and return None.
         """
@@ -64,7 +64,7 @@ class CacheFileHandler(CacheHandler):
                 cache_path += "-" + str(username)
             self.cache_path = cache_path
 
-    def get_cached_token(self) -> Optional[Token]:
+    def get_cached_token(self) -> Optional[TokenInfo]:
         token_info = None
 
         try:
@@ -81,7 +81,7 @@ class CacheFileHandler(CacheHandler):
 
         return token_info
 
-    def save_token_to_cache(self, token_info: Token):
+    def save_token_to_cache(self, token_info: TokenInfo):
         try:
             f = open(self.cache_path, "w")
             f.write(json.dumps(token_info))
@@ -98,15 +98,15 @@ class MemoryCacheHandler(CacheHandler):
     instance is freed.
     """
 
-    def __init__(self, token_info: Optional[Token] = None):
+    def __init__(self, token_info: Optional[TokenInfo] = None):
         """
         Parameters:
             * token_info: The token info to store in memory. Can be None.
         """
         self.token_info = token_info
 
-    def get_cached_token(self) -> Optional[Token]:
+    def get_cached_token(self) -> Optional[TokenInfo]:
         return self.token_info
 
-    def save_token_to_cache(self, token_info: Token):
+    def save_token_to_cache(self, token_info: TokenInfo):
         self.token_info = token_info
