@@ -34,7 +34,8 @@ logger = logging.getLogger(__name__)
 class SpotifyOauthError(Exception):
     """ Error during Auth Code or Implicit Grant flow """
 
-    def __init__(self, message: str, error: Optional[str] = None, error_description: Optional[str] = None, *args, **kwargs):
+    def __init__(self, message: str, error: Optional[str] = None,
+                 error_description: Optional[str] = None, *args, **kwargs):
         self.error = error
         self.error_description = error_description
         self.__dict__.update(kwargs)
@@ -44,8 +45,9 @@ class SpotifyOauthError(Exception):
 class SpotifyStateError(SpotifyOauthError):
     """ The state sent and state recieved were different """
 
-    def __init__(self, local_state: Optional[str] = None, remote_state: Optional[str] = None, message: Optional[str] = None,
-                 error: Optional[str] = None, error_description: Optional[str] = None, *args, **kwargs):
+    def __init__(self, local_state: Optional[str] = None, remote_state: Optional[str] = None,
+                 message: Optional[str] = None, error: Optional[str] = None,
+                 error_description: Optional[str] = None, *args, **kwargs):
         if not message:
             message = ("Expected " + local_state + " but recieved "
                        + remote_state)
@@ -975,7 +977,8 @@ window.close()
         return
 
 
-def start_local_http_server(port: int, handler: Type[BaseHTTPRequestHandler] = RequestHandler) -> HTTPServer:
+def start_local_http_server(
+        port: int, handler: Type[BaseHTTPRequestHandler] = RequestHandler) -> HTTPServer:
     server = HTTPServer(("127.0.0.1", port), handler)
     server.allow_reuse_address = True
     server.auth_code = None

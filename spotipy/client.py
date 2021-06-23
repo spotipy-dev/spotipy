@@ -376,7 +376,8 @@ class Spotify(object):
         return self._get("artists/?ids=" + ",".join(tlist))
 
     def artist_albums(
-        self, artist_id: str, album_type: Optional[str] = None, country: Optional[str] = None, limit: int = 20, offset: int = 0
+        self, artist_id: str, album_type: Optional[str] = None, country: Optional[str] = None,
+        limit: int = 20, offset: int = 0
     ) -> Page[SimplifiedAlbum]:
         """ Get Spotify catalog information about an artist's albums
 
@@ -431,7 +432,8 @@ class Spotify(object):
         return self._get("albums/" + trid)
 
     # TODO: the documentation is not clear about the return type
-    def album_tracks(self, album_id: str, limit: int = 50, offset: int = 0, market: Optional[str] = None):
+    def album_tracks(self, album_id: str, limit: int = 50,
+                     offset: int = 0, market: Optional[str] = None):
         """ Get Spotify catalog information about an album's tracks
 
             Parameters:
@@ -487,7 +489,8 @@ class Spotify(object):
         tlist = [self._get_id("show", s) for s in shows]
         return self._get("shows/?ids=" + ",".join(tlist), market=market)
 
-    def show_episodes(self, show_id: str, limit: int = 50, offset: int = 0, market: Optional[str] = None) -> Page[SimplifiedEpisode]:
+    def show_episodes(self, show_id: str, limit: int = 50, offset: int = 0,
+                      market: Optional[str] = None) -> Page[SimplifiedEpisode]:
         """ Get Spotify catalog information about a show's episodes
 
             Parameters:
@@ -536,7 +539,8 @@ class Spotify(object):
         tlist = [self._get_id("episode", e) for e in episodes]
         return self._get("episodes/?ids=" + ",".join(tlist), market=market)
 
-    def search(self, q: str, limit: int = 10, offset: int = 0, type: str = "track", market: Optional[str] = None) -> SearchResponse:
+    def search(self, q: str, limit: int = 10, offset: int = 0, type: str = "track",
+               market: Optional[str] = None) -> SearchResponse:
         """ searches for an item
 
             Parameters:
@@ -555,7 +559,8 @@ class Spotify(object):
             "search", q=q, limit=limit, offset=offset, type=type, market=market
         )
 
-    def search_markets(self, q: str, limit: int = 10, offset: int = 0, type: str = "track", markets: Optional[List[str]] = None, total: Optional[int] = None):
+    def search_markets(self, q: str, limit: int = 10, offset: int = 0, type: str = "track",
+                       markets: Optional[List[str]] = None, total: Optional[int] = None):
         """ (experimental) Searches multiple markets for an item
 
             Parameters:
@@ -603,7 +608,8 @@ class Spotify(object):
         """
         return self._get("me/playlists", limit=limit, offset=offset)
 
-    def playlist(self, playlist_id: str, fields: Optional[str] = None, market: Optional[str] = None, additional_types: Iterable[str] = ("track",)) -> Playlist:
+    def playlist(self, playlist_id: str, fields: Optional[str] = None, market: Optional[str]
+                 = None, additional_types: Iterable[str] = ("track",)) -> Playlist:
         """ Gets playlist by id.
 
             Parameters:
@@ -723,7 +729,8 @@ class Spotify(object):
             "users/%s/playlists" % user, limit=limit, offset=offset
         )
 
-    def user_playlist_create(self, user: str, name: str, public: bool = True, collaborative: bool = False, description: str = "") -> Playlist:
+    def user_playlist_create(self, user: str, name: str, public: bool = True,
+                             collaborative: bool = False, description: str = "") -> Playlist:
         """ Creates a playlist for a user
 
             Parameters:
@@ -945,7 +952,8 @@ class Spotify(object):
         """
         return self._get("me/player/currently-playing")
 
-    def current_user_saved_albums(self, limit: int = 20, offset: int = 0, market: Optional[str] = None) -> Page[SavedAlbum]:
+    def current_user_saved_albums(self, limit: int = 20, offset: int = 0,
+                                  market: Optional[str] = None) -> Page[SavedAlbum]:
         """ Gets a list of the albums saved in the current authorized user's
             "Your Music" library
 
@@ -987,7 +995,8 @@ class Spotify(object):
         alist = [self._get_id("album", a) for a in albums]
         return self._get("me/albums/contains?ids=" + ",".join(alist))
 
-    def current_user_saved_tracks(self, limit: int = 20, offset: int = 0, market: Optional[str] = None) -> Page[SavedTrack]:
+    def current_user_saved_tracks(self, limit: int = 20, offset: int = 0,
+                                  market: Optional[str] = None) -> Page[SavedTrack]:
         """ Gets a list of the tracks saved in the current authorized user's
             "Your Music" library
 
@@ -1034,7 +1043,8 @@ class Spotify(object):
             tlist = [self._get_id("track", t) for t in tracks]
         return self._get("me/tracks/contains?ids=" + ",".join(tlist))
 
-    def current_user_saved_episodes(self, limit: int = 20, offset: int = 0, market: Optional[str] = None) -> Page[SavedEpisode]:
+    def current_user_saved_episodes(self, limit: int = 20, offset: int = 0,
+                                    market: Optional[str] = None) -> Page[SavedEpisode]:
         """ Gets a list of the episodes saved in the current authorized user's
             "Your Music" library
 
@@ -1070,7 +1080,8 @@ class Spotify(object):
             elist = [self._get_id("episode", e) for e in episodes]
         return self._delete("me/episodes/?ids=" + ",".join(elist))
 
-    def current_user_saved_episodes_contains(self, episodes: Optional[List[str]] = None) -> List[bool]:
+    def current_user_saved_episodes_contains(
+            self, episodes: Optional[List[str]] = None) -> List[bool]:
         """ Check if one or more episodes is already saved in
             the current Spotify user’s “Your Music” library.
 
@@ -1082,7 +1093,8 @@ class Spotify(object):
             elist = [self._get_id("episode", e) for e in episodes]
         return self._get("me/episodes/contains?ids=" + ",".join(elist))
 
-    def current_user_saved_shows(self, limit: int = 20, offset: int = 0, market: Optional[str] = None) -> Page[SavedShow]:
+    def current_user_saved_shows(self, limit: int = 20, offset: int = 0,
+                                 market: Optional[str] = None) -> Page[SavedShow]:
         """ Gets a list of the shows saved in the current authorized user's
             "Your Music" library
 
@@ -1124,7 +1136,8 @@ class Spotify(object):
         slist = [self._get_id("show", s) for s in shows]
         return self._get("me/shows/contains?ids=" + ",".join(slist))
 
-    def current_user_followed_artists(self, limit: int = 20, after: Optional[str] = None) -> FollowedArtistsResponse:
+    def current_user_followed_artists(self, limit: int = 20,
+                                      after: Optional[str] = None) -> FollowedArtistsResponse:
         """ Gets a list of the artists followed by the current authorized user
 
             Parameters:
@@ -1197,7 +1210,9 @@ class Spotify(object):
             "me/top/tracks", time_range=time_range, limit=limit, offset=offset
         )
 
-    def current_user_recently_played(self, limit: int = 50, after: Optional[int] = None, before: Optional[int] = None) -> CursorPage[PlayHistory]:
+    def current_user_recently_played(
+            self, limit: int = 50, after: Optional[int] = None, before: Optional[int] = None
+    ) -> CursorPage[PlayHistory]:
         """ Get the current user's recently played tracks
 
             Parameters:
@@ -1245,7 +1260,8 @@ class Spotify(object):
         return self._delete("me/following?type=user&ids=" + ",".join(ids))
 
     def featured_playlists(
-        self, locale: Optional[str] = None, country: Optional[str] = None, timestamp: Optional[str] = None, limit: int = 20, offset: int = 0
+        self, locale: Optional[str] = None, country: Optional[str] = None,
+        timestamp: Optional[str] = None, limit: int = 20, offset: int = 0
     ) -> FeaturedPlaylistsResponse:
         """ Get a list of Spotify featured playlists
 
@@ -1277,7 +1293,8 @@ class Spotify(object):
             offset=offset,
         )
 
-    def new_releases(self, country: Optional[str] = None, limit: int = 20, offset: int = 0) -> NewReleasesResponse:
+    def new_releases(self, country: Optional[str] = None,
+                     limit: int = 20, offset: int = 0) -> NewReleasesResponse:
         """ Get a list of new album releases featured in Spotify
 
             Parameters:
@@ -1294,7 +1311,8 @@ class Spotify(object):
             "browse/new-releases", country=country, limit=limit, offset=offset
         )
 
-    def category(self, category_id: str, country: Optional[str] = None, locale: Optional[str] = None) -> Category:
+    def category(self, category_id: str,
+                 country: Optional[str] = None, locale: Optional[str] = None) -> Category:
         """ Get info about a category
 
             Parameters:
@@ -1311,7 +1329,8 @@ class Spotify(object):
             locale=locale,
         )
 
-    def categories(self, country: Optional[str] = None, locale: Optional[str] = None, limit: int = 20, offset: int = 0) -> Page[Category]:
+    def categories(self, country: Optional[str] = None, locale: Optional[str]
+                   = None, limit: int = 20, offset: int = 0) -> Page[Category]:
         """ Get a list of categories
 
             Parameters:
@@ -1336,7 +1355,8 @@ class Spotify(object):
         )
 
     def category_playlists(
-        self, category_id: Optional[str] = None, country: Optional[str] = None, limit: int = 20, offset: int = 0
+        self, category_id: Optional[str] = None, country: Optional[str] = None, limit: int = 20,
+        offset: int = 0
     ) -> Page[SimplifiedPlaylist]:
         """ Get a list of playlists for a specific Spotify category
 
@@ -1456,7 +1476,8 @@ class Spotify(object):
         """
         return self._get("me/player/devices")
 
-    def current_playback(self, market: Optional[str] = None, additional_types: Optional[str] = None) -> Any:
+    def current_playback(self, market: Optional[str] = None,
+                         additional_types: Optional[str] = None) -> Any:
         """ Get information about user's current playback.
 
             Parameters:
@@ -1465,7 +1486,9 @@ class Spotify(object):
         """
         return self._get("me/player", market=market, additional_types=additional_types)
 
-    def currently_playing(self, market: Optional[str] = None, additional_types: Optional[str] = None) -> CurrentlyPlayingContext:
+    def currently_playing(
+            self, market: Optional[str] = None, additional_types: Optional[str] = None
+    ) -> CurrentlyPlayingContext:
         """ Get user's currently playing track.
 
             Parameters:
@@ -1489,7 +1512,9 @@ class Spotify(object):
         return self._put("me/player", payload=data)
 
     def start_playback(
-        self, device_id: Optional[str] = None, context_uri: Optional[str] = None, uris: Optional[List[str]] = None, offset: Optional[int] = None, position_ms: Optional[int] = None
+        self, device_id: Optional[str] = None, context_uri: Optional[str] = None,
+        uris: Optional[List[str]] = None, offset: Optional[int] = None,
+        position_ms: Optional[int] = None
     ) -> None:
         """ Start or resume user's playback.
 

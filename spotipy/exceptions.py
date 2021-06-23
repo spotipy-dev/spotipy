@@ -3,7 +3,8 @@ from typing import Dict, Optional
 
 class SpotifyException(Exception):
 
-    def __init__(self, http_status: int, code: int, msg: str, reason: Optional[str] = None, headers: Optional[Dict[str, str]] = None):
+    def __init__(self, http_status: int, code: int, msg: str,
+                 reason: Optional[str] = None, headers: Optional[Dict[str, str]] = None):
         self.http_status = http_status
         self.code = code
         self.msg = msg
