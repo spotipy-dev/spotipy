@@ -226,7 +226,7 @@ class SpotifyClientCredentials(SpotifyAuthBase):
         else:
             self.cache_handler = CacheFileHandler()
 
-    def get_access_token(self, check_cache: bool = True) -> TokenInfo:
+    def get_access_token(self, check_cache: bool = True) -> str:
         """
         If a valid access token is in memory, returns it
         Else feches a new token and returns it
@@ -352,7 +352,7 @@ class SpotifyOAuth(SpotifyAuthBase):
         self.show_dialog = show_dialog
         self.open_browser = open_browser
 
-    def validate_token(self, token_info: TokenInfo) -> Optional[TokenInfo]:
+    def validate_token(self, token_info: Optional[TokenInfo]) -> Optional[TokenInfo]:
         if token_info is None:
             return None
 
