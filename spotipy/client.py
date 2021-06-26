@@ -1182,7 +1182,7 @@ class Spotify(object):
             "Your Music" library
 
             Parameters:
-                - limit - the number of albums to return
+                - limit - the number of albums to return (MAX_LIMIT=50)
                 - offset - the index of the first album to return
                 - market - an ISO 3166-1 alpha-2 country code.
 
