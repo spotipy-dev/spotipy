@@ -32,5 +32,5 @@ setup(
     ],
     tests_require=test_reqs,
     extras_require=extra_reqs,
-    license='LICENSE.md',
+    license='LICENSE',
     packages=['spotipy'])
