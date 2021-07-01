@@ -23,8 +23,7 @@ import six.moves.urllib.parse as urllibparse
 from six.moves.BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 from six.moves.urllib_parse import parse_qsl, urlparse
 
-from spotipy.cache_handler import CacheFileHandler, CacheHandler
-from spotipy.json_types import TokenInfo
+from spotipy.cache_handler import CacheFileHandler, CacheHandler, TokenInfo
 from spotipy.scope import Scope
 from spotipy.util import CLIENT_CREDS_ENV_VARS, get_host_port
 
@@ -819,7 +818,7 @@ class SpotifyPKCE(SpotifyAuthBase):
         self.code_verifier = self._get_code_verifier()
         self.code_challenge = self._get_code_challenge()
 
-    def get_access_token(self, code: Optional[str] = None, check_cache: bool = True):
+    def get_access_token(self, code: Optional[str] = None, check_cache: bool = True) -> str:
         """ Gets the access token for the app
 
             If the code is not given and no cached token is used, an

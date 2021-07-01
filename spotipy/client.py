@@ -34,9 +34,9 @@ class Spotify(object):
             user = sp.user('plamere')
             print(user)
     """
-    max_retries = 3
-    default_retry_codes = (429, 500, 502, 503, 504)
-    country_codes = [
+    max_retries: int = 3
+    default_retry_codes: Iterable[int] = (429, 500, 502, 503, 504)
+    country_codes: Iterable[str] = [
         "AD",
         "AR",
         "AU",

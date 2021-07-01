@@ -1,18 +1,32 @@
 # -*- coding: utf-8 -*-
 
-__all__ = ['CacheHandler', 'CacheFileHandler', 'MemoryCacheHandler']
+__all__ = ['CacheHandler', 'CacheFileHandler', 'MemoryCacheHandler', 'TokenInfo']
 
 import errno
 import json
 import logging
 import os
+import sys
 from abc import ABC, abstractmethod
 from typing import Optional
 
-from spotipy.json_types import TokenInfo
+if sys.version_info >= (3, 8):
+    from typing import TypedDict
+else:
+    from typing_extensions import TypedDict
+
 from spotipy.util import CLIENT_CREDS_ENV_VARS
 
 logger = logging.getLogger(__name__)
+
+TokenInfo = TypedDict("TokenInfo", {
+    "access_token": str,
+    "token_type": str,
+    "scope": str,
+    "expires_in": int,
+    "refresh_token": str,
+    "expires_at": int
+})
 
 
 class CacheHandler(ABC):
@@ -32,7 +46,7 @@ class CacheHandler(ABC):
         """
 
     @abstractmethod
-    def save_token_to_cache(self, token_info: TokenInfo):
+    def save_token_to_cache(self, token_info: TokenInfo) -> None:
         """
         Save a token_info dictionary object to the cache and return None.
         """
@@ -81,7 +95,7 @@ class CacheFileHandler(CacheHandler):
 
         return token_info
 
-    def save_token_to_cache(self, token_info: TokenInfo):
+    def save_token_to_cache(self, token_info: TokenInfo) -> None:
         try:
             f = open(self.cache_path, "w")
             f.write(json.dumps(token_info))
@@ -108,5 +122,5 @@ class MemoryCacheHandler(CacheHandler):
     def get_cached_token(self) -> Optional[TokenInfo]:
         return self.token_info
 
-    def save_token_to_cache(self, token_info: TokenInfo):
+    def save_token_to_cache(self, token_info: TokenInfo) -> None:
         self.token_info = token_info
