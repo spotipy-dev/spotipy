@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+// Add your changes here and then delete this line
+
+## [2.19.0] - 2021-08-12
+
 ### Added
 
 * Added `MemoryCacheHandler`, a cache handler that simply stores the token info in memory as an instance attribute of this class.
@@ -17,7 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Fixed a bug in `CacheFileHandler.__init__`: The documentation says that the username will be retrieved from the environment, but it wasn't.
 * Fixed a bug in the initializers for the auth managers that produced a spurious warning message if you provide a cache handler and you set a value for the "SPOTIPY_CLIENT_USERNAME" environment variable.
-* Use generated MIT license
+* Use generated MIT license and fix license type in `pip show`
 
 ## [2.18.0] - 2021-04-13
 

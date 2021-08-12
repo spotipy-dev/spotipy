@@ -18,7 +18,7 @@ extra_reqs = {
 
 setup(
     name='spotipy',
-    version='2.18.0',
+    version='2.19.0',
     description='A light weight Python library for the Spotify Web API',
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -32,5 +32,5 @@ setup(
     ],
     tests_require=test_reqs,
     extras_require=extra_reqs,
-    license='LICENSE',
+    license='MIT',
     packages=['spotipy'])
