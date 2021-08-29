@@ -13,7 +13,7 @@ import six
 import urllib3
 
 from spotipy.exceptions import SpotifyException
-from spotpy.objects import User, Artist, Album, Track
+from spotipy.objects import User, Artist, Album, Track
 
 logger = logging.getLogger(__name__)
 
