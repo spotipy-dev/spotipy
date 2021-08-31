@@ -13,6 +13,7 @@ import six
 import urllib3
 
 from spotipy.exceptions import SpotifyException
+from spotipy.objects import User, Artist, Album, Track
 
 logger = logging.getLogger(__name__)
 
@@ -553,6 +554,63 @@ class Spotify(object):
         return self._get(
             "search", q=q, limit=limit, offset=offset, type=type, market=market
         )
+
+    def search_artists(self, q, limit=10, offset=0, market=None):
+        """ searches for an artist
+
+            Parameters:
+                - q - the search query (see how to write a query in the
+                      official documentation https://developer.spotify.com/documentation/web-api/reference/search/)  # noqa
+                - limit - the number of items to return (min = 1, default = 10, max = 50). The limit is applied
+                          within each type, not on the total response.
+                - offset - the index of the first item to return
+
+                - market - An ISO 3166-1 alpha-2 country code or the string
+                           from_token.
+        """
+        results = self._get(
+            "search", q=q, limit=limit, offset=offset, type="artist", market=market
+        )['artists']['items']
+        for item in results:
+            yield Artist(self, item)
+
+    def search_albums(self, q, limit=10, offset=0, market=None):
+        """ searches for an album
+
+            Parameters:
+                - q - the search query (see how to write a query in the
+                      official documentation https://developer.spotify.com/documentation/web-api/reference/search/)  # noqa
+                - limit - the number of items to return (min = 1, default = 10, max = 50). The limit is applied
+                          within each type, not on the total response.
+                - offset - the index of the first item to return
+
+                - market - An ISO 3166-1 alpha-2 country code or the string
+                           from_token.
+        """
+        results = self._get(
+            "search", q=q, limit=limit, offset=offset, type="album", market=market
+        )['albums']['items']
+        for item in results:
+            yield Album(self, item)
+
+    def search_tracks(self, q, limit=10, offset=0, market=None):
+        """ searches for an artist
+
+            Parameters:
+                - q - the search query (see how to write a query in the
+                      official documentation https://developer.spotify.com/documentation/web-api/reference/search/)  # noqa
+                - limit - the number of items to return (min = 1, default = 10, max = 50). The limit is applied
+                          within each type, not on the total response.
+                - offset - the index of the first item to return
+
+                - market - An ISO 3166-1 alpha-2 country code or the string
+                           from_token.
+        """
+        results = self._get(
+            "search", q=q, limit=limit, offset=offset, type="track", market=market
+        )['tracks']['items']
+        for item in results:
+            yield Track(self, item)
 
     def search_markets(self, q, limit=10, offset=0, type="track", markets=None, total=None):
         """ (experimental) Searches multiple markets for an item
@@ -1164,7 +1222,7 @@ class Spotify(object):
         """ Get detailed profile information about the current user.
             An alias for the 'current_user' method.
         """
-        return self._get("me/")
+        return User(self, self._get("me/"))
 
     def current_user(self):
         """ Get detailed profile information about the current user.
