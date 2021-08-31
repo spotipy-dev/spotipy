@@ -2,12 +2,27 @@ class FreshObject:
     """Base Object for Spotipy Objects
     All spotify objects will inherit this
 
+    Parameters
+    ----------
+    client : spotipy.Spotify
+        client used for the api
+
+    Attributes
+    ----------
+    client : spotipy.Spotify
+        client used for the api
+
     """
 
-    def __init__(self, client):
+    def __init__(self, client) -> None:
         self.client = client
 
     def __str__(self) -> str:
+        """
+        Returns
+        -------
+        self.name : str
+        """
         try:
             return self.name
         except Exception as e:
@@ -28,14 +43,14 @@ class FreshObject:
             raise e
 
     def __eq__(self, other) -> bool:
-        """Checks if the artists are the same"""
+        """Checks if the objects are the same"""
         try:
             return self.id == other.id if (other.type == other.type) else False
         except Exception as e:
             raise e
 
     def __ne__(self, other) -> bool:
-        """Checks if they're NOT the same artist"""
+        """Checks if they're NOT the same object"""
         try:
             return not self.__eq__(other)
         except Exception as e:
@@ -75,7 +90,7 @@ class User(FreshObject):
     """
     def __init__(self, client, user):
         """Inits User"""
-        self.client = client
+        super().__init__(client)
         self.name = user['display_name']
         self.id = user['id']
         self.uri = user['uri']
@@ -128,9 +143,9 @@ class Artist(FreshObject):
             type of object (should always be 'artist')
 
     """
-    def __init__(self, client, artist: dict):
+    def __init__(self, client, artist: dict) -> None:
         """Inits Artist"""
-        self.client = client
+        super().__init__(client)
         self.name = artist['name']
         self.id = artist['id']
         self.uri = artist['uri']
@@ -144,14 +159,12 @@ class Artist(FreshObject):
             images.append(image['url'])
         self.images = images
         self.type = artist['type'] # should always be 'artist'
-        super().__init__(client)
 
     # add some methods like artist_albums()
 
 
 class Album(FreshObject):
     """Album class object
-    Turns album json data into an object Album
 
     Parameters
     ----------
@@ -188,9 +201,9 @@ class Album(FreshObject):
             type of object (should always be 'artist')
 
     """
-    def __init__(self, client, album):
+    def __init__(self, client, album: dict) -> None:
         """Inits Album"""
-        self.client = client
+        super().__init__(client)
         self.name = album['name']
         self.id = album['id']
         self.uri = album['uri']
@@ -213,13 +226,67 @@ class Album(FreshObject):
             images.append(image['url'])
         self.images = images
         self.type = album['type'] # should always be 'album'
-        super().__init__(client)
 
-    def __len__(self):
+        # data given if requested specifically
+        self.label = album.get('label')
+        self.genres = album.get('genres')
+        self.copyrights = album.get('copyrights')
+        self.external_ids = album.get('external_ids')
+        tracks = []
+        if album.get('tracks') is not None:
+            for track in album['tracks'].get('items'):
+                tracks.append(Track(track))
+        self.tracks = tracks
+
+    def __len__(self) -> int:
+        """
+        Returns
+        -------
+        self.total_tracks : int
+        """
         return self.total_tracks
 
     # add some methods like get_artists() and get_tracks()
 
+    def get_tracks(self) -> Track:
+        """
+        Yields
+        ------
+        track : Track
+        """
+        tracks = self.client.album_tracks(self.id)['items']
+        for track in tracks:
+            yield Track(self.client, track)
+
+    def get_artists(self) -> Artist:
+        """
+        Yields
+        ------
+        artist : Artist
+        """
+        uris = [artist['uri'] for artist in self.artists]
+        artists = self.client.artists(uris)['artists']
+        new_artists = []
+        for artist in artists:
+            yield Artist(self.client, artist)
+
+    def get_artist(self) -> Artist:
+        """
+        Returns
+        -------
+        artist : Artist
+        """
+        return Artist(self.client, self.client.artist(self.artists[0]['uri']))
+
+    def album_info(self) -> Album:
+        """
+        Returns
+        -------
+        self : Album
+        """
+        album  = self.client.album(self.uri)
+        self = self.__init__(album)
+        return self
 
 class Track(FreshObject):
     """Track class object
@@ -264,7 +331,7 @@ class Track(FreshObject):
             type of object (should always be 'artist')
 
     """
-    def __init__(self, client, track):
+    def __init__(self, client, track) -> None:
         """Inits Track"""
         self.client = client
         self.name = track['name']
@@ -295,10 +362,20 @@ class Track(FreshObject):
         self.type = track['type'] # should always be 'track'
         super().__init__(client)
 
-    def __len__(self):
+    def __len__(self) -> int:
         """
         Returns
         -------
         self.duration : int
         """
         return self.duration
+
+    def get_album(self) -> Album:
+        """
+        Returns
+        -------
+        self.album : Album
+        """
+        album = Album(self.client, self.client.album(self.album[id]))
+        self.album = album
+        return self.album
