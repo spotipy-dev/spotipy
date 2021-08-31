@@ -439,7 +439,7 @@ class Spotify(object):
         trid = self._get_id("album", album_id)
         return self._get(
             "albums/" + trid + "/tracks/", limit=limit, offset=offset, market=market
-        )
+        )['items']
 
     def albums(self, albums):
         """ returns a list of albums given the album IDs, URIs, or URLs
@@ -447,7 +447,6 @@ class Spotify(object):
             Parameters:
                 - albums - a list of  album IDs, URIs or URLs
         """
-
         tlist = [self._get_id("album", a) for a in albums]
         return self._get("albums/?ids=" + ",".join(tlist))
 
@@ -565,15 +564,8 @@ class Spotify(object):
         results = self._get(
             "search", q=q, limit=limit, offset=offset, type="artist", market=market
         )['artists']['items']
-        iteration = 0
         for item in results:
-            try:
-                yield Artist(self, results[iteration])
-                iteration += 1
-            except KeyError:
-                yield None
-            except Exception as e:
-                raise e
+            yield Artist(self, item)
 
     def search_albums(self, q, limit=10, offset=0, market=None):
         """ searches for an album
@@ -591,15 +583,8 @@ class Spotify(object):
         results = self._get(
             "search", q=q, limit=limit, offset=offset, type="album", market=market
         )['albums']['items']
-        iteration = 0
         for item in results:
-            try:
-                yield Album(self, results[iteration])
-                iteration += 1
-            except KeyError:
-                yield None
-            except Exception as e:
-                raise e
+            yield Album(self, item)
 
     def search_tracks(self, q, limit=10, offset=0, market=None):
         """ searches for an artist
@@ -617,15 +602,8 @@ class Spotify(object):
         results = self._get(
             "search", q=q, limit=limit, offset=offset, type="track", market=market
         )['tracks']['items']
-        iteration = 0
         for item in results:
-            try:
-                yield Track(self, results[iteration])
-                iteration += 1
-            except KeyError:
-                yield None
-            except Exception as e:
-                raise e
+            yield Track(self, item)
 
 
     def search_markets(self, q, limit=10, offset=0, type="track", markets=None, total=None):
