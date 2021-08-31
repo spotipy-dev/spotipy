@@ -13,7 +13,7 @@ import six
 import urllib3
 
 from spotipy.exceptions import SpotifyException
-from spotipy.objects import User, Artist, Album, Track
+from spotipy.objects import *
 
 logger = logging.getLogger(__name__)
 
@@ -549,7 +549,7 @@ class Spotify(object):
             "search", q=q, limit=limit, offset=offset, type=type, market=market
         )
 
-    def search_artists(self, q, limit = 10, offset, market=None):
+    def search_artists(self, q, limit=10, offset=0, market=None):
         """ searches for an artist
 
             Parameters:
@@ -575,7 +575,7 @@ class Spotify(object):
             except Exception as e:
                 raise e
 
-    def search_albums(self, q, limit = 10, offset, market=None):
+    def search_albums(self, q, limit=10, offset=0, market=None):
         """ searches for an album
 
             Parameters:
@@ -601,7 +601,7 @@ class Spotify(object):
             except Exception as e:
                 raise e
 
-    def search_tracks(self, q, limit = 10, offset, market=None):
+    def search_tracks(self, q, limit=10, offset=0, market=None):
         """ searches for an artist
 
             Parameters:
