@@ -26,4 +26,7 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    utama ()
+SPOTIFY_CLIENT_ID=bde075a609ea40a3aa8d845e8ecdadc3
+
+SPOTIFY_CLIENT_SECRET=3bacaf91b36345d78c1e924159c3aba4kami
