@@ -633,7 +633,7 @@ class Spotify(object):
         """ Get full details of the tracks of a playlist.
 
             Parameters:
-                - playlist_id - the id of the playlist
+                - playlist_id - the playlist ID, URI or URL
                 - fields - which fields to return
                 - limit - the maximum number of tracks to return
                 - offset - the index of the first track to return
@@ -661,7 +661,7 @@ class Spotify(object):
         """ Get full details of the tracks and episodes of a playlist.
 
             Parameters:
-                - playlist_id - the id of the playlist
+                - playlist_id - the playlist ID, URI or URL
                 - fields - which fields to return
                 - limit - the maximum number of tracks to return
                 - offset - the index of the first track to return
@@ -683,7 +683,7 @@ class Spotify(object):
         """ Get cover of a playlist.
 
             Parameters:
-                - playlist_id - the id of the playlist
+                - playlist_id - the playlist ID, URI or URL
         """
         plid = self._get_id("playlist", playlist_id)
         return self._get("playlists/%s/images" % (plid))
