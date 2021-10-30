@@ -143,7 +143,7 @@ Scopes
 ------
 
 See `Using
-Scopes <https://developer.spotify.com/web-api/using-scopes/>`_ for information
+Scopes <https://developer.spotify.com/documentation/general/guides/authorization/scopes/>`_ for information
 about scopes.
 
 Redirect URI
