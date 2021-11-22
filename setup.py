@@ -26,6 +26,7 @@ setup(
     author_email="paul@echonest.com",
     url='https://spotipy.readthedocs.org/',
     install_requires=[
+        'redis>=3.5.3',
         'requests>=2.25.0',
         'six>=1.15.0',
         'urllib3>=1.26.0'
