@@ -226,6 +226,10 @@ The custom cache handler would need to be a class that inherits from the base
 cache handler ``CacheHandler``. The default cache handler ``CacheFileHandler`` is a good example.
 An instance of that new class can then be passed as a parameter when
 creating ``SpotifyOAuth``, ``SpotifyPKCE`` or ``SpotifyImplicitGrant``.
+The following handlers are available and defined in the URL above.
+  - ``CacheFileHandler``
+  - ``MemoryCacheHandler``
+  - ``RedisCacheHandler``
 
 Feel free to contribute new cache handlers to the repo.
 
