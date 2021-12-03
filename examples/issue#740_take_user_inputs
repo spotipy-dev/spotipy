@@ -32,5 +32,3 @@ if __name__ == '__main__':
         remaining_track_count = remaining_track_count - max_limit
 
 print(json.dumps(results, indent=4))
-print()
-print('  limit', number)
