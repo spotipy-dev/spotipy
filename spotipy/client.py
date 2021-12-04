@@ -622,12 +622,12 @@ class Spotify(object):
         )
     
     def playlist_limit(
-        self, 
-        playlist_id, 
-        limit=100, 
-        offset=0, 
-        fields=None, 
-        market=None, 
+        self,
+        playlist_id,
+        limit=100,
+        offset=0,
+        fields=None,
+        market=None,
         additional_types=("track",)
     ):
         """ Gets playlist by id.
@@ -649,7 +649,7 @@ class Spotify(object):
             market=market,
             additional_types=",".join(additional_types),
         )
-        total_track_count = min(limit,results['tracks']['total'])
+        total_track_count = min(limit, results['tracks']['total'])
         remaining_track_count = total_track_count
         tracks = []
         while remaining_track_count > 0:
