@@ -620,7 +620,7 @@ class Spotify(object):
             market=market,
             additional_types=",".join(additional_types),
         )
-    
+
     def playlist_limit(
         self,
         playlist_id,
