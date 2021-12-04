@@ -620,7 +620,38 @@ class Spotify(object):
             market=market,
             additional_types=",".join(additional_types),
         )
+    
+    def playlist_limit(self, playlist_id, limit=100, offset=0, fields=None, market=None, additional_types=("track",)):
+        """ Gets playlist by id.
 
+            Parameters:
+                - playlist - the id of the playlist
+                - limit - the maximum number of tracks to return
+                - offset - the index of the first track to return
+                - fields - which fields to return
+                - market - An ISO 3166-1 alpha-2 country code or the
+                           string from_token.
+                - additional_types - list of item types to return.
+                                     valid types are: track and episode
+        """
+        plid = self._get_id("playlist", playlist_id)
+        results= self._get(
+            "playlists/%s" % (plid),
+            fields=fields,
+            market=market,
+            additional_types=",".join(additional_types),
+        )
+        total_track_count=min(limit,results['tracks']['total'])
+        remaining_track_count=total_track_count
+        tracks=[]
+        while remaining_track_count > 0:
+            max_limit=min(100,remaining_track_count)
+            results = self.playlist_items(playlist_id,limit=max_limit,offset=offset)
+            tracks.extend(results['items'])
+            offset = offset + max_limit
+            remaining_track_count = remaining_track_count - max_limit
+        return tracks
+    
     def playlist_tracks(
         self,
         playlist_id,
