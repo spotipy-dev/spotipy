@@ -621,17 +621,16 @@ class Spotify(object):
             additional_types=",".join(additional_types),
         )
 
-    def playlist_limit(
+    def playlist_full(
         self,
         playlist_id,
-        limit=100,
+        limit=0,
         offset=0,
         fields=None,
         market=None,
         additional_types=("track",)
     ):
         """ Gets playlist by id.
-
             Parameters:
                 - playlist - the id of the playlist
                 - limit - the maximum number of tracks to return
@@ -649,15 +648,17 @@ class Spotify(object):
             market=market,
             additional_types=",".join(additional_types),
         )
-        total_track_count = min(limit, results['tracks']['total'])
-        remaining_track_count = total_track_count
+        if limit == 0:
+            limit = results['tracks']['total']
+        else:
+            limit = min(limit, results['tracks']['total'])
         tracks = []
-        while remaining_track_count > 0:
-            max_limit = min(100, remaining_track_count)
+        while limit > 0:
+            max_limit = min(100, limit)
             results = self.playlist_items(playlist_id, limit=max_limit, offset=offset)
             tracks.extend(results['items'])
-            offset = offset + max_limit
-            remaining_track_count = remaining_track_count - max_limit
+            offset += max_limit
+            limit -= max_limit
         return tracks
 
     def playlist_tracks(
