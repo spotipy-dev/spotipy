@@ -67,6 +67,11 @@ class SpotipyPlaylistApiTest(unittest.TestCase):
         self.assertTrue('items' in playlists)
         self.assertGreaterEqual(len(playlists['items']), 1)
 
+    def test_playlist_full(self):
+        playlist = self.spotify.playlist("32lxctECTSPxFev7tnFfT2")
+        playlist_full = self.spotify.playlist_full("32lxctECTSPxFev7tnFfT2")
+        self.assertEqual(playlist['tracks']['total'] == len(playlist_full))
+
     def test_playlist_items(self):
         playlists = self.spotify.user_playlists(self.username, limit=5)
         self.assertTrue('items' in playlists)
