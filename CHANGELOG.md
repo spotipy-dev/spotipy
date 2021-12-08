@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 * Added `RedisCacheHandler`, a cache handler that stores the token info in Redis.
+* Added supports for `playlist_full`
 
 ## [2.19.0] - 2021-08-12
 
