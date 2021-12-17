@@ -12,8 +12,6 @@ import requests
 import six
 import urllib3
 
-import re
-
 from spotipy.exceptions import SpotifyException
 
 logger = logging.getLogger(__name__)
