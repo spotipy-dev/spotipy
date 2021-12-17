@@ -1913,7 +1913,7 @@ class Spotify(object):
             if type != fields[-2]:
                 logger.warning('Expected id of type %s but found type %s %s',
                                type, fields[-2], id)
-            return fields[-1]
+            return fields[-1].split("?")[0]
         fields = id.split("/")
         if len(fields) >= 3:
             itype = fields[-2]
