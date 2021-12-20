@@ -16,7 +16,7 @@ names of all the albums released by the artist 'Birdy'::
     from spotipy.oauth2 import SpotifyClientCredentials
 
     birdy_uri = 'spotify:artist:2WX2uTcsvV5OnS0inACecP'
-    spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
+    spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(YOUR_CLIENT_ID,YOUR_CLIENT_SECRET))
 
     results = spotify.artist_albums(birdy_uri, album_type='album')
     albums = results['items']
@@ -35,7 +35,7 @@ for the top 10 tracks for Led Zeppelin::
 
     lz_uri = 'spotify:artist:36QJpDe2go2KgaRleHCDTp'
 
-    spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
+    spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(YOUR_CLIENT_ID,YOUR_CLIENT_SECRET))
     results = spotify.artist_top_tracks(lz_uri)
 
     for track in results['tracks'][:10]:
@@ -51,7 +51,7 @@ artist's name::
     import sys
     from spotipy.oauth2 import SpotifyClientCredentials
 
-    spotify = spotipy.Spotify(auth_manager=SpotifyClientCredentials())
+    spotify = spotipy.Spotify(auth_manager=SpotifyClientCredentials(YOUR_CLIENT_ID,YOUR_CLIENT_SECRET))
 
     if len(sys.argv) > 1:
         name = ' '.join(sys.argv[1:])
