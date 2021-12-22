@@ -152,18 +152,21 @@ class RedisCacheHandler(CacheHandler):
     A cache handler that stores the token info in the Redis.
     """
 
-    def __init__(self, redis):
+    def __init__(self, redis, key=None):
         """
         Parameters:
             * redis: Redis object provided by redis-py library
             (https://github.com/redis/redis-py)
+            * key: May be supplied, will otherwise be generated
+                   (takes precedence over `token_info`)
         """
         self.redis = redis
+        self.key = key if key else 'token_info'
 
     def get_cached_token(self):
         token_info = None
         try:
-            token_info = json.loads(self.redis.get('token_info'))
+            token_info = json.loads(self.redis.get(self.key))
         except RedisError as e:
             logger.warning('Error getting token from cache: ' + str(e))
 
@@ -171,6 +174,6 @@ class RedisCacheHandler(CacheHandler):
 
     def save_token_to_cache(self, token_info):
         try:
-            self.redis.set('token_info', json.dumps(token_info))
+            self.redis.set(self.key, json.dumps(token_info))
         except RedisError as e:
             logger.warning('Error saving token to cache: ' + str(e))
