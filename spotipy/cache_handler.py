@@ -166,7 +166,8 @@ class RedisCacheHandler(CacheHandler):
     def get_cached_token(self):
         token_info = None
         try:
-            token_info = json.loads(self.redis.get(self.key))
+            if self.redis.exists(self.key):
+                token_info = json.loads(self.redis.get(self.key))
         except RedisError as e:
             logger.warning('Error getting token from cache: ' + str(e))
 
