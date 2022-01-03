@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Added `RedisCacheHandler`, a cache handler that stores the token info in Redis.
 * Changed URI handling in `client.Spotify._get_id()` to remove qureies if provided by error.
 * Added a new parameter to `RedisCacheHandler` to allow custom keys (instead of the default `token_info` key)
+* Simplify check for existing token in `RedisCacheHandler`
 
 ## [2.19.0] - 2021-08-12
 
