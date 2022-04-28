@@ -16,6 +16,6 @@ while True:
     if len(response['items']) == 0:
         break
     
-    pprint(response['items'])
+    print(response['items'])
     offset = offset + len(response['items'])
     print(offset, "/", response['total'])
