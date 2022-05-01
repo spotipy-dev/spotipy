@@ -144,7 +144,7 @@ class Spotify(object):
             See urllib3 https://urllib3.readthedocs.io/en/latest/reference/urllib3.util.html
         :param language:
             The language parameter advertises what language the user prefers to see.
-            See ISO-639 language code: https://www.loc.gov/standards/iso639-2/php/code_list.php
+            See ISO-639-1 language code: https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
         """
         self.prefix = "https://api.spotify.com/v1/"
         self._auth = auth
@@ -1483,8 +1483,8 @@ class Spotify(object):
 
             Parameters:
                 - locale - The desired language, consisting of a lowercase ISO
-                  639 language code and an uppercase ISO 3166-1 alpha-2 country
-                  code, joined by an underscore.
+                  639-1 alpha-2 language code and an uppercase ISO 3166-1 alpha-2
+                  country code, joined by an underscore.
 
                 - country - An ISO 3166-1 alpha-2 country code.
 
@@ -1533,7 +1533,7 @@ class Spotify(object):
                 - category_id - The Spotify category ID for the category.
 
                 - country - An ISO 3166-1 alpha-2 country code.
-                - locale - The desired language, consisting of an ISO 639
+                - locale - The desired language, consisting of an ISO 639-1 alpha-2
                   language code and an ISO 3166-1 alpha-2 country code, joined
                   by an underscore.
         """
@@ -1548,7 +1548,7 @@ class Spotify(object):
 
             Parameters:
                 - country - An ISO 3166-1 alpha-2 country code.
-                - locale - The desired language, consisting of an ISO 639
+                - locale - The desired language, consisting of an ISO 639-1 alpha-2
                   language code and an ISO 3166-1 alpha-2 country code, joined
                   by an underscore.
 

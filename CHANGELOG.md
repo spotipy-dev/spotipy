@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+* Updated the documentation to specify ISO-639-1 language codes.
+
 ### Added
 * Added `RedisCacheHandler`, a cache handler that stores the token info in Redis.
 * Changed URI handling in `client.Spotify._get_id()` to remove qureies if provided by error.
