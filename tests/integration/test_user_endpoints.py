@@ -368,6 +368,10 @@ class SpotipyBrowseApiTests(unittest.TestCase):
                 response = self.spotify.category_playlists(category_id=cat_id)
                 self.assertGreater(len(response['playlists']["items"]), 0)
 
+    def test_categories_country(self):
+        response = self.spotify.categories(country='US')
+        self.assertGreater(len(response['categories']), 0)
+
     def test_new_releases(self):
         response = self.spotify.new_releases()
         self.assertGreater(len(response['albums']), 0)
