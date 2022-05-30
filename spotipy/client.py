@@ -420,15 +420,19 @@ class Spotify(object):
         trid = self._get_id("artist", artist_id)
         return self._get("artists/" + trid + "/related-artists")
 
-    def album(self, album_id):
+    def album(self, album_id, market=None):
         """ returns a single album given the album's ID, URIs or URL
 
             Parameters:
                 - album_id - the album ID, URI or URL
+                - market - an ISO 3166-1 alpha-2 country code
         """
 
         trid = self._get_id("album", album_id)
-        return self._get("albums/" + trid)
+        if market is not None:
+            return self._get("albums/" + trid + '?market=' + market)
+        else:
+            return self._get("albums/" + trid)
 
     def album_tracks(self, album_id, limit=50, offset=0, market=None):
         """ Get Spotify catalog information about an album's tracks
@@ -446,15 +450,19 @@ class Spotify(object):
             "albums/" + trid + "/tracks/", limit=limit, offset=offset, market=market
         )
 
-    def albums(self, albums):
+    def albums(self, albums, market=None):
         """ returns a list of albums given the album IDs, URIs, or URLs
 
             Parameters:
                 - albums - a list of  album IDs, URIs or URLs
+                - market - an ISO 3166-1 alpha-2 country code
         """
 
         tlist = [self._get_id("album", a) for a in albums]
-        return self._get("albums/?ids=" + ",".join(tlist))
+        if market is not None:
+            return self._get("albums/?ids=" + ",".join(tlist) + '&market=' + market)
+        else:
+            return self._get("albums/?ids=" + ",".join(tlist))
 
     def show(self, show_id, market=None):
         """ returns a single show given the show's ID, URIs or URL

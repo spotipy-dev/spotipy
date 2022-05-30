@@ -6,8 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
-
 * Updated the documentation to specify ISO-639-1 language codes.
+* Added `market` parameter to `album` and `albums` to address ([#753](https://github.com/plamere/spotipy/issues/753)
 
 ### Added
 * Added `RedisCacheHandler`, a cache handler that stores the token info in Redis.
