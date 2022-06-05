@@ -982,7 +982,8 @@ class Spotify(object):
         collaborative=None,
         description=None,
     ):
-        """ Changes a playlist's name and/or public/private state
+        """ Changes a playlist's name and/or public/private state, 
+            collaborative state, and/or description
 
             Parameters:
                 - playlist_id - the id of the playlist
