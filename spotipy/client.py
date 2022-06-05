@@ -1385,7 +1385,7 @@ class Spotify(object):
         )
 
     def current_user_following_users(self, ids=None):
-        """ Check if the current user is following certain artists
+        """ Check if the current user is following certain users
 
             Returns list of booleans respective to ids
 
