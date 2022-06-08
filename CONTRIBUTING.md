@@ -1,5 +1,7 @@
 ## Contributing
 
+###### [Ver en español](https://github.com/plamere/spotipy/tree/master/espanol/FAQ_Espanol.md)
+
 If you would like to contribute to spotipy follow these steps:
 
 ### Export the needed environment variables
