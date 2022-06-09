@@ -292,31 +292,96 @@ Contribute
 
 Spotipy authored by Paul Lamere (plamere) with contributions by:
 
-  - Daniel Beaudry // danbeaudry
-  - Faruk Emre Sahin // fsahin
-  - George // rogueleaderr
-  - Henry Greville // sethaurus
-  - Hugo // hugovk
-  - José Manuel Pérez // JMPerez
-  - Lucas Nunno // lnunno
-  - Lynn Root // econchick
-  - Matt Dennewitz // mattdennewitz
-  - Matthew Duck // mattduck
-  - Michael Thelin // thelinmichael
-  - Ryan Choi // ryankicks
-  - Simon Metson // drsm79
-  - Steve Winton // swinton
-  - Tim Balzer // timbalzer
-  - corycorycory // corycorycory
-  - Nathan Coleman // nathancoleman
-  - Michael Birtwell // mbirtwell
-  - Harrison Hayes // Harrison97
-  - Stephane Bruckert // stephanebruckert
-  - Ritiek Malhotra // ritiek
+  - Daniel Beaudry (`danbeaudry on Github <https://github.com/danbeaudry>`_)
+  - Faruk Emre Sahin (`fsahin on Github <https://github.com/fsahin>`_)
+  - George (`rogueleaderr on Github <https://github.com/rogueleaderr>`_)
+  - Henry Greville (`sethaurus on Github <https://github.com/sethaurus>`_)
+  - Hugo van Kemanade (`hugovk on Github <https://github.com/hugovk>`_)
+  - José Manuel Pérez (`JMPerez on Github <https://github.com/JMPerez>`_)
+  - Lucas Nunno (`lnunno on Github <https://github.com/lnunno>`_)
+  - Lynn Root (`econchick on Github <https://github.com/econchick>`_)
+  - Matt Dennewitz (`mattdennewitz on Github <https://github.com/mattdennewitz>`_)
+  - Matthew Duck (`mattduck on Github <https://github.com/mattduck>`_)
+  - Michael Thelin (`thelinmichael on Github <https://github.com/thelinmichael>`_)
+  - Ryan Choi (`ryankicks on Github <https://github.com/ryankicks>`_)
+  - Simon Metson (`drsm79 on Github <https://github.com/drsm79>`_)
+  - Steve Winton (`swinton on Github <https://github.com/swinton>`_)
+  - Tim Balzer (`timbalzer on Github <https://github.com/timbalzer>`_)
+  - `corycorycory on Github <https://github.com/corycorycory>`_
+  - Nathan Coleman (`nathancoleman on Github <https://github.com/nathancoleman>`_) 
+  - Michael Birtwell (`mbirtwell on Github <https://github.com/mbirtwell>`_)
+  - Harrison Hayes (`Harrison97 on Github <https://github.com/Harrison97>`_)
+  - Stephane Bruckert (`stephanebruckert on Github <https://github.com/stephanebruckert>`_)
+  - Ritiek Malhotra (`ritiek on Github <https://github.com/ritiek>`_)
+
+If you are a developer with Python experience, and you would like to contribute to Spotipy, please
+be sure to follow the guidelines listed below:
+
+Export the needed Environment variables:::
+    export SPOTIPY_CLIENT_ID=client_id_here
+    export SPOTIPY_CLIENT_SECRET=client_secret_here
+    export SPOTIPY_CLIENT_USERNAME=client_username_here # This is actually an id not spotify display name
+    export SPOTIPY_REDIRECT_URI=http://localhost:8080 # Make url is set in app you created to get your ID and SECRET
+
+Create virtual environment, install dependencies, run tests:::
+    $ virtualenv --python=python3.7 env
+    (env) $ pip install --user -e .
+    (env) $ python -m unittest discover -v tests
+
+**Lint**
+
+To automatically fix the code style:::
+    pip install autopep8
+    autopep8 --in-place --aggressive --recursive .
+
+To verify the code style:::
+    pip install flake8
+    flake8 .
+
+To make sure if the import lists are stored correctly:::
+    pip install isort
+    isort . -c -v
+
+**Publishing (by maintainer)**
+
+- Bump version in setup.py
+- Bump and date changelog
+- Add to changelog:
+::
+    ## Unreleased
+
+    // Add your changes here and then delete this line
+- Commit changes
+- Package to pypi:
+::
+    python setup.py sdist bdist_wheel
+    python3 setup.py sdist bdist_wheel
+    twine check dist/*
+    twine upload --repository-url https://upload.pypi.org/legacy/ --skip-existing dist/*.(whl|gz|zip)~dist/*linux*.whl
+- Create github release https://github.com/plamere/spotipy/releases with the changelog content for the version and a short name that describes the main addition
+- Build the documentation again to ensure it's on the latest version
+
+**Changelog**
+
+Don't forget to add a short description of your change in the `CHANGELOG <https://github.com/plamere/spotipy/blob/master/CHANGELOG.md>`_!
+
+
 
 License
 =======
-https://github.com/plamere/spotipy/blob/master/LICENSE.md
+(Taken from https://github.com/plamere/spotipy/blob/master/LICENSE.md)::
+
+    MIT License
+    Copyright (c) 2021 Paul Lamere
+    Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files
+    (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, 
+    publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do
+    so, subject to the following conditions:
+    The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+    OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+    LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR 
+    IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
 Indices and tables
