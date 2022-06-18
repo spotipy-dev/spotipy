@@ -132,7 +132,7 @@ class SpotifyOAuth that can be used to authenticate requests like so::
         print(idx, track['artists'][0]['name'], " – ", track['name'])
 
 or if you are reluctant to immortalize your app credentials in your source code,
-you can set environment variables like so (use ``SET`` instead of ``export``
+you can set environment variables like so (use ``$env:"credentials"`` instead of ``export``
 on Windows)::
 
     export SPOTIPY_CLIENT_ID='your-spotify-client-id'
