@@ -25,6 +25,9 @@ setup(
     author="@plamere",
     author_email="paul@echonest.com",
     url='https://spotipy.readthedocs.org/',
+    project_urls={
+        'Source': 'https://github.com/plamere/spotipy',
+    },
     install_requires=[
         'redis>=3.5.3',
         'requests>=2.25.0',
