@@ -688,7 +688,7 @@ class Spotify(object):
         )
 
     def playlist_cover_image(self, playlist_id):
-        """ Get cover of a playlist.
+        """ Get cover image of a playlist.
 
             Parameters:
                 - playlist_id - the playlist ID, URI or URL
@@ -717,7 +717,7 @@ class Spotify(object):
             DeprecationWarning,
         )
 
-        """ Gets playlist of a user
+        """ Gets a single playlist of a user
 
             Parameters:
                 - user - the id of the user
@@ -849,7 +849,7 @@ class Spotify(object):
         return self.playlist_add_items(playlist_id, tracks, position)
 
     def user_playlist_replace_tracks(self, user, playlist_id, tracks):
-        """ Replace all tracks in a playlist
+        """ Replace all tracks in a playlist for a user
 
             Parameters:
                 - user - the id of the user
@@ -871,7 +871,7 @@ class Spotify(object):
         range_length=1,
         snapshot_id=None,
     ):
-        """ Reorder tracks in a playlist
+        """ Reorder tracks in a playlist from a user
 
             Parameters:
                 - user - the id of the user
@@ -990,7 +990,8 @@ class Spotify(object):
         collaborative=None,
         description=None,
     ):
-        """ Changes a playlist's name and/or public/private state
+        """ Changes a playlist's name and/or public/private state, 
+            collaborative state, and/or description
 
             Parameters:
                 - playlist_id - the id of the playlist
@@ -1090,7 +1091,7 @@ class Spotify(object):
     def playlist_remove_all_occurrences_of_items(
         self, playlist_id, items, snapshot_id=None
     ):
-        """ Removes all occurrences of the given tracks from the given playlist
+        """ Removes all occurrences of the given tracks/episodes from the given playlist
 
             Parameters:
                 - playlist_id - the id of the playlist
@@ -1393,7 +1394,7 @@ class Spotify(object):
         )
 
     def current_user_following_users(self, ids=None):
-        """ Check if the current user is following certain artists
+        """ Check if the current user is following certain users
 
             Returns list of booleans respective to ids
 
