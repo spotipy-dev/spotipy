@@ -402,7 +402,6 @@ class SpotipyBrowseApiTests(unittest.TestCase):
                 response = self.spotify.category_playlists(category_id=cat_id, limit=50)
                 self.assertLessEqual(len(response['categories']['items']), 50)
 
-
     def test_new_releases(self):
         response = self.spotify.new_releases()
         self.assertGreater(len(response['albums']), 0)
