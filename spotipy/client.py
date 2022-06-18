@@ -144,7 +144,7 @@ class Spotify(object):
             See urllib3 https://urllib3.readthedocs.io/en/latest/reference/urllib3.util.html
         :param language:
             The language parameter advertises what language the user prefers to see.
-            See ISO-639 language code: https://www.loc.gov/standards/iso639-2/php/code_list.php
+            See ISO-639-1 language code: https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
         """
         self.prefix = "https://api.spotify.com/v1/"
         self._auth = auth
@@ -420,15 +420,19 @@ class Spotify(object):
         trid = self._get_id("artist", artist_id)
         return self._get("artists/" + trid + "/related-artists")
 
-    def album(self, album_id):
+    def album(self, album_id, market=None):
         """ returns a single album given the album's ID, URIs or URL
 
             Parameters:
                 - album_id - the album ID, URI or URL
+                - market - an ISO 3166-1 alpha-2 country code
         """
 
         trid = self._get_id("album", album_id)
-        return self._get("albums/" + trid)
+        if market is not None:
+            return self._get("albums/" + trid + '?market=' + market)
+        else:
+            return self._get("albums/" + trid)
 
     def album_tracks(self, album_id, limit=50, offset=0, market=None):
         """ Get Spotify catalog information about an album's tracks
@@ -446,15 +450,19 @@ class Spotify(object):
             "albums/" + trid + "/tracks/", limit=limit, offset=offset, market=market
         )
 
-    def albums(self, albums):
+    def albums(self, albums, market=None):
         """ returns a list of albums given the album IDs, URIs, or URLs
 
             Parameters:
                 - albums - a list of  album IDs, URIs or URLs
+                - market - an ISO 3166-1 alpha-2 country code
         """
 
         tlist = [self._get_id("album", a) for a in albums]
-        return self._get("albums/?ids=" + ",".join(tlist))
+        if market is not None:
+            return self._get("albums/?ids=" + ",".join(tlist) + '&market=' + market)
+        else:
+            return self._get("albums/?ids=" + ",".join(tlist))
 
     def show(self, show_id, market=None):
         """ returns a single show given the show's ID, URIs or URL
@@ -1483,8 +1491,8 @@ class Spotify(object):
 
             Parameters:
                 - locale - The desired language, consisting of a lowercase ISO
-                  639 language code and an uppercase ISO 3166-1 alpha-2 country
-                  code, joined by an underscore.
+                  639-1 alpha-2 language code and an uppercase ISO 3166-1 alpha-2
+                  country code, joined by an underscore.
 
                 - country - An ISO 3166-1 alpha-2 country code.
 
@@ -1533,7 +1541,7 @@ class Spotify(object):
                 - category_id - The Spotify category ID for the category.
 
                 - country - An ISO 3166-1 alpha-2 country code.
-                - locale - The desired language, consisting of an ISO 639
+                - locale - The desired language, consisting of an ISO 639-1 alpha-2
                   language code and an ISO 3166-1 alpha-2 country code, joined
                   by an underscore.
         """
@@ -1548,7 +1556,7 @@ class Spotify(object):
 
             Parameters:
                 - country - An ISO 3166-1 alpha-2 country code.
-                - locale - The desired language, consisting of an ISO 639
+                - locale - The desired language, consisting of an ISO 639-1 alpha-2
                   language code and an ISO 3166-1 alpha-2 country code, joined
                   by an underscore.
 
