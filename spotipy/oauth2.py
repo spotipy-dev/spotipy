@@ -140,7 +140,7 @@ class SpotifyAuthBase(object):
             # then try do decode it into text
 
             # if we receive an empty string (which is falsy), then replace it with `None`
-            error = response.txt or None
+            error = response.text or None
             error_description = None
 
         raise SpotifyOauthError(

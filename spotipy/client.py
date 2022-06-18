@@ -144,7 +144,7 @@ class Spotify(object):
             See urllib3 https://urllib3.readthedocs.io/en/latest/reference/urllib3.util.html
         :param language:
             The language parameter advertises what language the user prefers to see.
-            See ISO-639 language code: https://www.loc.gov/standards/iso639-2/php/code_list.php
+            See ISO-639-1 language code: https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
         """
         self.prefix = "https://api.spotify.com/v1/"
         self._auth = auth
@@ -420,15 +420,19 @@ class Spotify(object):
         trid = self._get_id("artist", artist_id)
         return self._get("artists/" + trid + "/related-artists")
 
-    def album(self, album_id):
+    def album(self, album_id, market=None):
         """ returns a single album given the album's ID, URIs or URL
 
             Parameters:
                 - album_id - the album ID, URI or URL
+                - market - an ISO 3166-1 alpha-2 country code
         """
 
         trid = self._get_id("album", album_id)
-        return self._get("albums/" + trid)
+        if market is not None:
+            return self._get("albums/" + trid + '?market=' + market)
+        else:
+            return self._get("albums/" + trid)
 
     def album_tracks(self, album_id, limit=50, offset=0, market=None):
         """ Get Spotify catalog information about an album's tracks
@@ -446,15 +450,19 @@ class Spotify(object):
             "albums/" + trid + "/tracks/", limit=limit, offset=offset, market=market
         )
 
-    def albums(self, albums):
+    def albums(self, albums, market=None):
         """ returns a list of albums given the album IDs, URIs, or URLs
 
             Parameters:
                 - albums - a list of  album IDs, URIs or URLs
+                - market - an ISO 3166-1 alpha-2 country code
         """
 
         tlist = [self._get_id("album", a) for a in albums]
-        return self._get("albums/?ids=" + ",".join(tlist))
+        if market is not None:
+            return self._get("albums/?ids=" + ",".join(tlist) + '&market=' + market)
+        else:
+            return self._get("albums/?ids=" + ",".join(tlist))
 
     def show(self, show_id, market=None):
         """ returns a single show given the show's ID, URIs or URL
@@ -680,7 +688,7 @@ class Spotify(object):
         )
 
     def playlist_cover_image(self, playlist_id):
-        """ Get cover of a playlist.
+        """ Get cover image of a playlist.
 
             Parameters:
                 - playlist_id - the playlist ID, URI or URL
@@ -709,7 +717,7 @@ class Spotify(object):
             DeprecationWarning,
         )
 
-        """ Gets playlist of a user
+        """ Gets a single playlist of a user
 
             Parameters:
                 - user - the id of the user
@@ -841,7 +849,7 @@ class Spotify(object):
         return self.playlist_add_items(playlist_id, tracks, position)
 
     def user_playlist_replace_tracks(self, user, playlist_id, tracks):
-        """ Replace all tracks in a playlist
+        """ Replace all tracks in a playlist for a user
 
             Parameters:
                 - user - the id of the user
@@ -863,7 +871,7 @@ class Spotify(object):
         range_length=1,
         snapshot_id=None,
     ):
-        """ Reorder tracks in a playlist
+        """ Reorder tracks in a playlist from a user
 
             Parameters:
                 - user - the id of the user
@@ -982,7 +990,8 @@ class Spotify(object):
         collaborative=None,
         description=None,
     ):
-        """ Changes a playlist's name and/or public/private state
+        """ Changes a playlist's name and/or public/private state, 
+            collaborative state, and/or description
 
             Parameters:
                 - playlist_id - the id of the playlist
@@ -1082,7 +1091,7 @@ class Spotify(object):
     def playlist_remove_all_occurrences_of_items(
         self, playlist_id, items, snapshot_id=None
     ):
-        """ Removes all occurrences of the given tracks from the given playlist
+        """ Removes all occurrences of the given tracks/episodes from the given playlist
 
             Parameters:
                 - playlist_id - the id of the playlist
@@ -1385,7 +1394,7 @@ class Spotify(object):
         )
 
     def current_user_following_users(self, ids=None):
-        """ Check if the current user is following certain artists
+        """ Check if the current user is following certain users
 
             Returns list of booleans respective to ids
 
@@ -1483,8 +1492,8 @@ class Spotify(object):
 
             Parameters:
                 - locale - The desired language, consisting of a lowercase ISO
-                  639 language code and an uppercase ISO 3166-1 alpha-2 country
-                  code, joined by an underscore.
+                  639-1 alpha-2 language code and an uppercase ISO 3166-1 alpha-2
+                  country code, joined by an underscore.
 
                 - country - An ISO 3166-1 alpha-2 country code.
 
@@ -1533,7 +1542,7 @@ class Spotify(object):
                 - category_id - The Spotify category ID for the category.
 
                 - country - An ISO 3166-1 alpha-2 country code.
-                - locale - The desired language, consisting of an ISO 639
+                - locale - The desired language, consisting of an ISO 639-1 alpha-2
                   language code and an ISO 3166-1 alpha-2 country code, joined
                   by an underscore.
         """
@@ -1548,7 +1557,7 @@ class Spotify(object):
 
             Parameters:
                 - country - An ISO 3166-1 alpha-2 country code.
-                - locale - The desired language, consisting of an ISO 639
+                - locale - The desired language, consisting of an ISO 639-1 alpha-2
                   language code and an ISO 3166-1 alpha-2 country code, joined
                   by an underscore.
 
