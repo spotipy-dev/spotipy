@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Changed URI handling in `client.Spotify._get_id()` to remove qureies if provided by error.
 * Added a new parameter to `RedisCacheHandler` to allow custom keys (instead of the default `token_info` key)
 * Simplify check for existing token in `RedisCacheHandler`
+* Fix `AttributeError` for `text` attribute of the `Response` object
 
 ### Changed
 * Removed Python 3.5 and added Python 3.9 in Github Action
