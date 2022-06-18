@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Added a new parameter to `RedisCacheHandler` to allow custom keys (instead of the default `token_info` key)
 * Simplify check for existing token in `RedisCacheHandler`
 
+### Removed
+* Removed Python 3.5 from CI as it's not available anymore in Github Action
+
 ## [2.19.0] - 2021-08-12
 
 ### Added
