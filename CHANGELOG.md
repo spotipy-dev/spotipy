@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+// Add your changes here and then delete this line
+
+## [2.20.0] - 2022-06-18
+
 ### Added
 * Added `RedisCacheHandler`, a cache handler that stores the token info in Redis.
 * Changed URI handling in `client.Spotify._get_id()` to remove qureies if provided by error.
