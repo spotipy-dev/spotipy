@@ -6,10 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
-* Updated the documentation to specify ISO-639-1 language codes.
-* Added `market` parameter to `album` and `albums` to address ([#753](https://github.com/plamere/spotipy/issues/753)
 
-// Add your changes here and then delete this line
+### Added 
+
+* Added `market` parameter to `album` and `albums` to address ([#753](https://github.com/plamere/spotipy/issues/753)
+* Added 'show_featured_artists.py' to 'examples'.
+
+### Fixed
+
+* Updated the documentation to specify ISO-639-1 language codes.
+* Fix `AttributeError` for `text` attribute of the `Response` object
 
 ## [2.20.0] - 2022-06-18
 
@@ -18,7 +24,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Changed URI handling in `client.Spotify._get_id()` to remove qureies if provided by error.
 * Added a new parameter to `RedisCacheHandler` to allow custom keys (instead of the default `token_info` key)
 * Simplify check for existing token in `RedisCacheHandler`
-* Fix `AttributeError` for `text` attribute of the `Response` object
 
 ### Changed
 * Removed Python 3.5 and added Python 3.9 in Github Action
