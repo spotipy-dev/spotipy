@@ -11,11 +11,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Added `market` parameter to `album` and `albums` to address ([#753](https://github.com/plamere/spotipy/issues/753)
 * Added 'show_featured_artists.py' to 'examples'.
+* Expanded contribution and license sections of the documentation.
 
 ### Fixed
 
 * Updated the documentation to specify ISO-639-1 language codes.
 * Fix `AttributeError` for `text` attribute of the `Response` object
+* Require redis v3 if python2.7 (fixes readthedocs)
 
 ## [2.20.0] - 2022-06-18
 
@@ -24,7 +26,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Changed URI handling in `client.Spotify._get_id()` to remove qureies if provided by error.
 * Added a new parameter to `RedisCacheHandler` to allow custom keys (instead of the default `token_info` key)
 * Simplify check for existing token in `RedisCacheHandler`
-* Expanded contribution and license sections of the documentation.
 
 ### Changed
 * Removed Python 3.5 and added Python 3.9 in Github Action
