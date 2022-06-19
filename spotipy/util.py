@@ -97,7 +97,7 @@ def prompt_for_user_token(
 
     if not token_info:
         code = sp_oauth.get_auth_response()
-        token = sp_oauth.get_access_token(code, as_dict=False)
+        token = sp_oauth.get_access_token(code)
     else:
         return token_info["access_token"]
 

@@ -209,9 +209,9 @@ class Spotify(object):
         if not self.auth_manager:
             return {}
         try:
-            token = self.auth_manager.get_access_token(as_dict=False)
-        except TypeError:
             token = self.auth_manager.get_access_token()
+        except TypeError:
+            token = self.auth_manager.get_access_token(as_dict=True)
         return {"Authorization": "Bearer {0}".format(token)}
 
     def _internal_call(self, method, url, payload, params):

@@ -55,7 +55,7 @@ def index():
 
     if request.args.get("code"):
         # Step 3. Being redirected from Spotify auth page
-        auth_manager.get_access_token(request.args.get("code"))
+        auth_manager.get_access_token(request.args.get("code"), as_dict=True)
         return redirect('/')
 
     if not auth_manager.validate_token(cache_handler.get_cached_token()):

@@ -210,7 +210,7 @@ class SpotifyClientCredentials(SpotifyAuthBase):
         else:
             self.cache_handler = CacheFileHandler()
 
-    def get_access_token(self, as_dict=True, check_cache=True):
+    def get_access_token(self, as_dict=False, check_cache=True):
         """
         If a valid access token is in memory, returns it
         Else feches a new token and returns it
@@ -503,7 +503,7 @@ class SpotifyOAuth(SpotifyAuthBase):
             return self.parse_response_code(response)
         return self.get_auth_response()
 
-    def get_access_token(self, code=None, as_dict=True, check_cache=True):
+    def get_access_token(self, code=None, as_dict=False, check_cache=True):
         """ Gets the access token for the app given the code
 
             Parameters:

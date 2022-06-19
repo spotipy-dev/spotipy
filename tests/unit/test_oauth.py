@@ -245,7 +245,7 @@ class TestSpotifyClientCredentials(unittest.TestCase):
     def test_spotify_client_credentials_get_access_token(self):
         oauth = SpotifyClientCredentials(client_id='ID', client_secret='SECRET')
         with self.assertRaises(SpotifyOauthError) as error:
-            oauth.get_access_token(check_cache=False)
+            oauth.get_access_token(as_dict=True, check_cache=False)
         self.assertEqual(error.exception.error, 'invalid_client')
 
 

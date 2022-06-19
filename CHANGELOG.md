@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Updated the documentation to specify ISO-639-1 language codes.
 * Fix `AttributeError` for `text` attribute of the `Response` object
 * Require redis v3 if python2.7 (fixes readthedocs)
+* For backward-compatibility, ensure `get_access_token()` returns a token instead of dict by default,
+  fixes https://github.com/plamere/spotipy/issues/687 and https://github.com/plamere/spotipy/issues/828
 
 ## [2.20.0] - 2022-06-18
 
