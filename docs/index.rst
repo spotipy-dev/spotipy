@@ -235,6 +235,7 @@ The following handlers are available and defined in the URL above.
   - ``CacheFileHandler``
   - ``MemoryCacheHandler``
   - ``DjangoSessionCacheHandler``
+  - ``FlaskSessionCacheHandler``
   - ``RedisCacheHandler``
 
 Feel free to contribute new cache handlers to the repo.

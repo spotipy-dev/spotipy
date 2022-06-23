@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Added `market` parameter to `album` and `albums` to address ([#753](https://github.com/plamere/spotipy/issues/753)
 * Added 'show_featured_artists.py' to 'examples'.
 * Expanded contribution and license sections of the documentation.
+* Added `FlaskSessionCacheHandler`, a cache handler that stores the token info in a flask session.
 
 ### Fixed
 
