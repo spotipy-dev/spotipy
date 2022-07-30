@@ -1917,7 +1917,7 @@ class Spotify(object):
         return path
 
     def _get_id(self, type, id):
-        id=id['uri']
+        id = id['uri']
         fields = id.split(":")
         if len(fields) >= 3:
             if type != fields[-2]:
