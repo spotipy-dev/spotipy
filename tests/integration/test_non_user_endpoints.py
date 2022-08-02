@@ -63,13 +63,13 @@ class AuthTestSpotipy(unittest.TestCase):
 
     def test_audio_analysis(self):
         result = self.spotify.audio_analysis(self.four_tracks[0])
-        assert('beats' in result)
+        assert ('beats' in result)
 
     def test_audio_features(self):
         results = self.spotify.audio_features(self.four_tracks)
         self.assertTrue(len(results) == len(self.four_tracks))
         for track in results:
-            assert('speechiness' in track)
+            assert ('speechiness' in track)
 
     def test_audio_features_with_bad_track(self):
         bad_tracks = ['spotify:track:bad']
@@ -78,7 +78,7 @@ class AuthTestSpotipy(unittest.TestCase):
         self.assertTrue(len(results) == len(input))
         for track in results[:-1]:
             if track is not None:
-                assert('speechiness' in track)
+                assert ('speechiness' in track)
         self.assertTrue(results[-1] is None)
 
     def test_recommendations(self):
