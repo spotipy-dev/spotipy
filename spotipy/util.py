@@ -5,6 +5,7 @@
 __all__ = ["CLIENT_CREDS_ENV_VARS"]
 
 import logging
+from typing import Optional, Tuple
 
 LOGGER = logging.getLogger(__name__)
 
@@ -16,7 +17,7 @@ CLIENT_CREDS_ENV_VARS = {
 }
 
 
-def get_host_port(netloc):
+def get_host_port(netloc: str) -> Tuple[str, Optional[int]]:
     if ":" in netloc:
         host, port = netloc.split(":", 1)
         port = int(port)
