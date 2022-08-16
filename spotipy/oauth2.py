@@ -153,8 +153,9 @@ class SpotifyAuthBase(object):
 
     def __del__(self):
         """Make sure the connection (pool) gets closed"""
-        if isinstance(self._session, requests.Session):
-            self._session.close()
+        if requests.Session is not None:
+            if isinstance(self._session, requests.Session):
+                self._session.close()
 
 
 class SpotifyClientCredentials(SpotifyAuthBase):
