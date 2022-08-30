@@ -22,6 +22,7 @@ $env:SPOTIPY_REDIRECT_URI="http://localhost:8080"
 
 ```bash
 $ virtualenv --python=python3.7 env
+$ source env/bin/activate
 (env) $ pip install --user -e .
 (env) $ python -m unittest discover -v tests
 ```
