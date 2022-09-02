@@ -397,6 +397,29 @@ class Spotify(object):
             offset=offset,
         )
 
+    def artist_image(self, artist_id, idx=0, fallback=True):
+        """Retrieves the artist image.
+
+           Parameters:
+               - artist_id - the artist ID, URI, or URL
+               - idx - index of the image array. Smaller index means larger image.
+                       Usually ranges from 0 to 2.
+               - fallback - in case of IndexError, defaults to 0th index if set to True.
+
+        """
+
+        trid = self._get_id("artist", artist_id)
+        img_list = self._get("artists/%s" % (trid))['images']
+        try:
+            img = img_list[idx]
+        except IndexError as err:
+            if fallback:
+                img = img_list[0]
+            else:
+                raise IndexError(err)
+        finally:
+            return [img]
+
     def artist_top_tracks(self, artist_id, country="US"):
         """ Get Spotify catalog information about an artist's top 10 tracks
             by country.
@@ -463,6 +486,29 @@ class Spotify(object):
             return self._get("albums/?ids=" + ",".join(tlist) + '&market=' + market)
         else:
             return self._get("albums/?ids=" + ",".join(tlist))
+
+    def album_cover_image(self, album_id, idx=0, market=None, fallback=True):
+        """Retrieves the album cover.
+
+           Parameters:
+               - album_id - the album ID, URI, or URL
+               - idx - index of the image array. Smaller index means larger image.
+                       Usually ranges from 0 to 2.
+               - market - an ISO-3166-1 alpha-2 country code
+               - fallback - in case of IndexError, defaults to 0th index if set to True.
+        """
+
+        trid = self._get_id("album", album_id)
+        img_list = self._get("albums/%s" % (trid), market=market)['images']
+        try:
+            img = img_list[idx]
+        except IndexError as err:
+            if fallback:
+                img = img_list[0]
+            else:
+                raise IndexError(err)
+        finally:
+            return [img]
 
     def show(self, show_id, market=None):
         """ returns a single show given the show's ID, URIs or URL
