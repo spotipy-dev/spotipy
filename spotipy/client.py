@@ -1872,6 +1872,10 @@ class Spotify(object):
             )
         )
 
+    def queue(self):
+        """ Gets the current user's queue """
+        return self._get("me/player/queue")
+
     def add_to_queue(self, uri, device_id=None):
         """ Adds a song to the end of a user's queue
 
