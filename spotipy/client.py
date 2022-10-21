@@ -386,6 +386,19 @@ class Spotify(object):
                 - country - limit the response to one particular country.
                 - limit  - the number of albums to return
                 - offset - the index of the first album to return
+
+            Response:
+                - Type: Dictionary
+
+            Example Code Output:
+                Young Heart
+                Beautiful Lies
+                Beautiful Lies
+                Beautiful Lies (Deluxe)
+                Beautiful Lies (Deluxe)
+                Fire Within
+                Fire Within
+                Fire Within (Deluxe)
         """
 
         trid = self._get_id("artist", artist_id)
@@ -404,6 +417,15 @@ class Spotify(object):
             Parameters:
                 - artist_id - the artist ID, URI or URL
                 - country - limit the response to one particular country.
+
+            Response:
+                - Type: Dictionary
+
+            Example Code Output:
+                track    : Stairway to Heaven - Remaster
+                audio    : https://p.scdn.co/mp3-preview/fc80a280376d5142c888475bd8fdcd00b4fc8d7d?cid=3234bc8c7a4f48279de3c4885538a0c8
+                cover art: https://i.scdn.co/image/ab67616d0000b273c8a11e48c91a982d086afc69
+
         """
 
         trid = self._get_id("artist", artist_id)
@@ -416,6 +438,18 @@ class Spotify(object):
 
             Parameters:
                 - artist_id - the artist ID, URI or URL
+
+            Response:
+                - Type: Dictionary
+
+            Example Code Output:
+                Related artists for Weezer
+                   The Presidents Of The United States Of America
+                   CAKE
+                   Marcy Playground
+                   Third Eye Blind
+                   Jimmy Eat World
+                   The Smashing Pumpkins
         """
         trid = self._get_id("artist", artist_id)
         return self._get("artists/" + trid + "/related-artists")
@@ -426,6 +460,9 @@ class Spotify(object):
             Parameters:
                 - album_id - the album ID, URI or URL
                 - market - an ISO 3166-1 alpha-2 country code
+
+            Response:
+                - Type: Dictionary
         """
 
         trid = self._get_id("album", album_id)
@@ -442,6 +479,8 @@ class Spotify(object):
                 - limit  - the number of items to return
                 - offset - the index of the first item to return
                 - market - an ISO 3166-1 alpha-2 country code.
+            Response:
+                - Type: Dictionary
 
         """
 
@@ -557,6 +596,13 @@ class Spotify(object):
                          pass in a comma separated string; e.g., 'track,album,episode'.
                 - market - An ISO 3166-1 alpha-2 country code or the string
                            from_token.
+
+            Response:
+                - Type: Dictionary
+
+            Example Code Output:
+                Radiohead https://i.scdn.co/image/ab6761610000e5eba03696716c9ee605006047fd
+
         """
         return self._get(
             "search", q=q, limit=limit, offset=offset, type=type, market=market
