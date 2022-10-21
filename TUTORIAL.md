@@ -79,8 +79,3 @@ D. Close main.py and return to the directory that contains main.py. You can then
 E. You may see a window open in your browser asking you to authorize the application. Do so - you will only have to do this once.
 
 F. Return to your terminal - you should see all of Taylor's albums printed out there.
-
-
-
-
-    
