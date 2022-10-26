@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+// Add your changes here and then delete this line
+
+## [2.21.0] - 2022-09-26
+
 ### Added 
 
 * Added `market` parameter to `album` and `albums` to address ([#753](https://github.com/plamere/spotipy/issues/753)
