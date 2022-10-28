@@ -8,6 +8,14 @@
 
 Spotipy's full documentation is online at [Spotipy Documentation](http://spotipy.readthedocs.org/).
 
+### Work in Progress
+
+This section contains work that still needs completion for this project.
+
+- [Code of Conduct](https://github.com/plamere/spotipy/community/code-of-conduct/new).
+ 
+- [Security Policy](https://github.com/plamere/spotipy/community).
+
 ## Installation
 
 ```bash
@@ -70,10 +78,3 @@ If you have suggestions, bugs or other issues specific to this library,
 file them [here](https://github.com/plamere/spotipy/issues).
 Or just send a pull request.
 
-## Work in Progress
-
-This section contains work that still needs completion for this project.
-
-- [Code of Conduct](https://github.com/plamere/spotipy/community/code-of-conduct/new).
- 
-- [Security Policy](https://github.com/plamere/spotipy/community).
