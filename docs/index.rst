@@ -366,6 +366,13 @@ To make sure if the import lists are stored correctly:::
 
 Don't forget to add a short description of your change in the `CHANGELOG <https://github.com/plamere/spotipy/blob/master/CHANGELOG.md>`_!
 
+**Works in Progress**
+
+This section contains work that still needs completion for this projoect
+-`Code of Conduct <https://github.com/plamere/spotipy/community/code-of-conduct/new>`_.
+
+-`Security Policy <https://github.com/plamere/spotipy/community>`_.
+
 
 
 License
