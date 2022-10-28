@@ -368,10 +368,11 @@ Don't forget to add a short description of your change in the `CHANGELOG <https:
 
 **Works in Progress**
 
-This section contains work that still needs completion for this projoect
--`Code of Conduct <https://github.com/plamere/spotipy/community/code-of-conduct/new>`_.
+This section contains work that still needs completion for this project.
 
--`Security Policy <https://github.com/plamere/spotipy/community>`_.
+- `Code of Conduct <https://github.com/plamere/spotipy/community/code-of-conduct/new>`_.
+ 
+- `Security Policy <https://github.com/plamere/spotipy/community>`_.
 
 
 
