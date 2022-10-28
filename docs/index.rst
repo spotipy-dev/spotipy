@@ -8,6 +8,14 @@ Welcome to Spotipy!
 <https://developer.spotify.com/web-api/>`_. With *Spotipy*
 you get full access to all of the music data provided by the Spotify platform.
 
+*Spotipy* is a project that is considered open source software and is under an MIT license. Please see the License section for more information. 
+
+Technical Expertise
+-----------
+Python Basic or introductory level
+
+An Example
+-----------
 Assuming you set the ``SPOTIPY_CLIENT_ID`` and ``SPOTIPY_CLIENT_SECRET``
 environment variables (here is a `video <https://youtu.be/3RGm4jALukM>`_ explaining how to do so), here's a quick example of using *Spotipy* to list the
 names of all the albums released by the artist 'Birdy'::
