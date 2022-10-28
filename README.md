@@ -69,3 +69,11 @@ Don’t forget to add the *Spotipy* tag, and any other relevant tags as well, be
 If you have suggestions, bugs or other issues specific to this library,
 file them [here](https://github.com/plamere/spotipy/issues).
 Or just send a pull request.
+
+## Reporting Issues
+
+This section contains work that still needs completion for this project.
+
+- [Code of Conduct] (https://github.com/plamere/spotipy/community/code-of-conduct/new).
+ 
+- [Security Policy] (https://github.com/plamere/spotipy/community).
