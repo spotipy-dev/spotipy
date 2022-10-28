@@ -70,10 +70,10 @@ If you have suggestions, bugs or other issues specific to this library,
 file them [here](https://github.com/plamere/spotipy/issues).
 Or just send a pull request.
 
-## Reporting Issues
+## Work in Progress
 
 This section contains work that still needs completion for this project.
 
-- [Code of Conduct] (https://github.com/plamere/spotipy/community/code-of-conduct/new).
+- `Code of Conduct <https://github.com/plamere/spotipy/community/code-of-conduct/new>`_.
  
-- [Security Policy] (https://github.com/plamere/spotipy/community).
+- `Security Policy <https://github.com/plamere/spotipy/community>`_.
