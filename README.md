@@ -74,6 +74,6 @@ Or just send a pull request.
 
 This section contains work that still needs completion for this project.
 
-- `Code of Conduct <https://github.com/plamere/spotipy/community/code-of-conduct/new>`_.
+- [Code of Conduct](https://github.com/plamere/spotipy/community/code-of-conduct/new).
  
-- `Security Policy <https://github.com/plamere/spotipy/community>`_.
+- [Security Policy](https://github.com/plamere/spotipy/community).
