@@ -90,7 +90,7 @@ def prompt_for_user_token(
     )
 
     # try to get a valid token for this user, from the cache,
-    # if not in the cache, the create a new (this will send
+    # if not in the cache, then create a new (this will send
     # the user to a web page where they can authorize this app)
 
     token_info = sp_oauth.validate_token(sp_oauth.cache_handler.get_cached_token())
