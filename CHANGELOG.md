@@ -15,6 +15,7 @@ While this is unreleased, please only add v3 features here. Rebasing master onto
 * Added `RedisCacheHandler`, a cache handler that stores the token info in Redis.
 * Added a new parameter to `RedisCacheHandler` to allow custom keys (instead of the default `token_info` key)
 * Simplify check for existing token in `RedisCacheHandler`
+* Make redis an optional dependency
 
 ### Changed
 

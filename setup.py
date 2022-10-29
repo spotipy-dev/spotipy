@@ -11,9 +11,15 @@ doc_reqs = [
     'Sphinx>=1.5.2'
 ]
 
+redis_reqs = [
+    "redis>=3.5.3",
+    "redis<4.0.0;python_version<'3.4'",
+]
+
 extra_reqs = {
     'doc': doc_reqs,
-    'test': test_reqs
+    'test': test_reqs,
+    'redis': redis_reqs,
 }
 
 setup(
@@ -26,7 +32,6 @@ setup(
     author_email="paul@echonest.com",
     url='https://spotipy.readthedocs.org/',
     install_requires=[
-        'redis>=3.5.3',
         'requests>=2.25.0',
         'six>=1.15.0',
         'urllib3>=1.26.0'
