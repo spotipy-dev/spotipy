@@ -224,12 +224,13 @@ class AuthTestSpotipy(unittest.TestCase):
         self.assertTrue('items' in results)
         self.assertTrue(len(results['items']) > 0)
 
-        found = False
-        for album in results['items']:
-            if album['name'] == 'Hurley':
-                found = True
+        def find_album():
+            for album in results['items']:
+                if album['name'] == 'Death to False Metal':
+                    return True
+            return False
 
-        self.assertTrue(found)
+        self.assertTrue(find_album())
 
     def test_search_timeout(self):
         client_credentials_manager = SpotifyClientCredentials()
