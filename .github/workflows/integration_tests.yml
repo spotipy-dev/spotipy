@@ -12,7 +12,7 @@ jobs:
       PYTHON_VERSION: "3.10"
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Python ${{ env.PYTHON_VERSION }}
+      - name: Set up Python test
         uses: actions/setup-python@v1
         with:
           python-version: ${{ env.PYTHON_VERSION }}
