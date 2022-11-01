@@ -224,12 +224,13 @@ class AuthTestSpotipy(unittest.TestCase):
         self.assertTrue('items' in results)
         self.assertTrue(len(results['items']) > 0)
 
-        found = False
-        for album in results['items']:
-            if album['name'] == 'Hurley':
-                found = True
+        def find_album():
+            for album in results['items']:
+                if album['name'] == 'Death to False Metal':
+                    return True
+            return False
 
-        self.assertTrue(found)
+        self.assertTrue(find_album())
 
     def test_search_timeout(self):
         client_credentials_manager = SpotifyClientCredentials()
@@ -240,6 +241,7 @@ class AuthTestSpotipy(unittest.TestCase):
         self.assertRaises((requests.exceptions.Timeout, requests.exceptions.ConnectionError),
                           lambda: sp.search(q='my*', type='track'))
 
+    @unittest.skip("flaky test, need a better method to test retries")
     def test_max_retries_reached_get(self):
         spotify_no_retry = Spotify(
             client_credentials_manager=SpotifyClientCredentials(),
