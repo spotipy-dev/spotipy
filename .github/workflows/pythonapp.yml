@@ -28,3 +28,6 @@ jobs:
     - name: Run unit tests
       run: |
         python -m unittest discover -v tests/unit
+    - name: Run non user endpoints integration tests
+      run: |
+        python -m unittest discover -v tests/integration/non_user
