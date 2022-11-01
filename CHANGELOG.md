@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-// Add your changes here and then delete this line
+### Added
+
+* Integration tests via GHA (non-user endpoints)
 
 ## [2.21.0] - 2022-09-26
 
