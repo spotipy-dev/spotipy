@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-* Make test app credentials available in GHA as secrets
+* Integration tests workflow
 
 ## [2.21.0] - 2022-09-26
 
