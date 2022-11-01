@@ -241,6 +241,7 @@ class AuthTestSpotipy(unittest.TestCase):
         self.assertRaises((requests.exceptions.Timeout, requests.exceptions.ConnectionError),
                           lambda: sp.search(q='my*', type='track'))
 
+    @unittest.skip("flaky test, need a better method to test retries")
     def test_max_retries_reached_get(self):
         spotify_no_retry = Spotify(
             client_credentials_manager=SpotifyClientCredentials(),
