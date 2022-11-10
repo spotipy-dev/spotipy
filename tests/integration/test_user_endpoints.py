@@ -464,6 +464,65 @@ class SpotipyFollowApiTests(unittest.TestCase):
         # Unfollow these 2 users
         self.spotify.user_unfollow_users(users)
         self.assertFalse(any(self.spotify.current_user_following_users(users)))
+    
+    def test_album(self):
+        albumId = "spotify:album:6kL09DaURb7rAoqqaA51KU"
+        results = self.spotify.album(albumId, "GB")
+        self.assertIsNotNone(results)
+
+    def test_albums_market(self):
+        albumId = "spotify:album:6kL09DaURb7rAoqqaA51KU"
+        results = self.spotify.albums(albumId, "US")
+        self.assertIsNotNone(results)
+
+    def test_empty_playlist(self):
+        playlists = self.spotify.current_user_playlists()
+        size = len(playlists["items"])
+        self.assertEquals(size, 0)
+
+    def test_playlist_by_id(self):
+        playlist_id = 'spotify:user:spotifycharts:playlist:37i9dQZEVXbJiZcmkrIHGU'
+        playId = self.spotify.playlist(playlist_id)
+        self.assertIsNotNone(playId)
+
+    def test_previous_none(self):
+        uri = "spotify:artist:2WX2uTcsvV5OnS0inACecP"
+        results = self.spotify.artist_albums(uri, album_type='album')
+        results = self.spotify.previous(results)
+        self.assertIsNone(results)
+
+    def test_bad_shuffle(self):
+        response = self.spotify.shuffle('not')
+        self.assertEqual(None, response)
+
+    def test_good_shuffle(self):
+        response = self.spotify.shuffle(True)
+        self.assertEqual(None, response)
+
+    def test_neg_volume(self):
+        response = self.spotify.volume(-2)
+        self.assertEqual(None, response)
+
+    def test_not_volume(self):
+        response = self.spotify.volume('not')
+        self.assertEqual(None, response)
+
+    def test_volume(self):
+        response = self.spotify.volume(20)
+        self.assertEqual(None, response)
+
+    def test_invalid_seek_track(self):
+        response = self.spotify.seek_track('not')
+        self.assertEqual(None, response)
+
+    def test_invalid_repeat(self):
+        response = self.spotify.repeat('not valid')
+        self.assertEqual(None, response)
+
+    def test_bad_market(self):
+        response = self.spotify.search_markets(q='weezer', type='artist', markets=('this','is'))
+        self.assertEqual(None, response)
+
 
 
 class SpotipyPlayerApiTests(unittest.TestCase):
