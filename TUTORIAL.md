@@ -22,7 +22,9 @@ This tutorial will be easiest if you have some knowledge of how to use Linux com
 Once those three setup items are taken care of, you're ready to start learning how to use Spotipy!
 
 ## Step 1. Creating a Spotify Account
-Spotipy relies on the Spotify API. In order to use the Spotify API, you'll need to create a Spotify developer account. Here is a How-To video [https://www.youtube.com/watch?v=3RGm4jALukM] that showcases how to get setup with API credentials, Redirect URIs, and Spotify Developer Accounts, all of which are necessary prerequisites to using the Spotipy library environment variables.
+Spotipy relies on the Spotify API. In order to use the Spotify API, you'll 
+need to create a Spotify developer account. Here is a how-to [video](https://www.youtube.com/watch?v=3RGm4jALukM) that showcases how to get 
+setup with API credentials, Redirect URIs, and Spotify Developer Account, all of which are necessary prerequisites to using the Spotipy library environment variables.
 
 A. Visit the [Spotify developer portal](https://developer.spotify.com/dashboard/). If you already have a Spotify account, click "Log in" and enter your username and password. Otherwise, click "Sign up" and follow the steps to create an account. After you've signed in or signed up, you should be redirected to your developer dashboard. You do not need to have a premium Spotify account, a free account will work.
 
@@ -76,6 +78,6 @@ for album in albums:
 
 D. Close main.py and return to the directory that contains main.py. You can then run your app by entering the following command: python main.py
 
-E. You may see a window open in your browser asking you to authorize the application. Do so - you will only have to do this once. You also may receive an initial error which asks you for the redirect link. You will copy the URL where you receive the error and then creates a cache file and an access token, so you won’t have to do that all the time. The video [https://www.youtube.com/watch?v=3RGm4jALukM] does a good job of explaining this process. 
+E. You may see a window open in your browser asking you to authorize the application. Do so - you will only have to do this once. You also may receive an initial error which asks you for the redirect link. You will copy the URL where you receive the error and then creates a cache file and an access token, so you won’t have to do that all the time. The [video](https://www.youtube.com/watch?v=3RGm4jALukM) does a good job of explaining this process. 
 
 F. Return to your terminal - you should see all of Taylor's albums printed out there.
