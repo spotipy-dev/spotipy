@@ -11,6 +11,20 @@ from spotipy import (
 import unittest
 from tests import helpers
 
+scope = (
+    'playlist-modify-public '
+    'user-library-read '
+    'user-follow-read '
+    'user-library-modify '
+    'user-read-private '
+    'user-top-read '
+    'user-follow-modify '
+    'user-read-recently-played '
+    'ugc-image-upload '
+    'user-read-playback-state '
+    'user-read-currently-playing'
+)
+
 
 class SpotipyPlaylistApiTest(unittest.TestCase):
     @classmethod
@@ -34,19 +48,6 @@ class SpotipyPlaylistApiTest(unittest.TestCase):
             "spotify:episode:32vhLjJjT7m3f9DFCJUCVZ",
             "spotify:episode:7cRcsGYYRUFo1OF3RgRzdx",
         ]
-
-        scope = (
-            'playlist-modify-public '
-            'user-library-read '
-            'user-follow-read '
-            'user-library-modify '
-            'user-read-private '
-            'user-top-read '
-            'user-follow-modify '
-            'user-read-recently-played '
-            'ugc-image-upload '
-            'user-read-playback-state'
-        )
 
         token = prompt_for_user_token(cls.username, scope=scope)
 
@@ -229,19 +230,6 @@ class SpotipyLibraryApiTests(unittest.TestCase):
         ]
         cls.username = os.getenv(CCEV['client_username'])
 
-        scope = (
-            'playlist-modify-public '
-            'user-library-read '
-            'user-follow-read '
-            'user-library-modify '
-            'user-read-private '
-            'user-top-read '
-            'user-follow-modify '
-            'user-read-recently-played '
-            'ugc-image-upload '
-            'user-read-playback-state'
-        )
-
         token = prompt_for_user_token(cls.username, scope=scope)
 
         cls.spotify = Spotify(auth=token)
@@ -304,19 +292,6 @@ class SpotipyUserApiTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.username = os.getenv(CCEV['client_username'])
-
-        scope = (
-            'playlist-modify-public '
-            'user-library-read '
-            'user-follow-read '
-            'user-library-modify '
-            'user-read-private '
-            'user-top-read '
-            'user-follow-modify '
-            'user-read-recently-played '
-            'ugc-image-upload '
-            'user-read-playback-state'
-        )
 
         token = prompt_for_user_token(cls.username, scope=scope)
 
@@ -418,19 +393,6 @@ class SpotipyFollowApiTests(unittest.TestCase):
     def setUpClass(cls):
         cls.username = os.getenv(CCEV['client_username'])
 
-        scope = (
-            'playlist-modify-public '
-            'user-library-read '
-            'user-follow-read '
-            'user-library-modify '
-            'user-read-private '
-            'user-top-read '
-            'user-follow-modify '
-            'user-read-recently-played '
-            'ugc-image-upload '
-            'user-read-playback-state'
-        )
-
         token = prompt_for_user_token(cls.username, scope=scope)
 
         cls.spotify = Spotify(auth=token)
@@ -472,20 +434,6 @@ class SpotipyPlayerApiTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.username = os.getenv(CCEV['client_username'])
-
-        scope = (
-            'playlist-modify-public '
-            'user-library-read '
-            'user-follow-read '
-            'user-library-modify '
-            'user-read-private '
-            'user-top-read '
-            'user-follow-modify '
-            'user-read-recently-played '
-            'ugc-image-upload '
-            'user-read-playback-state '
-            'user-read-currently-playing '
-        )
 
         token = prompt_for_user_token(cls.username, scope=scope)
 
