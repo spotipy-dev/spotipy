@@ -40,7 +40,7 @@ class SpotifyOauthError(Exception):
 
 
 class SpotifyStateError(SpotifyOauthError):
-    """ The state sent and state recieved were different """
+    """ The state sent and state received were different """
 
     def __init__(self, local_state=None, remote_state=None, message=None,
                  error=None, error_description=None, *args, **kwargs):
@@ -136,8 +136,8 @@ class SpotifyAuthBase(object):
             error = error_payload.get('error')
             error_description = error_payload.get('error_description')
         except ValueError:
-            # if the response cannnot be decoded into JSON (which raises a ValueError),
-            # then try do decode it into text
+            # if the response cannot be decoded into JSON (which raises a ValueError),
+            # then try to decode it into text
 
             # if we receive an empty string (which is falsy), then replace it with `None`
             error = response.text or None
@@ -213,7 +213,7 @@ class SpotifyClientCredentials(SpotifyAuthBase):
     def get_access_token(self, as_dict=True, check_cache=True):
         """
         If a valid access token is in memory, returns it
-        Else feches a new token and returns it
+        Else fetches a new token and returns it
 
             Parameters:
             - as_dict - a boolean indicating if returning the access token
@@ -630,7 +630,7 @@ class SpotifyPKCE(SpotifyAuthBase):
 
     This auth manager enables *user and non-user* endpoints with only
     a client secret, redirect uri, and username. When the app requests
-    an an access token for the first time, the user is prompted to
+    an access token for the first time, the user is prompted to
     authorize the new client app. After authorizing the app, the client
     app is then given both access and refresh tokens. This is the
     preferred way of authorizing a mobile/desktop client.
@@ -669,7 +669,7 @@ class SpotifyPKCE(SpotifyAuthBase):
              * requests_timeout: Optional, tell Requests to stop waiting for a response after
                                  a given number of seconds
              * requests_session: A Requests session
-             * open_browser: Optional, thether or not the web browser should be opened to
+             * open_browser: Optional, whether or not the web browser should be opened to
                              authorize a user
              * cache_handler: An instance of the `CacheHandler` class to handle
                               getting and saving cached authorization tokens.
@@ -1025,7 +1025,7 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
     * parse_response_token(url) ->
       get_access_token(parse_response_code(url)); get_cached_token()
 
-    The security concern in the Implict Grant flow is that the token is
+    The security concern in the Implicit Grant flow is that the token is
     returned in the URL and can be intercepted through the browser. A
     request with an authorization code and proof of origin could not be
     easily intercepted without a compromised network.
@@ -1043,7 +1043,7 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
                  cache_handler=None):
         """ Creates Auth Manager using the Implicit Grant flow
 
-        **See help(SpotifyImplictGrant) for full Security Warning**
+        **See help(SpotifyImplicitGrant) for full Security Warning**
 
         Parameters
         ----------
@@ -1066,7 +1066,7 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
                        "Grant Flow for client-side code. Use the SpotifyPKCE "
                        "auth manager instead of SpotifyImplicitGrant. For "
                        "more details and a guide to switching, see "
-                       "help(SpotifyImplictGrant).")
+                       "help(SpotifyImplicitGrant).")
 
         self.client_id = client_id
         self.redirect_uri = redirect_uri
