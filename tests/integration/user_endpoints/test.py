@@ -352,8 +352,9 @@ class SpotipyBrowseApiTests(unittest.TestCase):
         cls.spotify = Spotify(auth=token)
 
     def test_category(self):
-        response = self.spotify.category('rock')
-        self.assertTrue('name' in response)
+        rock_cat_id = '0JQ5DAqbMKFDXXwE9BDJAr'
+        response = self.spotify.category(rock_cat_id)
+        self.assertEqual(response['name'], 'Rock')
 
     def test_categories(self):
         response = self.spotify.categories()
@@ -369,11 +370,11 @@ class SpotipyBrowseApiTests(unittest.TestCase):
 
     def test_categories_limit_low(self):
         response = self.spotify.categories(limit=1)
-        self.assertEqual(len(response['categories']), 1)
+        self.assertEqual(len(response['categories']['items']), 1)
 
     def test_categories_limit_high(self):
         response = self.spotify.categories(limit=50)
-        self.assertLessEqual(len(response['categories']), 50)
+        self.assertLessEqual(len(response['categories']['items']), 50)
 
     def test_category_playlists(self):
         response = self.spotify.categories()
