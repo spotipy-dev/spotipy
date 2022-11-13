@@ -503,7 +503,6 @@ class SpotipyPlayerApiTests(unittest.TestCase):
         # not much more to test if account is inactive and has no recently played tracks
 
     def test_get_queue(self):
-        # No cursor
         res = self.spotify.get_queue()
         self.assertLessEqual(len(res['items']), 0)
 
