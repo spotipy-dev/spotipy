@@ -220,7 +220,7 @@ class AuthTestSpotipy(unittest.TestCase):
         self.assertTrue(total_limited_results <= total)
 
     def test_artist_albums(self):
-        results = self.spotify.artist_albums(self.weezer_urn)
+        results = self.spotify.artist_albums(self.weezer_urn, limit=50)
         self.assertTrue('items' in results)
         self.assertTrue(len(results['items']) > 0)
 
