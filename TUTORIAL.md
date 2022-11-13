@@ -22,15 +22,19 @@ This tutorial will be easiest if you have some knowledge of how to use Linux com
 Once those three setup items are taken care of, you're ready to start learning how to use Spotipy!
 
 ## Step 1. Creating a Spotify Account
-Spotipy relies on the Spotify API. In order to use the Spotify API, you'll need to create a Spotify developer account.
+Spotipy relies on the Spotify API. In order to use the Spotify API, you'll 
+need to create a Spotify developer account. Here is a how-to [video](https://www.youtube.com/watch?v=3RGm4jALukM) that showcases how to get 
+setup with API credentials, Redirect URIs, and Spotify Developer Accounts, all of which are necessary prerequisites to using the Spotipy library environment variables.
 
-A. Visit the [Spotify developer portal](https://developer.spotify.com/dashboard/). If you already have a Spotify account, click "Log in" and enter your username and password. Otherwise, click "Sign up" and follow the steps to create an account. After you've signed in or signed up, you should be redirected to your developer dashboard.
+A. Visit the [Spotify developer portal](https://developer.spotify.
+com/dashboard/). If you already have a Spotify account, click "Log in" and enter your username and password. Otherwise, click "Sign up" and follow the steps to create an account. After you've signed in or signed up, you should be redirected to your developer dashboard.  You do not need to have a premium Spotify account, a free account will work.
 
 B. Click the "Create an App" button. Enter any name and description you'd like for your new app. Accept the terms of service and click "Create."
 
-C. In your new app's Overview screen, click the "Edit Settings" button and scroll down to "Redirect URIs." Add "http://localhost:1234" (or any other port number of your choosing). Hit the "Save" button at the bottom of the Settings panel to return to you App Overview screen.
+C. In your new app's Overview screen, click the "Edit Settings" button and scroll down to "Redirect URIs." Add "[https://localhost:1234/callback/]" (or any other port number of your choosing). Hit the "Save" button at the bottom of the Settings panel to return to you App Overview screen.
 
-D. Underneath your app name and description on the lefthand side, you'll see a "Show Client Secret" link. Click that link to reveal your Client Secret, then copy both your Client Secret and your Client ID somewhere on your computer. You'll need to access them later.
+D. Underneath your app name and description on the lefthand side, you'll 
+see a "Show Client Secret" link. Click that link to reveal your Client Secret, then copy both your Client Secret and your Client ID somewhere on your computer. You'll need to access them later.
 
 ## Step 2. Installation and Setup
 
@@ -76,6 +80,10 @@ for album in albums:
 
 D. Close main.py and return to the directory that contains main.py. You can then run your app by entering the following command: python main.py
 
-E. You may see a window open in your browser asking you to authorize the application. Do so - you will only have to do this once.
+E. You may see a window open in your browser asking you to authorize the 
+application. Do so - you will only have to do this once. You also may 
+receive an initial error which asks you for the redirect link. You will copy 
+the URL where you receive the error and then creates a cache file and an 
+access token, so you won’t have to do that all the time. The [video](https://www.youtube.com/watch?v=3RGm4jALukM) does a good job of explaining this process. 
 
 F. Return to your terminal - you should see all of Taylor's albums printed out there.
