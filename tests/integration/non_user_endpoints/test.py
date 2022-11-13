@@ -226,7 +226,7 @@ class AuthTestSpotipy(unittest.TestCase):
 
         def find_album():
             for album in results['items']:
-                if album['name'] == 'Death to False Metal':
+                if album['name'] == 'Weezer':
                     return True
             return False
 

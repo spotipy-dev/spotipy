@@ -1872,7 +1872,7 @@ class Spotify(object):
             )
         )
 
-    def queue(self):
+    def get_queue(self):
         """ Gets the current user's queue """
         return self._get("me/player/queue")
 
