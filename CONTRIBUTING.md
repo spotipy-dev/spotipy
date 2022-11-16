@@ -44,10 +44,6 @@ To make sure if the import lists are stored correctly:
     pip install isort
     isort . -c -v
 
-### Tests
-
-In order to commit and push your changes to the master files, all tests must be passing. If there are tests that are failing, due to your most recent commit, please fix prior to your commit or it will not be accepted.
-
 ### Publishing (by maintainer)
 
 - Bump version in setup.py
