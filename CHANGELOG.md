@@ -33,7 +33,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -   Fix `AttributeError` for `text` attribute of the `Response` object
 -   Require redis v3 if python2.7 (fixes readthedocs)
 
-
 ## [2.20.0] - 2022-06-18
 
 ### Added
@@ -61,7 +60,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -   Fixed a bug in the initializers for the auth managers that produced a spurious warning message if you provide a cache handler and you set a value for the "SPOTIPY_CLIENT_USERNAME" environment variable.
 -   Use generated MIT license and fix license type in `pip show`
 
-
 ## [2.18.0] - 2021-04-13
 
 ### Added
@@ -74,7 +72,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     -   `Spotify.current_user_saved_episodes_delete`
     -   `Spotify.current_user_saved_episodes_contains`
     -   `Spotify.available_markets`
-
 
 ### Changed
 
@@ -271,7 +268,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
         -   track uri, id, or url
         -   device id. If None, then the active device is used.
 -   Add CHANGELOG and LICENSE to released package
-
 
 ## [2.9.0] - 2020-02-15
 
