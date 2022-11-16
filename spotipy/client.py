@@ -423,8 +423,8 @@ class Spotify(object):
 
             Example Code Output:
                 track    : Stairway to Heaven - Remaster
-                audio    : https://p.scdn.co/mp3-preview/fc80a280376d5142c888475bd8fdcd00b4fc8d7d?cid=3234bc8c7a4f48279de3c4885538a0c8
-                cover art: https://i.scdn.co/image/ab67616d0000b273c8a11e48c91a982d086afc69
+                audio    : url
+                cover art: url
 
         """
 
