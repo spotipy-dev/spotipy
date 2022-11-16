@@ -52,7 +52,7 @@ To make sure if the import lists are stored correctly:
 
       ## Unreleased
 
-      // Add your changes here and then delete this line
+      - added response and example types within function docstrings
 
 - Commit changes
 - Package to pypi:
