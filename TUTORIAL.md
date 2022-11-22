@@ -27,7 +27,7 @@ need to create a Spotify developer account. Here is a how-to [video](https://www
 setup with API credentials, Redirect URIs, and Spotify Developer Accounts, all of which are necessary prerequisites to using the Spotipy library environment variables.
 
 A. Visit the [Spotify developer portal](https://developer.spotify.
-com/dashboard/). If you already have a Spotify account, click "Log in" and enter your username and password. Otherwise, click "Sign up" and follow the steps to create an account. After you've signed in or signed up, you should be redirected to your developer dashboard.  You do not need to have a premium Spotify account, a free account will work.
+com/dashboard/). If you already have a Spotify account, click "Log in" and enter your username and password. Otherwise, click "Sign up" and follow the steps to create an account. After you've signed in or signed up, you should be redirected to your developer dashboard. You do not need to have a premium Spotify account, a free account will work.
 
 B. Click the "Create an App" button. Enter any name and description you'd like for your new app. Accept the terms of service and click "Create."
 
