@@ -31,7 +31,7 @@ com/dashboard/). If you already have a Spotify account, click "Log in" and enter
 
 B. Click the "Create an App" button. Enter any name and description you'd like for your new app. Accept the terms of service and click "Create."
 
-C. In your new app's Overview screen, click the "Edit Settings" button and scroll down to "Redirect URIs." Add "[https://localhost:1234/callback/]" (or any other port number of your choosing). Hit the "Save" button at the bottom of the Settings panel to return to you App Overview screen.
+C. In your new app's Overview screen, click the "Edit Settings" button and scroll down to "Redirect URIs." Add "[http://localhost:1234/callback/]" (or any other port number of your choosing). Hit the "Save" button at the bottom of the Settings panel to return to you App Overview screen.
 
 D. Underneath your app name and description on the lefthand side, you'll 
 see a "Show Client Secret" link. Click that link to reveal your Client Secret, then copy both your Client Secret and your Client ID somewhere on your computer. You'll need to access them later.

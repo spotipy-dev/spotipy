@@ -5,21 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
 
-## [2.23.0] - 2022-11-21
-
-### Fixed
 -   Updated the TUTORIAL.md documentation to include link to video, corrected
     Redirect URI, and gave additional information on potential error.
     
-## [2.22.0] - 2022-11-21
-
-### Added
--   Updated the documentation to include a Code of Conduct
-
-
-## Unreleased
-
 ### Added
 
 -   Integration tests via GHA (non-user endpoints)
