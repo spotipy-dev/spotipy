@@ -364,8 +364,16 @@ class SpotipyBrowseApiTests(unittest.TestCase):
         response = self.spotify.categories(country='US')
         self.assertGreater(len(response['categories']), 0)
 
+    def test_categories_global(self):
+        response = self.spotify.categories()
+        self.assertGreater(len(response['categories']), 0)
+
     def test_categories_locale(self):
         response = self.spotify.categories(locale='en_US')
+        self.assertGreater(len(response['categories']), 0)
+
+    def test_categories_locale_global(self):
+        response = self.spotify.categories()
         self.assertGreater(len(response['categories']), 0)
 
     def test_categories_limit_low(self):
@@ -405,7 +413,15 @@ class SpotipyBrowseApiTests(unittest.TestCase):
 
     def test_new_releases(self):
         response = self.spotify.new_releases()
-        self.assertGreater(len(response['albums']), 0)
+        self.assertGreater(len(response['albums']['items']), 0)
+
+    def test_new_releases_limit_low(self):
+        response = self.spotify.new_releases(limit=1)
+        self.assertEqual(len(response['albums']['items']), 1)
+
+    def test_new_releases_limit_high(self):
+        response = self.spotify.new_releases(limit=50)
+        self.assertLessEqual(len(response['albums']['items']), 50)
 
     def test_featured_releases(self):
         response = self.spotify.featured_playlists()
