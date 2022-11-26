@@ -372,10 +372,6 @@ class SpotipyBrowseApiTests(unittest.TestCase):
         response = self.spotify.categories(locale='en_US')
         self.assertGreater(len(response['categories']), 0)
 
-    def test_categories_locale_global(self):
-        response = self.spotify.categories()
-        self.assertGreater(len(response['categories']), 0)
-
     def test_categories_limit_low(self):
         response = self.spotify.categories(limit=1)
         self.assertEqual(len(response['categories']['items']), 1)
