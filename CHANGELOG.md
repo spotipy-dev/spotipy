@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -   Incorrect category_id input for test_category
 -   Assertion value for test_categories_limit_low and test_categories_limit_high
+-   Pin Github Actions Runner to Ubuntu 20 for Py27
 
 ## [2.21.0] - 2022-09-26
 
