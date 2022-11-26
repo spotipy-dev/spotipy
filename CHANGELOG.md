@@ -16,6 +16,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -   Incorrect category_id input for test_category
 -   Assertion value for test_categories_limit_low and test_categories_limit_high
 
+## [2.21.1] - 2022-11-26
+
+### Added
+
+- Added further unit tests for new releases, passing limit parameter with minimum and maximum values of 1 and 50
+- Added further unit tests for categories, omitting country code and local to test global releases
+
+### Fixed
+
+- Fixed potential error where `found` variable in `test_artist_related_artists` is undefined if for loop never evaluates to true
+- Fixed false positive test `test_new_releases` which looks up the wrong property of the JSON response object and always evaluates to true
+
 ## [2.21.0] - 2022-09-26
 
 ### Added
