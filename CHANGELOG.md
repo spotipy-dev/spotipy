@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+-   Updated the TUTORIAL.md documentation to include link to video, corrected
+    Redirect URI, and gave additional information on potential error.
+    
 ### Added
 
 -   Integration tests via GHA (non-user endpoints)
