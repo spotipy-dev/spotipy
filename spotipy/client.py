@@ -370,7 +370,8 @@ class Spotify(object):
         return self._get("artists/?ids=" + ",".join(tlist))
 
     def artist_albums(
-        self, artist_id: str, album_type: str = None, country: str = None, limit: int = 20, offset: int = 0
+        self, artist_id: str, album_type: str = None, country: str = None,
+        limit: int = 20, offset: int = 0
     ):
         """ Get Spotify catalog information about an artist's albums
 
@@ -1423,7 +1424,8 @@ class Spotify(object):
         return self._delete("me/following?type=user&ids=" + ",".join(ids))
 
     def featured_playlists(
-        self, locale: str = None, country: str = None, timestamp: str = None, limit: int = 20, offset: int = 0
+        self, locale: str = None, country: str = None, timestamp: str = None, limit: int = 20,
+        offset: int = 0
     ):
         """ Get a list of Spotify featured playlists
 
@@ -1664,7 +1666,8 @@ class Spotify(object):
         return self._put("me/player", payload=data)
 
     def start_playback(
-        self, device_id: str = None, context_uri: str = None, uris: list = None, offset: object = None, position_ms: int = None
+        self, device_id: str = None, context_uri: str = None, uris: list = None,
+        offset: object = None, position_ms: int = None
     ):
         """ Start or resume user's playback.
 
