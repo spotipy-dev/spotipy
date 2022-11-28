@@ -8,7 +8,7 @@ sp = spotipy.Spotify(client_credentials_manager=SpotifyOAuth(scope=scope))
 
 # Shows playing devices
 res = sp.devices()
-pprint(res)
+print(res)
 
 # Change track
 sp.start_playback(uris=['spotify:track:6gdLoMygLsgktydTQ71b15'])
