@@ -43,6 +43,8 @@ for idx, track in enumerate(results['tracks']['items']):
 
 ### With user authentication
 
+Authorization code flow is necessary for requests that involve user information. To use Authorization Code flow, a redirect URI must be added to your application at [My Dashboard](https://developer.spotify.com/dashboard/applications).
+
 ```python
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
