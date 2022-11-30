@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+-   Documentation added in the form of CODE_OF_CONDUCT.md
 ### Added
 
 -   Integration tests via GHA (non-user endpoints)
