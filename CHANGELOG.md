@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+- Added alternative module installation instruction to README
 - Added Comment to README - Getting Started for user to add URI to app in Spotify Developer Dashboard. 
+
 
 ### Added
 

@@ -14,11 +14,18 @@ Spotipy's full documentation is online at [Spotipy Documentation](http://spotipy
 pip install spotipy
 ```
 
+alternatively 
+
+```bash
+py -m pip install spotipy
+```
+
 or upgrade
 
 ```bash
 pip install spotipy --upgrade
 ```
+
 
 ## Quick Start
 
