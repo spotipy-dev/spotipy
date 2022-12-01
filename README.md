@@ -10,7 +10,7 @@ Spotipy's full documentation is online at [Spotipy Documentation](http://spotipy
 
 ### Work in Progress
 
-This section contains work that still needs completion for this project.
+This section contains work that still needs completion for Documentation.
 
 - [Code of Conduct](https://github.com/plamere/spotipy/community/code-of-conduct/new).
  
