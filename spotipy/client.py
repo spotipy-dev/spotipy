@@ -340,7 +340,6 @@ class Spotify(object):
                 - track_id - a spotify URI, URL or ID
                 - market - an ISO 3166-1 alpha-2 country code.
         """
-
         trid = self._get_id("track", track_id)
         return self._get("tracks/" + trid, market=market)
 
@@ -351,7 +350,6 @@ class Spotify(object):
                 - tracks - a list of spotify URIs, URLs or IDs. Maximum: 50 IDs.
                 - market - an ISO 3166-1 alpha-2 country code.
         """
-
         tlist = [self._get_id("track", t) for t in tracks]
         return self._get("tracks/?ids=" + ",".join(tlist), market=market)
 
@@ -361,7 +359,6 @@ class Spotify(object):
             Parameters:
                 - artist_id - an artist ID, URI or URL
         """
-
         trid = self._get_id("artist", artist_id)
         return self._get("artists/" + trid)
 
@@ -371,7 +368,6 @@ class Spotify(object):
             Parameters:
                 - artists - a list of  artist IDs, URIs or URLs
         """
-
         tlist = [self._get_id("artist", a) for a in artists]
         return self._get("artists/?ids=" + ",".join(tlist))
 
@@ -387,7 +383,6 @@ class Spotify(object):
                 - limit  - the number of albums to return
                 - offset - the index of the first album to return
         """
-
         trid = self._get_id("artist", artist_id)
         return self._get(
             "artists/" + trid + "/albums",
@@ -405,7 +400,6 @@ class Spotify(object):
                 - artist_id - the artist ID, URI or URL
                 - country - limit the response to one particular country.
         """
-
         trid = self._get_id("artist", artist_id)
         return self._get("artists/" + trid + "/top-tracks", country=country)
 
@@ -427,7 +421,6 @@ class Spotify(object):
                 - album_id - the album ID, URI or URL
                 - market - an ISO 3166-1 alpha-2 country code
         """
-
         trid = self._get_id("album", album_id)
         if market is not None:
             return self._get("albums/" + trid + '?market=' + market)
@@ -442,9 +435,7 @@ class Spotify(object):
                 - limit  - the number of items to return
                 - offset - the index of the first item to return
                 - market - an ISO 3166-1 alpha-2 country code.
-
         """
-
         trid = self._get_id("album", album_id)
         return self._get(
             "albums/" + trid + "/tracks/", limit=limit, offset=offset, market=market
@@ -457,7 +448,6 @@ class Spotify(object):
                 - albums - a list of  album IDs, URIs or URLs
                 - market - an ISO 3166-1 alpha-2 country code
         """
-
         tlist = [self._get_id("album", a) for a in albums]
         if market is not None:
             return self._get("albums/?ids=" + ",".join(tlist) + '&market=' + market)
@@ -475,7 +465,6 @@ class Spotify(object):
                            takes precedence. If neither market nor user country are
                            provided, the content is considered unavailable for the client.
         """
-
         trid = self._get_id("show", show_id)
         return self._get("shows/" + trid, market=market)
 
@@ -490,7 +479,6 @@ class Spotify(object):
                            takes precedence. If neither market nor user country are
                            provided, the content is considered unavailable for the client.
         """
-
         tlist = [self._get_id("show", s) for s in shows]
         return self._get("shows/?ids=" + ",".join(tlist), market=market)
 
@@ -507,7 +495,6 @@ class Spotify(object):
                            takes precedence. If neither market nor user country are
                            provided, the content is considered unavailable for the client.
         """
-
         trid = self._get_id("show", show_id)
         return self._get(
             "shows/" + trid + "/episodes/", limit=limit, offset=offset, market=market
@@ -524,7 +511,6 @@ class Spotify(object):
                            takes precedence. If neither market nor user country are
                            provided, the content is considered unavailable for the client.
         """
-
         trid = self._get_id("episode", episode_id)
         return self._get("episodes/" + trid, market=market)
 
@@ -539,7 +525,6 @@ class Spotify(object):
                            takes precedence. If neither market nor user country are
                            provided, the content is considered unavailable for the client.
         """
-
         tlist = [self._get_id("episode", e) for e in episodes]
         return self._get("episodes/?ids=" + ",".join(tlist), market=market)
 
@@ -623,7 +608,7 @@ class Spotify(object):
         """
         plid = self._get_id("playlist", playlist_id)
         return self._get(
-            "playlists/%s" % (plid),
+            "playlists/%s" % plid,
             fields=fields,
             market=market,
             additional_types=",".join(additional_types),
@@ -679,7 +664,7 @@ class Spotify(object):
         """
         plid = self._get_id("playlist", playlist_id)
         return self._get(
-            "playlists/%s/tracks" % (plid),
+            "playlists/%s/tracks" % plid,
             limit=limit,
             offset=offset,
             fields=fields,
@@ -694,7 +679,7 @@ class Spotify(object):
                 - playlist_id - the playlist ID, URI or URL
         """
         plid = self._get_id("playlist", playlist_id)
-        return self._get("playlists/%s/images" % (plid))
+        return self._get("playlists/%s/images" % plid)
 
     def playlist_upload_cover_image(self, playlist_id, image_b64):
         """ Replace the image used to represent a specific playlist
@@ -730,7 +715,6 @@ class Spotify(object):
 
     def user_playlist_tracks(
         self,
-        user=None,
         playlist_id=None,
         fields=None,
         limit=100,
@@ -793,7 +777,6 @@ class Spotify(object):
 
     def user_playlist_change_details(
         self,
-        user,
         playlist_id,
         name=None,
         public=None,
@@ -814,11 +797,10 @@ class Spotify(object):
                 - collaborative - optional is the playlist collaborative
                 - description - optional description of the playlist
         """
-
         return self.playlist_change_details(playlist_id, name, public,
                                             collaborative, description)
 
-    def user_playlist_unfollow(self, user, playlist_id):
+    def user_playlist_unfollow(self, playlist_id):
         """ Unfollows (deletes) a playlist for a user
 
             Parameters:
@@ -832,7 +814,7 @@ class Spotify(object):
         return self.current_user_unfollow_playlist(playlist_id)
 
     def user_playlist_add_tracks(
-        self, user, playlist_id, tracks, position=None
+        self, playlist_id, tracks, position=None
     ):
         warnings.warn(
             "You should use `playlist_add_items(playlist_id, tracks)` instead",
@@ -848,7 +830,7 @@ class Spotify(object):
         """
         return self.playlist_add_items(playlist_id, tracks, position)
 
-    def user_playlist_replace_tracks(self, user, playlist_id, tracks):
+    def user_playlist_replace_tracks(self, playlist_id, tracks):
         """ Replace all tracks in a playlist for a user
 
             Parameters:
@@ -864,7 +846,6 @@ class Spotify(object):
 
     def user_playlist_reorder_tracks(
         self,
-        user,
         playlist_id,
         range_start,
         insert_before,
@@ -892,7 +873,7 @@ class Spotify(object):
                                            snapshot_id)
 
     def user_playlist_remove_all_occurrences_of_tracks(
-        self, user, playlist_id, tracks, snapshot_id=None
+        self, playlist_id, tracks, snapshot_id=None
     ):
         """ Removes all occurrences of the given tracks from the given playlist
 
@@ -901,7 +882,6 @@ class Spotify(object):
                 - playlist_id - the id of the playlist
                 - tracks - the list of track ids to remove from the playlist
                 - snapshot_id - optional id of the playlist snapshot
-
         """
         warnings.warn(
             "You should use `playlist_remove_all_occurrences_of_items"
@@ -948,14 +928,13 @@ class Spotify(object):
             "users/%s/playlists/%s/tracks" % (user, plid), payload=payload
         )
 
-    def user_playlist_follow_playlist(self, playlist_owner_id, playlist_id):
+    def user_playlist_follow_playlist(self, playlist_id):
         """
         Add the current authenticated user as a follower of a playlist.
 
         Parameters:
             - playlist_owner_id - the user id of the playlist owner
             - playlist_id - the id of the playlist
-
         """
         warnings.warn(
             "You should use `current_user_follow_playlist(playlist_id)` instead",
@@ -964,7 +943,7 @@ class Spotify(object):
         return self.current_user_follow_playlist(playlist_id)
 
     def user_playlist_is_following(
-        self, playlist_owner_id, playlist_id, user_ids
+        self, playlist_id, user_ids
     ):
         """
         Check to see if the given users are following the given playlist
@@ -974,7 +953,6 @@ class Spotify(object):
             - playlist_id - the id of the playlist
             - user_ids - the ids of the users that you want to check to see
                 if they follow the playlist. Maximum: 5 ids.
-
         """
         warnings.warn(
             "You should use `playlist_is_following(playlist_id, user_ids)` instead",
@@ -1000,7 +978,6 @@ class Spotify(object):
                 - collaborative - optional is the playlist collaborative
                 - description - optional description of the playlist
         """
-
         data = {}
         if isinstance(name, six.string_types):
             data["name"] = name
@@ -1022,7 +999,7 @@ class Spotify(object):
                 - name - the name of the playlist
         """
         return self._delete(
-            "playlists/%s/followers" % (playlist_id)
+            "playlists/%s/followers" % playlist_id
         )
 
     def playlist_add_items(
@@ -1038,7 +1015,7 @@ class Spotify(object):
         plid = self._get_id("playlist", playlist_id)
         ftracks = [self._get_uri("track", tid) for tid in items]
         return self._post(
-            "playlists/%s/tracks" % (plid),
+            "playlists/%s/tracks" % plid,
             payload=ftracks,
             position=position,
         )
@@ -1054,7 +1031,7 @@ class Spotify(object):
         ftracks = [self._get_uri("track", tid) for tid in items]
         payload = {"uris": ftracks}
         return self._put(
-            "playlists/%s/tracks" % (plid), payload=payload
+            "playlists/%s/tracks" % plid, payload=payload
         )
 
     def playlist_reorder_items(
@@ -1085,7 +1062,7 @@ class Spotify(object):
         if snapshot_id:
             payload["snapshot_id"] = snapshot_id
         return self._put(
-            "playlists/%s/tracks" % (plid), payload=payload
+            "playlists/%s/tracks" % plid, payload=payload
         )
 
     def playlist_remove_all_occurrences_of_items(
@@ -1097,16 +1074,14 @@ class Spotify(object):
                 - playlist_id - the id of the playlist
                 - items - list of track/episode ids to remove from the playlist
                 - snapshot_id - optional id of the playlist snapshot
-
         """
-
         plid = self._get_id("playlist", playlist_id)
         ftracks = [self._get_uri("track", tid) for tid in items]
         payload = {"tracks": [{"uri": track} for track in ftracks]}
         if snapshot_id:
             payload["snapshot_id"] = snapshot_id
         return self._delete(
-            "playlists/%s/tracks" % (plid), payload=payload
+            "playlists/%s/tracks" % plid, payload=payload
         )
 
     def playlist_remove_specific_occurrences_of_items(
@@ -1123,7 +1098,6 @@ class Spotify(object):
                         { "uri":"1301WleyT98MSxVHPZCA6M", "positions":[7] } ]
                 - snapshot_id - optional id of the playlist snapshot
         """
-
         plid = self._get_id("playlist", playlist_id)
         ftracks = []
         for tr in items:
@@ -1137,7 +1111,7 @@ class Spotify(object):
         if snapshot_id:
             payload["snapshot_id"] = snapshot_id
         return self._delete(
-            "playlists/%s/tracks" % (plid), payload=payload
+            "playlists/%s/tracks" % plid, payload=payload
         )
 
     def current_user_follow_playlist(self, playlist_id):
@@ -1162,7 +1136,6 @@ class Spotify(object):
             - playlist_id - the id of the playlist
             - user_ids - the ids of the users that you want to check to see
                 if they follow the playlist. Maximum: 5 ids.
-
         """
         endpoint = "playlists/{}/followers/contains?ids={}"
         return self._get(
@@ -1194,37 +1167,41 @@ class Spotify(object):
                 - limit - the number of albums to return (MAX_LIMIT=50)
                 - offset - the index of the first album to return
                 - market - an ISO 3166-1 alpha-2 country code.
-
         """
         return self._get("me/albums", limit=limit, offset=offset, market=market)
 
-    def current_user_saved_albums_add(self, albums=[]):
+    def current_user_saved_albums_add(self, albums=None):
         """ Add one or more albums to the current user's
             "Your Music" library.
             Parameters:
                 - albums - a list of album URIs, URLs or IDs
         """
-
+        if albums is None:
+            albums = []
         alist = [self._get_id("album", a) for a in albums]
         return self._put("me/albums?ids=" + ",".join(alist))
 
-    def current_user_saved_albums_delete(self, albums=[]):
+    def current_user_saved_albums_delete(self, albums=None):
         """ Remove one or more albums from the current user's
             "Your Music" library.
 
             Parameters:
                 - albums - a list of album URIs, URLs or IDs
         """
+        if albums is None:
+            albums = []
         alist = [self._get_id("album", a) for a in albums]
         return self._delete("me/albums/?ids=" + ",".join(alist))
 
-    def current_user_saved_albums_contains(self, albums=[]):
+    def current_user_saved_albums_contains(self, albums=None):
         """ Check if one or more albums is already saved in
             the current Spotify user’s “Your Music” library.
 
             Parameters:
                 - albums - a list of album URIs, URLs or IDs
         """
+        if albums is None:
+            albums = []
         alist = [self._get_id("album", a) for a in albums]
         return self._get("me/albums/contains?ids=" + ",".join(alist))
 
@@ -1236,7 +1213,6 @@ class Spotify(object):
                 - limit - the number of tracks to return
                 - offset - the index of the first track to return
                 - market - an ISO 3166-1 alpha-2 country code
-
         """
         return self._get("me/tracks", limit=limit, offset=offset, market=market)
 
@@ -1284,7 +1260,6 @@ class Spotify(object):
                 - limit - the number of episodes to return
                 - offset - the index of the first episode to return
                 - market - an ISO 3166-1 alpha-2 country code
-
         """
         return self._get("me/episodes", limit=limit, offset=offset, market=market)
 
@@ -1332,36 +1307,41 @@ class Spotify(object):
                 - limit - the number of shows to return
                 - offset - the index of the first show to return
                 - market - an ISO 3166-1 alpha-2 country code
-
         """
         return self._get("me/shows", limit=limit, offset=offset, market=market)
 
-    def current_user_saved_shows_add(self, shows=[]):
+    def current_user_saved_shows_add(self, shows=None):
         """ Add one or more albums to the current user's
             "Your Music" library.
             Parameters:
                 - shows - a list of show URIs, URLs or IDs
         """
+        if shows is None:
+            shows = []
         slist = [self._get_id("show", s) for s in shows]
         return self._put("me/shows?ids=" + ",".join(slist))
 
-    def current_user_saved_shows_delete(self, shows=[]):
+    def current_user_saved_shows_delete(self, shows=None):
         """ Remove one or more shows from the current user's
             "Your Music" library.
 
             Parameters:
                 - shows - a list of show URIs, URLs or IDs
         """
+        if shows is None:
+            shows = []
         slist = [self._get_id("show", s) for s in shows]
         return self._delete("me/shows/?ids=" + ",".join(slist))
 
-    def current_user_saved_shows_contains(self, shows=[]):
+    def current_user_saved_shows_contains(self, shows=None):
         """ Check if one or more shows is already saved in
             the current Spotify user’s “Your Music” library.
 
             Parameters:
                 - shows - a list of show URIs, URLs or IDs
         """
+        if shows is None:
+            shows = []
         slist = [self._get_id("show", s) for s in shows]
         return self._get("me/shows/contains?ids=" + ",".join(slist))
 
@@ -1372,7 +1352,6 @@ class Spotify(object):
                 - limit - the number of artists to return
                 - after - the last artist ID retrieved from the previous
                           request
-
         """
         return self._get(
             "me/following", type="artist", limit=limit, after=after
@@ -1457,32 +1436,40 @@ class Spotify(object):
             before=before,
         )
 
-    def user_follow_artists(self, ids=[]):
+    def user_follow_artists(self, ids=None):
         """ Follow one or more artists
             Parameters:
                 - ids - a list of artist IDs
         """
+        if ids is None:
+            ids = []
         return self._put("me/following?type=artist&ids=" + ",".join(ids))
 
-    def user_follow_users(self, ids=[]):
+    def user_follow_users(self, ids=None):
         """ Follow one or more users
             Parameters:
                 - ids - a list of user IDs
         """
+        if ids is None:
+            ids = []
         return self._put("me/following?type=user&ids=" + ",".join(ids))
 
-    def user_unfollow_artists(self, ids=[]):
+    def user_unfollow_artists(self, ids=None):
         """ Unfollow one or more artists
             Parameters:
                 - ids - a list of artist IDs
         """
+        if ids is None:
+            ids = []
         return self._delete("me/following?type=artist&ids=" + ",".join(ids))
 
-    def user_unfollow_users(self, ids=[]):
+    def user_unfollow_users(self, ids=None):
         """ Unfollow one or more users
             Parameters:
                 - ids - a list of user IDs
         """
+        if ids is None:
+            ids = []
         return self._delete("me/following?type=user&ids=" + ",".join(ids))
 
     def featured_playlists(
@@ -1679,11 +1666,13 @@ class Spotify(object):
         trid = self._get_id("track", track_id)
         return self._get("audio-analysis/" + trid)
 
-    def audio_features(self, tracks=[]):
+    def audio_features(self, tracks=None):
         """ Get audio features for one or multiple tracks based upon their Spotify IDs
             Parameters:
                 - tracks - a list of track URIs, URLs or IDs, maximum: 100 ids
         """
+        if tracks is None:
+            tracks = []
         if isinstance(tracks, str):
             trackid = self._get_id("track", tracks)
             results = self._get("audio-features/?ids=" + trackid)
@@ -1907,7 +1896,8 @@ class Spotify(object):
         """
         return self._get("markets")
 
-    def _append_device_id(self, path, device_id):
+    @staticmethod
+    def _append_device_id(path, device_id):
         """ Append device ID to API path.
 
             Parameters:
@@ -1920,7 +1910,8 @@ class Spotify(object):
                 path += "?device_id=%s" % device_id
         return path
 
-    def _get_id(self, type, id):
+    @staticmethod
+    def _get_id(type, id):
         fields = id.split(":")
         if len(fields) >= 3:
             if type != fields[-2]:
@@ -1942,7 +1933,8 @@ class Spotify(object):
         else:
             return "spotify:" + type + ":" + self._get_id(type, id)
 
-    def _is_uri(self, uri):
+    @staticmethod
+    def _is_uri(uri):
         return uri.startswith("spotify:") and len(uri.split(':')) == 3
 
     def _search_multiple_markets(self, q, limit, offset, type, markets, total):

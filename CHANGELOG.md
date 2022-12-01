@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -   Pin Github Actions Runner to Ubuntu 20 for Py27
 -   Fixed potential error where `found` variable in `test_artist_related_artists` is undefined if for loop never evaluates to true
 -   Fixed false positive test `test_new_releases` which looks up the wrong property of the JSON response object and always evaluates to true
+-   Fixed potential bugs by removing mutable arguments
 
 ## [2.21.0] - 2022-09-26
 
