@@ -376,7 +376,7 @@ Don't forget to add a short description of your change in the `CHANGELOG <https:
 
 **Work in Progress**
 
-This section contains work that still needs completion for this project.
+This section contains work that still needs completion for this Documentation.
 
 - `Code of Conduct <https://github.com/plamere/spotipy/community/code-of-conduct/new>`_.
  
