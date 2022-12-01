@@ -58,7 +58,7 @@ for idx, item in enumerate(results['items']):
     print(idx, track['artists'][0]['name'], " – ", track['name'])
 ```
 
-## Reporting Issues
+## FAQ and Suggestions
 
 For common questions please check our [FAQ](FAQ.md).
 
@@ -66,13 +66,15 @@ You can ask questions about Spotipy on
 [Stack Overflow](http://stackoverflow.com/questions/ask).
 Don’t forget to add the *Spotipy* tag, and any other relevant tags as well, before posting.
 
-If you have suggestions, bugs or other issues specific to this library,
+If you have suggestions or other issues specific to this library,
 file them [here](https://github.com/plamere/spotipy/issues).
 Or just send a pull request. 
 
 Refer to Documentation below for collecting information for bug reporting.
 
 ## Bud Reporting
+
+[This](https://github.com/plamere/spotipy/issues) link will take you to the issues page where a bug report can be made. Please try to gather the information below for the bug report.
 
 ### Describing the Bug 
 
