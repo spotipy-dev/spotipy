@@ -25,7 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -   Added a "Works in Progress" section to README.md and index.rst
 -   Added a "Technical Expertise" section to index.rst
--   Added an Open Source Software note in index.rst
+-   Added an Open Source Software note to index.rst
 
 ## [2.21.0] - 2022-09-26
 
