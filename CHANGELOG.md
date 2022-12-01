@@ -21,6 +21,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -   Fixed potential error where `found` variable in `test_artist_related_artists` is undefined if for loop never evaluates to true
 -   Fixed false positive test `test_new_releases` which looks up the wrong property of the JSON response object and always evaluates to true
 
+### Changed
+
+-   Added a "Works in Progress" section to README.md and index.rst
+-   Added a "Technical Expertise" section to index.rst
+-   Added an Open Source Software note in index.rst
+
 ## [2.21.0] - 2022-09-26
 
 ### Added
