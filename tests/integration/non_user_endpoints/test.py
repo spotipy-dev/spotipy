@@ -158,6 +158,8 @@ class AuthTestSpotipy(unittest.TestCase):
         results = self.spotify.artist_related_artists(self.weezer_urn)
         self.assertTrue('artists' in results)
         self.assertTrue(len(results['artists']) == 20)
+
+        found = False
         for artist in results['artists']:
             if artist['name'] == 'Jimmy Eat World':
                 found = True
@@ -224,22 +226,24 @@ class AuthTestSpotipy(unittest.TestCase):
         self.assertTrue('items' in results)
         self.assertTrue(len(results['items']) > 0)
 
-        found = False
-        for album in results['items']:
-            if album['name'] == 'Hurley':
-                found = True
+        def find_album():
+            for album in results['items']:
+                if album['name'] == 'Death to False Metal':
+                    return True
+            return False
 
-        self.assertTrue(found)
+        self.assertTrue(find_album())
 
     def test_search_timeout(self):
         client_credentials_manager = SpotifyClientCredentials()
         sp = spotipy.Spotify(requests_timeout=0.01,
                              client_credentials_manager=client_credentials_manager)
 
-        # depending on the timing or bandwidth, this raises a timeout or connection error"
+        # depending on the timing or bandwidth, this raises a timeout or connection error
         self.assertRaises((requests.exceptions.Timeout, requests.exceptions.ConnectionError),
                           lambda: sp.search(q='my*', type='track'))
 
+    @unittest.skip("flaky test, need a better method to test retries")
     def test_max_retries_reached_get(self):
         spotify_no_retry = Spotify(
             client_credentials_manager=SpotifyClientCredentials(),

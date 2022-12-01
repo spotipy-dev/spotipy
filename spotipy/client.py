@@ -252,7 +252,7 @@ class Spotify(object):
                 msg = error.get("message")
                 reason = error.get("reason")
             except ValueError:
-                # if the response cannnot be decoded into JSON (which raises a ValueError),
+                # if the response cannot be decoded into JSON (which raises a ValueError),
                 # then try to decode it into text
 
                 # if we receive an empty string (which is falsy), then replace it with `None`
@@ -1739,7 +1739,7 @@ class Spotify(object):
     ):
         """ Start or resume user's playback.
 
-            Provide a `context_uri` to start playback or a album,
+            Provide a `context_uri` to start playback or an album,
             artist, or playlist.
 
             Provide a `uris` list to start playback of one or more
@@ -1872,13 +1872,17 @@ class Spotify(object):
             )
         )
 
+    def queue(self):
+        """ Gets the current user's queue """
+        return self._get("me/player/queue")
+
     def add_to_queue(self, uri, device_id=None):
         """ Adds a song to the end of a user's queue
 
             If device A is currently playing music and you try to add to the queue
             and pass in the id for device B, you will get a
             'Player command failed: Restriction violated' error
-            I therefore reccomend leaving device_id as None so that the active device is targeted
+            I therefore recommend leaving device_id as None so that the active device is targeted
 
             :param uri: song uri, id, or url
             :param device_id:
