@@ -26,4 +26,4 @@ Paste and format errors (with complete stacktrace) or logs. Make sure to remove 
  - your IDE (if using any) [e.g. PyCharm, Jupyter Notebook IDE, Google Colab]
 
 **Additional context**
-Add any other context about the problem here.
+Add any other context about the problem here. Please give as much context as possible this will help the bug get fixed.

@@ -13,7 +13,7 @@ If you see a version number, pip is installed and you're ready to proceed. If no
 **2. python3**
 
 Spotipy is written in Python, so you'll need to have the lastest version of Python installed in order to use Spotipy. Check if you already have Python installed with the Terminal command: python --version
-If you see a version number, Python is already installed. If not, you can download it here: https://www.python.org/downloads/
+If you see a version number, Python is already installed. If not, you can download it here: https://www.python.org/downloads/ any version above 3.4 will work.
 
 **3. experience with basic Linux commands**
 

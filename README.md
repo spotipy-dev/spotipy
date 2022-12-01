@@ -68,4 +68,42 @@ Don’t forget to add the *Spotipy* tag, and any other relevant tags as well, be
 
 If you have suggestions, bugs or other issues specific to this library,
 file them [here](https://github.com/plamere/spotipy/issues).
-Or just send a pull request.
+Or just send a pull request. 
+
+Refer to Documentation below for collecting information for bug reporting.
+
+## Bud Reporting
+
+### Describing the Bug 
+
+Try to explain in detail what the bug is and how it is caused.
+
+### Posting your code
+
+Try to have the code either well commented or in a clean code style that is easy to follow and clear for the person debugging the issue to walk themselves through the code.
+
+### Expected behavior
+
+Explain what behavior you are looking for in the code and the expected output. 
+
+### Output
+
+Paste and format the output of your code. This includes errors (with complete stacktraces), logs and any on the fly debugging (print statements etc...)
+
+Please REMOVE any sensitive information from your bug report. 
+
+### Environment
+
+This section is collecting information about your system and environment which will include:
+ -OS: [e.g., Windows, Mac]
+ -Python version [e.g., 3.7.0]
+ -spotipy version [e.g., 2.12.0]
+ -your IDE (if using any) [e.g., PyCharm, Jupyter Notebook IDE, Google Colab]
+
+### Additional context
+
+This section is very important to speed up the process of bug fixing. Add any additional comments or context that can help everyone find and reproduce your bug. 
+
+This can include an explanation of what you are doing and walking through pseudocode, explain what you think cause the issue and if you have experience writing libraries explaining where you think the bug is coming from and where to look.
+
+The point of this context section is to narrow down the issue to the best of your ability so that other contributors can help track the bug down.
