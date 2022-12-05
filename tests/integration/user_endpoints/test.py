@@ -35,6 +35,14 @@ class SpotipyPlaylistApiTest(unittest.TestCase):
             "spotify:episode:7cRcsGYYRUFo1OF3RgRzdx",
         ]
 
+        cls.tracks_and_episodes = [
+            "spotify:track:3F5CgOj3wFlRv51JsHbxhe",
+            "http://open.spotify.com/track/5mCPDVBb16L4XQwDdbRUpz",
+
+            "spotify:episode:7AY0yaj2k0W3obOSCfm6m4",
+            "https://open.spotify.com/episode/5AJB2BTp7RExSGpbQlIsXI"
+        ]
+
         scope = (
             'playlist-modify-public '
             'user-library-read '
@@ -101,7 +109,7 @@ class SpotipyPlaylistApiTest(unittest.TestCase):
     def test_playlist_replace_items(self):
         # add tracks to playlist
         self.spotify.playlist_add_items(
-            self.new_playlist['id'], self.four_tracks)
+            self.new_playlist['id'], self.tracks_and_episodes)
         playlist = self.spotify.playlist(self.new_playlist['id'])
         self.assertEqual(playlist['tracks']['total'], 4)
         self.assertEqual(len(playlist['tracks']['items']), 4)
