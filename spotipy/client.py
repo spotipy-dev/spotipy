@@ -1045,7 +1045,7 @@ class Spotify(object):
         )
 
     def playlist_add_items(
-        self, playlist_id, item_uris, position=None
+        self, playlist_id, items, position=None
     ):
         """ Adds tracks/episodes to a playlist
 
@@ -1054,11 +1054,14 @@ class Spotify(object):
                 - items - a list of track/episode URIs or URLs
                 - position - the position to add the tracks
         """
+        for item in items:
+            if not self._is_uri(item) and not self._is_url(item):
+                raise RuntimeError("playlist_add_items() only accepts URIs and URLs.")
         plid = self._get_id("playlist", playlist_id)
-        item_uris = [self._url_to_uri(item) if self._is_url(item) else item for item in item_uris]
+        items = [self._url_to_uri(item) if self._is_url(item) else item for item in items]
         return self._post(
             "playlists/%s/tracks" % (plid),
-            payload=item_uris,
+            payload=items,
             position=position,
         )
 
