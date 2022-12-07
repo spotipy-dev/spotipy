@@ -28,7 +28,8 @@ def prompt_for_user_token(
     redirect_uri=None,
     cache_path=None,
     oauth_manager=None,
-    show_dialog=False
+    show_dialog=False,
+    open_browser=True
 ):
     warnings.warn(
         "'prompt_for_user_token' is deprecated."
@@ -51,7 +52,8 @@ def prompt_for_user_token(
          - cache_path - path to location to save tokens (optional)
          - oauth_manager - Oauth manager object (optional)
          - show_dialog - If true, a login prompt always shows (optional, defaults to False)
-
+         - open_browser - Optional, whether or not the web browser should be opened to
+                             authorize a user
     """
     if not oauth_manager:
         if not client_id:
@@ -86,7 +88,8 @@ def prompt_for_user_token(
         scope=scope,
         cache_path=cache_path,
         username=username,
-        show_dialog=show_dialog
+        show_dialog=show_dialog,
+        open_browser=open_browser
     )
 
     # try to get a valid token for this user, from the cache,
