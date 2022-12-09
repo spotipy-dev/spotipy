@@ -1186,6 +1186,11 @@ class Spotify(object):
         """
         return self._get("me/player/currently-playing")
 
+    def current_user_queue(self):
+        """ Get information about the current users playback queue.
+        """
+        return self._get("me/player/queue")
+    
     def current_user_saved_albums(self, limit=20, offset=0, market=None):
         """ Gets a list of the albums saved in the current authorized user's
             "Your Music" library
