@@ -1185,7 +1185,7 @@ class Spotify(object):
         """ Get information about the current users currently playing track.
         """
         return self._get("me/player/currently-playing")
-
+    
     def current_user_queue(self):
         """ Get information about the current users playback queue.
         """
