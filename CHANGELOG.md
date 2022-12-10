@@ -5,12 +5,6 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.21.0] - 2022-11-27
-
-### Added
-
--   Added 'CODE_OF_CONDUCT.md'
-
 ## Unreleased
 
 ### Added
@@ -18,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -   Integration tests via GHA (non-user endpoints)
 -   Unit tests for new releases, passing limit parameter with minimum and maximum values of 1 and 50
 -   Unit tests for categories, omitting country code to test global releases
+-   Added 'CODE_OF_CONDUCT.md'
 
 ### Fixed
 
