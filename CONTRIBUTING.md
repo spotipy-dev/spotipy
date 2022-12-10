@@ -52,7 +52,13 @@ To make sure if the import lists are stored correctly:
 
        ## Unreleased
 
-       // Add your changes here and then delete this line
+       // Add new changes below
+
+       ### Added
+
+       ### Fixed
+
+       ### Removed
 
  - Commit changes
  - Package to pypi:
@@ -60,7 +66,7 @@ To make sure if the import lists are stored correctly:
        python setup.py sdist bdist_wheel
        python3 setup.py sdist bdist_wheel
        twine check dist/*
-       twine upload --repository-url https://upload.pypi.org/legacy/ --skip-existing dist/*.(whl|gz|zip)~dist/*linux*.whl
+       twine upload dist/*
 
  - Create github release https://github.com/plamere/spotipy/releases with the changelog content
    for the version and a short name that describes the main addition
