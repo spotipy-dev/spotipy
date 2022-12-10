@@ -846,7 +846,26 @@ class Spotify(object):
                 - tracks - a list of track URIs, URLs or IDs
                 - position - the position to add the tracks
         """
+        tracks = [self._get_uri("track", tid) for tid in tracks]
         return self.playlist_add_items(playlist_id, tracks, position)
+
+    def user_playlist_add_episodes(
+        self, user, playlist_id, episodes, position=None
+    ):
+        warnings.warn(
+            "You should use `playlist_add_items(playlist_id, episodes)` instead",
+            DeprecationWarning,
+        )
+        """ Adds episodes to a playlist
+
+            Parameters:
+                - user - the id of the user
+                - playlist_id - the id of the playlist
+                - episodes - a list of track URIs, URLs or IDs
+                - position - the position to add the episodes
+        """
+        episodes = [self._get_uri("episode", tid) for tid in episodes]
+        return self.playlist_add_items(playlist_id, episodes, position)
 
     def user_playlist_replace_tracks(self, user, playlist_id, tracks):
         """ Replace all tracks in a playlist for a user
@@ -1032,14 +1051,17 @@ class Spotify(object):
 
             Parameters:
                 - playlist_id - the id of the playlist
-                - items - a list of track/episode URIs, URLs or IDs
+                - items - a list of track/episode URIs or URLs
                 - position - the position to add the tracks
         """
+        for item in items:
+            if not self._is_uri(item) and not self._is_url(item):
+                raise RuntimeError("playlist_add_items() only accepts URIs and URLs.")
         plid = self._get_id("playlist", playlist_id)
-        ftracks = [self._get_uri("track", tid) for tid in items]
+        items = [self._url_to_uri(item) if self._is_url(item) else item for item in items]
         return self._post(
             "playlists/%s/tracks" % (plid),
-            payload=ftracks,
+            payload=items,
             position=position,
         )
 
@@ -1944,6 +1966,13 @@ class Spotify(object):
 
     def _is_uri(self, uri):
         return uri.startswith("spotify:") and len(uri.split(':')) == 3
+
+    def _is_url(self, url):
+        return url.startswith("http")
+
+    def _url_to_uri(self, url):
+        splitted = url.split("/")
+        return "spotify:" + splitted[-2] + ":" + splitted[-1]
 
     def _search_multiple_markets(self, q, limit, offset, type, markets, total):
         if total and limit > total:
