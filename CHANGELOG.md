@@ -7,12 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
+
 -   Added alternative module installation instruction to README
 -   Added Comment to README - Getting Started for user to add URI to app in Spotify Developer Dashboard. 
 -   Added playlist_add_tracks.py to example folder
-
-### Added
-
 -   Integration tests via GHA (non-user endpoints)
 -   Unit tests for new releases, passing limit parameter with minimum and maximum values of 1 and 50
 -   Unit tests for categories, omitting country code to test global releases
