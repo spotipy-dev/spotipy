@@ -14,7 +14,7 @@ Spotipy's full documentation is online at [Spotipy Documentation](http://spotipy
 pip install spotipy
 ```
 
-alternatively 
+alternatively, for Windows users 
 
 ```bash
 py -m pip install spotipy
