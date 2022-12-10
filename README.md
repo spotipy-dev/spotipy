@@ -26,8 +26,6 @@ or upgrade
 pip install spotipy --upgrade
 ```
 
-After installation if your IDE can not find the libary, add an intepretor path to the library in your IDE. 
-
 ## Quick Start
 
 A full set of examples can be found in the [online documentation](http://spotipy.readthedocs.org/) and in the [Spotipy examples directory](https://github.com/plamere/spotipy/tree/master/examples).
