@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 
 // Add new changes below this line
+-   Modified docstring for playlist_add_items() to accept "only URIs or URLs",
+    with intended deprecation for IDs in v3
 
 ### Added
 
