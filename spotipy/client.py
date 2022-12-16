@@ -846,7 +846,26 @@ class Spotify(object):
                 - tracks - a list of track URIs, URLs or IDs
                 - position - the position to add the tracks
         """
+        tracks = [self._get_uri("track", tid) for tid in tracks]
         return self.playlist_add_items(playlist_id, tracks, position)
+
+    def user_playlist_add_episodes(
+        self, user, playlist_id, episodes, position=None
+    ):
+        warnings.warn(
+            "You should use `playlist_add_items(playlist_id, episodes)` instead",
+            DeprecationWarning,
+        )
+        """ Adds episodes to a playlist
+
+            Parameters:
+                - user - the id of the user
+                - playlist_id - the id of the playlist
+                - episodes - a list of track URIs, URLs or IDs
+                - position - the position to add the episodes
+        """
+        episodes = [self._get_uri("episode", tid) for tid in episodes]
+        return self.playlist_add_items(playlist_id, episodes, position)
 
     def user_playlist_replace_tracks(self, user, playlist_id, tracks):
         """ Replace all tracks in a playlist for a user
@@ -1032,7 +1051,7 @@ class Spotify(object):
 
             Parameters:
                 - playlist_id - the id of the playlist
-                - items - a list of track/episode URIs, URLs or IDs
+                - items - a list of track/episode URIs or URLs
                 - position - the position to add the tracks
         """
         plid = self._get_id("playlist", playlist_id)
