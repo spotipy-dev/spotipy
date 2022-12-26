@@ -2,8 +2,8 @@
 
 __all__ = ["Scope"]
 
-from enum import Enum
 import re
+from enum import Enum
 from typing import Iterable, Set
 
 
@@ -75,7 +75,7 @@ class Scope(Enum):
         returns: a set of scopes.
         """
         scope_string_list = re.split(pattern=r"[^\w-]+", string=scope_string)
-        scopes = set()
+        scopes: Set['Scope'] = set()
         for scope_string in sorted(scope_string_list):
             try:
                 scope = Scope(scope_string)

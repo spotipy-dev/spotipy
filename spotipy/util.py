@@ -5,10 +5,11 @@
 __all__ = ["CLIENT_CREDS_ENV_VARS"]
 
 import logging
+from typing import Dict, Optional, Tuple
 
 LOGGER = logging.getLogger(__name__)
 
-CLIENT_CREDS_ENV_VARS = {
+CLIENT_CREDS_ENV_VARS: Dict[str, str] = {
     "client_id": "SPOTIPY_CLIENT_ID",
     "client_secret": "SPOTIPY_CLIENT_SECRET",
     "client_username": "SPOTIPY_CLIENT_USERNAME",
@@ -16,7 +17,7 @@ CLIENT_CREDS_ENV_VARS = {
 }
 
 
-def get_host_port(netloc):
+def get_host_port(netloc: str) -> Tuple[str, Optional[int]]:
     if ":" in netloc:
         host, port = netloc.split(":", 1)
         port = int(port)

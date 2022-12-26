@@ -12,6 +12,7 @@ While this is unreleased, please only add v3 features here. Rebasing master onto
 ### Added
 
 * `Scope` - An enum which contains all of the authorization scopes (see [here](https://github.com/plamere/spotipy/issues/652#issuecomment-797461311)).
+* Add basic type annotations.
 
 ### Changed
 
