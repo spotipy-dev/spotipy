@@ -188,7 +188,7 @@ class RedisCacheHandler(CacheHandler):
         self.key = key if key else 'token_info'
 
         try:
-            from redis import RedisError
+            from redis import RedisError  # noqa: F401
         except ImportError:
             warnings.warn(
                 'Error importing module "redis"; '
