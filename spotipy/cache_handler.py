@@ -14,8 +14,6 @@ from spotipy.util import CLIENT_CREDS_ENV_VARS
 from abc import ABC, abstractmethod
 import warnings
 
-from redis import RedisError
-
 logger = logging.getLogger(__name__)
 
 
