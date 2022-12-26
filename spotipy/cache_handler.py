@@ -12,8 +12,7 @@ import logging
 import os
 from spotipy.util import CLIENT_CREDS_ENV_VARS
 from abc import ABC, abstractmethod
-
-from redis import RedisError
+import warnings
 
 logger = logging.getLogger(__name__)
 
@@ -188,8 +187,19 @@ class RedisCacheHandler(CacheHandler):
         self.redis = redis
         self.key = key if key else 'token_info'
 
+        try:
+            from redis import RedisError  # noqa: F401
+        except ImportError:
+            warnings.warn(
+                'Error importing module "redis"; '
+                'it is required for RedisCacheHandler',
+                UserWarning
+            )
+
     def get_cached_token(self):
         token_info = None
+        from redis import RedisError
+
         try:
             token_info = self.redis.get(self.key)
             if token_info:
@@ -200,6 +210,8 @@ class RedisCacheHandler(CacheHandler):
         return token_info
 
     def save_token_to_cache(self, token_info):
+        from redis import RedisError
+
         try:
             self.redis.set(self.key, json.dumps(token_info))
         except RedisError as e:

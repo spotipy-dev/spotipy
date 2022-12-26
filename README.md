@@ -26,6 +26,12 @@ or upgrade
 pip install spotipy --upgrade
 ```
 
+Spotipy includes optional support for caching Spotify access tokens to a Redis server. To use this support, make sure to specify the `redis` extra:
+
+```bash
+pip install spotipy[redis]
+```
+
 ## Quick Start
 
 A full set of examples can be found in the [online documentation](http://spotipy.readthedocs.org/) and in the [Spotipy examples directory](https://github.com/plamere/spotipy/tree/master/examples).

@@ -12,6 +12,10 @@ While this is unreleased, please only add v3 features here. Rebasing master onto
 ### Added
 
 * `Scope` - An enum which contains all of the authorization scopes (see [here](https://github.com/plamere/spotipy/issues/652#issuecomment-797461311)).
+* Added `RedisCacheHandler`, a cache handler that stores the token info in Redis.
+* Added a new parameter to `RedisCacheHandler` to allow custom keys (instead of the default `token_info` key)
+* Simplify check for existing token in `RedisCacheHandler`
+* Make redis an optional dependency
 
 ### Changed
 
