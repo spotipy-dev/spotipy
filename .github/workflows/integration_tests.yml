@@ -1,0 +1,25 @@
+name: Integration tests
+
+on: [push, pull_request_target]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    env:
+      SPOTIPY_CLIENT_ID: ${{ secrets.SPOTIPY_CLIENT_ID }}
+      SPOTIPY_CLIENT_SECRET: ${{ secrets.SPOTIPY_CLIENT_SECRET }}
+      PYTHON_VERSION: "3.10"
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install .[test]
+      - name: Run non user endpoints integration tests
+        run: |
+          python -m unittest discover -v tests/integration/non_user_endpoints

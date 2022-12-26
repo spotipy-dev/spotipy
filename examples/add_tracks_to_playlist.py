@@ -11,7 +11,7 @@ scope = 'playlist-modify-public'
 
 def get_args():
     parser = argparse.ArgumentParser(description='Adds track to user playlist')
-    parser.add_argument('-t', '--tids', action='append',
+    parser.add_argument('-u', '--uris', action='append',
                         required=True, help='Track ids')
     parser.add_argument('-p', '--playlist', required=True,
                         help='Playlist to add track to')
@@ -22,7 +22,7 @@ def main():
     args = get_args()
 
     sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
-    sp.playlist_add_items(args.playlist, args.tids)
+    sp.playlist_add_items(args.playlist, args.uris)
 
 
 if __name__ == '__main__':

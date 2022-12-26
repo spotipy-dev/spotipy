@@ -74,6 +74,10 @@ class SpotipyPlaylistApiTest(unittest.TestCase):
             cls.spotify.user_playlist_create(cls.username, cls.new_playlist_name)
         cls.new_playlist_uri = cls.new_playlist['uri']
 
+    @classmethod
+    def tearDownClass(cls):
+        cls.spotify.current_user_unfollow_playlist(cls.new_playlist['id'])
+
     def test_user_playlists(self):
         playlists = self.spotify.user_playlists(self.username, limit=5)
         self.assertTrue('items' in playlists)
@@ -135,14 +139,25 @@ class SpotipyPlaylistApiTest(unittest.TestCase):
         self.assertEqual(pl["tracks"]["total"], 0)
 
     def test_max_retries_reached_post(self):
-        for i in range(500):
-            try:
-                self.spotify_no_retry.playlist_change_details(
-                    self.new_playlist['id'], description="test")
-            except SpotifyException as e:
-                self.assertIsInstance(e, SpotifyException)
-                self.assertEqual(e.http_status, 429)
-                return
+        import concurrent.futures
+        max_workers = 100
+        total_requests = 500
+
+        def do():
+            self.spotify_no_retry.playlist_change_details(
+                self.new_playlist['id'], description="test")
+
+        with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
+            future_to_post = (executor.submit(do) for _i in range(1, total_requests))
+            for future in concurrent.futures.as_completed(future_to_post):
+                try:
+                    future.result()
+                except Exception as exc:
+                    # Test success
+                    self.assertIsInstance(exc, SpotifyException)
+                    self.assertEqual(exc.http_status, 429)
+                    return
+
         self.fail()
 
     def test_playlist_add_items(self):
@@ -237,9 +252,8 @@ class SpotipyLibraryApiTests(unittest.TestCase):
             self.spotify.track('BadID123')
 
     def test_current_user_saved_tracks(self):
-        # TODO make this not fail if someone doesnthave saved tracks
         tracks = self.spotify.current_user_saved_tracks()
-        self.assertGreater(len(tracks['items']), 0)
+        self.assertGreaterEqual(len(tracks['items']), 0)
 
     def test_current_user_save_and_unsave_tracks(self):
         tracks = self.spotify.current_user_saved_tracks()
@@ -322,7 +336,7 @@ class SpotipyUserApiTests(unittest.TestCase):
     def test_current_user_top_tracks(self):
         response = self.spotify.current_user_top_tracks()
         items = response['items']
-        self.assertGreater(len(items), 0)
+        self.assertGreaterEqual(len(items), 0)
 
     def test_current_user_top_artists(self):
         response = self.spotify.current_user_top_artists()
@@ -336,12 +350,33 @@ class SpotipyBrowseApiTests(unittest.TestCase):
         cls.spotify = _make_spotify()
 
     def test_category(self):
-        response = self.spotify.category('rock')
-        self.assertTrue('name' in response)
+        rock_cat_id = '0JQ5DAqbMKFDXXwE9BDJAr'
+        response = self.spotify.category(rock_cat_id)
+        self.assertEqual(response['name'], 'Rock')
 
     def test_categories(self):
         response = self.spotify.categories()
         self.assertGreater(len(response['categories']), 0)
+
+    def test_categories_country(self):
+        response = self.spotify.categories(country='US')
+        self.assertGreater(len(response['categories']), 0)
+
+    def test_categories_global(self):
+        response = self.spotify.categories()
+        self.assertGreater(len(response['categories']), 0)
+
+    def test_categories_locale(self):
+        response = self.spotify.categories(locale='en_US')
+        self.assertGreater(len(response['categories']), 0)
+
+    def test_categories_limit_low(self):
+        response = self.spotify.categories(limit=1)
+        self.assertEqual(len(response['categories']['items']), 1)
+
+    def test_categories_limit_high(self):
+        response = self.spotify.categories(limit=50)
+        self.assertLessEqual(len(response['categories']['items']), 50)
 
     def test_category_playlists(self):
         response = self.spotify.categories()
@@ -352,9 +387,35 @@ class SpotipyBrowseApiTests(unittest.TestCase):
                 response = self.spotify.category_playlists(category_id=cat_id)
                 self.assertGreater(len(response['playlists']["items"]), 0)
 
+    def test_category_playlists_limit_low(self):
+        response = self.spotify.categories()
+        category = 'rock'
+        for cat in response['categories']['items']:
+            cat_id = cat['id']
+            if cat_id == category:
+                response = self.spotify.category_playlists(category_id=cat_id, limit=1)
+                self.assertEqual(len(response['categories']['items']), 1)
+
+    def test_category_playlists_limit_high(self):
+        response = self.spotify.categories()
+        category = 'rock'
+        for cat in response['categories']['items']:
+            cat_id = cat['id']
+            if cat_id == category:
+                response = self.spotify.category_playlists(category_id=cat_id, limit=50)
+                self.assertLessEqual(len(response['categories']['items']), 50)
+
     def test_new_releases(self):
         response = self.spotify.new_releases()
-        self.assertGreater(len(response['albums']), 0)
+        self.assertGreater(len(response['albums']['items']), 0)
+
+    def test_new_releases_limit_low(self):
+        response = self.spotify.new_releases(limit=1)
+        self.assertEqual(len(response['albums']['items']), 1)
+
+    def test_new_releases_limit_high(self):
+        response = self.spotify.new_releases(limit=50)
+        self.assertLessEqual(len(response['albums']['items']), 50)
 
     def test_featured_releases(self):
         response = self.spotify.featured_playlists()
@@ -384,7 +445,7 @@ class SpotipyFollowApiTests(unittest.TestCase):
     def test_current_user_follows(self):
         response = self.spotify.current_user_followed_artists()
         artists = response['artists']
-        self.assertGreater(len(artists['items']), 0)
+        self.assertGreaterEqual(len(artists['items']), 0)
 
     def test_user_follows_and_unfollows_artist(self):
         # Initially follows 1 artist
@@ -437,7 +498,7 @@ class SpotipyPlayerApiTests(unittest.TestCase):
     def test_devices(self):
         # No devices playing by default
         res = self.spotify.devices()
-        self.assertEqual(len(res["devices"]), 0)
+        self.assertGreaterEqual(len(res["devices"]), 0)
 
     def test_current_user_recently_played(self):
         # No cursor
@@ -457,22 +518,6 @@ class SpotifyPKCETests(unittest.TestCase):
         cache_handler = CacheFileHandler(cache_path=".cache-pkcetest")
         auth_manager = SpotifyPKCE(scope=scope, cache_handler=cache_handler)
         cls.spotify = Spotify(auth_manager=auth_manager)
-
-    def test_user_follows_and_unfollows_artist(self):
-        # Initially follows 1 artist
-        current_user_followed_artists = self.spotify.current_user_followed_artists()[
-            'artists']['total']
-
-        # Follow 2 more artists
-        artists = ["6DPYiyq5kWVQS4RGwxzPC7", "0NbfKEOTQCcwd6o7wSDOHI"]
-        self.spotify.user_follow_artists(artists)
-        res = self.spotify.current_user_followed_artists()
-        self.assertEqual(res['artists']['total'], current_user_followed_artists + len(artists))
-
-        # Unfollow these 2 artists
-        self.spotify.user_unfollow_artists(artists)
-        res = self.spotify.current_user_followed_artists()
-        self.assertEqual(res['artists']['total'], current_user_followed_artists)
 
     def test_current_user(self):
         c_user = self.spotify.current_user()

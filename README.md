@@ -14,6 +14,12 @@ Spotipy's full documentation is online at [Spotipy Documentation](http://spotipy
 pip install spotipy
 ```
 
+alternatively, for Windows users
+
+```bash
+py -m pip install spotipy
+```
+
 or upgrade
 
 ```bash
@@ -42,6 +48,8 @@ for idx, track in enumerate(results['tracks']['items']):
 ```
 
 ### With user authentication
+
+A redirect URI must be added to your application at [My Dashboard](https://developer.spotify.com/dashboard/applications) to access user authenticated features.
 
 ```python
 import spotipy

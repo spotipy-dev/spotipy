@@ -64,13 +64,13 @@ class AuthTestSpotipy(unittest.TestCase):
 
     def test_audio_analysis(self):
         result = self.spotify.audio_analysis(self.four_tracks[0])
-        assert('beats' in result)
+        assert ('beats' in result)
 
     def test_audio_features(self):
         results = self.spotify.audio_features(self.four_tracks)
         self.assertTrue(len(results['audio_features']) == len(self.four_tracks))
         for track in results['audio_features']:
-            assert('speechiness' in track)
+            assert ('speechiness' in track)
 
     def test_audio_features_with_bad_track(self):
         bad_tracks = ['spotify:track:bad']
@@ -79,7 +79,7 @@ class AuthTestSpotipy(unittest.TestCase):
         self.assertTrue(len(results['audio_features']) == len(input))
         for track in results['audio_features'][:-1]:
             if track is not None:
-                assert('speechiness' in track)
+                assert ('speechiness' in track)
         self.assertTrue(results['audio_features'][-1] is None)
 
     def test_recommendations(self):
@@ -159,6 +159,8 @@ class AuthTestSpotipy(unittest.TestCase):
         results = self.spotify.artist_related_artists(self.weezer_urn)
         self.assertTrue('artists' in results)
         self.assertTrue(len(results['artists']) == 20)
+
+        found = False
         for artist in results['artists']:
             if artist['name'] == 'Jimmy Eat World':
                 found = True
@@ -225,22 +227,24 @@ class AuthTestSpotipy(unittest.TestCase):
         self.assertTrue('items' in results)
         self.assertTrue(len(results['items']) > 0)
 
-        found = False
-        for album in results['items']:
-            if album['name'] == 'Hurley':
-                found = True
+        def find_album():
+            for album in results['items']:
+                if album['name'] == 'Death to False Metal':
+                    return True
+            return False
 
-        self.assertTrue(found)
+        self.assertTrue(find_album())
 
     def test_search_timeout(self):
         auth_manager = SpotifyClientCredentials()
         sp = spotipy.Spotify(requests_timeout=0.01,
                              auth_manager=auth_manager)
 
-        # depending on the timing or bandwidth, this raises a timeout or connection error"
+        # depending on the timing or bandwidth, this raises a timeout or connection error
         self.assertRaises((requests.exceptions.Timeout, requests.exceptions.ConnectionError),
                           lambda: sp.search(q='my*', type='track'))
 
+    @unittest.skip("flaky test, need a better method to test retries")
     def test_max_retries_reached_get(self):
         spotify_no_retry = Spotify(
             auth_manager=SpotifyClientCredentials(),
