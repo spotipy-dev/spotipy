@@ -139,7 +139,7 @@ class Spotify(object):
             See urllib3 https://urllib3.readthedocs.io/en/latest/reference/urllib3.util.html
         :param language:
             The language parameter advertises what language the user prefers to see.
-            See ISO-639 language code: https://www.loc.gov/standards/iso639-2/php/code_list.php
+            See ISO-639-1 language code: https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
         """
 
         if access_token is not None and auth_manager is not None:
@@ -232,16 +232,22 @@ class Spotify(object):
         except requests.exceptions.HTTPError as http_error:
             response = http_error.response
             try:
-                msg = response.json()["error"]["message"]
-            except (ValueError, KeyError):
-                msg = "error"
-            try:
-                reason = response.json()["error"]["reason"]
-            except (ValueError, KeyError):
+                json_response = response.json()
+                error = json_response.get("error", {})
+                msg = error.get("message")
+                reason = error.get("reason")
+            except ValueError:
+                # if the response cannot be decoded into JSON (which raises a ValueError),
+                # then try to decode it into text
+
+                # if we receive an empty string (which is falsy), then replace it with `None`
+                msg = response.text or None
                 reason = None
 
-            logger.error('HTTP Error for %s to %s returned %s due to %s',
-                         method, url, response.status_code, msg)
+            logger.error(
+                'HTTP Error for %s to %s with Params: %s returned %s due to %s',
+                method, url, args.get("params"), response.status_code, msg
+            )
 
             raise SpotifyException(
                 response.status_code,
@@ -399,15 +405,19 @@ class Spotify(object):
         trid = self._get_id("artist", artist_id)
         return self._get("artists/" + trid + "/related-artists")
 
-    def album(self, album_id):
+    def album(self, album_id, market=None):
         """ returns a single album given the album's ID, URIs or URL
 
             Parameters:
                 - album_id - the album ID, URI or URL
+                - market - an ISO 3166-1 alpha-2 country code
         """
 
         trid = self._get_id("album", album_id)
-        return self._get("albums/" + trid)
+        if market is not None:
+            return self._get("albums/" + trid + '?market=' + market)
+        else:
+            return self._get("albums/" + trid)
 
     def album_tracks(self, album_id, limit=50, offset=0, market=None):
         """ Get Spotify catalog information about an album's tracks
@@ -425,15 +435,19 @@ class Spotify(object):
             "albums/" + trid + "/tracks/", limit=limit, offset=offset, market=market
         )
 
-    def albums(self, albums):
+    def albums(self, albums, market=None):
         """ returns a list of albums given the album IDs, URIs, or URLs
 
             Parameters:
                 - albums - a list of  album IDs, URIs or URLs
+                - market - an ISO 3166-1 alpha-2 country code
         """
 
         tlist = [self._get_id("album", a) for a in albums]
-        return self._get("albums/?ids=" + ",".join(tlist))
+        if market is not None:
+            return self._get("albums/?ids=" + ",".join(tlist) + '&market=' + market)
+        else:
+            return self._get("albums/?ids=" + ",".join(tlist))
 
     def show(self, show_id, market=None):
         """ returns a single show given the show's ID, URIs or URL
@@ -612,7 +626,7 @@ class Spotify(object):
         """ Get full details of the tracks and episodes of a playlist.
 
             Parameters:
-                - playlist_id - the id of the playlist
+                - playlist_id - the playlist ID, URI or URL
                 - fields - which fields to return
                 - limit - the maximum number of tracks to return
                 - offset - the index of the first track to return
@@ -631,10 +645,10 @@ class Spotify(object):
         )
 
     def playlist_cover_image(self, playlist_id):
-        """ Get cover of a playlist.
+        """ Get cover image of a playlist.
 
             Parameters:
-                - playlist_id - the id of the playlist
+                - playlist_id - the playlist ID, URI or URL
         """
         plid = self._get_id("playlist", playlist_id)
         return self._get("playlists/%s/images" % (plid))
@@ -693,7 +707,8 @@ class Spotify(object):
         collaborative=None,
         description=None,
     ):
-        """ Changes a playlist's name and/or public/private state
+        """ Changes a playlist's name and/or public/private state,
+            collaborative state, and/or description
 
             Parameters:
                 - playlist_id - the id of the playlist
@@ -734,7 +749,7 @@ class Spotify(object):
 
             Parameters:
                 - playlist_id - the id of the playlist
-                - items - a list of track/episode URIs, URLs or IDs
+                - items - a list of track/episode URIs or URLs
                 - position - the position to add the tracks
         """
         plid = self._get_id("playlist", playlist_id)
@@ -793,7 +808,7 @@ class Spotify(object):
     def playlist_remove_all_occurrences_of_items(
         self, playlist_id, items, snapshot_id=None
     ):
-        """ Removes all occurrences of the given tracks from the given playlist
+        """ Removes all occurrences of the given tracks/episodes from the given playlist
 
             Parameters:
                 - playlist_id - the id of the playlist
@@ -893,7 +908,7 @@ class Spotify(object):
             "Your Music" library
 
             Parameters:
-                - limit - the number of albums to return
+                - limit - the number of albums to return (MAX_LIMIT=50)
                 - offset - the index of the first album to return
                 - market - an ISO 3166-1 alpha-2 country code.
 
@@ -1096,7 +1111,7 @@ class Spotify(object):
         )
 
     def current_user_following_users(self, ids=None):
-        """ Check if the current user is following certain artists
+        """ Check if the current user is following certain users
 
             Returns list of booleans respective to ids
 
@@ -1194,8 +1209,8 @@ class Spotify(object):
 
             Parameters:
                 - locale - The desired language, consisting of a lowercase ISO
-                  639 language code and an uppercase ISO 3166-1 alpha-2 country
-                  code, joined by an underscore.
+                  639-1 alpha-2 language code and an uppercase ISO 3166-1 alpha-2
+                  country code, joined by an underscore.
 
                 - country - An ISO 3166-1 alpha-2 country code.
 
@@ -1244,7 +1259,7 @@ class Spotify(object):
                 - category_id - The Spotify category ID for the category.
 
                 - country - An ISO 3166-1 alpha-2 country code.
-                - locale - The desired language, consisting of an ISO 639
+                - locale - The desired language, consisting of an ISO 639-1 alpha-2
                   language code and an ISO 3166-1 alpha-2 country code, joined
                   by an underscore.
         """
@@ -1259,7 +1274,7 @@ class Spotify(object):
 
             Parameters:
                 - country - An ISO 3166-1 alpha-2 country code.
-                - locale - The desired language, consisting of an ISO 639
+                - locale - The desired language, consisting of an ISO 639-1 alpha-2
                   language code and an ISO 3166-1 alpha-2 country code, joined
                   by an underscore.
 
@@ -1436,7 +1451,7 @@ class Spotify(object):
     ):
         """ Start or resume user's playback.
 
-            Provide a `context_uri` to start playback or a album,
+            Provide a `context_uri` to start playback or an album,
             artist, or playlist.
 
             Provide a `uris` list to start playback of one or more
@@ -1569,13 +1584,17 @@ class Spotify(object):
             )
         )
 
+    def queue(self):
+        """ Gets the current user's queue """
+        return self._get("me/player/queue")
+
     def add_to_queue(self, uri, device_id=None):
         """ Adds a song to the end of a user's queue
 
             If device A is currently playing music and you try to add to the queue
             and pass in the id for device B, you will get a
             'Player command failed: Restriction violated' error
-            I therefore reccomend leaving device_id as None so that the active device is targeted
+            I therefore recommend leaving device_id as None so that the active device is targeted
 
             :param uri: song uri, id, or url
             :param device_id:
@@ -1619,7 +1638,7 @@ class Spotify(object):
             if type != fields[-2]:
                 logger.warning('Expected id of type %s but found type %s %s',
                                type, fields[-2], id)
-            return fields[-1]
+            return fields[-1].split("?")[0]
         fields = id.split("/")
         if len(fields) >= 3:
             itype = fields[-2]

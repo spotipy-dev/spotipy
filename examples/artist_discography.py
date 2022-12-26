@@ -1,4 +1,4 @@
-#Shows the list of all songs sung by the artist or the band
+# Shows the list of all songs sung by the artist or the band
 import argparse
 import logging
 
@@ -34,7 +34,7 @@ def show_album_tracks(album):
         results = sp.next(results)
         tracks.extend(results['items'])
     for i, track in enumerate(tracks):
-        logger.info('%s. %s', i+1, track['name'])
+        logger.info('%s. %s', i + 1, track['name'])
 
 
 def show_artist_albums(artist):
@@ -59,6 +59,7 @@ def show_artist(artist):
     logger.info('Popularity: %s', artist['popularity'])
     if len(artist['genres']) > 0:
         logger.info('Genres: %s', ','.join(artist['genres']))
+
 
 def main():
     args = get_args()

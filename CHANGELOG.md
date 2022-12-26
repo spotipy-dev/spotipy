@@ -54,11 +54,76 @@ While this is unreleased, please only add v3 features here. Rebasing master onto
 
 ### Added
 
-* Added `MemoryCacheHandler`, a cache handler that simply stores the token info in memory as an instance attribute of this class.
+- Add alternative module installation instruction to README
+- Added Comment to README - Getting Started for user to add URI to app in Spotify Developer Dashboard. 
+- Added playlist_add_tracks.py to example folder
+
+### Fixed
+- Modified docstring for playlist_add_items() to accept "only URIs or URLs",
+  with intended deprecation for IDs in v3
+- Update contributing.md
+
+### Removed
+
+## [2.22.0] - 2022-12-10
+
+### Added
+
+- Integration tests via GHA (non-user endpoints)
+- Unit tests for new releases, passing limit parameter with minimum and maximum values of 1 and 50
+- Unit tests for categories, omitting country code to test global releases
+- Added `CODE_OF_CONDUCT.md`
 
 ### Fixed
 
-* Fixed a bug in `CacheFileHandler.__init__`: The documentation says that the username will be retrieved from the environment, but it wasn't.
+- Incorrect `category_id` input for test_category
+- Assertion value for `test_categories_limit_low` and `test_categories_limit_high`
+- Pin Github Actions Runner to Ubuntu 20 for Py27
+- Fixed potential error where `found` variable in `test_artist_related_artists` is undefined if for loop never evaluates to true
+- Fixed false positive test `test_new_releases` which looks up the wrong property of the JSON response object and always evaluates to true
+
+## [2.21.0] - 2022-09-26
+
+### Added
+
+- Added `market` parameter to `album` and `albums` to address ([#753](https://github.com/plamere/spotipy/issues/753)
+- Added `show_featured_artists.py` to `/examples`.
+- Expanded contribution and license sections of the documentation.
+- Added `FlaskSessionCacheHandler`, a cache handler that stores the token info in a flask session.
+- Added Python 3.10 in GitHub Actions
+
+### Fixed
+
+- Updated the documentation to specify ISO-639-1 language codes.
+- Fix `AttributeError` for `text` attribute of the `Response` object
+- Require redis v3 if python2.7 (fixes readthedocs)
+
+## [2.20.0] - 2022-06-18
+
+### Added
+
+- Added `RedisCacheHandler`, a cache handler that stores the token info in Redis.
+- Changed URI handling in `client.Spotify._get_id()` to remove qureies if provided by error.
+- Added a new parameter to `RedisCacheHandler` to allow custom keys (instead of the default `token_info` key)
+- Simplify check for existing token in `RedisCacheHandler`
+
+### Changed
+
+- Removed Python 3.5 and added Python 3.9 in Github Action
+
+## [2.19.0] - 2021-08-12
+
+### Added
+
+- Added `MemoryCacheHandler`, a cache handler that simply stores the token info in memory as an instance attribute of this class.
+- If a network request returns an error status code but the response body cannot be decoded into JSON, then fall back on decoding the body into a string.
+- Added `DjangoSessionCacheHandler`, a cache handler that stores the token in the session framework provided by Django. Web apps using spotipy with Django can directly use this for cache handling.
+
+### Fixed
+
+- Fixed a bug in `CacheFileHandler.__init__`: The documentation says that the username will be retrieved from the environment, but it wasn't.
+- Fixed a bug in the initializers for the auth managers that produced a spurious warning message if you provide a cache handler and you set a value for the "SPOTIPY_CLIENT_USERNAME" environment variable.
+- Use generated MIT license and fix license type in `pip show`
 
 ## [2.18.0] - 2021-04-13
 
@@ -67,11 +132,11 @@ While this is unreleased, please only add v3 features here. Rebasing master onto
 - Enabled using both short and long IDs for playlist_change_details
 - Added a cache handler to `SpotifyClientCredentials`
 - Added the following endpoints
-    * `Spotify.current_user_saved_episodes`
-    * `Spotify.current_user_saved_episodes_add`
-    * `Spotify.current_user_saved_episodes_delete`
-    * `Spotify.current_user_saved_episodes_contains`
-    * `Spotify.available_markets`
+    - `Spotify.current_user_saved_episodes`
+    - `Spotify.current_user_saved_episodes_add`
+    - `Spotify.current_user_saved_episodes_delete`
+    - `Spotify.current_user_saved_episodes_contains`
+    - `Spotify.available_markets`
 
 ### Changed
 
@@ -79,9 +144,9 @@ While this is unreleased, please only add v3 features here. Rebasing master onto
 
 ### Fixed
 
-* Fixed the bugs in `SpotifyOAuth.refresh_access_token` and `SpotifyPKCE.refresh_access_token` which raised the incorrect exception upon receiving an error response from the server. This addresses #645.
-* Fixed a bug in `RequestHandler.do_GET` in which the non-existent `state` attribute of  `SpotifyOauthError` is accessed. This bug occurs when the user clicks "cancel" in the permissions dialog that opens in the browser.
-* Cleaned up the documentation for `SpotifyClientCredentials.__init__`, `SpotifyOAuth.__init__`, and `SpotifyPKCE.__init__`.
+- Fixed the bugs in `SpotifyOAuth.refresh_access_token` and `SpotifyPKCE.refresh_access_token` which raised the incorrect exception upon receiving an error response from the server. This addresses #645.
+- Fixed a bug in `RequestHandler.do_GET` in which the non-existent `state` attribute of `SpotifyOauthError` is accessed. This bug occurs when the user clicks "cancel" in the permissions dialog that opens in the browser.
+- Cleaned up the documentation for `SpotifyClientCredentials.__init__`, `SpotifyOAuth.__init__`, and `SpotifyPKCE.__init__`.
 
 ## [2.17.1] - 2021-02-28
 
@@ -152,10 +217,10 @@ While this is unreleased, please only add v3 features here. Rebasing master onto
 
 ### Added
 
- - (experimental) Support to search multiple/all markets at once.
- - Support to test whether the current user is following certain
+- (experimental) Support to search multiple/all markets at once.
+- Support to test whether the current user is following certain
     users or artists
- - Proper replacements for all deprecated playlist endpoints
+- Proper replacements for all deprecated playlist endpoints
     (See https://developer.spotify.com/community/news/2018/06/12/changes-to-playlist-uris/ and below)
 - Allow for OAuth 2.0 authorization by instructing the user to open the URL in a browser instead of opening the browser.
 - Reason for 403 error in SpotifyException
@@ -190,176 +255,175 @@ While this is unreleased, please only add v3 features here. Rebasing master onto
 
 ### Added
 
- - Added `SpotifyImplicitGrant` as an auth manager option. It provides
+- Added `SpotifyImplicitGrant` as an auth manager option. It provides
     user authentication without a client secret but sacrifices the ability
     to refresh the token without user input. (However, read the class
     docstring for security advisory.)
- - Added built-in verification of the `state` query parameter
- - Added two new attributes: error and error_description to `SpotifyOauthError` exception class to show
+- Added built-in verification of the `state` query parameter
+- Added two new attributes: error and error_description to `SpotifyOauthError` exception class to show
     authorization/authentication web api errors details.
- - Added `SpotifyStateError` subclass of `SpotifyOauthError`
- - Allow extending `SpotifyClientCredentials` and `SpotifyOAuth`
- - Added the market paramter to `album_tracks`
+- Added `SpotifyStateError` subclass of `SpotifyOauthError`
+- Allow extending `SpotifyClientCredentials` and `SpotifyOAuth`
+- Added the market paramter to `album_tracks`
 
 ### Deprecated
 
- - Deprecated `util.prompt_for_user_token` in favor of `spotipy.Spotify(auth_manager=SpotifyOAuth())`
+- Deprecated `util.prompt_for_user_token` in favor of `spotipy.Spotify(auth_manager=SpotifyOAuth())`
 
 ## [2.12.0] - 2020-04-26
 
 ### Added
 
- - Added a method to update the auth token.
+- Added a method to update the auth token.
 
 ### Fixed
 
- - Logging regression due to the addition of `logging.basicConfig()` which was unneeded.
+- Logging regression due to the addition of `logging.basicConfig()` which was unneeded.
 
 ## [2.11.2] - 2020-04-19
 
 ### Changed
 
- - Updated the documentation to give more details on the authorization process and reflect
+- Updated the documentation to give more details on the authorization process and reflect
     2020 Spotify Application jargon and practices.
 
- - The local webserver is only started for localhost redirect_uri which specify a port,
+- The local webserver is only started for localhost redirect_uri which specify a port,
     i.e. it is started for `http://localhost:8080` or `http://127.0.0.1:8080`, not for `http://localhost`.
 
 ### Fixed
 
- - Issue where using `http://localhost` as redirect_uri would cause the authorization process to hang.
+- Issue where using `http://localhost` as redirect_uri would cause the authorization process to hang.
 
 ## [2.11.1] - 2020-04-11
 
 ### Fixed
 
- - Fixed miscellaneous issues with parsing of callback URL
+- Fixed miscellaneous issues with parsing of callback URL
 
 ## [2.11.0] - 2020-04-11
 
 ### Added
 
- - Support for shows/podcasts and episodes
- - Added CONTRIBUTING.md
+- Support for shows/podcasts and episodes
+- Added CONTRIBUTING.md
 
 ### Changed
 
- - Client retry logic has changed as it now uses urllib3's `Retry` in conjunction with requests `Session`
- - The session is customizable as it allows for:
+- Client retry logic has changed as it now uses urllib3's `Retry` in conjunction with requests `Session`
+- The session is customizable as it allows for:
     - status_forcelist
     - retries
     - status_retries
     - backoff_factor
- - Spin up a local webserver to auto-fill authentication URL
- - Use session in SpotifyAuthBase
- - Logging used instead of print statements
+- Spin up a local webserver to auto-fill authentication URL
+- Use session in SpotifyAuthBase
+- Logging used instead of print statements
 
 ### Fixed
 
- - Close session when Spotipy object is unloaded
- - Propagate refresh token error
+- Close session when Spotipy object is unloaded
+- Propagate refresh token error
 
 ## [2.10.0] - 2020-03-18
 
 ### Added
 
- - Support for `add_to_queue`
+- Support for `add_to_queue`
     - **Parameters:**
         - track uri, id, or url
         - device id. If None, then the active device is used.
- - Add CHANGELOG and LICENSE to released package
-
+- Add CHANGELOG and LICENSE to released package
 
 ## [2.9.0] - 2020-02-15
 
 ### Added
 
- - Support `position_ms` optional parameter in `start_playback`
- - Add `requests_timeout` parameter to authentication methods
- - Make cache optional in `get_access_token`
+- Support `position_ms` optional parameter in `start_playback`
+- Add `requests_timeout` parameter to authentication methods
+- Make cache optional in `get_access_token`
 
 ## [2.8.0] - 2020-02-12
 
 ### Added
 
- - Support for `playlist_cover_image`
- - Support `after` and `before` parameter in `current_user_recently_played`
- - CI for unit tests
- - Automatic `token` refresh
- - `auth_manager` and `oauth_manager` optional parameters added to `Spotify`'s init.
- - Optional `username` parameter to be passed to `SpotifyOAuth`, to infer a `cache_path` automatically
- - Optional `as_dict` parameter to control `SpotifyOAuth`'s `get_access_token` output type. However, this is going to be deprecated in the future, and the method will always return a token string
- - Optional `show_dialog` parameter to be passed to `SpotifyOAuth`
+- Support for `playlist_cover_image`
+- Support `after` and `before` parameter in `current_user_recently_played`
+- CI for unit tests
+- Automatic `token` refresh
+- `auth_manager` and `oauth_manager` optional parameters added to `Spotify`'s init.
+- Optional `username` parameter to be passed to `SpotifyOAuth`, to infer a `cache_path` automatically
+- Optional `as_dict` parameter to control `SpotifyOAuth`'s `get_access_token` output type. However, this is going to be deprecated in the future, and the method will always return a token string
+- Optional `show_dialog` parameter to be passed to `SpotifyOAuth`
 
 ### Changed
 
-  - Both `SpotifyClientCredentials` and `SpotifyOAuth` inherit from a common `SpotifyAuthBase` which handles common parameters and logics.
+- Both `SpotifyClientCredentials` and `SpotifyOAuth` inherit from a common `SpotifyAuthBase` which handles common parameters and logics.
 
 ## [2.7.1] - 2020-01-20
 
 ### Changed
 
- - PyPi release mistake without pulling last merge first
+- PyPi release mistake without pulling last merge first
 
 ## [2.7.0] - 2020-01-20
 
 ### Added
 
- - Support for `playlist_tracks`
- - Support for `playlist_upload_cover_image`
+- Support for `playlist_tracks`
+- Support for `playlist_upload_cover_image`
 
 ### Changed
 
- - `user_playlist_tracks` doesn't require a user anymore (accepts `None`)
+- `user_playlist_tracks` doesn't require a user anymore (accepts `None`)
 
 ### Deprecated
 
- - Deprecated `user_playlist` and `user_playlist_tracks`
+- Deprecated `user_playlist` and `user_playlist_tracks`
 
 ## [2.6.3] - 2020-01-16
 
 ### Fixed
 
- - Fixed broken doc in 2.6.2
+- Fixed broken doc in 2.6.2
 
 ## [2.6.2] - 2020-01-16
 
 ### Fixed
 
- - Fixed broken examples in README, examples and doc
+- Fixed broken examples in README, examples and doc
 
 ### Changed
 
- - Allow session keepalive
- - Bump requests to 2.20.0
+- Allow session keepalive
+- Bump requests to 2.20.0
 
 ## [2.6.1] - 2020-01-13
 
 ### Fixed
 
- - Fixed inconsistent behaviour with some API methods when
+- Fixed inconsistent behaviour with some API methods when
     a full HTTP URL is passed.
- - Fixed invalid calls to logging warn method
+- Fixed invalid calls to logging warn method
 
 ### Removed
 
- - `mock` no longer needed for install. Only used in `tox`.
+- `mock` no longer needed for install. Only used in `tox`.
 
 ## [2.6.0] - 2020-01-12
 
 ### Added
 
- - Support for `playlist` to get a playlist without specifying a user
- - Support for `current_user_saved_albums_delete`
- - Support for `current_user_saved_albums_contains`
- - Support for `user_unfollow_artists`
- - Support for `user_unfollow_users`
- - Lint with flake8 using Github action
+- Support for `playlist` to get a playlist without specifying a user
+- Support for `current_user_saved_albums_delete`
+- Support for `current_user_saved_albums_contains`
+- Support for `user_unfollow_artists`
+- Support for `user_unfollow_users`
+- Lint with flake8 using Github action
 
 ### Changed
 
- - Fix typos in doc
- - Start following [SemVer](https://semver.org) properly
+- Fix typos in doc
+- Start following [SemVer](https://semver.org) properly
 
 ## [2.5.0] - 2020-01-11
 
