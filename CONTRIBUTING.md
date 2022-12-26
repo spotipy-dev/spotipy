@@ -5,16 +5,24 @@ If you would like to contribute to spotipy follow these steps:
 ### Export the needed environment variables
 
 ```bash
+# Linux or Mac
 export SPOTIPY_CLIENT_ID=client_id_here
 export SPOTIPY_CLIENT_SECRET=client_secret_here
 export SPOTIPY_CLIENT_USERNAME=client_username_here # This is actually an id not spotify display name
 export SPOTIPY_REDIRECT_URI=http://localhost:8080 # Make url is set in app you created to get your ID and SECRET
+
+# Windows
+$env:SPOTIPY_CLIENT_ID="client_id_here"
+$env:SPOTIPY_CLIENT_SECRET="client_secret_here"
+$env:SPOTIPY_CLIENT_USERNAME="client_username_here" 
+$env:SPOTIPY_REDIRECT_URI="http://localhost:8080" 
 ```
 
 ### Create virtual environment, install dependencies, run tests:
 
 ```bash
 $ virtualenv --python=python3.7 env
+$ source env/bin/activate
 (env) $ pip install --user -e .
 (env) $ python -m unittest discover -v tests
 ```
@@ -44,7 +52,13 @@ To make sure if the import lists are stored correctly:
 
        ## Unreleased
 
-       // Add your changes here and then delete this line
+       // Add new changes below
+
+       ### Added
+
+       ### Fixed
+
+       ### Removed
 
  - Commit changes
  - Package to pypi:
@@ -52,7 +66,7 @@ To make sure if the import lists are stored correctly:
        python setup.py sdist bdist_wheel
        python3 setup.py sdist bdist_wheel
        twine check dist/*
-       twine upload --repository-url https://upload.pypi.org/legacy/ --skip-existing dist/*.(whl|gz|zip)~dist/*linux*.whl
+       twine upload dist/*
 
  - Create github release https://github.com/plamere/spotipy/releases with the changelog content
    for the version and a short name that describes the main addition

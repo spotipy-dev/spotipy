@@ -1,6 +1,10 @@
-# -*- coding: utf-8 -*-
-
-__all__ = ['CacheHandler', 'CacheFileHandler', 'MemoryCacheHandler']
+__all__ = [
+    'CacheHandler',
+    'CacheFileHandler',
+    'DjangoSessionCacheHandler',
+    'FlaskSessionCacheHandler',
+    'MemoryCacheHandler',
+    'RedisCacheHandler']
 
 import errno
 import json
@@ -8,6 +12,8 @@ import logging
 import os
 from spotipy.util import CLIENT_CREDS_ENV_VARS
 from abc import ABC, abstractmethod
+
+from redis import RedisError
 
 logger = logging.getLogger(__name__)
 
@@ -107,3 +113,94 @@ class MemoryCacheHandler(CacheHandler):
 
     def save_token_to_cache(self, token_info):
         self.token_info = token_info
+
+
+class DjangoSessionCacheHandler(CacheHandler):
+    """
+    A cache handler that stores the token info in the session framework
+    provided by Django.
+
+    Read more at https://docs.djangoproject.com/en/3.2/topics/http/sessions/
+    """
+
+    def __init__(self, request):
+        """
+        Parameters:
+            * request: HttpRequest object provided by Django for every
+            incoming request
+        """
+        self.request = request
+
+    def get_cached_token(self):
+        token_info = None
+        try:
+            token_info = self.request.session['token_info']
+        except KeyError:
+            logger.debug("Token not found in the session")
+
+        return token_info
+
+    def save_token_to_cache(self, token_info):
+        try:
+            self.request.session['token_info'] = token_info
+        except Exception as e:
+            logger.warning("Error saving token to cache: " + str(e))
+
+
+class FlaskSessionCacheHandler(CacheHandler):
+    """
+    A cache handler that stores the token info in the session framework
+    provided by flask.
+    """
+
+    def __init__(self, session):
+        self.session = session
+
+    def get_cached_token(self):
+        token_info = None
+        try:
+            token_info = self.session["token_info"]
+        except KeyError:
+            logger.debug("Token not found in the session")
+
+        return token_info
+
+    def save_token_to_cache(self, token_info):
+        try:
+            self.session["token_info"] = token_info
+        except Exception as e:
+            logger.warning("Error saving token to cache: " + str(e))
+
+
+class RedisCacheHandler(CacheHandler):
+    """
+    A cache handler that stores the token info in the Redis.
+    """
+
+    def __init__(self, redis, key=None):
+        """
+        Parameters:
+            * redis: Redis object provided by redis-py library
+            (https://github.com/redis/redis-py)
+            * key: May be supplied, will otherwise be generated
+                   (takes precedence over `token_info`)
+        """
+        self.redis = redis
+        self.key = key if key else 'token_info'
+
+    def get_cached_token(self):
+        token_info = None
+        try:
+            token_info = self.redis.get(self.key)
+            if token_info:
+                return json.loads(token_info)
+        except RedisError as e:
+            logger.warning('Error getting token from cache: ' + str(e))
+
+        return token_info
+
+    def save_token_to_cache(self, token_info):
+        try:
+            self.redis.set(self.key, json.dumps(token_info))
+        except RedisError as e:
+            logger.warning('Error saving token to cache: ' + str(e))
