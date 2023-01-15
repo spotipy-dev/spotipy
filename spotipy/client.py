@@ -1758,7 +1758,7 @@ class Spotify(object):
     ):
         """ Start or resume user's playback.
 
-            Provide a `context_uri` to start playback or an album,
+            Provide a `context_uri` to start playback of an album,
             artist, or playlist.
 
             Provide a `uris` list to start playback of one or more
