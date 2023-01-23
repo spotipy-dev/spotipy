@@ -7,7 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-// Add new changes below this line
+### Added
+
+### Fixed
+
+### Removed
+
+## [2.22.1] - 2023-01-23
 
 ### Added
 
@@ -24,8 +30,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Path traversal vulnerability that may lead to type confusion in URI handling code
 - Update contributing.md
-
-### Removed
 
 ## [2.22.0] - 2022-12-10
 
