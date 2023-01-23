@@ -8,8 +8,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 
 // Add new changes below this line
--   Modified docstring for playlist_add_items() to accept "only URIs or URLs",
-    with intended deprecation for IDs in v3
 
 ### Added
 
@@ -17,8 +15,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added Comment to README - Getting Started for user to add URI to app in Spotify Developer Dashboard. 
 - Added playlist_add_tracks.py to example folder
 
+### Changed
+
+- Modified docstring for playlist_add_items() to accept "only URIs or URLs",
+  with intended deprecation for IDs in v3
+
 ### Fixed
 
+- Path traversal vulnerability that may lead to type confusion in URI handling code
 - Update contributing.md
 
 ### Removed

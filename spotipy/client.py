@@ -6,6 +6,7 @@ __all__ = ["Spotify", "SpotifyException"]
 
 import json
 import logging
+import re
 import warnings
 
 import requests
@@ -95,6 +96,29 @@ class Spotify(object):
         "GB",
         "US",
         "UY"]
+
+    # Spotify URI scheme defined in [1], and the ID format as base-62 in [2].
+    #
+    # Unfortunately the IANA specification is out of date and doesn't include the new types
+    # show and episode. Additionally, for the user URI, it does not specify which characters
+    # are valid for usernames, so the assumption is alphanumeric which coincidentially are also
+    # the same ones base-62 uses.
+    # In limited manual exploration this seems to hold true, as newly accounts are assigned an
+    # identifier that looks like the base-62 of all other IDs, but some older accounts only have
+    # numbers and even older ones seemed to have been allowed to freely pick this name.
+    #
+    # [1] https://www.iana.org/assignments/uri-schemes/prov/spotify
+    # [2] https://developer.spotify.com/documentation/web-api/#spotify-uris-and-ids
+    _regex_spotify_uri = r'^spotify:(?P<type>track|artist|album|playlist|show|episode|user):(?P<id>[0-9A-Za-z]+)$'
+
+    # Spotify URLs are defined at [1]. The assumption is made that they are all
+    # pointing to open.spotify.com, so a regex is used to parse them as well,
+    # instead of a more complex URL parsing function.
+    #
+    # [1] https://developer.spotify.com/documentation/web-api/#spotify-uris-and-ids
+    _regex_spotify_url = r'^(http[s]?:\/\/)?open.spotify.com\/(?P<type>track|artist|album|playlist|show|episode|user)\/(?P<id>[0-9A-Za-z]+)(\?.*)?$'
+
+    _regex_base62 = r'^[0-9A-Za-z]+$'
 
     def __init__(
         self,
@@ -1940,20 +1964,28 @@ class Spotify(object):
         return path
 
     def _get_id(self, type, id):
-        fields = id.split(":")
-        if len(fields) >= 3:
-            if type != fields[-2]:
-                logger.warning('Expected id of type %s but found type %s %s',
-                               type, fields[-2], id)
-            return fields[-1].split("?")[0]
-        fields = id.split("/")
-        if len(fields) >= 3:
-            itype = fields[-2]
-            if type != itype:
-                logger.warning('Expected id of type %s but found type %s %s',
-                               type, itype, id)
-            return fields[-1].split("?")[0]
-        return id
+        uri_match = re.search(Spotify._regex_spotify_uri, id)
+        if uri_match is not None:
+            uri_match_groups = uri_match.groupdict()
+            if uri_match_groups['type'] != type:
+                # TODO change to a ValueError in v3
+                raise SpotifyException(400, -1, "Unexpected Spotify URI type.")
+            return uri_match_groups['id']
+
+        url_match = re.search(Spotify._regex_spotify_url, id)
+        if url_match is not None:
+            url_match_groups = url_match.groupdict()
+            if url_match_groups['type'] != type:
+                raise SpotifyException(400, -1, "Unexpected Spotify URL type.")
+            # TODO change to a ValueError in v3
+            return url_match_groups['id']
+
+        # Raw identifiers might be passed, ensure they are also base-62
+        if re.search(Spotify._regex_base62, id) is not None:
+            return id
+
+        # TODO change to a ValueError in v3
+        raise SpotifyException(400, -1, "Unsupported URL / URI.")
 
     def _get_uri(self, type, id):
         if self._is_uri(id):
@@ -1962,7 +1994,7 @@ class Spotify(object):
             return "spotify:" + type + ":" + self._get_id(type, id)
 
     def _is_uri(self, uri):
-        return uri.startswith("spotify:") and len(uri.split(':')) == 3
+        return re.search(Spotify._regex_spotify_uri, uri) is not None
 
     def _search_multiple_markets(self, q, limit, offset, type, markets, total):
         if total and limit > total:
