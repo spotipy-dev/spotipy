@@ -109,14 +109,14 @@ class Spotify(object):
     #
     # [1] https://www.iana.org/assignments/uri-schemes/prov/spotify
     # [2] https://developer.spotify.com/documentation/web-api/#spotify-uris-and-ids
-    _regex_spotify_uri = r'^spotify:(?P<type>track|artist|album|playlist|show|episode|user):(?P<id>[0-9A-Za-z]+)$'
+    _regex_spotify_uri = r'^spotify:(?P<type>track|artist|album|playlist|show|episode|user):(?P<id>[0-9A-Za-z]+)$'  # noqa: E501
 
     # Spotify URLs are defined at [1]. The assumption is made that they are all
     # pointing to open.spotify.com, so a regex is used to parse them as well,
     # instead of a more complex URL parsing function.
     #
     # [1] https://developer.spotify.com/documentation/web-api/#spotify-uris-and-ids
-    _regex_spotify_url = r'^(http[s]?:\/\/)?open.spotify.com\/(?P<type>track|artist|album|playlist|show|episode|user)\/(?P<id>[0-9A-Za-z]+)(\?.*)?$'
+    _regex_spotify_url = r'^(http[s]?:\/\/)?open.spotify.com\/(?P<type>track|artist|album|playlist|show|episode|user)\/(?P<id>[0-9A-Za-z]+)(\?.*)?$'  # noqa: E501
 
     _regex_base62 = r'^[0-9A-Za-z]+$'
 
