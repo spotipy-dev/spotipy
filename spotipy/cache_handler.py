@@ -58,7 +58,7 @@ class CacheFileHandler(CacheHandler):
                            (takes precedence over `username`)
              * username: May be supplied or set as environment variable
                          (will set `cache_path` to `.cache-{username}`)
-             * encoder_cls: May be supplied as a means of overwriting the 
+             * encoder_cls: May be supplied as a means of overwriting the
                         default serializer used for writing tokens to disk
         """
         self.encoder_cls = encoder_cls
