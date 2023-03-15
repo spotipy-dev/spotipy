@@ -50,15 +50,18 @@ class CacheFileHandler(CacheHandler):
 
     def __init__(self,
                  cache_path=None,
-                 username=None):
+                 username=None,
+                 encoder_cls=None):
         """
         Parameters:
              * cache_path: May be supplied, will otherwise be generated
                            (takes precedence over `username`)
              * username: May be supplied or set as environment variable
                          (will set `cache_path` to `.cache-{username}`)
+             * encoder_cls: May be supplied as a means of overwriting the
+                        default serializer used for writing tokens to disk
         """
-
+        self.encoder_cls = encoder_cls
         if cache_path:
             self.cache_path = cache_path
         else:
@@ -88,7 +91,7 @@ class CacheFileHandler(CacheHandler):
     def save_token_to_cache(self, token_info):
         try:
             f = open(self.cache_path, "w")
-            f.write(json.dumps(token_info))
+            f.write(json.dumps(token_info, cls=self.encoder_cls))
             f.close()
         except IOError:
             logger.warning('Couldn\'t write token to cache at: %s',
