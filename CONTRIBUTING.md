@@ -8,7 +8,7 @@ If you would like to contribute to spotipy follow these steps:
 # Linux or Mac
 export SPOTIPY_CLIENT_ID=client_id_here
 export SPOTIPY_CLIENT_SECRET=client_secret_here
-export SPOTIPY_CLIENT_USERNAME=client_username_here # This is actually an id not spotify display name
+export SPOTIPY_CLIENT_USERNAME=client_username_here # This is actually an id not spotify display name and can be found [here](https://www.spotify.com/us/account/overview/)
 export SPOTIPY_REDIRECT_URI=http://localhost:8080 # Make url is set in app you created to get your ID and SECRET
 
 # Windows
@@ -21,9 +21,9 @@ $env:SPOTIPY_REDIRECT_URI="http://localhost:8080"
 ### Create virtual environment, install dependencies, run tests:
 
 ```bash
-$ virtualenv --python=python3.7 env
+$ virtualenv --python=python3.7 env #You can also use the latest version of python installed on your device, by running $virtualenv --python=python3 env
 $ source env/bin/activate
-(env) $ pip install --user -e .
+(env) $ pip install --user -e . #If this raises an error, try using: pip install -e . 
 (env) $ python -m unittest discover -v tests
 ```
 
