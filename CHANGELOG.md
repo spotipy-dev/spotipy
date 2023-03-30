@@ -395,6 +395,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix typos in doc
 - Start following [SemVer](https://semver.org) properly
 
+### Changed
+
+- Made instructions in the CONTRIBUTING.md file more clear such that it is easier to onboard and there are no conflicts with TUTORIAL.md
 ## [2.5.0] - 2020-01-11
 
 Added follow and player endpoints
