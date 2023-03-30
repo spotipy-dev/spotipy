@@ -21,9 +21,9 @@ $env:SPOTIPY_REDIRECT_URI="http://localhost:8080"
 ### Create virtual environment, install dependencies, run tests:
 
 ```bash
-$ virtualenv --python=python3.7 env #You can also use the latest version of python installed on your device, by running $virtualenv --python=python3 env
+$ virtualenv --python=python3 env
 $ source env/bin/activate
-(env) $ pip install --user -e . #If this raises an error, try using: pip install -e . 
+(env) $ pip install -e . 
 (env) $ python -m unittest discover -v tests
 ```
 
