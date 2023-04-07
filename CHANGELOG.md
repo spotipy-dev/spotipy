@@ -8,6 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 
 ### Added
+- Replace with changes
+
+### Fixed
+
+### Removed
+
+## [2.23.0] - 2023-04-07
+
+### Added
 - Added optional `encoder_cls` argument to `CacheFileHandler`, which overwrite default encoder for token before writing to disk
 - Integration tests for searching multiple types in multiple markets (non-user endpoints)
 - Publish to PyPI action
