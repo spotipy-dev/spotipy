@@ -52,9 +52,8 @@ To make sure if the import lists are stored correctly:
 
        ## Unreleased
 
-       // Add new changes below
-
        ### Added
+       - Replace with changes
 
        ### Fixed
 
