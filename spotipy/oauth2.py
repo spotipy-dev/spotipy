@@ -46,8 +46,7 @@ class SpotifyStateError(SpotifyOauthError):
     def __init__(self, local_state=None, remote_state=None, message=None,
                  error=None, error_description=None, *args, **kwargs):
         if not message:
-            message = ("Expected " + local_state + " but recieved "
-                       + remote_state)
+            message = f"Expected {local_state} but recieved {remote_state}"
         super(SpotifyOauthError, self).__init__(message, error,
                                                 error_description, *args,
                                                 **kwargs)
@@ -55,19 +54,16 @@ class SpotifyStateError(SpotifyOauthError):
 
 def _make_authorization_headers(client_id, client_secret):
     auth_header = base64.b64encode(
-        six.text_type(client_id + ":" + client_secret).encode("ascii")
+        six.text_type(f"{client_id}:{client_secret}").encode("ascii")
     )
-    return {"Authorization": "Basic %s" % auth_header.decode("ascii")}
+    return {"Authorization": f'Basic {auth_header.decode("ascii")}'}
 
 
 def _ensure_value(value, env_key):
     env_val = CLIENT_CREDS_ENV_VARS[env_key]
     _val = value or os.getenv(env_val)
     if _val is None:
-        msg = "No %s. Pass it or set a %s environment variable." % (
-            env_key,
-            env_val,
-        )
+        msg = f"No {env_key}. Pass it or set a {env_val} environment variable."
         raise SpotifyOauthError(msg)
     return _val
 
@@ -77,12 +73,11 @@ class SpotifyAuthBase(object):
     def __init__(self, requests_session):
         if isinstance(requests_session, requests.Session):
             self._session = requests_session
-        else:
-            if requests_session:  # Build a new session.
-                self._session = requests.Session()
-            else:  # Use the Requests API module as a "session".
-                from requests import api
-                self._session = api
+        elif requests_session:  # Build a new session.
+            self._session = requests.Session()
+        else:  # Use the Requests API module as a "session".
+            from requests import api
+            self._session = api
 
     def _normalize_scope(self, scope):
         """
@@ -237,9 +232,9 @@ class SpotifyClientCredentials(SpotifyAuthBase):
         self.proxies = proxies
         self.requests_timeout = requests_timeout
         if cache_handler:
-            assert issubclass(cache_handler.__class__, CacheHandler), \
-                "cache_handler must be a subclass of CacheHandler: " + str(type(cache_handler)) \
-                + " != " + str(CacheHandler)
+            assert issubclass(
+                cache_handler.__class__, CacheHandler
+            ), f"cache_handler must be a subclass of CacheHandler: {str(type(cache_handler))} != {str(CacheHandler)}"
             self.cache_handler = cache_handler
         else:
             self.cache_handler = CacheFileHandler()
@@ -357,9 +352,9 @@ class SpotifyOAuth(SpotifyAuthBase):
         self.scope = self._normalize_scope(scope)
 
         if cache_handler:
-            assert issubclass(cache_handler.__class__, CacheHandler), \
-                "cache_handler must be a subclass of CacheHandler: " + str(type(cache_handler)) \
-                + " != " + str(CacheHandler)
+            assert issubclass(
+                cache_handler.__class__, CacheHandler
+            ), f"cache_handler must be a subclass of CacheHandler: {str(type(cache_handler))} != {str(CacheHandler)}"
             self.cache_handler = cache_handler
         else:
             self.cache_handler = CacheFileHandler()
@@ -405,7 +400,7 @@ class SpotifyOAuth(SpotifyAuthBase):
 
         urlparams = urllibparse.urlencode(payload)
 
-        return "%s?%s" % (self.OAUTH_AUTHORIZE_URL, urlparams)
+        return f"{self.OAUTH_AUTHORIZE_URL}?{urlparams}"
 
     def parse_response_code(self, url):
         """ Parse the response code in the given response url
@@ -414,19 +409,17 @@ class SpotifyOAuth(SpotifyAuthBase):
                 - url - the response url
         """
         _, code = self.parse_auth_response_url(url)
-        if code is None:
-            return url
-        else:
-            return code
+        return url if code is None else code
 
     @staticmethod
     def parse_auth_response_url(url):
         query_s = urlparse(url).query
         form = dict(parse_qsl(query_s))
         if "error" in form:
-            raise SpotifyOauthError("Received error from auth server: "
-                                    "{}".format(form["error"]),
-                                    error=form["error"])
+            raise SpotifyOauthError(
+                f'Received error from auth server: {form["error"]}',
+                error=form["error"],
+            )
         return tuple(form.get(param) for param in ["state", "code"])
 
     def _make_authorization_headers(self):
@@ -446,10 +439,7 @@ class SpotifyOAuth(SpotifyAuthBase):
             prompt = "Enter the URL you were redirected to: "
         else:
             url = self.get_authorize_url()
-            prompt = (
-                "Go to the following URL: {}\n"
-                "Enter the URL you were redirected to: ".format(url)
-            )
+            prompt = f"Go to the following URL: {url}\nEnter the URL you were redirected to: "
         response = self._get_user_input(prompt)
         state, code = SpotifyOAuth.parse_auth_response_url(response)
         if self.state is not None and self.state != state:
@@ -666,9 +656,9 @@ class SpotifyPKCE(SpotifyAuthBase):
         self.scope = self._normalize_scope(scope)
 
         if cache_handler:
-            assert issubclass(cache_handler.__class__, CacheHandler), \
-                "cache_handler must be a subclass of CacheHandler: " + str(type(cache_handler)) \
-                + " != " + str(CacheHandler)
+            assert issubclass(
+                cache_handler.__class__, CacheHandler
+            ), f"cache_handler must be a subclass of CacheHandler: {str(type(cache_handler))} != {str(CacheHandler)}"
             self.cache_handler = cache_handler
         else:
             self.cache_handler = CacheFileHandler()
@@ -732,7 +722,7 @@ class SpotifyPKCE(SpotifyAuthBase):
         if state is not None:
             payload["state"] = state
         urlparams = urllibparse.urlencode(payload)
-        return "%s?%s" % (self.OAUTH_AUTHORIZE_URL, urlparams)
+        return f"{self.OAUTH_AUTHORIZE_URL}?{urlparams}"
 
     def _open_auth_url(self, state=None):
         auth_url = self.get_authorize_url(state)
@@ -783,7 +773,7 @@ class SpotifyPKCE(SpotifyAuthBase):
         if server.auth_code is not None:
             return server.auth_code
         elif server.error is not None:
-            raise SpotifyOauthError("Received error from OAuth server: {}".format(server.error))
+            raise SpotifyOauthError(f"Received error from OAuth server: {server.error}")
         else:
             raise SpotifyOauthError("Server listening on localhost has not been accessed")
 
@@ -793,10 +783,7 @@ class SpotifyPKCE(SpotifyAuthBase):
             prompt = "Enter the URL you were redirected to: "
         else:
             url = self.get_authorize_url()
-            prompt = (
-                "Go to the following URL: {}\n"
-                "Enter the URL you were redirected to: ".format(url)
-            )
+            prompt = f"Go to the following URL: {url}\nEnter the URL you were redirected to: "
         response = self._get_user_input(prompt)
         state, code = self.parse_auth_response_url(response)
         if self.state is not None and self.state != state:
@@ -933,10 +920,7 @@ class SpotifyPKCE(SpotifyAuthBase):
                 - url - the response url
         """
         _, code = self.parse_auth_response_url(url)
-        if code is None:
-            return url
-        else:
-            return code
+        return url if code is None else code
 
     @staticmethod
     def parse_auth_response_url(url):
@@ -960,7 +944,7 @@ class RequestHandler(BaseHTTPRequestHandler):
         if self.server.auth_code:
             status = "successful"
         elif self.server.error:
-            status = "failed ({})".format(self.server.error)
+            status = f"failed ({self.server.error})"
         else:
             self._write("<html><body><h1>Invalid request</h1></body></html>")
             return

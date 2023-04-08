@@ -3,16 +3,14 @@
 
     given a list of track IDs show the artist and track name
 '''
+
 from spotipy.oauth2 import SpotifyClientCredentials
 import sys
 import spotipy
 
 if __name__ == '__main__':
     max_tracks_per_call = 50
-    if len(sys.argv) > 1:
-        file = open(sys.argv[1])
-    else:
-        file = sys.stdin
+    file = open(sys.argv[1]) if len(sys.argv) > 1 else sys.stdin
     tids = file.read().split()
 
     auth_manager = SpotifyClientCredentials()

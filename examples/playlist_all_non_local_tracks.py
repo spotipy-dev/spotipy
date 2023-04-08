@@ -27,4 +27,4 @@ for item in tracks:
 
 
 # print result
-print("Playlist length: " + str(len(tracks)) + "\nExcluding: " + str(i))
+print(f"Playlist length: {len(tracks)}" + "\nExcluding: " + str(i))
