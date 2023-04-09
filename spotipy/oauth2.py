@@ -234,7 +234,8 @@ class SpotifyClientCredentials(SpotifyAuthBase):
         if cache_handler:
             assert issubclass(
                 cache_handler.__class__, CacheHandler
-            ), f"cache_handler must be a subclass of CacheHandler: {str(type(cache_handler))} != {str(CacheHandler)}"
+            ), f"cache_handler must be a subclass of CacheHandler:\
+            {str(type(cache_handler))} != {str(CacheHandler)}"
             self.cache_handler = cache_handler
         else:
             self.cache_handler = CacheFileHandler()
@@ -354,7 +355,8 @@ class SpotifyOAuth(SpotifyAuthBase):
         if cache_handler:
             assert issubclass(
                 cache_handler.__class__, CacheHandler
-            ), f"cache_handler must be a subclass of CacheHandler: {str(type(cache_handler))} != {str(CacheHandler)}"
+            ), f"cache_handler must be a subclass of CacheHandler:\
+                {str(type(cache_handler))} != {str(CacheHandler)}"
             self.cache_handler = cache_handler
         else:
             self.cache_handler = CacheFileHandler()
@@ -658,7 +660,8 @@ class SpotifyPKCE(SpotifyAuthBase):
         if cache_handler:
             assert issubclass(
                 cache_handler.__class__, CacheHandler
-            ), f"cache_handler must be a subclass of CacheHandler: {str(type(cache_handler))} != {str(CacheHandler)}"
+            ), f"cache_handler must be a subclass of CacheHandler:\
+                {str(type(cache_handler))} != {str(CacheHandler)}"
             self.cache_handler = cache_handler
         else:
             self.cache_handler = CacheFileHandler()
