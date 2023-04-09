@@ -13,7 +13,4 @@ while response:
     for i, item in enumerate(playlists['items']):
         print(playlists['offset'] + i, item['name'])
 
-    if playlists['next']:
-        response = sp.next(playlists)
-    else:
-        response = None
+    response = sp.next(playlists) if playlists['next'] else None

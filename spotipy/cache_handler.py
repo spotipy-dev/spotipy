@@ -1,3 +1,4 @@
+import pathlib
 __all__ = [
     'CacheHandler',
     'CacheFileHandler',
@@ -57,22 +58,19 @@ class CacheFileHandler(CacheHandler):
                          (will set `cache_path` to `.cache-{username}`)
         """
 
-        if cache_path:
-            self.cache_path = cache_path
-        else:
+        if not cache_path:
             cache_path = ".cache"
-            username = (username or os.getenv(CLIENT_CREDS_ENV_VARS["client_username"]))
-            if username:
-                cache_path += "-" + str(username)
-            self.cache_path = cache_path
+            if username := (
+                username or os.getenv(CLIENT_CREDS_ENV_VARS["client_username"])
+            ):
+                cache_path += f"-{str(username)}"
+        self.cache_path = cache_path
 
     def get_cached_token(self):
         token_info = None
 
         try:
-            f = open(self.cache_path)
-            token_info_string = f.read()
-            f.close()
+            token_info_string = pathlib.Path(self.cache_path).read_text()
             token_info = json.loads(token_info_string)
 
         except IOError as error:
@@ -85,9 +83,8 @@ class CacheFileHandler(CacheHandler):
 
     def save_token_to_cache(self, token_info):
         try:
-            f = open(self.cache_path, "w")
-            f.write(json.dumps(token_info))
-            f.close()
+            with open(self.cache_path, "w") as f:
+                f.write(json.dumps(token_info))
         except IOError:
             logger.warning('Couldn\'t write token to cache at: %s',
                            self.cache_path)
@@ -143,7 +140,7 @@ class DjangoSessionCacheHandler(CacheHandler):
         try:
             self.request.session['token_info'] = token_info
         except Exception as e:
-            logger.warning("Error saving token to cache: " + str(e))
+            logger.warning(f"Error saving token to cache: {str(e)}")
 
 
 class FlaskSessionCacheHandler(CacheHandler):
@@ -168,7 +165,7 @@ class FlaskSessionCacheHandler(CacheHandler):
         try:
             self.session["token_info"] = token_info
         except Exception as e:
-            logger.warning("Error saving token to cache: " + str(e))
+            logger.warning(f"Error saving token to cache: {str(e)}")
 
 
 class RedisCacheHandler(CacheHandler):
@@ -185,7 +182,7 @@ class RedisCacheHandler(CacheHandler):
                    (takes precedence over `token_info`)
         """
         self.redis = redis
-        self.key = key if key else 'token_info'
+        self.key = key or 'token_info'
 
         try:
             from redis import RedisError  # noqa: F401
@@ -205,7 +202,7 @@ class RedisCacheHandler(CacheHandler):
             if token_info:
                 return json.loads(token_info)
         except RedisError as e:
-            logger.warning('Error getting token from cache: ' + str(e))
+            logger.warning(f'Error getting token from cache: {str(e)}')
 
         return token_info
 
@@ -215,4 +212,4 @@ class RedisCacheHandler(CacheHandler):
         try:
             self.redis.set(self.key, json.dumps(token_info))
         except RedisError as e:
-            logger.warning('Error saving token to cache: ' + str(e))
+            logger.warning(f'Error saving token to cache: {str(e)}')

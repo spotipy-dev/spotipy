@@ -56,11 +56,9 @@ class AuthTestSpotipy(unittest.TestCase):
     reply_all_ep1_urn = 'spotify:episode:1KHjbpnmNpFmNTczQmTZlR'
 
     @classmethod
-    def setUpClass(self):
-        self.spotify = Spotify(
-            auth_manager=SpotifyClientCredentials()
-        )
-        self.spotify.trace = False
+    def setUpClass(cls):
+        cls.spotify = Spotify(auth_manager=SpotifyClientCredentials())
+        cls.spotify.trace = False
 
     def test_audio_analysis(self):
         result = self.spotify.audio_analysis(self.four_tracks[0])
@@ -160,10 +158,9 @@ class AuthTestSpotipy(unittest.TestCase):
         self.assertTrue('artists' in results)
         self.assertTrue(len(results['artists']) == 20)
 
-        found = False
-        for artist in results['artists']:
-            if artist['name'] == 'Jimmy Eat World':
-                found = True
+        found = any(
+            artist['name'] == 'Jimmy Eat World' for artist in results['artists']
+        )
         self.assertTrue(found)
 
     def test_artist_search(self):
@@ -217,9 +214,10 @@ class AuthTestSpotipy(unittest.TestCase):
         self.assertTrue(all(results_limited[country]['artists']['items']
                             [0]['name'] == 'Weezer' for country in results_limited))
 
-        total_limited_results = 0
-        for country in results_limited:
-            total_limited_results += len(results_limited[country]['artists']['items'])
+        total_limited_results = sum(
+            len(results_limited[country]['artists']['items'])
+            for country in results_limited
+        )
         self.assertTrue(total_limited_results <= total)
 
     def test_artist_albums(self):
@@ -249,7 +247,7 @@ class AuthTestSpotipy(unittest.TestCase):
         spotify_no_retry = Spotify(
             auth_manager=SpotifyClientCredentials(),
             retries=0)
-        for i in range(100):
+        for _ in range(100):
             try:
                 spotify_no_retry.search(q='foo')
             except SpotifyException as e:
@@ -347,7 +345,7 @@ class AuthTestSpotipy(unittest.TestCase):
         with self.assertRaises(SpotifyException) as cm:
             self.spotify.user_playlist_create(
                 "spotify", "Best hits of the 90s")
-        self.assertTrue(cm.exception.http_status == 401 or cm.exception.http_status == 403)
+        self.assertTrue(cm.exception.http_status in [401, 403])
 
     def test_custom_requests_session(self):
         sess = requests.Session()
