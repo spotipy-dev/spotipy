@@ -4,7 +4,7 @@ with open("README.md", "r") as f:
     long_description = f.read()
 
 test_reqs = [
-    'mock==2.0.0'
+    'mock==5.0.1'
 ]
 
 doc_reqs = [
