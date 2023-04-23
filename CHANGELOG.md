@@ -13,6 +13,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [2.22.1] - 2023-04-23
+
+### Added
+
+ - N/A
+
+### Changed
+
+- Changes the YouTube video link for authentication tutorial (the old video was in low definition, the new one is in high definition)
+
+### Removed
+
+ - N/A
+
 ## [2.22.1] - 2023-01-23
 
 ### Added
