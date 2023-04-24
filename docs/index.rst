@@ -160,7 +160,7 @@ The redirect URI can be any valid URI (it does not need to be accessible)
 such as ``http://example.com``, ``http://localhost`` or ``http://127.0.0.1:9090``.
 
     .. note:: If you choose an `http`-scheme URL, and it's for `localhost` or
-     `127.0.0.1`, **AND** it specifies a port, then spotispy will instantiate
+     `127.0.0.1`, **AND** it specifies a port, then spotipy will instantiate
       a server on the indicated response to receive the access token from the
       response at the end of the oauth flow [see the code](https://github.com/plamere/spotipy/blob/master/spotipy/oauth2.py#L483-L490).
 

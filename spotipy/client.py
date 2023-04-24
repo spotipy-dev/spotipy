@@ -15,6 +15,8 @@ import urllib3
 
 from spotipy.exceptions import SpotifyException
 
+from collections import defaultdict
+
 logger = logging.getLogger(__name__)
 
 
@@ -109,7 +111,7 @@ class Spotify(object):
     #
     # [1] https://www.iana.org/assignments/uri-schemes/prov/spotify
     # [2] https://developer.spotify.com/documentation/web-api/#spotify-uris-and-ids
-    _regex_spotify_uri = r'^spotify:(?P<type>track|artist|album|playlist|show|episode|user):(?P<id>[0-9A-Za-z]+)$'  # noqa: E501
+    _regex_spotify_uri = r'^spotify:(?:(?P<type>track|artist|album|playlist|show|episode):(?P<id>[0-9A-Za-z]+)|user:(?P<username>[0-9A-Za-z]+):playlist:(?P<playlistid>[0-9A-Za-z]+))$'  # noqa: E501
 
     # Spotify URLs are defined at [1]. The assumption is made that they are all
     # pointing to open.spotify.com, so a regex is used to parse them as well,
@@ -594,12 +596,12 @@ class Spotify(object):
                       official documentation https://developer.spotify.com/documentation/web-api/reference/search/)  # noqa
                 - limit  - the number of items to return (min = 1, default = 10, max = 50). If a search is to be done on multiple
                             markets, then this limit is applied to each market. (e.g. search US, CA, MX each with a limit of 10).
+                            If multiple types are specified, this applies to each type.
                 - offset - the index of the first item to return
                 - type - the types of items to return. One or more of 'artist', 'album',
                          'track', 'playlist', 'show', or 'episode'. If multiple types are desired, pass in a comma separated string.
                 - markets - A list of ISO 3166-1 alpha-2 country codes. Search all country markets by default.
-                - total - the total number of results to return if multiple markets are supplied in the search.
-                          If multiple types are specified, this only applies to the first type.
+                - total - the total number of results to return across multiple markets and types.
         """
         warnings.warn(
             "Searching multiple markets is an experimental feature. "
@@ -2005,22 +2007,29 @@ class Spotify(object):
                 UserWarning,
             )
 
-        results = {}
-        first_type = type.split(",")[0] + 's'
+        results = defaultdict(dict)
+        item_types = [item_type + "s" for item_type in type.split(",")]
         count = 0
 
         for country in markets:
             result = self._get(
                 "search", q=q, limit=limit, offset=offset, type=type, market=country
             )
-            results[country] = result
+            for item_type in item_types:
+                results[country][item_type] = result[item_type]
 
-            count += len(result[first_type]['items'])
+                # Truncate the items list to the current limit
+                if len(results[country][item_type]['items']) > limit:
+                    results[country][item_type]['items'] = \
+                        results[country][item_type]['items'][:limit]
+
+                count += len(results[country][item_type]['items'])
+                if total and limit > total - count:
+                    # when approaching `total` results, adjust `limit` to not request more
+                    # items than needed
+                    limit = total - count
+
             if total and count >= total:
-                break
-            if total and limit > total - count:
-                # when approaching `total` results, adjust `limit` to not request more
-                # items than needed
-                limit = total - count
+                return results
 
         return results

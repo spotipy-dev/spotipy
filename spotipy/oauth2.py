@@ -629,7 +629,7 @@ class SpotifyPKCE(SpotifyAuthBase):
     """ Implements PKCE Authorization Flow for client apps
 
     This auth manager enables *user and non-user* endpoints with only
-    a client secret, redirect uri, and username. When the app requests
+    a client ID, redirect URI, and username. When the app requests
     an access token for the first time, the user is prompted to
     authorize the new client app. After authorizing the app, the client
     app is then given both access and refresh tokens. This is the
