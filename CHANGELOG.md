@@ -7,12 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-### Added
-- Replace with changes
-
-### Fixed
-
-### Removed
+### Changed
+- Changes the YouTube video link for authentication tutorial (the old video was in low definition, the new one is in high definition)
 
 ## [2.23.0] - 2023-04-07
 
@@ -24,8 +20,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Fixed the regex for matching playlist URIs with the format spotify:user:USERNAME:playlist:PLAYLISTID.
 - `search_markets` now factors the counts of all types in the `total`  rather than just the first type ([#534](https://github.com/spotipy-dev/spotipy/issues/534))
-
-### Removed
 
 ## [2.22.1] - 2023-01-23
 
