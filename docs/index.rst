@@ -93,9 +93,7 @@ to get the credentials necessary to make authorized calls
 User authorization setup
 ------------------------
 
-1. Log into 
-`My Dashboard <https://developer.spotify.com/dashboard/applications>`_
-using your Sporify account.
+1. Log into `My Dashboard <https://developer.spotify.com/dashboard/applications>`_ using your Sporify account.
 
 2. Create an app. Once you have created an app, you will have access to the app's credentials. These will be used for API authorization to obtain an access token.
 
