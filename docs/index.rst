@@ -90,6 +90,19 @@ All methods require user authorization. You will need to register your app at
 to get the credentials necessary to make authorized calls
 (a *client id* and *client secret*).
 
+User authorization setup
+------------------------
+
+1. Log into 
+`My Dashboard <https://developer.spotify.com/dashboard/applications>`_
+using your Sporify account.
+
+2. Create an app. Once you have created an app, you will have access to the app's credentials. These will be used for API authorization to obtain an access token.
+
+3. Use the obtained access token in your API requests.
+
+For more details about setup, you can visit the Spotify API docs: https://developer.spotify.com/documentation/web-api
+
 *Spotipy* supports two authorization flows:
 
   - The **Authorization Code flow** This method is suitable for long-running applications
