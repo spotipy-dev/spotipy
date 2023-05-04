@@ -76,24 +76,12 @@ Don’t forget to add the *Spotipy* tag, and any other relevant tags as well, be
 
 If you have suggestions, bugs or other issues specific to this library,
 file them [here](https://github.com/plamere/spotipy/issues).
-Or just send a pull request.
-Follow the guidelines to [Contribute](## Contribute).
+Or offer your own solution following the guidelines below.
 
 ## Contribute
 Python developers wanting to contribute to Spotipy, please follow these guidelines:
-#### Export Environment Variables
-```
-export SPOTIPY_CLIENT_ID=client_id_here 
-export SPOTIPY_CLIENT_SECRET=client_secret_here 
-export SPOTIPY_CLIENT_USERNAME=client_username_here
-export SPOTIPY_REDIRECT_URI=https://localhost:8080
-```
-#### Create Virtual Environment
-```virtualenv –python=python3.7 env (env) $ pip install –user -e . (env) $ python -m unittest discover -v tests```
-#### Lint
-Spotipy uses flake8 linting.
-Useful linting tools can be found under contribute, [linting](https://spotipy.readthedocs.io/en/2.22.1/#contribute).
-#### Publishing
-Handled by the Maintainer
-#### Change Log
-Update the [CHANGELOG](https://github.com/peterspr/spotipy/blob/master/CHANGELOG.md) with a description of the contribution.
+- Export Environment Variables
+- Create Virtual Environment
+- Lint Using flake8
+- Update the [CHANGELOG](https://github.com/peterspr/spotipy/blob/master/CHANGELOG.md)
+Examples and descriptions are under the [Contributions](https://spotipy.readthedocs.io/en/2.22.1/#contribute) in the documentation or [here](https://github.com/peterspr/spotipy/blob/documentation/CONTRIBUTING.md).
