@@ -92,7 +92,7 @@ export SPOTIPY_REDIRECT_URI=https://localhost:8080
 ```virtualenv –python=python3.7 env (env) $ pip install –user -e . (env) $ python -m unittest discover -v tests```
 #### Lint
 Spotipy uses flake8 linting.
-Useful linting tools can be under contribute, [linting](https://spotipy.readthedocs.io/en/2.22.1/#contribute).
+Useful linting tools can be found under contribute, [linting](https://spotipy.readthedocs.io/en/2.22.1/#contribute).
 #### Publishing
 Handled by the Maintainer
 #### Change Log
