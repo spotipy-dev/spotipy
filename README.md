@@ -94,6 +94,6 @@ export SPOTIPY_REDIRECT_URI=https://localhost:8080
 Spotipy uses flake8 linting.
 Useful linting tools can be under contribute, [linting](https://spotipy.readthedocs.io/en/2.22.1/#contribute).
 ### Publishing
-The publishing portion of the contribution is handled by the maintainer.
-### 
+Handled by the Maintainer
+### Change Log
 Update the [CHANGELOG](https://github.com/peterspr/spotipy/blob/master/CHANGELOG.md) with a description of the contribution.
