@@ -84,4 +84,4 @@ Python developers wanting to contribute to Spotipy, please follow these guidelin
 - Create Virtual Environment
 - Lint Using flake8
 - Update the [CHANGELOG](https://github.com/peterspr/spotipy/blob/master/CHANGELOG.md) <br />
-Examples and descriptions are under the [Contributions](https://spotipy.readthedocs.io/en/2.22.1/#contribute) in the documentation or [here](https://github.com/peterspr/spotipy/blob/documentation/CONTRIBUTING.md).
+Examples and descriptions are under [Contributions](https://spotipy.readthedocs.io/en/2.22.1/#contribute) in the documentation or [here](https://github.com/peterspr/spotipy/blob/documentation/CONTRIBUTING.md).
