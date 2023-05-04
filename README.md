@@ -81,19 +81,19 @@ Follow the guidelines to [Contribute](## Contribute).
 
 ## Contribute
 Python developers wanting to contribute to Spotipy, please follow these guidelines:
-### Export Environment Variables
+#### Export Environment Variables
 ```
 export SPOTIPY_CLIENT_ID=client_id_here 
 export SPOTIPY_CLIENT_SECRET=client_secret_here 
 export SPOTIPY_CLIENT_USERNAME=client_username_here
 export SPOTIPY_REDIRECT_URI=https://localhost:8080
 ```
-### Create Virtual Environment
+#### Create Virtual Environment
 ```virtualenv –python=python3.7 env (env) $ pip install –user -e . (env) $ python -m unittest discover -v tests```
-### Lint
+#### Lint
 Spotipy uses flake8 linting.
 Useful linting tools can be under contribute, [linting](https://spotipy.readthedocs.io/en/2.22.1/#contribute).
-### Publishing
+#### Publishing
 Handled by the Maintainer
-### Change Log
+#### Change Log
 Update the [CHANGELOG](https://github.com/peterspr/spotipy/blob/master/CHANGELOG.md) with a description of the contribution.
