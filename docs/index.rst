@@ -113,15 +113,6 @@ to `setup an account <https://www.spotify.com/us/signup>`_.
     and create an application, see `Setting Up Your Application on Spotify Web API`_ for details on setting up
     an application.
 
-Authorization Code Flow
-=======================
-
-This flow is suitable for long-running applications in which the user grants
-permission only once. It provides an access token that can be refreshed.
-Since the token exchange involves sending your secret key, perform this on a
-secure location, like a backend service, and not from a client such as a
-browser or from a mobile app.
-
 Setting Up Your Application on Spotify Web API
 ----------------------------------------------
 *You must have a Spotify account to access these features.*
@@ -141,6 +132,15 @@ Setting Up Your Application on Spotify Web API
 .. note:: If this is your first time logging in, you will need to accept a user
          agreement. After accepted, this should redirect you to a new page to 
          create your first application. 
+
+Authorization Code Flow
+=======================
+
+This flow is suitable for long-running applications in which the user grants
+permission only once. It provides an access token that can be refreshed.
+Since the token exchange involves sending your secret key, perform this on a
+secure location, like a backend service, and not from a client such as a
+browser or from a mobile app.
          
 Quick start
 -----------
