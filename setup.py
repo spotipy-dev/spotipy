@@ -1,32 +1,37 @@
+# Import required packages
 from setuptools import setup
 
-with open("README.md", "r") as f:
-    long_description = f.read()
+# Open the README file and read the contents into a variable
+with open("README.md", "r") as readme_file:
+    long_description = readme_file.read()
 
-test_reqs = [
-    'mock==2.0.0'
+# Define lists of test and documentation requirements
+test_requirements = [
+    "mock==2.0.0"
 ]
 
-doc_reqs = [
-    'Sphinx>=1.5.2'
+doc_requirements = [
+    "Sphinx>=1.5.2"
 ]
 
-extra_reqs = {
-    'doc': doc_reqs,
-    'test': test_reqs
+# Define a dictionary of extra requirements
+extra_requirements = {
+    "doc": doc_requirements,
+    "test": test_requirements
 }
 
+# Configure the setup function with required and optional parameters
 setup(
-    name='spotipy',
-    version='2.23.0',
-    description='A light weight Python library for the Spotify Web API',
+    name="spotipy",
+    version="2.23.0",
+    description="A lightweight Python library for the Spotify Web API",
     long_description=long_description,
     long_description_content_type="text/markdown",
     author="@plamere",
     author_email="paul@echonest.com",
-    url='https://spotipy.readthedocs.org/',
+    url="https://spotipy.readthedocs.org/",
     project_urls={
-        'Source': 'https://github.com/plamere/spotipy',
+        "Source": "https://github.com/plamere/spotipy",
     },
     install_requires=[
         "redis>=3.5.3",
@@ -35,7 +40,8 @@ setup(
         "six>=1.15.0",
         "urllib3>=1.26.0"
     ],
-    tests_require=test_reqs,
-    extras_require=extra_reqs,
-    license='MIT',
-    packages=['spotipy'])
+    tests_require=test_requirements,
+    extras_require=extra_requirements,
+    license="MIT",
+    packages=["spotipy"]
+)
