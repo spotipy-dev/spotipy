@@ -109,7 +109,7 @@ In order to successfully utilize the Spotify Web API and in turn, Spotipy, you w
 to `setup an account <https://www.spotify.com/us/signup>`_. 
 - Fill out the given form
 - Click sign-up, *Spotify is a free service, you will not need to use a form of payment*
-- Once signed up, you can now sign in via `My Dashboard <https://developer.spotify.com/dashboard/applications>`_.
+- Once signed up, you can now sign in via `My Dashboard <https://developer.spotify.com/dashboard/applications>`.
   and create an application, see `Setting Up Your Application on Spotify Web API`_ for details on setting up
   an application.
 
