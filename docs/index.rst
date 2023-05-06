@@ -115,12 +115,9 @@ browser or from a mobile app.
 
 Setting Up Your Application on Spotify Web API
 ----------------------------------------------
-.. note:: You must have a Spotify account to access these features.
+*You must have a Spotify account to access these features.*
 
 - Login to the Dashboard via your Spotify account
-.. note:: If this is your first time logging in, you will need to accept a user
-         agreement. After accepted, this should redirect you to a new page to 
-         create your first application. 
 - From the Dashboard, click on `Create App`
 - Fill out the form with your specified *App Name*, *App Description*, *Website* (optional),
   *Redirect URI*
@@ -132,7 +129,10 @@ Setting Up Your Application on Spotify Web API
    - App settings
    - A Client ID, that provides a unique identifier for your app
    - A Client secret, the key will you use to authorize your Web API or SDK calls
-
+.. note:: If this is your first time logging in, you will need to accept a user
+         agreement. After accepted, this should redirect you to a new page to 
+         create your first application. 
+         
 Quick start
 -----------
 
