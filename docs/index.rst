@@ -102,7 +102,11 @@ to get the credentials necessary to make authorized calls
   - The **Client Credentials flow**  The method makes it possible
     to authenticate your requests to the Spotify Web API and to obtain
     a higher rate limit than you would with the Authorization Code flow.
-
+    
+Setting Up a Spotify Account
+----------------------------
+In order to successfully utilize the Spotify Web API and in turn, Spotipy, you will need
+to `set up an account <https://www.spotify.com/us/signup>`. 
 
 Authorization Code Flow
 =======================
