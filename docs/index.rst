@@ -113,6 +113,26 @@ Since the token exchange involves sending your secret key, perform this on a
 secure location, like a backend service, and not from a client such as a
 browser or from a mobile app.
 
+Setting Up Your Application on Spotify Web API
+----------------------------------------------
+..note:: You must have a Spotify account to access these features.
+
+- Login to the Dashboard via your Spotify account
+..note:: If this is your first time logging in, you will need to accept a user
+         agreement. After accepted, this should redirect you to a new page to 
+         create your first application. 
+- From the Dashboard, click on `Create App`
+- Fill out the form with your specified *App Name*, *App Description*, *Website* (optional),
+  *Redirect URI*
+- You should then be redirected to your app overview page, this will provide you
+  with valuable information such as:
+   
+   - App Metrics
+   - App Status
+   - App settings
+   - A Client ID, that provides a unique identifier for your app
+   - A Client secret, the key will you use to authorize your Web API or SDK calls
+
 Quick start
 -----------
 
