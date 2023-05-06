@@ -106,7 +106,12 @@ to get the credentials necessary to make authorized calls
 Setting Up a Spotify Account
 ----------------------------
 In order to successfully utilize the Spotify Web API and in turn, Spotipy, you will need
-to `setup an account <https://developer.spotify.com/dashboard/applications>`_. 
+to `setup an account <https://www.spotify.com/us/signup>`_. 
+- Fill out the given form
+- Click sign-up, *Spotify is a free service, you will not need to use a form of payment*
+- Once signed up, you can now sign in via `My Dashboard <https://developer.spotify.com/dashboard/applications>`_.
+  and create an application, see `Setting Up Your Application on Spotify Web API`_ for details on setting up
+  an application.
 
 Authorization Code Flow
 =======================
