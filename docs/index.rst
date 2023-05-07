@@ -131,7 +131,9 @@ Setting Up Your Application on Spotify Web API
    - A Client secret, the key will you use to authorize your Web API or SDK calls
 .. note:: If this is your first time logging in, you will need to accept a user
          agreement. After accepted, this should redirect you to a new page to 
-         create your first application. 
+         create your first application.
+         
+ **For further details on setting up an application, checkout the `Getting Started <https://developer.spotify.com/documentation/web-api/tutorials/getting-started>`_ page on the Spotify Web API site.**
 
 Authorization Code Flow
 =======================
