@@ -285,42 +285,6 @@ The following handlers are available and defined in the URL above.
 
 Feel free to contribute new cache handlers to the repo.
 
-User Guide
-=======================
-
-In this section, we'll provide a step-by-step tutorial for using some of Spotipy's essential features, such as retrieving user data, and searching for music.
- 
-**Retrieving User Data**
-  - Import the Spotipy module in your Python code::
-   
-      import spotipy
-      
-  - Create a Spotipy object with authentication manager::
-   
-      from spotipy.oauth2 import SpotifyOAuth
-
-      sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id='<your_client_id>',
-                                               client_secret='<your_client_secret>',
-                                               redirect_uri='<your_redirect_uri>'))
-  - Use the sp.current_user() method to retrieve the authenticated user's data::
-   
-      user_data = sp.current_user()
-      
-  - Access various pieces of user data from the user_data dictionary, such as the user's display name::
-   
-      display_name = user_data['display_name']
-   
-**Searching for Music**
-  - Use the sp.search() method to search for a track, artist, album or playlist::
-      
-      results = sp.search(q='chocolate', type='track')
-      
-  - The results variable contains a dictionary with search results. You can access the list of tracks returned by the search by accessing results['tracks']['items'].
-   
-  - Each item in the list of tracks is a dictionary containing information about the track. For example, you can retrieve the track name using track_name = results['tracks']['items'][0]['name'].
-      
-
-
 Examples
 =======================
 
