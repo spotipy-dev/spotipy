@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+Changelog Basics & Principles
+-----------------------------
+- Changelogs are for Humans not Machines (make it readable to the layperson)
+- There should be an entry to every version
+- The same types of changes should be grouped
+- Version and sections should be linkable
+- The latest version comes first
+- The release date of each version is displayed
+- Should be mentioned of a change follows Semantic Versioning
+- Types of changes include: Added, Changed, Deprecated, Removed, Fixed, and Security
+
+See the site above for further details on how to keep a changelog
+
+
 ## Unreleased
 
 ### Changed
