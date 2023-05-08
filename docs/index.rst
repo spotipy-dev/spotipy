@@ -116,7 +116,7 @@ Open command prompt and run the following::
 
    sudo apt-get install python3-pip
 
-- Install Spotipy: Run pip install spotipy in the terminal.
+- Install Spotipy: Run pip install spotipy in the terminal::
 
    pip install spotipy
 
