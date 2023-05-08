@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Changelog Basics & Principles
 -----------------------------
+Before adding to the Changelog, think about the following: 
 - Changelogs are for Humans not Machines (make it readable to the layperson)
 - There should be an entry to every version
 - The same types of changes should be grouped
