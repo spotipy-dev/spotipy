@@ -26,7 +26,7 @@ Ignoring deprecations
 - Deprecations, removals, and any changes that may break the program, should be clear to the user
 
 Confusing Dates
-- There are multiple ways to format a date, typically it is best practice follow the format YYYY-MM-DD. This format is less ambiguous than other formats and is more widely accepted across different regions of the world. 
+- There are multiple ways to format a date, typically it is best practice follow the format ``YYYY-MM-DD``. This format is less ambiguous than other formats and is more widely accepted across different regions of the world. 
 
 
 See the site above for further details on how to keep a changelog
