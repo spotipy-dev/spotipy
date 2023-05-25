@@ -8,8 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 
 ### Changed
+- Edited TUTORIAL.md, CONTRIBUTING.md, and TUTORIAL.md, fixed/added several links, and added clarification for some steps
+
+## Unreleased
+
+### Changed
 - Changes the YouTube video link for authentication tutorial (the old video was in low definition, the new one is in high definition)
-- Updated links to Spotify in documentation 
+- Updated links to Spotify in documentation
 
 ## [2.23.0] - 2023-04-07
 
