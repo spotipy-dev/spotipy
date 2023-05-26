@@ -36,7 +36,7 @@ Error:
 Solution:
 
  - You are likely missing a scope when requesting the endpoint, check
-https://developer.spotify.com/web-api/using-scopes/
+https://developer.spotify.com/documentation/web-api/concepts/scopes/
 
 ### Search doesn't find some tracks
 

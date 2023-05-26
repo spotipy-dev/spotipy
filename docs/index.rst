@@ -5,11 +5,11 @@ Welcome to Spotipy!
 ===================================
 
 *Spotipy* is a lightweight Python library for the `Spotify Web API
-<https://developer.spotify.com/web-api/>`_. With *Spotipy*
+<https://developer.spotify.com/documentation/web-api/>`_. With *Spotipy*
 you get full access to all of the music data provided by the Spotify platform.
 
 Assuming you set the ``SPOTIPY_CLIENT_ID`` and ``SPOTIPY_CLIENT_SECRET``
-environment variables (here is a `video <https://youtu.be/3RGm4jALukM>`_ explaining how to do so). For a longer tutorial with examples included, refer to this `video playlist <https://www.youtube.com/watch?v=tmt5SdvTqUI&list=PLqgOPibB_QnzzcaOFYmY2cQjs35y0is9N&index=1>`_. Below is a quick example of using *Spotipy* to list the
+environment variables (here is a `video <https://youtu.be/kaBVN8uP358>`_ explaining how to do so). For a longer tutorial with examples included, refer to this `video playlist <https://www.youtube.com/watch?v=tmt5SdvTqUI&list=PLqgOPibB_QnzzcaOFYmY2cQjs35y0is9N&index=1>`_. Below is a quick example of using *Spotipy* to list the
 names of all the albums released by the artist 'Birdy'::
 
     import spotipy
@@ -71,7 +71,7 @@ Features
 *Spotipy* supports all of the features of the Spotify Web API including access
 to all end points, and support for user authorization. For details on the
 capabilities you are encouraged to review the `Spotify Web
-API <https://developer.spotify.com/web-api/>`_ documentation.
+API <https://developer.spotify.com/documentation/web-api/>`_ documentation.
 
 Installation
 ============
@@ -143,7 +143,7 @@ Scopes
 ------
 
 See `Using
-Scopes <https://developer.spotify.com/documentation/general/guides/authorization/scopes/>`_ for information
+Scopes <https://developer.spotify.com/documentation/web-api/concepts/scopes/>`_ for information
 about scopes.
 
 Redirect URI
