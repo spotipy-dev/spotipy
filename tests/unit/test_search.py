@@ -1,36 +1,45 @@
-import sys
-import xml.etree.ElementTree as ET
+import unittest
 from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy
-from tabulate import tabulate
+import traceback
 
-client_id = 'client_id'
-client_secret = 'client_secret'
 
-client_credentials_manager = SpotifyClientCredentials(
-    client_id=client_id, client_secret=client_secret)
-sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+class artist_info_test_case(unittest.TestCase):
+    def test_artist_info_with_search_str(self):
+        search_str = 'Radiohead'
+        sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(
+            client_id='id_client', client_secret='secret_client'))
+        result = sp.search(search_str)
 
-search_str = input("Enter a search string: ")
-result = sp.search(search_str)
+        # Assert that the 'tracks' key is present in the result
+        self.assertIn('tracks', result)
 
-# Convert the search results to a table format
-headers = ["Track Name", "Artist", "Album"]
-table = [[track['name'], track['artists'][0]['name'], track['album']['name']]
-         for track in result['tracks']['items']]
-table_str = tabulate(table, headers=headers)
+        # Assert that the 'items' key is present in the 'tracks' dictionary
+        self.assertIn('items', result['tracks'])
 
-# Create an XML tree and save it to a file
-root = ET.Element("search_results")
-for track in result['tracks']['items']:
-    track_element = ET.SubElement(root, "track")
-    track_element.set("name", track['name'])
-    track_element.set("artist", track['artists'][0]['name'])
-    track_element.set("album", track['album']['name'])
+        # Assert that the 'items' list is not empty
+        self.assertTrue(len(result['tracks']['items']) > 0)
 
-xml_str = ET.tostring(root, encoding='utf8', method='xml')
-with open('search_results.xml', 'wb') as f:
-    f.write(xml_str)
 
-print(table_str)
-print("Search results saved to search_results.xml")
+class exception_test_case(unittest.TestCase):
+    def test_empty_search_query(self):
+        search_str = "Radiohead"
+        sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(
+            client_id='id_client', client_secret='secret_client'))
+        result = sp.search(search_str)
+
+        # Assert that the 'tracks' key is present in the result
+        self.assertIn('tracks', result)
+
+    def test_invalid_search_query(self):
+        search_str = "1234"
+        sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(
+            client_id='id_client', client_secret='secret_client'))
+        result = sp.search(search_str)
+
+        # Make sure at least some tracks are returned
+        self.assertNotEqual(result['tracks']['total'], 0)
+
+
+if __name__ == '__main__':
+    unittest.main(verbosity=2)
