@@ -1,4 +1,4 @@
-# Unit testing some of the methods of the spotify.client.Spotify class
+# Unit testing some of the methods of the spotipy.client.Spotify class
 # This is not an exhaustive test suite
 # Note: this test suite currently requires a user to be authenticated (to be fixed in a future update)
 
