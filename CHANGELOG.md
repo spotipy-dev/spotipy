@@ -11,6 +11,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changes the YouTube video link for authentication tutorial (the old video was in low definition, the new one is in high definition)
 - Updated links to Spotify in documentation 
 
+## [2.23.1] - 2023-06-04
+
+### Added
+- Added Table of Contents, Features, Contributing, and License section on README file
+- Added Expected result for quick start section
+
+### Changed
+- Make the short description clearer
+- Add some notice on Documentation section
+- Edit Installation description to be more clear with step-by-step video link
+
 ## [2.23.0] - 2023-04-07
 
 ### Added
