@@ -73,36 +73,41 @@ to all end points, and support for user authorization. For details on the
 capabilities you are encouraged to review the `Spotify Web
 API <https://developer.spotify.com/documentation/web-api/>`_ documentation.
 
-Installation
-============
 
-Install or upgrade *Spotipy* with::
-
-    pip install spotipy --upgrade
-
-Or you can get the source from github at https://github.com/plamere/spotipy
 
 Getting Started
 ===============
+If you are a first time user, you should checkout the `Spotipy Tutorial for Beginners <https://github.com/spotipy-dev/spotipy/blob/master/TUTORIAL.md>`_.
+The Tutorial can also be found directly on our `Github <https://github.com/spotipy-dev/spotipy>`_. Some of the tutorial details are listed below and will
+help you get started using the program. 
 
-All methods require user authorization. You will need to register your app at 
-`My Dashboard <https://developer.spotify.com/dashboard/applications>`_ 
-to get the credentials necessary to make authorized calls
-(a *client id* and *client secret*).
+Things You Will Need to Use Spotipy
+-----------------------------------
+**1. pip package manager**
+pip package manager is used to install packages for Python. In order to check if you have the latest version of pip installed, you can enter the following into the CLI::
 
-*Spotipy* supports two authorization flows:
+      pip --version
 
-  - The **Authorization Code flow** This method is suitable for long-running applications
-    which the user logs into once. It provides an access token that can be refreshed.
+If you are presented with version number, pip is installed, you can check to see if you have the latest version `here <https://pypi.org/project/pip/>`_.
 
-    .. note:: Requires you to add a redirect URI to your application at 
-              `My Dashboard <https://developer.spotify.com/dashboard/applications>`_.
-              See `Redirect URI`_ for more details.
+**2. Python 3**
+It is recommended that you use the latest version of Python when utilizing Spotipy. To check your current version of Python enter the following in the CLI::
 
-  - The **Client Credentials flow**  The method makes it possible
-    to authenticate your requests to the Spotify Web API and to obtain
-    a higher rate limit than you would with the Authorization Code flow.
-    
+      python3 --version
+
+To ensure that you're machine is currently using that version of python, enter the following::
+
+      which python3
+      
+To check that you have the latest version install, click `here <https://www.python.org/downloads/>`_ to check out the latest version.
+
+**3. Knowledge of Basic Linux Commands**
+In order to be able to navigate you files and directories on your computer more easily, it is recommended that you have a basic knowledge of Linux commands.
+You can find a beginner tutorial `here <https://ubuntu.com/tutorials/command-line-for-beginners#1-overview>`_ or checkout `this youtube video <https://www.youtube.com/watch?v=IVquJh3DXUA>`_ that gives a great introduction to commands in Linux.
+
+Getting Started with the Spotify Web API
+========================================
+
 Setting Up a Spotify Account
 ----------------------------
 In order to successfully utilize the Spotify Web API and in turn, Spotipy, you will need
@@ -133,7 +138,37 @@ Setting Up Your Application on Spotify Web API
          agreement. After accepted, this should redirect you to a new page to 
          create your first application.
          
-For further details on setting up an application, checkout the `Getting Started <https://developer.spotify.com/documentation/web-api/tutorials/getting-started>`_ page on the Spotify Web API site
+For further details on setting up an application, checkout the `Getting Started <https://developer.spotify.com/documentation/web-api/tutorials/getting-started>`_ page on the Spotify Web API sited
+
+Installation
+============
+
+Install or upgrade *Spotipy* with::
+
+    pip install spotipy --upgrade
+
+Or you can get the source from github at https://github.com/plamere/spotipy
+
+Code Flows
+==========
+
+All methods require user authorization. You will need to register your app at 
+`My Dashboard <https://developer.spotify.com/dashboard/applications>`_ 
+to get the credentials necessary to make authorized calls
+(a *client id* and *client secret*).
+
+*Spotipy* supports two authorization flows:
+
+  - The **Authorization Code flow** This method is suitable for long-running applications
+    which the user logs into once. It provides an access token that can be refreshed.
+
+    .. note:: Requires you to add a redirect URI to your application at 
+              `My Dashboard <https://developer.spotify.com/dashboard/applications>`_.
+              See `Redirect URI`_ for more details.
+
+  - The **Client Credentials flow**  The method makes it possible
+    to authenticate your requests to the Spotify Web API and to obtain
+    a higher rate limit than you would with the Authorization Code flow.
 
 Authorization Code Flow
 =======================
