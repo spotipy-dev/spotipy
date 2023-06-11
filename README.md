@@ -29,7 +29,7 @@ Please be sure to read the full [Code of Conduct](code_of_conduct.md) and follow
 
 ## Video Tutorial
 
-Ian has created a series of 8 tutorial videos to showcase how to get started with and untilize Spotipy. Click the image below to get started with the first video:
+Ian has created a series of 8 tutorial videos to showcase how to get started with and untilize Spotipy. Click the image below to get started with the first video, or follow this link: https://youtu.be/tmt5SdvTqUI
 
 [![SPOTIPY TUTORIAL VIDEO 1](http://img.youtube.com/vi/tmt5SdvTqUI/0.jpg)](http://www.youtube.com/watch?v=tmt5SdvTqUI "Video Title")
 
