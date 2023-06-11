@@ -10,10 +10,10 @@ Spotipy uses the MIT License, which allows free use of the software and zero lia
 
 ## Table of Contents
 - [Code of Conduct](#code-of-conduct)
-- [Video Tutorial](#tutorial)
+- [Video Tutorial](#video-tutorial)
+- [Examples](#examples)
 - [Installation](#installation)
 - [Quick Start](#quick-start)
-- [Contributing](#contributing)
 - [License](#license)
 - [Documentation](#documentation)
 - [FAQ](#frequently-asked-questions)
@@ -33,8 +33,21 @@ Ian has created a series of 8 tutorial videos to showcase how to get started wit
 
 [![SPOTIPY TUTORIAL VIDEO 1](http://img.youtube.com/vi/tmt5SdvTqUI/0.jpg)](http://www.youtube.com/watch?v=tmt5SdvTqUI "Video Title")
 
+## Examples
+
+After following the video tutorial or quick start guide, you may be curious as to what other types of data you can pull from Spotify. The [Examples Directory](./examples) provides over 50 different examples of how to pull certain data using Spotipy. 
+
+Examples include actions like: 
+- Adding a song to a playlist
+- Show related songs/artists
+- View user playlists
+- Viewing an artisits dicography
+- and much, much more! 
+
 
 ## Installation
+
+To install Spotipy on your local system:
 
 ```bash
 pip install spotipy
@@ -53,6 +66,8 @@ pip install spotipy --upgrade
 ```
 
 ## Quick Start
+
+If you don't want to follow the video guide, you can utilize the below quick start guide to begin using Spotipy:
 
 A full set of examples can be found in the [online documentation](http://spotipy.readthedocs.org/) and in the [Spotipy examples directory](https://github.com/plamere/spotipy/tree/master/examples).
 
