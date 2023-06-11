@@ -10,6 +10,7 @@ Spotipy uses the MIT License, which allows free use of the software and zero lia
 
 ## Table of Contents
 - [Code of Conduct](#code-of-conduct)
+- [Video Tutorial](#tutorial)
 - [Installation](#installation)
 - [Quick Start](#quick-start)
 - [Contributing](#contributing)
@@ -24,6 +25,13 @@ Spotipy uses the MIT License, which allows free use of the software and zero lia
 Here at Spotipy, we promote an environment which is open and welcoming to all. As contributors and maintainers we want to guarantee an experience which is free of harassment for everyone.
 
 Please be sure to read the full [Code of Conduct](code_of_conduct.md) and follow these guidelines at all times when interacting with Spotipy and its users.  
+
+
+## Video Tutorial
+
+Ian has created a series of 8 tutorial videos to showcase how to get started with and untilize Spotipy. Click the image below to get started with the first video:
+
+[![SPOTIPY TUTORIAL VIDEO 1](http://img.youtube.com/vi/tmt5SdvTqUI/0.jpg)](http://www.youtube.com/watch?v=tmt5SdvTqUI "Video Title")
 
 
 ## Installation
