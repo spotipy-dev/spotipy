@@ -11,6 +11,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changes the YouTube video link for authentication tutorial (the old video was in low definition, the new one is in high definition)
 - Updated links to Spotify in documentation 
 
+## [2.23.1] - 2023-06-11
+
+### Added
+- Added many changed to the ReadMe.md file, including:
+  - Table of Contents
+  - Code of Conduct
+  - Video Tutorial link
+  - Examples link
+  - License information
+
+### Fixed
+- Edited introduction, adding more clarity on the use of Spotipy
+- Split apart FAQ from Reporting Issues sections
+
 ## [2.23.0] - 2023-04-07
 
 ### Added
