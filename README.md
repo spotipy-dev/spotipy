@@ -1,12 +1,30 @@
 # Spotipy
 
-##### A light weight Python library for the Spotify Web API
+##### A light weight Python library for the Spotify Web API. 
+
+Spotipy was created to allow a user to easily handle any data that can be supplied by the Spotify API. This includes anything from adding a song to your queue, viewing a playlist, or following another user (and much, much more). With Spotipy you get full access to all of the music data provided by the Spotify platform. This includes access to all endpoints and support for user authorization. For details on the capabilities you are encouraged to review the [Spotify Web API](https://developer.spotify.com/documentation/web-api) documentation.
+
+Spotipy uses the MIT License, which allows free use of the software and zero liability toward the creators of the code. 
 
 ![Tests](https://github.com/plamere/spotipy/workflows/Tests/badge.svg?branch=master) [![Documentation Status](https://readthedocs.org/projects/spotipy/badge/?version=latest)](https://spotipy.readthedocs.io/en/latest/?badge=latest)
 
-## Documentation
+## Table of Contents
+- [Code of Conduct](#code-of-conduct)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Contributing](#contributing)
+- [License](#license)
+- [Documentation](#documentation)
+- [FAQ](#frequently-asked-questions)
+- [Reporting Issues/Other Questions](#reporting-issues)
 
-Spotipy's full documentation is online at [Spotipy Documentation](http://spotipy.readthedocs.org/).
+
+## Code of Conduct
+
+Here at Spotipy, we promote an environment which is open and welcoming to all. As contributors and maintainers we want to guarantee an experience which is free of harassment for everyone.
+
+Please be sure to read the full [Code of Conduct](code_of_conduct.md) and follow these guidelines at all times when interacting with Spotipy and its users.  
+
 
 ## Installation
 
@@ -66,9 +84,17 @@ for idx, item in enumerate(results['items']):
     print(idx, track['artists'][0]['name'], " – ", track['name'])
 ```
 
-## Reporting Issues
+## Documentation
+
+Spotipy's full documentation is online at [Spotipy Documentation](http://spotipy.readthedocs.org/).
+
+
+## Frequently Asked Questions
 
 For common questions please check our [FAQ](FAQ.md).
+
+
+## Reporting Issues
 
 You can ask questions about Spotipy on
 [Stack Overflow](http://stackoverflow.com/questions/ask).
@@ -77,3 +103,7 @@ Don’t forget to add the *Spotipy* tag, and any other relevant tags as well, be
 If you have suggestions, bugs or other issues specific to this library,
 file them [here](https://github.com/plamere/spotipy/issues).
 Or just send a pull request.
+
+## License
+
+Spotipy is licensed under the MIT License. You can view more here: [LICENSE.md](LICENSE.md)
