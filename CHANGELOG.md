@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 
 ### Changed
+- Changes the YouTube video link in the opening section. This was created recently and reflects the changes
+that have been made to the Spotify API website, making it easier for new users to follow along. It's also in HD.
+
+## [2.23.0] - 2023-06-12
+
+### Changed
 - Changes the YouTube video link for authentication tutorial (the old video was in low definition, the new one is in high definition)
 - Updated links to Spotify in documentation 
 
