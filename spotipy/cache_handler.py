@@ -79,11 +79,13 @@ class CacheFileHandler(CacheHandler):
             with open(self.cache_path) as f:
                 token_info_string = f.read()
                 token_info = json.loads(token_info_string)
-        except IOError as error:
+        except OSError as error:
             if error.errno == errno.ENOENT:
                 logger.debug("cache does not exist at: %s", self.cache_path)
             else:
                 logger.warning("Couldn't read cache at: %s", self.cache_path)
+        except json.JSONDecodeError:
+            logger.warning("Couldn't decode JSON from cache at: %s", self.cache_path)
         except json.JSONDecodeError:
             logger.warning("Couldn't decode JSON from cache at: %s", self.cache_path)
 
@@ -93,7 +95,7 @@ class CacheFileHandler(CacheHandler):
         try:
             with open(self.cache_path, "w") as f:
                 f.write(json.dumps(token_info, cls=self.encoder_cls))
-        except IOError:
+        except OSError:
             logger.warning('Couldn\'t write token to cache at: %s',
                            self.cache_path)
 
