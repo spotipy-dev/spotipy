@@ -6,13 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+
 Add your changes below.
 
 ### Added
+
 - Added examples for audiobooks, shows and episodes methods to examples directory
 - Use newer string formatters (https://pyformat.info)
 
 ### Fixed
+
 - Fixed scripts in examples directory that didn't run correctly
 - Updated documentation for `Client.current_user_top_artists` to indicate maximum number of artists limit
 
@@ -21,6 +24,7 @@ Add your changes below.
 ## [2.25.0] - 2025-03-01
 
 ### Added
+
 - Added unit tests for queue functions
 - Added detailed function docstrings to 'util.py', including descriptions and special sections that lists arguments, returns, and raises.
 - Updated order of instructions for Python and pip package manager installation in TUTORIAL.md
@@ -45,51 +49,62 @@ Add your changes below.
 - Split test and lint workflows
 
 ### Fixed
+
 - Audiobook integration tests
 - Edited docstrings for certain functions in client.py for functions that are no longer in use and have been replaced.
 - `current_user_unfollow_playlist()` now supports playlist IDs, URLs, and URIs rather than previously where it only supported playlist IDs.
 
 ### Removed
+
 - `mock` no longer listed as a test dependency. Only built-in `unittest.mock` is actually used.
 
 ## [2.24.0] - 2024-05-30
 
 ### Added
+
 - Added `MemcacheCacheHandler`, a cache handler that stores the token info using pymemcache.
 - Added support for audiobook endpoints: `get_audiobook`, `get_audiobooks`, and `get_audiobook_chapters`.
 - Added integration tests for audiobook endpoints.
 - Added `update` field to `current_user_follow_playlist`.
 
 ### Changed
+
+- Updated get_cached_token and save_token_to_cache methods to utilize Python's Context Management Protocol
+- Added except clause to get_cached_token method to handle json decode errors
+
 - Fixed error obfuscation when Spotify class is being inherited and an error is raised in the Child's `__init__`
 - Replaced `artist_albums(album_type=...)` with `artist_albums(include_groups=...)` due to an API change.
 - Updated `_regex_spotify_url` to ignore `/intl-<countrycode>` in Spotify links
 - Improved README, docs and examples
 
 ### Fixed
+
 - Readthedocs build
 - Split `test_current_user_save_and_usave_tracks` unit test
 
 ### Removed
+
 - Drop support for EOL Python 3.7
 
 ## [2.23.0] - 2023-04-07
 
 ### Added
+
 - Added optional `encoder_cls` argument to `CacheFileHandler`, which overwrite default encoder for token before writing to disk
 - Integration tests for searching multiple types in multiple markets (non-user endpoints)
 - Publish to PyPI action
 
 ### Fixed
+
 - Fixed the regex for matching playlist URIs with the format spotify:user:USERNAME:playlist:PLAYLISTID.
-- `search_markets` now factors the counts of all types in the `total`  rather than just the first type ([#534](https://github.com/spotipy-dev/spotipy/issues/534))
+- `search_markets` now factors the counts of all types in the `total` rather than just the first type ([#534](https://github.com/spotipy-dev/spotipy/issues/534))
 
 ## [2.22.1] - 2023-01-23
 
 ### Added
 
 - Add alternative module installation instruction to README
-- Added Comment to README - Getting Started for user to add URI to app in Spotify Developer Dashboard. 
+- Added Comment to README - Getting Started for user to add URI to app in Spotify Developer Dashboard.
 - Added playlist_add_tracks.py to example folder
 
 ### Changed
@@ -169,11 +184,11 @@ Add your changes below.
 - Enabled using both short and long IDs for playlist_change_details
 - Added a cache handler to `SpotifyClientCredentials`
 - Added the following endpoints
-    - `Spotify.current_user_saved_episodes`
-    - `Spotify.current_user_saved_episodes_add`
-    - `Spotify.current_user_saved_episodes_delete`
-    - `Spotify.current_user_saved_episodes_contains`
-    - `Spotify.available_markets`
+  - `Spotify.current_user_saved_episodes`
+  - `Spotify.current_user_saved_episodes_add`
+  - `Spotify.current_user_saved_episodes_delete`
+  - `Spotify.current_user_saved_episodes_contains`
+  - `Spotify.available_markets`
 
 ### Changed
 
@@ -239,7 +254,7 @@ Add your changes below.
 ### Added
 
 - `SpotifyPKCE.parse_auth_response_url`, mirroring that method in
-    `SpotifyOAuth`
+  `SpotifyOAuth`
 
 ### Changed
 
@@ -248,7 +263,7 @@ Add your changes below.
 ### Fixed
 
 - Using `SpotifyPKCE.get_authorization_url` will now generate a code
-    challenge if needed
+  challenge if needed
 
 ## [2.14.0] - 2020-08-29
 
@@ -256,9 +271,9 @@ Add your changes below.
 
 - (experimental) Support to search multiple/all markets at once.
 - Support to test whether the current user is following certain
-    users or artists
+  users or artists
 - Proper replacements for all deprecated playlist endpoints
-    (See https://developer.spotify.com/community/news/2018/06/12/changes-to-playlist-uris/ and below)
+  (See https://developer.spotify.com/community/news/2018/06/12/changes-to-playlist-uris/ and below)
 - Allow for OAuth 2.0 authorization by instructing the user to open the URL in a browser instead of opening the browser.
 - Reason for 403 error in SpotifyException
 - Support for the PKCE Auth Flow
@@ -276,11 +291,11 @@ Add your changes below.
 - `user_playlist_replace_tracks` in favor of `playlist_replace_items`
 - `user_playlist_reorder_tracks` in favor of `playlist_reorder_items`
 - `user_playlist_remove_all_occurrences_of_tracks` in favor of
-    `playlist_remove_all_occurrences_of_items`
+  `playlist_remove_all_occurrences_of_items`
 - `user_playlist_remove_specific_occurrences_of_tracks` in favor of
-    `playlist_remove_specific_occurrences_of_items`
+  `playlist_remove_specific_occurrences_of_items`
 - `user_playlist_follow_playlist` in favor of
-    `current_user_follow_playlist`
+  `current_user_follow_playlist`
 - `user_playlist_is_following` in favor of `playlist_is_following`
 - `playlist_tracks` in favor of `playlist_items`
 
@@ -293,12 +308,12 @@ Add your changes below.
 ### Added
 
 - Added `SpotifyImplicitGrant` as an auth manager option. It provides
-    user authentication without a client secret but sacrifices the ability
-    to refresh the token without user input. (However, read the class
-    docstring for security advisory.)
+  user authentication without a client secret but sacrifices the ability
+  to refresh the token without user input. (However, read the class
+  docstring for security advisory.)
 - Added built-in verification of the `state` query parameter
 - Added two new attributes: error and error_description to `SpotifyOauthError` exception class to show
-    authorization/authentication web api errors details.
+  authorization/authentication web api errors details.
 - Added `SpotifyStateError` subclass of `SpotifyOauthError`
 - Allow extending `SpotifyClientCredentials` and `SpotifyOAuth`
 - Added the market parameter to `album_tracks`
@@ -322,10 +337,10 @@ Add your changes below.
 ### Changed
 
 - Updated the documentation to give more details on the authorization process and reflect
-    2020 Spotify Application jargon and practices.
+  2020 Spotify Application jargon and practices.
 
 - The local webserver is only started for localhost redirect_uri which specify a port,
-    i.e. it is started for `http://localhost:8080` or `http://127.0.0.1:8080`, not for `http://localhost`.
+  i.e. it is started for `http://localhost:8080` or `http://127.0.0.1:8080`, not for `http://localhost`.
 
 ### Fixed
 
@@ -348,10 +363,10 @@ Add your changes below.
 
 - Client retry logic has changed as it now uses urllib3's `Retry` in conjunction with requests `Session`
 - The session is customizable as it allows for:
-    - status_forcelist
-    - retries
-    - status_retries
-    - backoff_factor
+  - status_forcelist
+  - retries
+  - status_retries
+  - backoff_factor
 - Spin up a local webserver to autofill authentication URL
 - Use session in SpotifyAuthBase
 - Logging used instead of print statements
@@ -366,9 +381,9 @@ Add your changes below.
 ### Added
 
 - Support for `add_to_queue`
-    - **Parameters:**
-        - track uri, id, or url
-        - device id. If None, then the active device is used.
+  - **Parameters:**
+    - track uri, id, or url
+    - device id. If None, then the active device is used.
 - Add CHANGELOG and LICENSE to released package
 
 ## [2.9.0] - 2020-02-15
@@ -439,7 +454,7 @@ Add your changes below.
 ### Fixed
 
 - Fixed inconsistent behaviour with some API methods when
-    a full HTTP URL is passed.
+  a full HTTP URL is passed.
 - Fixed invalid calls to logging warn method
 
 ### Removed
@@ -465,6 +480,7 @@ Add your changes below.
 ### Changed
 
 - Made instructions in the CONTRIBUTING.md file more clear such that it is easier to onboard and there are no conflicts with TUTORIAL.md
+
 ## [2.5.0] - 2020-01-11
 
 Added follow and player endpoints
