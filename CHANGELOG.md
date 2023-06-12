@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 
 ### Changed
+- Updated get_cached_token and save_token_to_cache methods to utilize Python's Context Management Protocol
+- Added except clause to get_cached_token method to handle json decode errors
+
 - Changes the YouTube video link for authentication tutorial (the old video was in low definition, the new one is in high definition)
 - Updated links to Spotify in documentation 
 
