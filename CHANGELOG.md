@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
+-Added 'start here' folder for new users to easily locate important information
+-Added link to examples folder in tutorial.md
+
+### Changed
+- Renamed FAQ.md to common_issues.md
+- moved code_of_conduct.md, tutorial.md, and common_issues.md into the 'start here' folder
+
 ### Changed
 - Changes the YouTube video link for authentication tutorial (the old video was in low definition, the new one is in high definition)
 - Updated links to Spotify in documentation 

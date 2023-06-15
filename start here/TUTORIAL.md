@@ -79,3 +79,5 @@ D. Close main.py and return to the directory that contains main.py. You can then
 E. You may see a window open in your browser asking you to authorize the application. Do so - you will only have to do this once.
 
 F. Return to your terminal - you should see all of Taylor's albums printed out there.
+
+G. You can find more examples like this and many more in our [examples folder](https://github.com/spotipy-dev/spotipy/tree/master/examples).
