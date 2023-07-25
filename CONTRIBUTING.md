@@ -44,6 +44,22 @@ To make sure if the import lists are stored correctly:
     pip install isort
     isort . -c -v
 
+### Properly Document the Code:
+
+    Clear and comprehensive documentation helps other developers understand and use the code effectively. Here are some guidelines for documenting your changes:
+
+    Docstrings: Add docstrings to functions, classes, and modules. Use clear and concise language to describe their purpose, inputs, and outputs.
+
+    Comments: Use comments to explain complex logic, algorithms, or any non-obvious decisions in the code.
+
+    Code Design: Document the design decisions and architectural considerations behind your code changes. Explain the reasoning and trade-offs.
+
+    User Guides and Tutorials: If your contribution adds new features or functionality, consider creating or updating user guides and tutorials to help users understand how to utilize them.
+
+    API Documentation: If your changes impact the public API, ensure that you document the changes and update the API documentation accordingly.
+
+    Changelog Updates: As part of the documentation, update the changelog to include a summary of your changes. Follow the project's existing format for changelog entries.
+
 ### Changelog
 
 Don't forget to add a short description of your change in the [CHANGELOG](CHANGELOG.md)
