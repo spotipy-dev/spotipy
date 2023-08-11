@@ -34,11 +34,13 @@ D. Underneath your app name and description on the lefthand side, you'll see a "
 
 ## Step 2. Installation and Setup
 
-A. Create a folder somewhere on your computer where you'd like to store the code for your Spotipy app. You can create a folder in terminal with this command: mkdir folder_name
+A. Create a folder somewhere on your computer where you'd like to store the code for your Spotipy app. You can create a folder in terminal with this command:  ```mkdir folder_name```
 
-B. In that folder, create a Python file named main.py. You can create the file directly from Terminal using a built in text editor like Vim, which comes preinstalled on Linux operating systems. To create the file with Vim, ensure that you are in your new directory, then run: vim main.py
+B. Install the Spotipy library. You can do this by using this command in the terminal: ```pip install spotipy```
 
-C. Paste the following code into your main.py file:
+C. In that folder, create a Python file named main.py. You can create the file directly from Terminal using a built in text editor like Vim, which comes preinstalled on Linux operating systems. To create the file with Vim, ensure that you are in your new directory, then run: vim main.py
+
+D. Paste the following code into your main.py file:
 ```
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
@@ -48,7 +50,7 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id="YOUR_APP_CLIENT_ID",
                                                redirect_uri="YOUR_APP_REDIRECT_URI",
                                                scope="user-library-read"))
 ```
-D. Replace YOUR_APP_CLIENT_ID and YOUR_APP_CLIENT_SECRET with the values you copied and saved in step 1D. Replace YOUR_APP_REDIRECT_URI with the URI you set in step 1C.
+E. Replace YOUR_APP_CLIENT_ID and YOUR_APP_CLIENT_SECRET with the values you copied and saved in step 1D. Replace YOUR_APP_REDIRECT_URI with the URI you set in step 1C.
 
 ## Step 3. Start Using Spotipy
 
