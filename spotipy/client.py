@@ -2033,3 +2033,18 @@ class Spotify(object):
                 return results
 
         return results
+
+    def audiobook(self, audiobook_id, market=None):
+        """ returns a single audiobook given the audiobook's ID, URIs or URL
+
+            Parameters:
+                - audiobook_id - the audiobook ID, URI or URL
+                - market - an ISO 3166-1 alpha-2 country code
+        """
+
+        tri = self._get_id("audiobook", audiobook_id)
+        if market is not None:
+            return self._get("audiobooks/" + trid + '?market=' + market)
+        else:
+            return self._get("audiobooks/" + trid)
+                                 
