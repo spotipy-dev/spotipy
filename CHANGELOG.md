@@ -9,7 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Changes the YouTube video link for authentication tutorial (the old video was in low definition, the new one is in high definition)
-- Updated links to Spotify in documentation 
+- Updated links to Spotify in documentation
+
+### Added
+- Audiobook URI and URL support to `client.py`
+- `show_audiobook.py` to `examples`
 
 ## [2.23.0] - 2023-04-07
 
