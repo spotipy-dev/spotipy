@@ -2042,7 +2042,7 @@ class Spotify(object):
                 - market - an ISO 3166-1 alpha-2 country code
         """
 
-        tri = self._get_id("audiobook", audiobook_id)
+        trid = self._get_id("audiobook", audiobook_id)
         if market is not None:
             return self._get("audiobooks/" + trid + '?market=' + market)
         else:
