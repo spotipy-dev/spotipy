@@ -11,7 +11,7 @@ Prerequisites
     OPTIONAL
     // in development environment for debug output
     export FLASK_ENV=development
-    // so that you can invoke the app outside of the file's directory include
+    // so that you can invoke the app outside the file's directory include
     export FLASK_APP=/path/to/spotipy/examples/app.py
 
     // on Windows, use `SET` instead of `export`
