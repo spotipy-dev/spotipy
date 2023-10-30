@@ -52,3 +52,7 @@ If you cannot open a browser, set `open_browser=False` when instantiating Spotif
 prompted to open the authorization URI manually.  
 
 See the [headless auth example](examples/headless.py).
+
+### Howcome I have trouble accessing/adding/deleting more than 50 current user saved shows?
+
+If you are running into issues with any of these services in the family of functions suffixed with "current_user_saved_shows" in the client.py file such as an HTTP error response, that is because Spotify imposes a hidden limit to the number of shows you can access/add/delete to 50 in a single request. A quick recommended workout solution is to limit the amount to 50 shows or lower in a single request or call to one of those functions
