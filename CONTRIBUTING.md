@@ -2,7 +2,18 @@
 
 If you would like to contribute to spotipy follow these steps:
 
+### Fork and clone the project and create a branch to work on
+```git
+git clone https://github.com/spotipy-dev/spotipy.git
+git checkout -b [name_of_your_branch]
+```
+
 ### Export the needed environment variables
+
+An environment variable is like any other variable with some additional considerations. Environment variables are stored outside the program and
+can affect how the program runs. Common environment variables include API keys and secrets. Using environment variables for sensitive data like
+API keys has two advantages: it keeps sensitive data safe and allows for easy updates to these variables if the data should change. Use the code
+snippet below to set environment variables in the appropriate environment.
 
 ```bash
 # Linux or Mac
@@ -18,6 +29,21 @@ $env:SPOTIPY_CLIENT_USERNAME="client_username_here"
 $env:SPOTIPY_REDIRECT_URI="http://localhost:8080" 
 ```
 
+Verify that the environment variables have been correctly set:
+```bash
+# Linux or Mac
+echo $SPOTIPY_CLIENT_ID
+echo $SPOTIPY_CLIENT_SECRET
+echo $SPOTIPY_CLIENT_USERNAME
+echo $SPOTIPY_REDIRECT_URI
+
+# Windows
+echo %SPOTIPY_CLIENT_ID%
+echo %SPOTIPY_CLIENT_SECRET%
+echo %SPOTIPY_CLIENT_USERNAME%
+echo %SPOTIPY_REDIRECT_URI%
+```
+
 ### Create virtual environment, install dependencies, run tests:
 
 ```bash
@@ -30,20 +56,20 @@ $ source env/bin/activate
 ### Lint
 
 To automatically fix the code style:
-
+```bash
     pip install autopep8
     autopep8 --in-place --aggressive --recursive .
-
+```
 To verify the code style:
-
+```bash
     pip install flake8
     flake8 .
-
+```
 To make sure if the import lists are stored correctly:
-
+```bash
     pip install isort
     isort . -c -v
-
+```
 ### Changelog
 
 Don't forget to add a short description of your change in the [CHANGELOG](CHANGELOG.md)

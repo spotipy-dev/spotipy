@@ -10,17 +10,19 @@ Spotipy's full documentation is online at [Spotipy Documentation](http://spotipy
 
 ## Installation
 
+Mac and Linux users can install Spotipy using [PIP](https://pypi.org/project/pip/):
+
 ```bash
 pip install spotipy
 ```
 
-alternatively, for Windows users 
+Alternatively, for Windows users:
 
 ```bash
 py -m pip install spotipy
 ```
 
-or upgrade
+Or upgrade PIP if needed:
 
 ```bash
 pip install spotipy --upgrade
@@ -30,7 +32,7 @@ pip install spotipy --upgrade
 
 A full set of examples can be found in the [online documentation](http://spotipy.readthedocs.org/) and in the [Spotipy examples directory](https://github.com/plamere/spotipy/tree/master/examples).
 
-To get started, install spotipy and create an app on https://developers.spotify.com/.
+To get started, install spotipy and create an app on [https://developers.spotify.com/](https://developers.spotify.com/).
 Add your new ID and SECRET to your environment:
 
 ### Without user authentication
