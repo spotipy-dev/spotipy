@@ -111,14 +111,14 @@ class Spotify(object):
     #
     # [1] https://www.iana.org/assignments/uri-schemes/prov/spotify
     # [2] https://developer.spotify.com/documentation/web-api/#spotify-uris-and-ids
-    _regex_spotify_uri = r'^spotify:(?:(?P<type>track|artist|album|playlist|show|episode):(?P<id>[0-9A-Za-z]+)|user:(?P<username>[0-9A-Za-z]+):playlist:(?P<playlistid>[0-9A-Za-z]+))$'  # noqa: E501
+    _regex_spotify_uri = r'^spotify:(?:(?P<type>track|artist|album|playlist|show|episode|audiobook):(?P<id>[0-9A-Za-z]+)|user:(?P<username>[0-9A-Za-z]+):playlist:(?P<playlistid>[0-9A-Za-z]+))$'  # noqa: E501
 
     # Spotify URLs are defined at [1]. The assumption is made that they are all
     # pointing to open.spotify.com, so a regex is used to parse them as well,
     # instead of a more complex URL parsing function.
     #
     # [1] https://developer.spotify.com/documentation/web-api/#spotify-uris-and-ids
-    _regex_spotify_url = r'^(http[s]?:\/\/)?open.spotify.com\/(?P<type>track|artist|album|playlist|show|episode|user)\/(?P<id>[0-9A-Za-z]+)(\?.*)?$'  # noqa: E501
+    _regex_spotify_url = r'^(http[s]?:\/\/)?open.spotify.com\/(?P<type>track|artist|album|playlist|show|episode|user|audiobook)\/(?P<id>[0-9A-Za-z]+)(\?.*)?$'  # noqa: E501
 
     _regex_base62 = r'^[0-9A-Za-z]+$'
 
@@ -2033,3 +2033,51 @@ class Spotify(object):
                 return results
 
         return results
+
+    def get_audiobook(self, id, market=None):
+        """ Get Spotify catalog information for a single audiobook identified by its unique
+        Spotify ID.
+
+        Parameters:
+        - id - the Spotify ID for the audiobook
+        - market - an ISO 3166-1 alpha-2 country code.
+        """
+        audiobook_id = self._get_id("audiobook", id)
+        endpoint = f"audiobooks/{audiobook_id}"
+
+        if market:
+            endpoint += f'?market={market}'
+
+        return self._get(endpoint)
+
+    def get_audiobooks(self, ids, market=None):
+        """ Get Spotify catalog information for multiple audiobooks based on their Spotify IDs.
+
+        Parameters:
+        - ids - a list of Spotify IDs for the audiobooks
+        - market - an ISO 3166-1 alpha-2 country code.
+        """
+        audiobook_ids = [self._get_id("audiobook", id) for id in ids]
+        endpoint = f"audiobooks?ids={','.join(audiobook_ids)}"
+
+        if market:
+            endpoint += f'&market={market}'
+
+        return self._get(endpoint)
+
+    def get_audiobook_chapters(self, id, market=None, limit=20, offset=0):
+        """ Get Spotify catalog information about an audiobook’s chapters.
+
+        Parameters:
+        - id - the Spotify ID for the audiobook
+        - market - an ISO 3166-1 alpha-2 country code.
+        - limit - the maximum number of items to return
+        - offset - the index of the first item to return
+        """
+        audiobook_id = self._get_id("audiobook", id)
+        endpoint = f"audiobooks/{audiobook_id}/chapters?limit={limit}&offset={offset}"
+
+        if market:
+            endpoint += f'&market={market}'
+
+        return self._get(endpoint)
