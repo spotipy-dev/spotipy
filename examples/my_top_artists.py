@@ -1,3 +1,5 @@
+# code example that demonstrates current_user_top_artists(limit=20, offset=0, time_range='medium_term') functionality
+# Link to documentation -> https://spotipy.readthedocs.io/en/2.22.1/#spotipy.client.Spotify.current_user_top_artists
 # Shows the top artists for a user
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth

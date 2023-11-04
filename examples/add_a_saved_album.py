@@ -1,3 +1,6 @@
+# code example that demonstrates current_user_saved_albums_add(albums=[]) functionality
+# Link to documentation -> https://spotipy.readthedocs.io/en/2.22.1/#spotipy.client.Spotify.current_user_saved_albums_add
+
 import argparse
 import logging
 
@@ -16,11 +19,11 @@ def get_args():
                         required=True, help='Album ids')
     return parser.parse_args()
 
-# TODO
+
 def main():
     args = get_args()
     sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
-    sp.current_user_saved_albums_add(albums=args.aids)
+    sp.current_user_saved_albums_add(albums=args.aids) 
 
 
 if __name__ == '__main__':

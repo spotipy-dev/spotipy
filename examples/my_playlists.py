@@ -1,3 +1,5 @@
+# code example that demonstrates current_user_playlists(limit=50, offset=0) functionality
+# Link to documentation -> https://spotipy.readthedocs.io/en/2.22.1/#spotipy.client.Spotify.current_user_playlists
 # Shows a user's playlists
 
 import spotipy

@@ -1,3 +1,6 @@
+# code example that demonstrates playlist_add_items(playlist_id, items, position=None) functionality
+# Link to documentation -> https://spotipy.readthedocs.io/en/2.22.1/#spotipy.client.Spotify.playlist_add_items
+
 import argparse
 import logging
 

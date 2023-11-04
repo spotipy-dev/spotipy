@@ -1,3 +1,5 @@
+# code example that demonstrates current_user_saved_tracks_delete(tracks=None) functionality
+# Link to documentation -> https://spotipy.readthedocs.io/en/2.22.1/#spotipy.client.Spotify.current_user_saved_tracks_delete
 # Delete a track from 'Your Collection' of saved tracks
 
 import pprint
