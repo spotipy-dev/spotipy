@@ -16,7 +16,7 @@ def get_args():
                         required=True, help='Album ids')
     return parser.parse_args()
 
-
+# TODO
 def main():
     args = get_args()
     sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
