@@ -4,7 +4,8 @@ __all__ = [
     'DjangoSessionCacheHandler',
     'FlaskSessionCacheHandler',
     'MemoryCacheHandler',
-    'RedisCacheHandler']
+    'RedisCacheHandler',
+    'MemcacheCacheHandler']
 
 import errno
 import json
@@ -13,6 +14,7 @@ import os
 from spotipy.util import CLIENT_CREDS_ENV_VARS
 
 from redis import RedisError
+from pymemcache import MemcacheError
 
 logger = logging.getLogger(__name__)
 
@@ -208,3 +210,32 @@ class RedisCacheHandler(CacheHandler):
             self.redis.set(self.key, json.dumps(token_info))
         except RedisError as e:
             logger.warning('Error saving token to cache: ' + str(e))
+
+
+class MemcacheCacheHandler(CacheHandler):
+    """A Cache handler that stores the token info in Memcache using the pymemcache client
+    """
+    def __init__(self, memcache, key=None) -> None:
+        """
+        Parameters:
+            * memcache: memcache client object provided by pymemcache
+            (https://pymemcache.readthedocs.io/en/latest/getting_started.html)
+            * key: May be supplied, will otherwise be generated
+                   (takes precedence over `token_info`)
+        """
+        self.memcache = memcache
+        self.key = key if key else 'token_info'
+
+    def get_cached_token(self):
+        try:
+            token_info = self.memcache.get(self.key)
+            if token_info:
+                return json.loads(token_info.decode())
+        except MemcacheError as e:
+            logger.warning('Error getting token from cache' + str(e))
+
+    def save_token_to_cache(self, token_info):
+        try:
+            self.memcache.set(self.key, json.dumps(token_info))
+        except MemcacheError as e:
+            logger.warning('Error saving token to cache' + str(e))
