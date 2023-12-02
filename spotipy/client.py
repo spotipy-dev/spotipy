@@ -19,7 +19,7 @@ from collections import defaultdict
 
 logger = logging.getLogger(__name__)
 
-
+#
 class Spotify(object):
     """
         Example usage::
@@ -785,7 +785,7 @@ class Spotify(object):
             fields=fields,
             market=market,
         )
-
+#
     def user_playlists(self, user, limit=50, offset=0):
         """ Gets playlists of a user
 
