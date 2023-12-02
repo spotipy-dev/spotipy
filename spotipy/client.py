@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """ A simple and thin Python library for the Spotify Web API """
-
+#la
 __all__ = ["Spotify", "SpotifyException"]
 
 import json
