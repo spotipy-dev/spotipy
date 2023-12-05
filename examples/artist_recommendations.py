@@ -1,3 +1,7 @@
+"""
+Insert module docstring
+"""
+
 import argparse
 import logging
 
@@ -20,6 +24,9 @@ def get_args():
 
 
 def get_artist(name):
+    """
+    Insert docstring
+    """
     results = sp.search(q='artist:' + name, type='artist')
     items = results['artists']['items']
     if len(items) > 0:
@@ -29,6 +36,9 @@ def get_artist(name):
 
 
 def show_recommendations_for_artist(artist):
+    """
+    Insert docstring
+    """
     results = sp.recommendations(seed_artists=[artist['id']])
     for track in results['tracks']:
         logger.info('Recommendation: %s - %s', track['name'],

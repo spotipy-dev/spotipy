@@ -1,3 +1,7 @@
+"""
+Insert module docstring
+"""
+
 import argparse
 import logging
 
@@ -18,6 +22,9 @@ def get_args():
 
 
 def get_artist(name):
+    """
+    Docstring needed
+    """
     results = sp.search(q='artist:' + name, type='artist')
     items = results['artists']['items']
     if len(items) > 0:
@@ -27,6 +34,9 @@ def get_artist(name):
 
 
 def show_artist_albums(artist):
+    """
+    Docstring needed
+    """
     albums = []
     results = sp.artist_albums(artist['id'], album_type='album')
     albums.extend(results['items'])

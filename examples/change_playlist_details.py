@@ -32,6 +32,7 @@ def get_args():
     return parser.parse_args()
 
 
+
 def main():
     args = get_args()
     sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))

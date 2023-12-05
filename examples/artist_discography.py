@@ -1,3 +1,7 @@
+"""
+Insert module docstring
+"""
+
 # Shows the list of all songs sung by the artist or the band
 import argparse
 import logging
@@ -10,6 +14,9 @@ logging.basicConfig(level='INFO')
 
 
 def get_args():
+    """
+    Insert docstring
+    """
     parser = argparse.ArgumentParser(description='Shows albums and tracks for '
                                      'given artist')
     parser.add_argument('-a', '--artist', required=True,
@@ -18,15 +25,21 @@ def get_args():
 
 
 def get_artist(name):
+    """
+    Docstring needed
+    """
     results = sp.search(q='artist:' + name, type='artist')
     items = results['artists']['items']
     if len(items) > 0:
         return items[0]
-    else:
-        return None
+    # else:
+    #     return None
 
 
 def show_album_tracks(album):
+    """
+    Docstring needed
+    """
     tracks = []
     results = sp.album_tracks(album['id'])
     tracks.extend(results['items'])
@@ -38,6 +51,9 @@ def show_album_tracks(album):
 
 
 def show_artist_albums(artist):
+    """
+    Docstring needed
+    """
     albums = []
     results = sp.artist_albums(artist['id'], album_type='album')
     albums.extend(results['items'])
@@ -55,6 +71,9 @@ def show_artist_albums(artist):
 
 
 def show_artist(artist):
+    """
+    Docstring needed
+    """
     logger.info('====%s====', artist['name'])
     logger.info('Popularity: %s', artist['popularity'])
     if len(artist['genres']) > 0:

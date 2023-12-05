@@ -1,3 +1,7 @@
+"""
+Module Docstring needed
+"""
+
 import argparse
 import logging
 
@@ -11,7 +15,10 @@ scope = 'user-library-modify'
 
 
 def get_args():
-    parser = argparse.ArgumentParser(description='Creates a playlist for user')
+    """
+    Docstring needed
+    """
+    parser = argparse.ArgumentParser(description='Creates a playlist for user') # description here seems incorrect
     parser.add_argument('-a', '--aids', action='append',
                         required=True, help='Album ids')
     return parser.parse_args()
