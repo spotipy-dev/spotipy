@@ -18,12 +18,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changes the YouTube video link for authentication tutorial (the old video was in low definition, the new one is in high definition)
 - Updated links to Spotify in documentation 
 
-## [2.23.1] - 2023-10-30
-
-### Added
-
-- Added an additional FAQ addressing the hidden limit of 50 shows per request for the API endpoints related to accessing/adding/deleting current user saved shows suffixed by "current_user_saved_shows" in client.py, resulting in an unexplained HTTP error response.
-
 ## [2.23.0] - 2023-04-07
 
 ### Added
