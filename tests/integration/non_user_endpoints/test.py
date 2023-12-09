@@ -54,7 +54,7 @@ class AuthTestSpotipy(unittest.TestCase):
     heavyweight_ep1_id = '68kq3bNz6hEuq8NtdfwERG'
     heavyweight_ep1_url = 'https://open.spotify.com/episode/68kq3bNz6hEuq8NtdfwERG'
     reply_all_ep1_urn = 'spotify:episode:1KHjbpnmNpFmNTczQmTZlR'
-
+    
     american_gods_urn = 'spotify:audiobook:1IcM9Untg6d3ktuwObYGcN'
     american_gods_id = '1IcM9Untg6d3ktuwObYGcN'
     american_gods_url = 'https://open.spotify.com/audiobook/1IcM9Untg6d3ktuwObYGcN'
@@ -64,6 +64,7 @@ class AuthTestSpotipy(unittest.TestCase):
         'spotify:audiobook:37sRC6carIX2Vf3Vv716T7',
         'spotify:audiobook:1Gep4UJ95xQawA55OgRI8n',
         'spotify:audiobook:4Sm381mcf5gBsi9yfhqgVB']
+
 
     @classmethod
     def setUpClass(self):
@@ -390,6 +391,10 @@ class AuthTestSpotipy(unittest.TestCase):
         with self.assertRaises(SpotifyException):
             self.spotify.show("bogus_urn", market="US")
 
+    def test_show_exception(self):
+        print(SpotifyException(http_status=404, code='123', msg='Unable to find endpoint'))
+
+
     def test_shows(self):
         results = self.spotify.shows([self.heavyweight_urn, self.reply_all_urn], market="US")
         self.assertTrue('shows' in results)
@@ -465,6 +470,7 @@ class AuthTestSpotipy(unittest.TestCase):
         self.assertTrue(isinstance(markets, list))
         self.assertIn("US", markets)
         self.assertIn("GB", markets)
+
 
     def test_get_audiobook(self):
         audiobook = self.spotify.get_audiobook(self.american_gods_urn, market="US")
