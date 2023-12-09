@@ -77,3 +77,7 @@ Don’t forget to add the *Spotipy* tag, and any other relevant tags as well, be
 If you have suggestions, bugs or other issues specific to this library,
 file them [here](https://github.com/plamere/spotipy/issues).
 Or just send a pull request.
+
+## Contributing
+
+If you would like to contribute to the project, see more on how to do so in the [CONTRIBUTING.md](https://github.com/spotipy-dev/spotipy/blob/master/CONTRIBUTING.md) file or in the contributing section in our [full](https://spotipy.readthedocs.io/en/2.22.1/#contribute) documentation page.

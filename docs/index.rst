@@ -322,39 +322,46 @@ Export the needed Environment variables:::
     export SPOTIPY_CLIENT_ID=client_id_here
     export SPOTIPY_CLIENT_SECRET=client_secret_here
     export SPOTIPY_CLIENT_USERNAME=client_username_here # This is actually an id not spotify display name
-    export SPOTIPY_REDIRECT_URI=http://localhost:8080 # Make url is set in app you created to get your ID and SECRET
+    export SPOTIPY_REDIRECT_URI=http://localhost:8080 # Make sure url is set in app you created to get your ID and SECRET
 
-Create virtual environment, install dependencies, run tests:::
+    For more information, see `this <https://spotipy.readthedocs.io/en/2.22.1/#welcome-to-spotipy>`_ section
+
+Create virtual environment, install dependencies, run tests:
     $ virtualenv --python=python3.7 env
     (env) $ pip install --user -e .
     (env) $ python -m unittest discover -v tests
 
 **Lint**
 
-To automatically fix the code style:::
+To automatically fix the code style:
     pip install autopep8
     autopep8 --in-place --aggressive --recursive .
 
-To verify the code style:::
+To verify the code style:
     pip install flake8
     flake8 .
 
-To make sure if the import lists are stored correctly:::
+To make sure if the import lists are stored correctly:
     pip install isort
     isort . -c -v
 
 **Publishing (by maintainer)**
+------------------------------
 
 - Bump version in setup.py
 - Bump and date changelog
 - Add to changelog:
-::
     ## Unreleased
 
-    // Add your changes here and then delete this line
+    ### Added
+    - Replace with changes
+
+    ### Fixed
+
+    ### Removed
+    
 - Commit changes
 - Package to pypi:
-::
     python setup.py sdist bdist_wheel
     python3 setup.py sdist bdist_wheel
     twine check dist/*
