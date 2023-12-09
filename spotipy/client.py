@@ -2014,3 +2014,48 @@ class Spotify(object):
                 return results
 
         return results
+
+ def get_audiobook(self, id, market=None):
+        """ Get Spotify catalog information for a single audiobook identified by its unique
+        Spotify ID.
+        Parameters:
+        - id - the Spotify ID for the audiobook
+        - market - an ISO 3166-1 alpha-2 country code.
+        """
+        audiobook_id = self._get_id("audiobook", id)
+        endpoint = f"audiobooks/{audiobook_id}"
+
+        if market:
+            endpoint += f'?market={market}'
+
+        return self._get(endpoint)
+
+    def get_audiobooks(self, ids, market=None):
+        """ Get Spotify catalog information for multiple audiobooks based on their Spotify IDs.
+        Parameters:
+        - ids - a list of Spotify IDs for the audiobooks
+        - market - an ISO 3166-1 alpha-2 country code.
+        """
+        audiobook_ids = [self._get_id("audiobook", id) for id in ids]
+        endpoint = f"audiobooks?ids={','.join(audiobook_ids)}"
+
+        if market:
+            endpoint += f'&market={market}'
+
+        return self._get(endpoint)
+
+    def get_audiobook_chapters(self, id, market=None, limit=20, offset=0):
+        """ Get Spotify catalog information about an audiobook’s chapters.
+        Parameters:
+        - id - the Spotify ID for the audiobook
+        - market - an ISO 3166-1 alpha-2 country code.
+        - limit - the maximum number of items to return
+        - offset - the index of the first item to return
+        """
+        audiobook_id = self._get_id("audiobook", id)
+        endpoint = f"audiobooks/{audiobook_id}/chapters?limit={limit}&offset={offset}"
+
+        if market:
+            endpoint += f'&market={market}'
+
+        return self._get(endpoint)
