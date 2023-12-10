@@ -13,10 +13,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added integration tests for audiobook endpoints.
 - Removed `python 2.7` from GitHub Actions CI workflow. Python v2.7 reached end of life support and is no longer supported by Ubuntu 20.04.
 - Removed `python 3.6` from GitHub Actions CI workflow. Ubuntu 20.04 is not available in GitHub Actions for `python 3.6`.
+- Added examples for audiobooks, shows and episodes methods to examples directory
 
 ### Changed
 - Changes the YouTube video link for authentication tutorial (the old video was in low definition, the new one is in high definition)
 - Updated links to Spotify in documentation 
+
+### Fixed
+- Fixed scripts in examples directory that didn't run correctly
 
 ## [2.23.0] - 2023-04-07
 
