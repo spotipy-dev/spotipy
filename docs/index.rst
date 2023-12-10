@@ -195,9 +195,7 @@ Feel free to contribute new cache handlers to the repo.
 
 Examples
 =======================
-
-Assuming you set the ``SPOTIPY_CLIENT_ID`` and ``SPOTIPY_CLIENT_SECRET``
-environment variables (here is a `video <https://youtu.be/kaBVN8uP358>`_ explaining how to do so). For a longer tutorial with examples included, refer to this `video playlist <https://www.youtube.com/watch?v=tmt5SdvTqUI&list=PLqgOPibB_QnzzcaOFYmY2cQjs35y0is9N&index=1>`_. 
+ 
 Here is an example of using *Spotipy* to list the
 names of all the albums released by the artist 'Birdy'::
 
@@ -254,7 +252,7 @@ artist's name::
         print(artist['name'], artist['images'][0]['url'])
 
 There are many more examples of how to use *Spotipy* in the `Examples
-Directory <https://github.com/plamere/spotipy/tree/master/examples>`_ on Github
+Directory <https://github.com/plamere/spotipy/tree/master/examples>`_ on GitHub.
 
 API Reference
 ==============
