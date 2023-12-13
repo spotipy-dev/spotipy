@@ -93,6 +93,25 @@ You can ask questions about Spotipy on
 [Stack Overflow](http://stackoverflow.com/questions/ask).
 Don’t forget to add the *Spotipy* tag, and any other relevant tags as well, before posting.
 
+### Reporting Bugs
+
 If you have suggestions, bugs or other issues specific to this library,
 file them [here](https://github.com/plamere/spotipy/issues).
 Or just send a pull request.
+
+When reporting a bug please fill out all the given fields: 
+**Describe the bug**
+A clear and concise description of what the bug is and where/when it occured. Does the program terminate? Is the retrived information correct? Which endpoints are you making a call to? Include formatted text, not screen shots.
+
+**Your code**
+Share a complete minimal working example. Include libraries used.
+
+**Expected behavior**
+A clear and concise description of what you expected to happen.
+
+**Output**
+Paste and format errors (with complete stacktrace) or logs. Make sure to remove sensitive information.
+
+You can find these catagories by navagating to the bug report [link](https://github.com/plamere/spotipy/issues) then selecting "New issue" and then "Get started" next to Bug Report on the following page.
+
+Please fill out all above fields. The information helps identify bugs faster, enabling bug patches to be released faster. Leaving any field blank may resort in your report going unanswered. 
