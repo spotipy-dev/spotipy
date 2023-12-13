@@ -68,6 +68,7 @@ for idx, item in enumerate(results['items']):
 
 ## Example of getting artist image with artist's name
 
+```python
 import spotipy
 import sys
 from spotipy.oauth2 import SpotifyClientCredentials
@@ -84,7 +85,7 @@ items = results['artists']['items']
 if len(items) > 0:
     artist = items[0]
     print(artist['name'], artist['images'][0]['url'])
-
+```
 ## Reporting Issues
 
 For common questions please check our [FAQ](FAQ.md).
