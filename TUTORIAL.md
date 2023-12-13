@@ -79,3 +79,34 @@ D. Close main.py and return to the directory that contains main.py. You can then
 E. You may see a window open in your browser asking you to authorize the application. Do so - you will only have to do this once.
 
 F. Return to your terminal - you should see all of Taylor's albums printed out there.
+
+# Accessing specific data
+The data returned is an object of type dictionary. Accessing the data is quite easy and then can be transformed into json and string format. Below is an example of what is returned from querying the API for a user's top tracks.
+```
+'artists': [   {   'external_urls': {   'spotify': 'https://open.spotify.com/artist/41SQP16hv1TioVYqdckmxT'},
+                                        'href': 'https://api.spotify.com/v1/artists/41SQP16hv1TioVYqdckmxT',
+                                        'id': '41SQP16hv1TioVYqdckmxT',
+	@@ -187,9 +187,9 @@ The data returned is an object of type dictionary. Accessing the data is quite e
+    'offset': 0,
+    'previous': None,
+    'total': 50}
+```
+To provide a clear way of access and reformatting we can write some code to grab some important information that we see fit for our use case:
+```
+def get_top_tracks():
+    results = sp.current_user_top_tracks(time_range="short_term", limit=20)
+    top_track_array = []
+	@@ -204,14 +204,14 @@ def get_top_tracks():
+        }
+        top_track_array.append(top_tracks_ids)
+    return results
+```
+This transforms the raw response into something useful for our/your program:
+```
+[{   'artist_name': 'Coeo',
+        'song_name': 'Like It Is',
+        'tid': '3OoNpyvA82LedOZWG3WE8Z',
+        'uri': 'spotify:track:2hFjxLPeeBZrvLb302MKLj',
+        'url': {   'spotify': 'https://open.spotify.com/artist/3OoNpyvA82LedOZWG3WE8Z'}},]
+```
+I recommend looking into map, reduce, and filter methods to create cleaner code and not access through hardcoding indexes: https://book.pythontips.com/en/latest/map_filter.html
