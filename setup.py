@@ -33,7 +33,6 @@ setup(
         "redis>=3.5.3",
         "redis<4.0.0;python_version<'3.4'",
         "requests>=2.25.0",
-        "six>=1.15.0",
         "urllib3>=1.26.0"
     ],
     tests_require=test_reqs,

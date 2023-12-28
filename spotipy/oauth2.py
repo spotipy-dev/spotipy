@@ -15,8 +15,6 @@ import warnings
 import webbrowser
 
 import requests
-# Workaround to support both python 2 & 3
-import six
 import urllib.parse as urllibparse
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import parse_qsl, urlparse
