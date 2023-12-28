@@ -723,15 +723,8 @@ class SpotifyPKCE(SpotifyAuthBase):
         length = random.randint(33, 96)
 
         # The seeded length generates between a 44 and 128 base64 characters encoded string
-        try:
-            import secrets
-            verifier = secrets.token_urlsafe(length)
-        except ImportError:  # For python 3.5 support
-            import base64
-            import os
-            rand_bytes = os.urandom(length)
-            verifier = base64.urlsafe_b64encode(rand_bytes).decode('utf-8').replace('=', '')
-        return verifier
+        import secrets
+        return secrets.token_urlsafe(length)
 
     def _get_code_challenge(self):
         """ Spotify PCKE code challenge - See step 1 of the reference guide below
