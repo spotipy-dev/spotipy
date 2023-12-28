@@ -113,12 +113,4 @@ Or just send a pull request.
 
 If you are a developer with Python experience, and you would like to contribute to Spotipy, please be sure to follow the guidelines listed on documentation page
 
-> #### [Visit the guideline](https://spotipy.readthedocs.io/en/2.22.1/#contribute)
-
-## License
-
-Copyright © 2021 Paul Lamere
-
-Spotipy is licensed under the MIT License. See more detail below:
-
-> #### [LICENSE.md](LICENSE.md)
+> #### [Visit the guideline](https://spotipy.readthedocs.io/en/#contribute)
