@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """ A simple and thin Python library for the Spotify Web API """
 
 __all__ = ["Spotify", "SpotifyException"]
@@ -20,7 +18,7 @@ from collections import defaultdict
 logger = logging.getLogger(__name__)
 
 
-class Spotify(object):
+class Spotify:
     """
         Example usage::
 
@@ -231,14 +229,14 @@ class Spotify(object):
 
     def _auth_headers(self):
         if self._auth:
-            return {"Authorization": "Bearer {0}".format(self._auth)}
+            return {"Authorization": f"Bearer {self._auth}"}
         if not self.auth_manager:
             return {}
         try:
             token = self.auth_manager.get_access_token(as_dict=False)
         except TypeError:
             token = self.auth_manager.get_access_token()
-        return {"Authorization": "Bearer {0}".format(token)}
+        return {"Authorization": f"Bearer {token}"}
 
     def _internal_call(self, method, url, payload, params):
         args = dict(params=params)
@@ -293,7 +291,7 @@ class Spotify(object):
             raise SpotifyException(
                 response.status_code,
                 -1,
-                "%s:\n %s" % (response.url, msg),
+                "{}:\n {}".format(response.url, msg),
                 reason=reason,
                 headers=response.headers,
             )
@@ -307,7 +305,7 @@ class Spotify(object):
             raise SpotifyException(
                 429,
                 -1,
-                "%s:\n %s" % (request.path_url, "Max Retries"),
+                "{}:\n {}".format(request.path_url, "Max Retries"),
                 reason=reason
             )
         except ValueError:
@@ -732,7 +730,7 @@ class Spotify(object):
         """
         plid = self._get_id("playlist", playlist_id)
         return self._put(
-            "playlists/{}/images".format(plid),
+            f"playlists/{plid}/images",
             payload=image_b64,
             content_type="image/jpeg",
         )
@@ -815,7 +813,7 @@ class Spotify(object):
             "description": description
         }
 
-        return self._post("users/%s/playlists" % (user,), payload=data)
+        return self._post("users/{}/playlists".format(user), payload=data)
 
     def user_playlist_change_details(
         self,
@@ -990,7 +988,7 @@ class Spotify(object):
         if snapshot_id:
             payload["snapshot_id"] = snapshot_id
         return self._delete(
-            "users/%s/playlists/%s/tracks" % (user, plid), payload=payload
+            "users/{}/playlists/{}/tracks".format(user, plid), payload=payload
         )
 
     def user_playlist_follow_playlist(self, playlist_owner_id, playlist_id):
@@ -1047,13 +1045,13 @@ class Spotify(object):
         """
 
         data = {}
-        if isinstance(name, six.string_types):
+        if isinstance(name, str):
             data["name"] = name
         if isinstance(public, bool):
             data["public"] = public
         if isinstance(collaborative, bool):
             data["collaborative"] = collaborative
-        if isinstance(description, six.string_types):
+        if isinstance(description, str):
             data["description"] = description
         return self._put(
             "playlists/%s" % (self._get_id("playlist", playlist_id)), payload=data
@@ -1194,7 +1192,7 @@ class Spotify(object):
 
         """
         return self._put(
-            "playlists/{}/followers".format(playlist_id)
+            f"playlists/{playlist_id}/followers"
         )
 
     def playlist_is_following(

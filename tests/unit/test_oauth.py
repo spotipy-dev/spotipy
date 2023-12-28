@@ -1,9 +1,8 @@
-# -*- coding: utf-8 -*-
 import io
 import json
 import unittest
 
-import six.moves.urllib.parse as urllibparse
+import urllib.parse as urllibparse
 
 from spotipy import SpotifyOAuth, SpotifyImplicitGrant, SpotifyPKCE
 from spotipy.cache_handler import MemoryCacheHandler
@@ -13,7 +12,7 @@ from spotipy.oauth2 import SpotifyStateError
 try:
     import unittest.mock as mock
 except ImportError:
-    import mock
+    from unittest import mock
 
 patch = mock.patch
 DEFAULT = mock.DEFAULT

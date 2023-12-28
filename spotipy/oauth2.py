@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 __all__ = [
     "SpotifyClientCredentials",
     "SpotifyOAuth",
@@ -19,9 +17,9 @@ import webbrowser
 import requests
 # Workaround to support both python 2 & 3
 import six
-import six.moves.urllib.parse as urllibparse
-from six.moves.BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
-from six.moves.urllib_parse import parse_qsl, urlparse
+import urllib.parse as urllibparse
+from http.server import BaseHTTPRequestHandler, HTTPServer
+from urllib.parse import parse_qsl, urlparse
 
 from spotipy.cache_handler import CacheFileHandler, CacheHandler
 from spotipy.util import CLIENT_CREDS_ENV_VARS, get_host_port, normalize_scope
@@ -36,7 +34,7 @@ class SpotifyOauthError(Exception):
         self.error = error
         self.error_description = error_description
         self.__dict__.update(kwargs)
-        super(SpotifyOauthError, self).__init__(message, *args, **kwargs)
+        super().__init__(message, *args, **kwargs)
 
 
 class SpotifyStateError(SpotifyOauthError):
@@ -54,7 +52,7 @@ class SpotifyStateError(SpotifyOauthError):
 
 def _make_authorization_headers(client_id, client_secret):
     auth_header = base64.b64encode(
-        six.text_type(client_id + ":" + client_secret).encode("ascii")
+        str(client_id + ":" + client_secret).encode("ascii")
     )
     return {"Authorization": "Basic %s" % auth_header.decode("ascii")}
 
@@ -63,7 +61,7 @@ def _ensure_value(value, env_key):
     env_val = CLIENT_CREDS_ENV_VARS[env_key]
     _val = value or os.getenv(env_val)
     if _val is None:
-        msg = "No %s. Pass it or set a %s environment variable." % (
+        msg = "No {}. Pass it or set a {} environment variable.".format(
             env_key,
             env_val,
         )
@@ -71,7 +69,7 @@ def _ensure_value(value, env_key):
     return _val
 
 
-class SpotifyAuthBase(object):
+class SpotifyAuthBase:
     def __init__(self, requests_session):
         if isinstance(requests_session, requests.Session):
             self._session = requests_session
@@ -144,7 +142,7 @@ class SpotifyAuthBase(object):
             error_description = None
 
         raise SpotifyOauthError(
-            'error: {0}, error_description: {1}'.format(
+            'error: {}, error_description: {}'.format(
                 error, error_description
             ),
             error=error,
@@ -196,7 +194,7 @@ class SpotifyClientCredentials(SpotifyAuthBase):
 
         """
 
-        super(SpotifyClientCredentials, self).__init__(requests_session)
+        super().__init__(requests_session)
 
         self.client_id = client_id
         self.client_secret = client_secret
@@ -327,7 +325,7 @@ class SpotifyOAuth(SpotifyAuthBase):
                               (takes precedence over `cache_path` and `username`)
         """
 
-        super(SpotifyOAuth, self).__init__(requests_session)
+        super().__init__(requests_session)
 
         self.client_id = client_id
         self.client_secret = client_secret
@@ -402,7 +400,7 @@ class SpotifyOAuth(SpotifyAuthBase):
 
         urlparams = urllibparse.urlencode(payload)
 
-        return "%s?%s" % (self.OAUTH_AUTHORIZE_URL, urlparams)
+        return "{}?{}".format(self.OAUTH_AUTHORIZE_URL, urlparams)
 
     def parse_response_code(self, url):
         """ Parse the response code in the given response url
@@ -677,7 +675,7 @@ class SpotifyPKCE(SpotifyAuthBase):
                               (takes precedence over `cache_path` and `username`)
         """
 
-        super(SpotifyPKCE, self).__init__(requests_session)
+        super().__init__(requests_session)
         self.client_id = client_id
         self.redirect_uri = redirect_uri
         self.state = state
@@ -766,7 +764,7 @@ class SpotifyPKCE(SpotifyAuthBase):
         if state is not None:
             payload["state"] = state
         urlparams = urllibparse.urlencode(payload)
-        return "%s?%s" % (self.OAUTH_AUTHORIZE_URL, urlparams)
+        return "{}?{}".format(self.OAUTH_AUTHORIZE_URL, urlparams)
 
     def _open_auth_url(self, state=None):
         auth_url = self.get_authorize_url(state)
@@ -817,7 +815,7 @@ class SpotifyPKCE(SpotifyAuthBase):
         if server.auth_code is not None:
             return server.auth_code
         elif server.error is not None:
-            raise SpotifyOauthError("Received error from OAuth server: {}".format(server.error))
+            raise SpotifyOauthError(f"Received error from OAuth server: {server.error}")
         else:
             raise SpotifyOauthError("Server listening on localhost has not been accessed")
 
@@ -1160,7 +1158,7 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
 
         urlparams = urllibparse.urlencode(payload)
 
-        return "%s?%s" % (self.OAUTH_AUTHORIZE_URL, urlparams)
+        return "{}?{}".format(self.OAUTH_AUTHORIZE_URL, urlparams)
 
     def parse_response_token(self, url, state=None):
         """ Parse the response code in the given response url """
@@ -1273,7 +1271,7 @@ class RequestHandler(BaseHTTPRequestHandler):
         if self.server.auth_code:
             status = "successful"
         elif self.server.error:
-            status = "failed ({})".format(self.server.error)
+            status = f"failed ({self.server.error})"
         else:
             self._write("<html><body><h1>Invalid request</h1></body></html>")
             return
