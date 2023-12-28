@@ -31,7 +31,6 @@ setup(
     python_requires='>3.7',
     install_requires=[
         "redis>=3.5.3",
-        "redis<4.0.0;python_version<'3.4'",
         "requests>=2.25.0",
         "urllib3>=1.26.0"
     ],
