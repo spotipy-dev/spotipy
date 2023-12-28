@@ -28,6 +28,7 @@ setup(
     project_urls={
         'Source': 'https://github.com/plamere/spotipy',
     },
+    python_requires='>3.7',
     install_requires=[
         "redis>=3.5.3",
         "redis<4.0.0;python_version<'3.4'",
