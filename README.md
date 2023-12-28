@@ -46,7 +46,7 @@ A full set of examples can be found in the [online documentation](http://spotipy
 
 To get started, [install spotipy](#installation), create a new account or log in on https://developers.spotify.com/. Go to the [dashboard](https://developer.spotify.com/dashboard), create an app and add your new ID and SECRET (ID and SECRET can be found on an app setting) to your environment ([step-by-step video](https://www.youtube.com/watch?v=kaBVN8uP358)):
 
-### Without user authentication Example
+### Example without user authentication
 
 ```python
 import spotipy
