@@ -11,7 +11,7 @@ scope = 'user-library-modify'
 if len(sys.argv) > 1:
     tid = sys.argv[1]
 else:
-    print("Usage: {} track-id ...".format(sys.argv[0]))
+    print(f"Usage: {sys.argv[0]} track-id ...")
     sys.exit()
 
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))

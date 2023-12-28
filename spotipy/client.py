@@ -290,7 +290,7 @@ class Spotify:
             raise SpotifyException(
                 response.status_code,
                 -1,
-                "{}:\n {}".format(response.url, msg),
+                f"{response.url}:\n {msg}",
                 reason=reason,
                 headers=response.headers,
             )
@@ -812,7 +812,7 @@ class Spotify:
             "description": description
         }
 
-        return self._post("users/{}/playlists".format(user), payload=data)
+        return self._post(f"users/{user}/playlists", payload=data)
 
     def user_playlist_change_details(
         self,
@@ -987,7 +987,7 @@ class Spotify:
         if snapshot_id:
             payload["snapshot_id"] = snapshot_id
         return self._delete(
-            "users/{}/playlists/{}/tracks".format(user, plid), payload=payload
+            f"users/{user}/playlists/{plid}/tracks", payload=payload
         )
 
     def user_playlist_follow_playlist(self, playlist_owner_id, playlist_id):

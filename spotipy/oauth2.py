@@ -398,7 +398,7 @@ class SpotifyOAuth(SpotifyAuthBase):
 
         urlparams = urllibparse.urlencode(payload)
 
-        return "{}?{}".format(self.OAUTH_AUTHORIZE_URL, urlparams)
+        return f"{self.OAUTH_AUTHORIZE_URL}?{urlparams}"
 
     def parse_response_code(self, url):
         """ Parse the response code in the given response url
@@ -755,7 +755,7 @@ class SpotifyPKCE(SpotifyAuthBase):
         if state is not None:
             payload["state"] = state
         urlparams = urllibparse.urlencode(payload)
-        return "{}?{}".format(self.OAUTH_AUTHORIZE_URL, urlparams)
+        return f"{self.OAUTH_AUTHORIZE_URL}?{urlparams}"
 
     def _open_auth_url(self, state=None):
         auth_url = self.get_authorize_url(state)
@@ -1149,7 +1149,7 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
 
         urlparams = urllibparse.urlencode(payload)
 
-        return "{}?{}".format(self.OAUTH_AUTHORIZE_URL, urlparams)
+        return f"{self.OAUTH_AUTHORIZE_URL}?{urlparams}"
 
     def parse_response_token(self, url, state=None):
         """ Parse the response code in the given response url """

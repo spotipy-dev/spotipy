@@ -19,4 +19,4 @@ if len(sys.argv) > 1:
     features = sp.audio_features(tids)
     delta = time.time() - start
     print(json.dumps(features, indent=4))
-    print("features retrieved in {:.2f} seconds".format(delta))
+    print(f"features retrieved in {delta:.2f} seconds")
