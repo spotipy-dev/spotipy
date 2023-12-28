@@ -72,7 +72,7 @@ Expected result:
 ```
 
 
-### With user authentication Example
+### Example with user authentication
 
 A redirect URI must be added to your application at [My Dashboard](https://developer.spotify.com/dashboard/applications) to access user authenticated features.
 
