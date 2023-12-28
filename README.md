@@ -20,7 +20,7 @@ Spotipy supports all of the features of the Spotify Web API including access to 
 
 ## Documentation
 
-Spotipy's full documentation is online at [Spotipy Documentation](http://spotipy.readthedocs.org/). Some function may need a specific scope. Please visit https://developer.spotify.com/documentation/web-api/concepts/scopes to learn more. If you do not define the scope properly `ERROR 401 Unauthorized, permission missing` may occur.
+Spotipy's [full documentation is online](http://spotipy.readthedocs.org/). Some function may need a [specific scope](https://developer.spotify.com/documentation/web-api/concepts/scopes). If you do not define the scope properly `ERROR 401 Unauthorized, permission missing` may occur.
 
 ## Installation
 
