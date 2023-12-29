@@ -19,6 +19,12 @@ def get_args():
     return parser.parse_args()
 
 
+def get_related_artists(artist_id):
+    results = sp.artist_related_artists(artist_id)
+    related_artists = [artist['name'] for artist in results['artists']]
+    return related_artists
+
+
 def get_artist(name):
     results = sp.search(q='artist:' + name, type='artist')
     items = results['artists']['items']
