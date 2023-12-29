@@ -5,6 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+Changelog Basics & Principles
+-----------------------------
+Before adding to the Changelog, think about the following: 
+- Changelogs are for Humans not Machines (make it readable to the layperson)
+- There should be an entry to every version
+- The same types of changes should be grouped
+- Version and sections should be linkable
+- The latest version comes first
+- The release date of each version is displayed
+- Should be mentioned of a change follows Semantic Versioning
+- Types of changes include: Added, Changed, Deprecated, Removed, Fixed, and Security
+
+Common issues when contributing to a Changelog
+------------------------------------------------
+Using Commit log diffs, such as merge commits, commits with obscure titles, or documentation changes
+- Commit log is a way to show the evolution of the codebase, the Changelog demonstrate the noteworthy changes, often across multiple commits, so they can be communicated clearly to end users.
+
+Ignoring deprecations
+- Deprecations, removals, and any changes that may break the program, should be clear to the user
+
+Confusing Dates
+- There are multiple ways to format a date, typically it is best practice follow the format ``YYYY-MM-DD``. This format is less ambiguous than other formats and is more widely accepted across different regions of the world. 
+
+
+See the site above for further details on how to keep a changelog
+
+
 ## Unreleased
 
 ### Added

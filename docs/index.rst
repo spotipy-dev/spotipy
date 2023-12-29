@@ -73,6 +73,73 @@ to all end points, and support for user authorization. For details on the
 capabilities you are encouraged to review the `Spotify Web
 API <https://developer.spotify.com/documentation/web-api/>`_ documentation.
 
+
+
+Getting Started
+===============
+If you are a first time user, you should checkout the `Spotipy Tutorial for Beginners <https://github.com/spotipy-dev/spotipy/blob/master/TUTORIAL.md>`_.
+The Tutorial can also be found directly on our `Github <https://github.com/spotipy-dev/spotipy>`_. Some of the tutorial details are listed below and will
+help you get started using the program. 
+
+Things You Will Need to Use Spotipy
+-----------------------------------
+**1. pip package manager**
+pip package manager is used to install packages for Python. In order to check if you have the latest version of pip installed, you can enter the following into the CLI::
+
+      pip --version
+
+If you are presented with version number, pip is installed, you can check to see if you have the latest version `here <https://pypi.org/project/pip/>`_.
+
+**2. Python 3**
+It is recommended that you use the latest version of Python when utilizing Spotipy. To check your current version of Python enter the following in the CLI::
+
+      python3 --version
+
+To ensure that you're machine is currently using that version of python, enter the following::
+
+      which python3
+      
+To check that you have the latest version install, click `here <https://www.python.org/downloads/>`_ to check out the latest version.
+
+**3. Knowledge of Basic Linux Commands**
+In order to be able to navigate you files and directories on your computer more easily, it is recommended that you have a basic knowledge of Linux commands.
+You can find a beginner tutorial `here <https://ubuntu.com/tutorials/command-line-for-beginners#1-overview>`_ or checkout `this youtube video <https://www.youtube.com/watch?v=IVquJh3DXUA>`_ that gives a great introduction to commands in Linux.
+
+Getting Started with the Spotify Web API
+========================================
+
+Setting Up a Spotify Account
+----------------------------
+In order to successfully utilize the Spotify Web API and in turn, Spotipy, you will need
+to `setup an account <https://www.spotify.com/us/signup>`_. 
+  - Fill out the given form
+  - Click sign-up, *Spotify is a free service, you will not need to use a form of payment*
+  - Once signed up, you can now sign in via `My Dashboard <https://developer.spotify.com/dashboard/applications>`_.
+    and create an application, see `Setting Up Your Application on Spotify Web API`_ for details on setting up
+    an application.
+
+Setting Up Your Application on Spotify Web API
+----------------------------------------------
+*You must have a Spotify account to access these features.*
+
+- Login to the Dashboard via your Spotify account
+- From the Dashboard, click on `Create App`
+- Fill out the form with your specified *App Name*, *App Description*, *Website* (optional),
+  *Redirect URI*
+- You should then be redirected to your app overview page, this will provide you
+  with valuable information such as:
+   
+   - App Metrics
+   - App Status
+   - App settings
+   - A Client ID, that provides a unique identifier for your app
+   - A Client secret, the key will you use to authorize your Web API or SDK calls
+.. note:: If this is your first time logging in, you will need to accept a user
+         agreement. After accepted, this should redirect you to a new page to 
+         create your first application.
+         
+For further details on setting up an application, checkout the `Getting Started <https://developer.spotify.com/documentation/web-api/tutorials/getting-started>`_ page on the Spotify Web API sited
+
 Installation
 ============
 
@@ -82,8 +149,8 @@ Install or upgrade *Spotipy* with::
 
 Or you can get the source from github at https://github.com/plamere/spotipy
 
-Getting Started
-===============
+Code Flows
+==========
 
 All methods require user authorization. You will need to register your app at 
 `My Dashboard <https://developer.spotify.com/dashboard/applications>`_ 
@@ -103,7 +170,6 @@ to get the credentials necessary to make authorized calls
     to authenticate your requests to the Spotify Web API and to obtain
     a higher rate limit than you would with the Authorization Code flow.
 
-
 Authorization Code Flow
 =======================
 
@@ -112,7 +178,7 @@ permission only once. It provides an access token that can be refreshed.
 Since the token exchange involves sending your secret key, perform this on a
 secure location, like a backend service, and not from a client such as a
 browser or from a mobile app.
-
+         
 Quick start
 -----------
 
