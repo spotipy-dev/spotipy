@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """ A simple and thin Python library for the Spotify Web API """
-
+#laa
 __all__ = ["Spotify", "SpotifyException"]
 
 import json
@@ -19,7 +19,7 @@ from collections import defaultdict
 
 logger = logging.getLogger(__name__)
 
-
+#
 class Spotify(object):
     """
         Example usage::
@@ -785,7 +785,7 @@ class Spotify(object):
             fields=fields,
             market=market,
         )
-
+#
     def user_playlists(self, user, limit=50, offset=0):
         """ Gets playlists of a user
 
