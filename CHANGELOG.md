@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated links to Spotify in documentation
 - Improve usability on README.md
 
+## [2.23.1] - 2023-10-30
+
+### Added
+
+- Added an additional FAQ addressing the hidden limit of 50 shows per request for the API endpoints related to accessing/adding/deleting current user saved shows suffixed by "current_user_saved_shows" in client.py, resulting in an unexplained HTTP error response.
+
 ## [2.23.0] - 2023-04-07
 
 ### Added
