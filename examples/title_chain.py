@@ -13,7 +13,7 @@ client_credentials_manager = SpotifyClientCredentials()
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
 
-skiplist = set(['dm', 'remix'])
+skiplist = {'dm', 'remix'}
 max_offset = 500
 seen = set()
 

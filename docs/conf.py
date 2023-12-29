@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # spotipy documentation build configuration file, created by
 # sphinx-quickstart on Thu Aug 21 11:04:39 2014.
