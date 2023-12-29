@@ -1,3 +1,6 @@
+# code example that demonstrates current_user_saved_tracks_add(tracks=None) functionality
+# Link to documentation -> https://spotipy.readthedocs.io/en/2.22.1/#spotipy.client.Spotify.current_user_saved_tracks_add
+
 import argparse
 import logging
 
