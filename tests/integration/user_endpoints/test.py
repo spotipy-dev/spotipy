@@ -253,7 +253,7 @@ class SpotipyLibraryApiTests(unittest.TestCase):
         tracks = self.spotify.current_user_saved_tracks()
         self.assertGreaterEqual(len(tracks['items']), 0)
 
-    def test_current_user_save_and_unsave_tracks(self):
+    def test_current_user_save_tracks(self):
         tracks = self.spotify.current_user_saved_tracks()
         total = tracks['total']
         self.spotify.current_user_saved_tracks_add(self.four_tracks)
@@ -261,6 +261,19 @@ class SpotipyLibraryApiTests(unittest.TestCase):
         tracks = self.spotify.current_user_saved_tracks()
         new_total = tracks['total']
         self.assertEqual(new_total - total, len(self.four_tracks))
+
+        self.spotify.current_user_saved_tracks_delete(
+            self.four_tracks)
+        tracks = self.spotify.current_user_saved_tracks()
+        new_total = tracks['total']
+
+    def test_current_user_unsave_tracks(self):
+        tracks = self.spotify.current_user_saved_tracks()
+        total = tracks['total']
+        self.spotify.current_user_saved_tracks_add(self.four_tracks)
+
+        tracks = self.spotify.current_user_saved_tracks()
+        new_total = tracks['total']
 
         self.spotify.current_user_saved_tracks_delete(
             self.four_tracks)
