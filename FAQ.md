@@ -52,3 +52,29 @@ If you cannot open a browser, set `open_browser=False` when instantiating Spotif
 prompted to open the authorization URI manually.  
 
 See the [headless auth example](examples/headless.py).
+
+### Why do the versions on the GitHub page and the spotipy website differ?
+
+The spotipy team updates the GitHub page more frequently than the website. As a result, the GitHub page will often have a more recent version of the documentation. Always refer to the GitHub page for the most accurate and current information. 
+
+### How do I set up the necessary environment variables for spotipy?
+
+spotipy requires certain environment variables to function properly. Detailed instructions on setting these up can be found in the `CONTRIBUTING.md` guide on the GitHub page.
+
+### How are contributions to spotipy recognized?
+
+spotipy appreciates all forms of contributions from the community, whether it be feature enhancements, bug fixes, or improvements to documentation. While the project does not formally recognize contributions, your changes, if merged, will be part of spotipy's codebase and benefit its users. Your contribution history will also be visible on GitHub, serving as a testament to your active participation in open-source development. 
+
+Note that while making contributions, please adhere to spotipy's contribution guidelines outlined in the `CONTRIBUTING.md` file.
+
+### Are there any limitations as to what I can create with spotipy and the Spotify API?
+
+Yes, there are certain types of applications and functionality that Spotify explicitly prohibits in their [developer policy](https://developer.spotify.com/policy#iii-some-prohibited-applications). Some of these include:
+
+1. Creating ringtone, alert tone, or alarm functionality in an application, unless you receive Spotify’s written approval.
+2. Creating a game, including trivia quizzes.
+3. Creating any product or service which includes any non-interactive internet webcasting service.
+4. Synchronizing any sound recordings with any visual media, including any advertising, film, television program, slideshow, video, or similar content.
+5. Building products and services that mimic, replicate or attempt to replace a core user experience of Spotify without their prior written permission.
+
+Please note this is not an exhaustive list, and developers are advised to read the full policy to ensure their application complies with all guidelines. Violating these rules may lead to the suspension or termination of your access to the Spotify Developer Platform.
