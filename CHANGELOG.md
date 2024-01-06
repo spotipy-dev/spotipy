@@ -19,6 +19,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated links to Spotify in documentation
 - Improve usability on README.md
 
+### Fixed
+- Fixed unused description parameter in playlist creation example
+
 ## [2.23.0] - 2023-04-07
 
 ### Added

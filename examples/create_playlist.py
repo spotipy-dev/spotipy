@@ -24,7 +24,7 @@ def main():
     scope = "playlist-modify-public"
     sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
     user_id = sp.me()['id']
-    sp.user_playlist_create(user_id, args.playlist)
+    sp.user_playlist_create(user_id, args.playlist, description=args.description)
 
 
 if __name__ == '__main__':
