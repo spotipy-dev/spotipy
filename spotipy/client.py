@@ -1677,15 +1677,21 @@ class Spotify(object):
         """
         params = dict(limit=limit)
         if seed_artists:
-            params["seed_artists"] = ",".join(
-                [self._get_id("artist", a) for a in seed_artists]
-            )
+            if isinstance(seed_artists, str):
+                params["seed_artists"] = self._get_id("artist", seed_artists)
+            else:
+                params["seed_artists"] = ",".join(
+                    [self._get_id("artist", a) for a in seed_artists]
+                )
         if seed_genres:
             params["seed_genres"] = ",".join(seed_genres)
         if seed_tracks:
-            params["seed_tracks"] = ",".join(
-                [self._get_id("track", t) for t in seed_tracks]
-            )
+            if isinstance(seed_tracks, str):
+                params["seed_tracks"] = self._get_id("track", seed_tracks)
+            else:
+                params["seed_tracks"] = ",".join(
+                    [self._get_id("track", t) for t in seed_tracks]
+                )
         if country:
             params["market"] = country
 
