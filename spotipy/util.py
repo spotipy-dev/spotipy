@@ -146,4 +146,3 @@ def url_to_id(url):
     for i in url:
         a.append(re.search(r"/track\/([A-Za-z0-9]+)", i).group(1))
     return a
-
