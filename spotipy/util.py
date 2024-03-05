@@ -2,13 +2,14 @@
 
 """ Shows a user's playlists (need to be authenticated via oauth) """
 
-__all__ = ["CLIENT_CREDS_ENV_VARS", "prompt_for_user_token"]
+__all__ = ["CLIENT_CREDS_ENV_VARS", "prompt_for_user_token", url_to_id]
 
 import logging
 import os
 import warnings
 
 import spotipy
+import re
 
 LOGGER = logging.getLogger(__name__)
 
@@ -133,3 +134,13 @@ def normalize_scope(scope):
         return " ".join(sorted(scopes))
     else:
         return None
+
+""" Extract Spotify ID from input Spotify URL using regular expression """
+
+def url_to_id(url):
+    a = []
+    if isinstance(url, str):
+        url = [url]
+    for i in url:
+        a.append(re.search(r"/track\/([A-Za-z0-9]+)", i).group(1))
+    return a
