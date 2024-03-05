@@ -135,8 +135,8 @@ def normalize_scope(scope):
     else:
         return None
 
-""" Extract Spotify ID from input Spotify URL using regular expression """
 
+""" Extract Spotify ID from input Spotify URL using regular expression """
 
 def url_to_id(url):
     a = []
