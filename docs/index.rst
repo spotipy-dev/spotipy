@@ -285,7 +285,7 @@ You can ask questions about Spotipy on Stack Overflow.   Don’t forget to add t
     http://stackoverflow.com/questions/ask
 
 If you think you've found a bug, let us know at
-`Spotify Issues <https://github.com/plamere/spotipy/issues>`_
+`Spotipy Issues <https://github.com/plamere/spotipy/issues>`_
 
 
 Contribute
