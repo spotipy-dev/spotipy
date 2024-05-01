@@ -96,6 +96,7 @@ class Spotify(object):
         "TW",
         "TR",
         "GB",
+        "UA",
         "US",
         "UY"]
 
