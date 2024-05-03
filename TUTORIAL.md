@@ -15,7 +15,13 @@ If you see a version number, pip is installed and you're ready to proceed. If no
 Spotipy is written in Python, so you'll need to have the lastest version of Python installed in order to use Spotipy. Check if you already have Python installed with the Terminal command: python --version
 If you see a version number, Python is already installed. If not, you can download it here: https://www.python.org/downloads/
 
-**3. experience with basic Linux commands**
+**3. spotipy**
+You'll need to install the packages necessary for this project. Run the following command:
+```
+pip install spotipy
+```
+
+**4. experience with basic Linux commands**
 
 This tutorial will be easiest if you have some knowledge of how to use Linux commands to create and navigate folders and files on your computer. If you're not sure how to create, edit and delete files and directories from Terminal, learn about basic Linux commands [here](https://ubuntu.com/tutorials/command-line-for-beginners#1-overview) before continuing.
 
@@ -79,3 +85,19 @@ D. Close main.py and return to the directory that contains main.py. You can then
 E. You may see a window open in your browser asking you to authorize the application. Do so - you will only have to do this once.
 
 F. Return to your terminal - you should see all of Taylor's albums printed out there.
+
+## Troubleshooting Tips
+A. Command not found running the application "zsh: command not found: python"
+Check which Python version that you have by running the command:
+```python --version ``` or ```python3 --version```.
+
+In most cases, the recent Python version is Python 3. You may need to update Python. Once you have updated Python to the most recent version, run the command:
+``` python3 main.py```
+
+B. Encountering package error:
+If you are seeing an error "ModuleNotFoundError: No module named 'spotipy'", this means you have not installed the package. This may occur if you followed the installation and setup (up to Step 3, Part D) and attempted to run the app with the missing package.
+Run the command:
+```
+pip install spotipy
+```
+After the package is installed, run the app again.
