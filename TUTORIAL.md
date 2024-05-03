@@ -16,6 +16,7 @@ Spotipy is written in Python, so you'll need to have the lastest version of Pyth
 If you see a version number, Python is already installed. If not, you can download it here: https://www.python.org/downloads/
 
 **3. spotipy**
+
 You'll need to install the packages necessary for this project. Run the following command:
 ```
 pip install spotipy
@@ -88,6 +89,7 @@ F. Return to your terminal - you should see all of Taylor's albums printed out t
 
 ## Troubleshooting Tips
 A. Command not found running the application "zsh: command not found: python"
+
 Check which Python version that you have by running the command:
 ```python --version ``` or ```python3 --version```.
 
@@ -95,6 +97,7 @@ In most cases, the recent Python version is Python 3. You may need to update Pyt
 ``` python3 main.py```
 
 B. Encountering package error:
+
 If you are seeing an error "ModuleNotFoundError: No module named 'spotipy'", this means you have not installed the package. This may occur if you followed the installation and setup (up to Step 3, Part D) and attempted to run the app with the missing package.
 Run the command:
 ```
