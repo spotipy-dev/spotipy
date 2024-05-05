@@ -9,6 +9,8 @@ In order to complete this tutorial successfully, there are a few things that you
 You can check to see if you have pip installed by opening up Terminal and typing the following command: pip --version
 If you see a version number, pip is installed and you're ready to proceed. If not, instructions for downloading the latest version of pip can be found      here: https://pip.pypa.io/en/stable/cli/pip_download/
 
+A. After ensuring that pip is installed, run the following command in Terminal to install Spotipy: pip install spotipy --upgrade
+
 
 **2. python3**
 
