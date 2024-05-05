@@ -24,7 +24,7 @@ Once those three setup items are taken care of, you're ready to start learning h
 ## Step 1. Creating a Spotify Account
 Spotipy relies on the Spotify API. In order to use the Spotify API, you'll need to create a Spotify developer account.
 
-A. Visit the [Spotify developer portal](https://developer.spotify.com/dashboard/). If you already have a Spotify account, click "Log in" and enter your username and password. Otherwise, click "Sign up" and follow the steps to create an account. After you've signed in or signed up, you should be redirected to your developer dashboard.
+A. Visit the [Spotify developer portal](https://developer.spotify.com/dashboard/). If you already have a Spotify account, click "Log in" and enter your username and password. If you don't already have a Spotify account, click "Sign up" and follow the steps to create an account. After you've signed in or signed up, begin by clicking Documentation at the top of your screen and then click “Web API”. Finally, click the link in “Log into the dashboard using your Spotify account” to go to Spotify’s Developer Dashboard.
 
 B. Click the "Create an App" button. Enter any name and description you'd like for your new app. Accept the terms of service and click "Create."
 
