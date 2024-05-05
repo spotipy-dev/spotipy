@@ -15,7 +15,7 @@ If you see a version number, pip is installed and you're ready to proceed. If no
 Spotipy is written in Python, so you'll need to have the lastest version of Python installed in order to use Spotipy. Check if you already have Python installed with the Terminal command: python --version
 If you see a version number, Python is already installed. If not, you can download it here: https://www.python.org/downloads/
 
-**3. experience with basic Linux commands**
+**3. Experience with Basic Linux Commands**
 
 This tutorial will be easiest if you have some knowledge of how to use Linux commands to create and navigate folders and files on your computer. If you're not sure how to create, edit and delete files and directories from Terminal, learn about basic Linux commands [here](https://ubuntu.com/tutorials/command-line-for-beginners#1-overview) before continuing.
 
