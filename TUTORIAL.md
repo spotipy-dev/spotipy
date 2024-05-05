@@ -28,7 +28,7 @@ A. Visit the [Spotify developer portal](https://developer.spotify.com/dashboard/
 
 B. Check the box "Accept the Spotify Developer Terms of Service" and then click "Accept the terms". On the next page, verify your email address if you haven't already. Click the "Create an App" button. Enter any name and description you'd like for your new app. Next, add "http://localhost:1234" (or any other port number of your choosing) to the "Redirect URI" secction. Check the box "I understand and agree with Spotify's Developer Terms of Service and Design Guidelines" and then click the "Save" button.
 
-C. Underneath your app name and description on the lefthand side, you'll see a "Show Client Secret" link. Click that link to reveal your Client Secret, then copy both your Client Secret and your Client ID somewhere on your computer. You'll need to access them later.
+C. Click on "Settings". Underneath "Client ID", you'll see a "View Client Secret" link. Click the link to reveal your Client secret and copy both your Client secret and your Client ID somewhere so that you can access them later.
 
 ## Step 2. Installation and Setup
 
