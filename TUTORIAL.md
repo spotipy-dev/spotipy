@@ -26,11 +26,9 @@ Spotipy relies on the Spotify API. In order to use the Spotify API, you'll need 
 
 A. Visit the [Spotify developer portal](https://developer.spotify.com/dashboard/). If you already have a Spotify account, click "Log in" and enter your username and password. If you don't already have a Spotify account, click "Sign up" and follow the steps to create an account. After you've signed in or signed up, begin by clicking Documentation at the top of your screen and then click “Web API”. Finally, click the link in “Log into the dashboard using your Spotify account” to go to Spotify’s Developer Dashboard.
 
-B. Click the "Create an App" button. Enter any name and description you'd like for your new app. Accept the terms of service and click "Create."
+B. Check the box "Accept the Spotify Developer Terms of Service" and then click "Accept the terms". On the next page, verify your email address if you haven't already. Click the "Create an App" button. Enter any name and description you'd like for your new app. Next, add "http://localhost:1234" (or any other port number of your choosing) to the "Redirect URI" secction. Check the box "I understand and agree with Spotify's Developer Terms of Service and Design Guidelines" and then click the "Save" button.
 
-C. In your new app's Overview screen, click the "Edit Settings" button and scroll down to "Redirect URIs." Add "http://localhost:1234" (or any other port number of your choosing). Hit the "Save" button at the bottom of the Settings panel to return to you App Overview screen.
-
-D. Underneath your app name and description on the lefthand side, you'll see a "Show Client Secret" link. Click that link to reveal your Client Secret, then copy both your Client Secret and your Client ID somewhere on your computer. You'll need to access them later.
+C. Underneath your app name and description on the lefthand side, you'll see a "Show Client Secret" link. Click that link to reveal your Client Secret, then copy both your Client Secret and your Client ID somewhere on your computer. You'll need to access them later.
 
 ## Step 2. Installation and Setup
 
