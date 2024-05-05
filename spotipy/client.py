@@ -118,7 +118,7 @@ class Spotify(object):
     # instead of a more complex URL parsing function.
     #
     # [1] https://developer.spotify.com/documentation/web-api/#spotify-uris-and-ids
-    _regex_spotify_url = r'^(http[s]?:\/\/)?open.spotify.com\/(?P<type>track|artist|album|playlist|show|episode|user|audiobook)\/(?P<id>[0-9A-Za-z]+)(\?.*)?$'  # noqa: E501
+    _regex_spotify_url = r'^(http[s]?:\/\/)?open.spotify.com\/(intl-\w\w\/)?(?P<type>track|artist|album|playlist|show|episode|user|audiobook)\/(?P<id>[0-9A-Za-z]+)(\?.*)?$'  # noqa: E501
 
     _regex_base62 = r'^[0-9A-Za-z]+$'
 
