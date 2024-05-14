@@ -20,6 +20,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improve usability on README.md
 - Fix `user_playlists_contents` example. 
 
+### Fixed
+- Fixed unused description parameter in playlist creation example
+
 ## [2.23.0] - 2023-04-07
 
 ### Added
