@@ -7,10 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
+
+- Added support for audiobook endpoints: get_audiobook, get_audiobooks, and get_audiobook_chapters.
+- Added integration tests for audiobook endpoints.
+- Removed `python 2.7` from GitHub Actions CI workflow. Python v2.7 reached end of life support and is no longer supported by Ubuntu 20.04.
+- Removed `python 3.6` from GitHub Actions CI workflow. Ubuntu 20.04 is not available in GitHub Actions for `python 3.6`.
+
 ### Changed
 - Changes the YouTube video link for authentication tutorial (the old video was in low definition, the new one is in high definition)
+- Updated links to Spotify in documentation
+- Improve usability on README.md
+- Fix `user_playlists_contents` example. 
 - Updated links to Spotify in documentation 
 - Fixed error obfuscation when Spotify class is being inherited and an error is raised in the Child's `__init__`
+
+### Fixed
+- Fixed unused description parameter in playlist creation example
 
 ## [2.23.0] - 2023-04-07
 
