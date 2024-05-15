@@ -211,8 +211,11 @@ class Spotify(object):
 
     def __del__(self):
         """Make sure the connection (pool) gets closed"""
-        if isinstance(self._session, requests.Session):
-            self._session.close()
+        try:
+            if isinstance(self._session, requests.Session):
+                self._session.close()
+        except AttributeError:
+            pass
 
     def _build_session(self):
         self._session = requests.Session()
