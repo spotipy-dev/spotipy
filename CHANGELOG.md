@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Changes the YouTube video link for authentication tutorial (the old video was in low definition, the new one is in high definition)
 - Updated links to Spotify in documentation 
-- Fixed error obfuscation when Spotify class is being inherited and an error is raised in the Child's __init__
+- Fixed error obfuscation when Spotify class is being inherited and an error is raised in the Child's `__init__`
 
 ## [2.23.0] - 2023-04-07
 
