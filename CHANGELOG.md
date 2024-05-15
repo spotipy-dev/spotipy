@@ -18,7 +18,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changes the YouTube video link for authentication tutorial (the old video was in low definition, the new one is in high definition)
 - Updated links to Spotify in documentation
 - Improve usability on README.md
+- Fix `user_playlists_contents` example. 
 - Updated _regex_spotify_url to ignore `/intl-<countrycode>` in Spotify links
+
+### Fixed
+- Fixed unused description parameter in playlist creation example
 
 ## [2.23.0] - 2023-04-07
 
