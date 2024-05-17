@@ -405,7 +405,7 @@ class Spotify(object):
         return self._get("artists/?ids=" + ",".join(tlist))
 
     def artist_albums(
-        self, artist_id, album_type=None, include_groups=None country=None, limit=20, offset=0
+        self, artist_id, album_type=None, include_groups=None, country=None, limit=20, offset=0
     ):
         """ Get Spotify catalog information about an artist's albums
 
