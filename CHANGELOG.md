@@ -19,6 +19,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated links to Spotify in documentation
 - Improve usability on README.md
 - Fix `user_playlists_contents` example. 
+- Updated links to Spotify in documentation 
+- Fixed error obfuscation when Spotify class is being inherited and an error is raised in the Child's `__init__`
+- Replaced `artist_albums(album_type=...)` with `artist_albums(include_groups=...)` due to an API change.
 - Updated _regex_spotify_url to ignore `/intl-<countrycode>` in Spotify links
 
 ### Fixed
