@@ -426,7 +426,7 @@ class Spotify(object):
                 "`artist_albums(..., include_groups='...')` instead.",
                 DeprecationWarning,
             )
-            include_groups = album_type if include_groups is None else include_groups
+            include_groups = include_groups or album_type
 
         trid = self._get_id("artist", artist_id)
         return self._get(
