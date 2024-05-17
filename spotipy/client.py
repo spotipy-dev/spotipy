@@ -421,8 +421,9 @@ class Spotify(object):
 
         if album_type:
             warnings.warn(
-                "You're using `artist_albums(..., album_type='...')` which will be removed in future versions. "
-                "Please adjust your code accordingly by using `artist_albums(..., include_groups='...')` instead.",
+                "You're using `artist_albums(..., album_type='...')` which will be removed in "
+                "future versions. Please adjust your code accordingly by using "
+                "`artist_albums(..., include_groups='...')` instead.",
                 DeprecationWarning,
             )
             include_groups = album_type if include_groups is None else include_groups
