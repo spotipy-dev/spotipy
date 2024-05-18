@@ -8,6 +8,9 @@ Welcome to Spotipy!
 <https://developer.spotify.com/documentation/web-api/>`_. With *Spotipy*
 you get full access to all of the music data provided by the Spotify platform.
 
+A Quick Tutorial To Get Started
+===============================
+
 Assuming you set the ``SPOTIPY_CLIENT_ID`` and ``SPOTIPY_CLIENT_SECRET``
 environment variables (here is a `video <https://youtu.be/kaBVN8uP358>`_ explaining how to do so). For a longer tutorial with examples included, refer to this `video playlist <https://www.youtube.com/watch?v=tmt5SdvTqUI&list=PLqgOPibB_QnzzcaOFYmY2cQjs35y0is9N&index=1>`_. Below is a quick example of using *Spotipy* to list the
 names of all the albums released by the artist 'Birdy'::
