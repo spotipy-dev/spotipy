@@ -694,7 +694,8 @@ class Spotify(object):
             "additional_types=('track',))` instead",
             DeprecationWarning,
         )
-        return self.playlist_items(playlist_id, fields, limit, offset,
+        plid = self._get_id("playlist", playlist_id)
+        return self.playlist_items(plid, fields, limit, offset,
                                    market, additional_types)
 
     def playlist_items(
