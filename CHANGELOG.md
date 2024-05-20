@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Fixed unused description parameter in playlist creation example
+- The value passed to playlist_id in playlist_tracks is now compatible with URI and URI according to the documentation
 
 ## [2.23.0] - 2023-04-07
 
