@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed `python 3.6` from GitHub Actions CI workflow. Ubuntu 20.04 is not available in GitHub Actions for `python 3.6`.
 - Added extra installation step to TUTORIAL.md for required installation packages.
 - Added Troubleshooting Tips section to TUTORIAL.md to address common installation issues.
+- Added "A Quick Tutorial To Get Started" section to index.rst to improve documentation readability.
 
 ### Changed
 - Changes the YouTube video link for authentication tutorial (the old video was in low definition, the new one is in high definition)
