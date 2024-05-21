@@ -333,7 +333,7 @@ Export the needed Environment variables:::
     export SPOTIPY_REDIRECT_URI=http://localhost:8080 # Make url is set in app you created to get your ID and SECRET
 
 Create virtual environment, install dependencies, run tests:::
-    $ virtualenv --python=python3.7 env
+    $ virtualenv --python=python3.12 env
     (env) $ pip install --user -e .
     (env) $ python -m unittest discover -v tests
 
