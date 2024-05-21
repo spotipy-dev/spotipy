@@ -52,17 +52,14 @@ def _make_authorization_headers(client_id, client_secret):
     auth_header = base64.b64encode(
         str(client_id + ":" + client_secret).encode("ascii")
     )
-    return {"Authorization": "Basic %s" % auth_header.decode("ascii")}
+    return {"Authorization": f"Basic {auth_header.decode('ascii')}"}
 
 
 def _ensure_value(value, env_key):
     env_val = CLIENT_CREDS_ENV_VARS[env_key]
     _val = value or os.getenv(env_val)
     if _val is None:
-        msg = "No {}. Pass it or set a {} environment variable.".format(
-            env_key,
-            env_val,
-        )
+        msg = f"No {env_key}. Pass it or set a {env_val} environment variable."
         raise SpotifyOauthError(msg)
     return _val
 
@@ -140,9 +137,7 @@ class SpotifyAuthBase:
             error_description = None
 
         raise SpotifyOauthError(
-            'error: {}, error_description: {}'.format(
-                error, error_description
-            ),
+            f'error: {error}, error_description: {error_description}',
             error=error,
             error_description=error_description
         )
@@ -417,8 +412,7 @@ class SpotifyOAuth(SpotifyAuthBase):
         query_s = urlparse(url).query
         form = dict(parse_qsl(query_s))
         if "error" in form:
-            raise SpotifyOauthError("Received error from auth server: "
-                                    "{}".format(form["error"]),
+            raise SpotifyOauthError(f"Received error from auth server: {form['error']}",
                                     error=form["error"])
         return tuple(form.get(param) for param in ["state", "code"])
 
@@ -1169,8 +1163,7 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
         form = dict(i.split('=') for i
                     in (fragment_s or query_s or url).split('&'))
         if "error" in form:
-            raise SpotifyOauthError("Received error from auth server: "
-                                    "{}".format(form["error"]),
+            raise SpotifyOauthError(f"Received error from auth server: {form['error']}",
                                     state=form["state"])
         if "expires_in" in form:
             form["expires_in"] = int(form["expires_in"])

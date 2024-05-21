@@ -304,7 +304,7 @@ class Spotify:
             raise SpotifyException(
                 429,
                 -1,
-                "{}:\n {}".format(request.path_url, "Max Retries"),
+                f"{request.path_url}:\n Max Retries",
                 reason=reason
             )
         except ValueError:
@@ -646,7 +646,7 @@ class Spotify:
         """
         plid = self._get_id("playlist", playlist_id)
         return self._get(
-            "playlists/%s" % (plid),
+            f"playlists/{plid}",
             fields=fields,
             market=market,
             additional_types=",".join(additional_types),
@@ -702,7 +702,7 @@ class Spotify:
         """
         plid = self._get_id("playlist", playlist_id)
         return self._get(
-            "playlists/%s/tracks" % (plid),
+            f"playlists/{plid}/tracks",
             limit=limit,
             offset=offset,
             fields=fields,
@@ -717,7 +717,7 @@ class Spotify:
                 - playlist_id - the playlist ID, URI or URL
         """
         plid = self._get_id("playlist", playlist_id)
-        return self._get("playlists/%s/images" % (plid))
+        return self._get(f"playlists/{plid}/images")
 
     def playlist_upload_cover_image(self, playlist_id, image_b64):
         """ Replace the image used to represent a specific playlist
@@ -748,7 +748,7 @@ class Spotify:
                 - fields - which fields to return
         """
         if playlist_id is None:
-            return self._get("users/%s/starred" % user)
+            return self._get(f"users/{user}/starred")
         return self.playlist(playlist_id, fields=fields, market=market)
 
     def user_playlist_tracks(
@@ -792,7 +792,7 @@ class Spotify:
                 - offset - the index of the first item to return
         """
         return self._get(
-            "users/%s/playlists" % user, limit=limit, offset=offset
+            f"users/{user}/playlists", limit=limit, offset=offset
         )
 
     def user_playlist_create(self, user, name, public=True, collaborative=False, description=""):
@@ -1053,7 +1053,7 @@ class Spotify:
         if isinstance(description, str):
             data["description"] = description
         return self._put(
-            "playlists/%s" % (self._get_id("playlist", playlist_id)), payload=data
+            f"playlists/{self._get_id('playlist', playlist_id)}", payload=data
         )
 
     def current_user_unfollow_playlist(self, playlist_id):
@@ -1064,7 +1064,7 @@ class Spotify:
                 - name - the name of the playlist
         """
         return self._delete(
-            "playlists/%s/followers" % (playlist_id)
+            f"playlists/{playlist_id}/followers"
         )
 
     def playlist_add_items(
@@ -1080,7 +1080,7 @@ class Spotify:
         plid = self._get_id("playlist", playlist_id)
         ftracks = [self._get_uri("track", tid) for tid in items]
         return self._post(
-            "playlists/%s/tracks" % (plid),
+            f"playlists/{plid}/tracks",
             payload=ftracks,
             position=position,
         )
@@ -1096,7 +1096,7 @@ class Spotify:
         ftracks = [self._get_uri("track", tid) for tid in items]
         payload = {"uris": ftracks}
         return self._put(
-            "playlists/%s/tracks" % (plid), payload=payload
+            f"playlists/{plid}/tracks", payload=payload
         )
 
     def playlist_reorder_items(
@@ -1127,7 +1127,7 @@ class Spotify:
         if snapshot_id:
             payload["snapshot_id"] = snapshot_id
         return self._put(
-            "playlists/%s/tracks" % (plid), payload=payload
+            f"playlists/{plid}/tracks", payload=payload
         )
 
     def playlist_remove_all_occurrences_of_items(
@@ -1148,7 +1148,7 @@ class Spotify:
         if snapshot_id:
             payload["snapshot_id"] = snapshot_id
         return self._delete(
-            "playlists/%s/tracks" % (plid), payload=payload
+            f"playlists/{plid}/tracks", payload=payload
         )
 
     def playlist_remove_specific_occurrences_of_items(
@@ -1179,7 +1179,7 @@ class Spotify:
         if snapshot_id:
             payload["snapshot_id"] = snapshot_id
         return self._delete(
-            "playlists/%s/tracks" % (plid), payload=payload
+            f"playlists/{plid}/tracks", payload=payload
         )
 
     def current_user_follow_playlist(self, playlist_id):
@@ -1857,7 +1857,7 @@ class Spotify:
             return
         return self._put(
             self._append_device_id(
-                "me/player/seek?position_ms=%s" % position_ms, device_id
+                f"me/player/seek?position_ms={position_ms}", device_id
             )
         )
 
@@ -1873,7 +1873,7 @@ class Spotify:
             return
         self._put(
             self._append_device_id(
-                "me/player/repeat?state=%s" % state, device_id
+                f"me/player/repeat?state={state}", device_id
             )
         )
 
@@ -1892,7 +1892,7 @@ class Spotify:
             return
         self._put(
             self._append_device_id(
-                "me/player/volume?volume_percent=%s" % volume_percent,
+                f"me/player/volume?volume_percent={volume_percent}",
                 device_id,
             )
         )
@@ -1910,7 +1910,7 @@ class Spotify:
         state = str(state).lower()
         self._put(
             self._append_device_id(
-                "me/player/shuffle?state=%s" % state, device_id
+                f"me/player/shuffle?state={state}", device_id
             )
         )
 
@@ -1935,10 +1935,10 @@ class Spotify:
 
         uri = self._get_uri("track", uri)
 
-        endpoint = "me/player/queue?uri=%s" % uri
+        endpoint = f"me/player/queue?uri={uri}"
 
         if device_id is not None:
-            endpoint += "&device_id=%s" % device_id
+            endpoint += f"&device_id={device_id}"
 
         return self._post(endpoint)
 
@@ -1957,9 +1957,9 @@ class Spotify:
         """
         if device_id:
             if "?" in path:
-                path += "&device_id=%s" % device_id
+                path += f"&device_id={device_id}"
             else:
-                path += "?device_id=%s" % device_id
+                path += f"?device_id={device_id}"
         return path
 
     def _get_id(self, type, id):
