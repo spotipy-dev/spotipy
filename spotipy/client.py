@@ -211,8 +211,11 @@ class Spotify(object):
 
     def __del__(self):
         """Make sure the connection (pool) gets closed"""
-        if isinstance(self._session, requests.Session):
-            self._session.close()
+        try:
+            if isinstance(self._session, requests.Session):
+                self._session.close()
+        except AttributeError:
+            pass
 
     def _build_session(self):
         self._session = requests.Session()
@@ -402,22 +405,33 @@ class Spotify(object):
         return self._get("artists/?ids=" + ",".join(tlist))
 
     def artist_albums(
-        self, artist_id, album_type=None, country=None, limit=20, offset=0
+        self, artist_id, album_type=None, include_groups=None, country=None, limit=20, offset=0
     ):
         """ Get Spotify catalog information about an artist's albums
 
             Parameters:
                 - artist_id - the artist ID, URI or URL
-                - album_type - 'album', 'single', 'appears_on', 'compilation'
+                - include_groups - the types of items to return. One or more of 'album', 'single',
+                                   'appears_on', 'compilation'. If multiple types are desired,
+                                   pass in a comma separated string; e.g., 'album,single'.
                 - country - limit the response to one particular country.
                 - limit  - the number of albums to return
                 - offset - the index of the first album to return
         """
 
+        if album_type:
+            warnings.warn(
+                "You're using `artist_albums(..., album_type='...')` which will be removed in "
+                "future versions. Please adjust your code accordingly by using "
+                "`artist_albums(..., include_groups='...')` instead.",
+                DeprecationWarning,
+            )
+            include_groups = include_groups or album_type
+
         trid = self._get_id("artist", artist_id)
         return self._get(
             "artists/" + trid + "/albums",
-            album_type=album_type,
+            include_groups=include_groups,
             country=country,
             limit=limit,
             offset=offset,
