@@ -1,5 +1,5 @@
-
-
+# code example that demonstrates audio_features(tracks=[]) functionality
+# Link to documentation -> https://spotipy.readthedocs.io/en/2.22.1/#spotipy.client.Spotify.audio_features
 # shows acoustic features for tracks for the given artist
 
 from __future__ import print_function    # (at top of module)

@@ -1,3 +1,5 @@
+# code example that demonstrates user_playlist_create(user, name, public=True, collaborative=False, description='') functionality
+# Link to documentation -> https://spotipy.readthedocs.io/en/2.22.1/#spotipy.client.Spotify.user_playlist_create
 # Creates a playlist for a user
 
 import argparse
