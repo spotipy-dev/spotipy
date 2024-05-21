@@ -30,6 +30,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Fixed unused description parameter in playlist creation example
 
+### Changed
+- Drop support for EOL Python 3.7.
+
+
 ## [2.23.0] - 2023-04-07
 
 ### Added
