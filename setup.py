@@ -1,6 +1,6 @@
 from setuptools import setup
 
-with open("README.md", "r") as f:
+with open("README.md") as f:
     long_description = f.read()
 
 test_reqs = [
@@ -28,11 +28,10 @@ setup(
     project_urls={
         'Source': 'https://github.com/plamere/spotipy',
     },
+    python_requires='>3.8',
     install_requires=[
         "redis>=3.5.3",
-        "redis<4.0.0;python_version<'3.4'",
         "requests>=2.25.0",
-        "six>=1.15.0",
         "urllib3>=1.26.0"
     ],
     tests_require=test_reqs,
