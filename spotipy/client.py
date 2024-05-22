@@ -110,14 +110,18 @@ class Spotify(object):
     # numbers and even older ones seemed to have been allowed to freely pick this name.
     #
     # [1] https://www.iana.org/assignments/uri-schemes/prov/spotify
-    # [2] https://developer.spotify.com/documentation/web-api/#spotify-uris-and-ids
+    # [2] https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids
     _regex_spotify_uri = r'^spotify:(?:(?P<type>track|artist|album|playlist|show|episode|audiobook):(?P<id>[0-9A-Za-z]+)|user:(?P<username>[0-9A-Za-z]+):playlist:(?P<playlistid>[0-9A-Za-z]+))$'  # noqa: E501
 
     # Spotify URLs are defined at [1]. The assumption is made that they are all
     # pointing to open.spotify.com, so a regex is used to parse them as well,
     # instead of a more complex URL parsing function.
+    # Spotify recently added "/intl-<countrycode>" to their links. This change is undocumented.
+    # There is an assumption that the country code uses the ISO 3166-1 alpha-2 standard [2], 
+    # but this has not been confirmed yet. Spotipy has no use for this, so it gets ignored.
     #
-    # [1] https://developer.spotify.com/documentation/web-api/#spotify-uris-and-ids
+    # [1] https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids
+    # [2] https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
     _regex_spotify_url = r'^(http[s]?:\/\/)?open.spotify.com\/(intl-\w\w\/)?(?P<type>track|artist|album|playlist|show|episode|user|audiobook)\/(?P<id>[0-9A-Za-z]+)(\?.*)?$'  # noqa: E501
 
     _regex_base62 = r'^[0-9A-Za-z]+$'
