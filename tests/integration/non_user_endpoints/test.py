@@ -463,7 +463,3 @@ class AuthTestSpotipy(unittest.TestCase):
         self.assertTrue(isinstance(markets, list))
         self.assertIn("US", markets)
         self.assertIn("GB", markets)
-
-
-if __name__ == '__main__':
-    unittest.main()
