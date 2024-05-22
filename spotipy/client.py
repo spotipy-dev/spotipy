@@ -1,4 +1,5 @@
 """ A simple and thin Python library for the Spotify Web API """
+from all_country_codes import cc
 
 __all__ = ["Spotify", "SpotifyException"]
 
@@ -34,67 +35,7 @@ class Spotify:
     """
     max_retries = 3
     default_retry_codes = (429, 500, 502, 503, 504)
-    country_codes = [
-        "AD",
-        "AR",
-        "AU",
-        "AT",
-        "BE",
-        "BO",
-        "BR",
-        "BG",
-        "CA",
-        "CL",
-        "CO",
-        "CR",
-        "CY",
-        "CZ",
-        "DK",
-        "DO",
-        "EC",
-        "SV",
-        "EE",
-        "FI",
-        "FR",
-        "DE",
-        "GR",
-        "GT",
-        "HN",
-        "HK",
-        "HU",
-        "IS",
-        "ID",
-        "IE",
-        "IT",
-        "JP",
-        "LV",
-        "LI",
-        "LT",
-        "LU",
-        "MY",
-        "MT",
-        "MX",
-        "MC",
-        "NL",
-        "NZ",
-        "NI",
-        "NO",
-        "PA",
-        "PY",
-        "PE",
-        "PH",
-        "PL",
-        "PT",
-        "SG",
-        "ES",
-        "SK",
-        "SE",
-        "CH",
-        "TW",
-        "TR",
-        "GB",
-        "US",
-        "UY"]
+    country_codes = cc
 
     # Spotify URI scheme defined in [1], and the ID format as base-62 in [2].
     #
@@ -2049,50 +1990,3 @@ class Spotify:
 
         return results
 
-    def get_audiobook(self, id, market=None):
-        """ Get Spotify catalog information for a single audiobook identified by its unique
-        Spotify ID.
-
-        Parameters:
-        - id - the Spotify ID for the audiobook
-        - market - an ISO 3166-1 alpha-2 country code.
-        """
-        audiobook_id = self._get_id("audiobook", id)
-        endpoint = f"audiobooks/{audiobook_id}"
-
-        if market:
-            endpoint += f'?market={market}'
-
-        return self._get(endpoint)
-
-    def get_audiobooks(self, ids, market=None):
-        """ Get Spotify catalog information for multiple audiobooks based on their Spotify IDs.
-
-        Parameters:
-        - ids - a list of Spotify IDs for the audiobooks
-        - market - an ISO 3166-1 alpha-2 country code.
-        """
-        audiobook_ids = [self._get_id("audiobook", id) for id in ids]
-        endpoint = f"audiobooks?ids={','.join(audiobook_ids)}"
-
-        if market:
-            endpoint += f'&market={market}'
-
-        return self._get(endpoint)
-
-    def get_audiobook_chapters(self, id, market=None, limit=20, offset=0):
-        """ Get Spotify catalog information about an audiobook’s chapters.
-
-        Parameters:
-        - id - the Spotify ID for the audiobook
-        - market - an ISO 3166-1 alpha-2 country code.
-        - limit - the maximum number of items to return
-        - offset - the index of the first item to return
-        """
-        audiobook_id = self._get_id("audiobook", id)
-        endpoint = f"audiobooks/{audiobook_id}/chapters?limit={limit}&offset={offset}"
-
-        if market:
-            endpoint += f'&market={market}'
-
-        return self._get(endpoint)
