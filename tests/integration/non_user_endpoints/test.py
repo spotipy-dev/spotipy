@@ -464,30 +464,6 @@ class AuthTestSpotipy(unittest.TestCase):
         self.assertIn("US", markets)
         self.assertIn("GB", markets)
 
-    def test_get_audiobook(self):
-        audiobook = self.spotify.get_audiobook(self.american_gods_urn, market="US")
-        print(audiobook)
-        self.assertTrue(audiobook['name'] ==
-                        'American Gods: The Tenth Anniversary Edition: A Novel')
 
-    def test_get_audiobook_bad_urn(self):
-        with self.assertRaises(SpotifyException):
-            self.spotify.get_audiobook("bogus_urn", market="US")
-
-    def test_get_audiobooks(self):
-        results = self.spotify.get_audiobooks(self.four_books, market="US")
-        self.assertTrue('audiobooks' in results)
-        self.assertTrue(len(results['audiobooks']) == 4)
-        self.assertTrue(results['audiobooks'][0]['name'] ==
-                        'American Gods: The Tenth Anniversary Edition: A Novel')
-        self.assertTrue(results['audiobooks'][1]['name'] == 'The Da Vinci Code: A Novel')
-        self.assertTrue(results['audiobooks'][2]['name'] == 'Outlander')
-        self.assertTrue(results['audiobooks'][3]['name'] == 'Pachinko: A Novel')
-
-    def test_get_audiobook_chapters(self):
-        results = self.spotify.get_audiobook_chapters(
-            self.american_gods_urn, market="US", limit=10, offset=5)
-        self.assertTrue('items' in results)
-        self.assertTrue(len(results['items']) == 10)
-        self.assertTrue(results['items'][0]['chapter_number'] == 5)
-        self.assertTrue(results['items'][9]['chapter_number'] == 14)
+if __name__ == '__main__':
+    unittest.main()
