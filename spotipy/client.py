@@ -117,7 +117,7 @@ class Spotify(object):
     # pointing to open.spotify.com, so a regex is used to parse them as well,
     # instead of a more complex URL parsing function.
     # Spotify recently added "/intl-<countrycode>" to their links. This change is undocumented.
-    # There is an assumption that the country code uses the ISO 3166-1 alpha-2 standard [2], 
+    # There is an assumption that the country code uses the ISO 3166-1 alpha-2 standard [2],
     # but this has not been confirmed yet. Spotipy has no use for this, so it gets ignored.
     #
     # [1] https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids
