@@ -39,14 +39,19 @@ class AuthTestSpotipy(unittest.TestCase):
     creep_urn = 'spotify:track:6b2oQwSGFkzsMtQruIWm2p'
     creep_id = '6b2oQwSGFkzsMtQruIWm2p'
     creep_url = 'http://open.spotify.com/track/6b2oQwSGFkzsMtQruIWm2p'
+    
     el_scorcho_urn = 'spotify:track:0Svkvt5I79wficMFgaqEQJ'
     el_scorcho_bad_urn = 'spotify:track:0Svkvt5I79wficMFgaqEQK'
     pinkerton_urn = 'spotify:album:04xe676vyiTeYNXw15o9jT'
     weezer_urn = 'spotify:artist:3jOstUTkEu2JkjvRdBA5Gu'
+    
     pablo_honey_urn = 'spotify:album:6AZv3m27uyRxi8KyJSfUxL'
     radiohead_urn = 'spotify:artist:4Z8W4fKeB5YxbusRsdQVPb'
     radiohead_id = "4Z8W4fKeB5YxbusRsdQVPb"
     radiohead_url = "https://open.spotify.com/artist/4Z8W4fKeB5YxbusRsdQVPb"
+
+    qotsa_url = "https://open.spotify.com/artist/4pejUc4iciQfgdX6OKulQn"
+    
     angeles_haydn_urn = 'spotify:album:1vAbqAeuJVWNAe7UR00bdM'
     heavyweight_urn = 'spotify:show:5c26B28vZMN8PG0Nppmn5G'
     heavyweight_id = '5c26B28vZMN8PG0Nppmn5G'
@@ -117,6 +122,11 @@ class AuthTestSpotipy(unittest.TestCase):
         results = self.spotify.artists([self.weezer_urn, self.radiohead_urn])
         self.assertTrue('artists' in results)
         self.assertTrue(len(results['artists']) == 2)
+
+    def test_artists_mixed_ids(self):
+        results = self.spotify.artists([self.weezer_urn, self.radiohead_id, self.qotsa_url])
+        self.assertTrue('artists' in results)
+        self.assertTrue(len(results['artists']) == 3)
 
     def test_album_urn(self):
         album = self.spotify.album(self.pinkerton_urn)
