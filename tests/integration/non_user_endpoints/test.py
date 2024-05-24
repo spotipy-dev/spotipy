@@ -45,6 +45,8 @@ class AuthTestSpotipy(unittest.TestCase):
     weezer_urn = 'spotify:artist:3jOstUTkEu2JkjvRdBA5Gu'
     pablo_honey_urn = 'spotify:album:6AZv3m27uyRxi8KyJSfUxL'
     radiohead_urn = 'spotify:artist:4Z8W4fKeB5YxbusRsdQVPb'
+    radiohead_id = "4Z8W4fKeB5YxbusRsdQVPb"
+    radiohead_url = "https://open.spotify.com/artist/4Z8W4fKeB5YxbusRsdQVPb"
     angeles_haydn_urn = 'spotify:album:1vAbqAeuJVWNAe7UR00bdM'
     heavyweight_urn = 'spotify:show:5c26B28vZMN8PG0Nppmn5G'
     heavyweight_id = '5c26B28vZMN8PG0Nppmn5G'
@@ -101,6 +103,14 @@ class AuthTestSpotipy(unittest.TestCase):
 
     def test_artist_urn(self):
         artist = self.spotify.artist(self.radiohead_urn)
+        self.assertTrue(artist['name'] == 'Radiohead')
+
+    def test_artist_id(self):
+        artist = self.spotify.artist(self.radiohead_id)
+        self.assertTrue(artist['name'] == 'Radiohead')
+
+    def test_artist_url(self):
+        artist = self.spotify.artist(self.radiohead_url)
         self.assertTrue(artist['name'] == 'Radiohead')
 
     def test_artists(self):
