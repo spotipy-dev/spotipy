@@ -14,7 +14,6 @@ import os
 from spotipy.util import CLIENT_CREDS_ENV_VARS
 
 from redis import RedisError
-from pymemcache import MemcacheError
 
 logger = logging.getLogger(__name__)
 
@@ -227,6 +226,7 @@ class MemcacheCacheHandler(CacheHandler):
         self.key = key if key else 'token_info'
 
     def get_cached_token(self):
+        from pymemcache import MemcacheError
         try:
             token_info = self.memcache.get(self.key)
             if token_info:
@@ -235,6 +235,7 @@ class MemcacheCacheHandler(CacheHandler):
             logger.warning('Error getting token from cache' + str(e))
 
     def save_token_to_cache(self, token_info):
+        from pymemcache import MemcacheError
         try:
             self.memcache.set(self.key, json.dumps(token_info))
         except MemcacheError as e:
