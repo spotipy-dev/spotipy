@@ -82,7 +82,7 @@ class CacheFileHandler(CacheHandler):
             f.close()
             token_info = json.loads(token_info_string)
 
-        except IOError as error:
+        except OSError as error:
             if error.errno == errno.ENOENT:
                 logger.debug("cache does not exist at: %s", self.cache_path)
             else:
@@ -95,7 +95,7 @@ class CacheFileHandler(CacheHandler):
             f = open(self.cache_path, "w")
             f.write(json.dumps(token_info, cls=self.encoder_cls))
             f.close()
-        except IOError:
+        except OSError:
             logger.warning('Couldn\'t write token to cache at: %s',
                            self.cache_path)
 
