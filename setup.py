@@ -7,12 +7,7 @@ test_reqs = [
     'mock==2.0.0'
 ]
 
-doc_reqs = [
-    'Sphinx>=1.5.2'
-]
-
 extra_reqs = {
-    'doc': doc_reqs,
     'test': test_reqs
 }
 
