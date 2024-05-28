@@ -8,7 +8,8 @@ test_reqs = [
 ]
 
 doc_reqs = [
-    'Sphinx>=1.5.2'
+    'Sphinx>=1.5.2',
+    'sphinx-rtd-theme~=2.0.0'
 ]
 
 extra_reqs = {
