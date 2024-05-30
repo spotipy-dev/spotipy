@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added extra installation step to TUTORIAL.md for required installation packages.
 - Added Troubleshooting Tips section to TUTORIAL.md to address common installation issues.
 - Added link to Spotipy Tutorial for Beginners under Getting Started.
+- Added `update` field to `current_user_follow_playlist`.
 
 ### Changed
 - Changes the YouTube video link for authentication tutorial (the old video was in low definition, the new one is in high definition)

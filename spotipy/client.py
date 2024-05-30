@@ -1200,7 +1200,7 @@ class Spotify:
             f"playlists/{plid}/tracks", payload=payload
         )
 
-    def current_user_follow_playlist(self, playlist_id):
+    def current_user_follow_playlist(self, playlist_id, public=True):
         """
         Add the current authenticated user as a follower of a playlist.
 
@@ -1209,7 +1209,8 @@ class Spotify:
 
         """
         return self._put(
-            f"playlists/{playlist_id}/followers"
+            f"playlists/{playlist_id}/followers",
+            payload={"public": public}
         )
 
     def playlist_is_following(
