@@ -185,13 +185,16 @@ cache handler ``CacheHandler``. The default cache handler ``CacheFileHandler`` i
 An instance of that new class can then be passed as a parameter when
 creating ``SpotifyOAuth``, ``SpotifyPKCE`` or ``SpotifyImplicitGrant``.
 The following handlers are available and defined in the URL above.
+
   - ``CacheFileHandler``
   - ``MemoryCacheHandler``
   - ``DjangoSessionCacheHandler``
   - ``FlaskSessionCacheHandler``
   - ``RedisCacheHandler``
+  - ``MemcacheCacheHandler``: install with dependency using ``pip install "spotipy[pymemcache]"``
 
 Feel free to contribute new cache handlers to the repo.
+
 
 Examples
 =======================

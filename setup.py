@@ -7,8 +7,13 @@ test_reqs = [
     'mock==2.0.0'
 ]
 
+memcache_cache_reqs = [
+    'pymemcache>=3.5.2'
+]
+
 extra_reqs = {
-    'test': test_reqs
+    'test': test_reqs,
+    'memcache': memcache_cache_reqs
 }
 
 setup(
@@ -25,7 +30,7 @@ setup(
     },
     python_requires='>3.8',
     install_requires=[
-        "redis>=3.5.3",
+        "redis>=3.5.3",  # TODO: Move to extras_require in v3
         "requests>=2.25.0",
         "urllib3>=1.26.0"
     ],
