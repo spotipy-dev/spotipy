@@ -12,5 +12,5 @@ class SpotifyException(Exception):
         self.headers = headers
 
     def __str__(self):
-        return 'http status: {0}, code:{1} - {2}, reason: {3}'.format(
+        return 'http status: {}, code:{} - {}, reason: {}'.format(
             self.http_status, self.code, self.msg, self.reason)
