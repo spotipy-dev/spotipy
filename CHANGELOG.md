@@ -6,35 +6,37 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+Add your changes below.
+
+### Added
+-
+
+### Fixed
+-
+
+### Removed
+-
+
+## [2.24.0] - 2024-05-30
 
 ### Added
 - Added `MemcacheCacheHandler`, a cache handler that stores the token info using pymemcache.
-- Added support for audiobook endpoints: get_audiobook, get_audiobooks, and get_audiobook_chapters.
+- Added support for audiobook endpoints: `get_audiobook`, `get_audiobooks`, and `get_audiobook_chapters`.
 - Added integration tests for audiobook endpoints.
-- Removed `python 2.7` from GitHub Actions CI workflow. Python v2.7 reached end of life support and is no longer supported by Ubuntu 20.04.
-- Removed `python 3.6` from GitHub Actions CI workflow. Ubuntu 20.04 is not available in GitHub Actions for `python 3.6`.
-- Added extra installation step to TUTORIAL.md for required installation packages.
-- Added Troubleshooting Tips section to TUTORIAL.md to address common installation issues.
-- Added link to Spotipy Tutorial for Beginners under Getting Started.
 - Added `update` field to `current_user_follow_playlist`.
 
 ### Changed
-- Changes the YouTube video link for authentication tutorial (the old video was in low definition, the new one is in high definition)
-- Updated links to Spotify in documentation
-- Improve usability on README.md
-- Fix `user_playlists_contents` example. 
-- Updated links to Spotify in documentation 
 - Fixed error obfuscation when Spotify class is being inherited and an error is raised in the Child's `__init__`
 - Replaced `artist_albums(album_type=...)` with `artist_albums(include_groups=...)` due to an API change.
-- Restructured the tutorial in `index.rst` to improve logical flow and made some minor edits.
-- Updated _regex_spotify_url to ignore `/intl-<countrycode>` in Spotify links
-- Drop support for EOL Python 3.7.
+- Updated `_regex_spotify_url` to ignore `/intl-<countrycode>` in Spotify links
+- Improved README, docs and examples
 
 ### Fixed
-- Fixed unused description parameter in playlist creation example
-- Readthedocs
-- Corrected various grammar errors and typos in the documentation.
-- Seperated the test_current_user_save_and_usave_tracks unit test into test_current_user_save_tracks and test_current_user_unsave_tracks in the user endpoint test suite to improve unit test clarity and effectiveness for their respective user endpoints methods (current_user_saved_tracks_add, current_user_saved_tracks).
+- Readthedocs build
+- Split `test_current_user_save_and_usave_tracks` unit test
+
+### Removed
+- Drop support for EOL Python 3.7
 
 ## [2.23.0] - 2023-04-07
 
