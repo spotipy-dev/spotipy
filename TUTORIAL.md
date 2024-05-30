@@ -33,19 +33,21 @@ Spotipy relies on the Spotify API. In order to use the Spotify API, you'll need 
 
 A. Visit the [Spotify developer portal](https://developer.spotify.com/dashboard/). If you already have a Spotify account, click "Log in" and enter your username and password. Otherwise, click "Sign up" and follow the steps to create an account. After you've signed in or signed up, you should be redirected to your developer dashboard.
 
-B. Click the "Create an App" button. Enter any name and description you'd like for your new app. Accept the terms of service and click "Create."
+B. Click the "Create an App" button. Enter any name and description you'd like for your new app. Add "http://localhost:1234" (or any other port number of your choosing) as your "Redirect URI". Accept the terms of service and click "Create."
 
-C. In your new app's Overview screen, click the "Edit Settings" button and scroll down to "Redirect URIs." Add "http://localhost:1234" (or any other port number of your choosing). Hit the "Save" button at the bottom of the Settings panel to return to you App Overview screen.
+C. In your new app's Overview screen, click the "Settings" button and then under the "Basic Information" tab click "View client secret", then copy both your Client Secret and your Client ID somewhere on your computer. You'll need to access them later.
 
 D. Underneath your app name and description on the left-hand side, you'll see a "Show Client Secret" link. Click that link to reveal your Client Secret, then copy both your Client Secret and your Client ID somewhere on your computer. You'll need to access them later.
 
 ## Step 2. Installation and Setup
 
-A. Create a folder somewhere on your computer where you'd like to store the code for your Spotipy app. You can create a folder in terminal with this command: mkdir folder_name
+A. Create a folder somewhere on your computer where you'd like to store the code for your Spotipy app. You can create a folder in terminal with this command:  ```mkdir folder_name```
 
-B. In that folder, create a Python file named main.py. You can create the file directly from Terminal using a built-in text editor like Vim, which comes preinstalled on Linux operating systems. To create the file with Vim, ensure that you are in your new directory, then run: vim main.py
+B. Install the Spotipy library. You can do this by using this command in the terminal: ```pip install spotipy```
 
-C. Paste the following code into your main.py file:
+C. In that folder, create a Python file named main.py. You can create the file directly from Terminal using a built in text editor like Vim, which comes preinstalled on Linux operating systems. To create the file with Vim, ensure that you are in your new directory, then run: vim main.py
+
+D. Paste the following code into your main.py file:
 ```
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
@@ -55,7 +57,7 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id="YOUR_APP_CLIENT_ID",
                                                redirect_uri="YOUR_APP_REDIRECT_URI",
                                                scope="user-library-read"))
 ```
-D. Replace YOUR_APP_CLIENT_ID and YOUR_APP_CLIENT_SECRET with the values you copied and saved in step 1D. Replace YOUR_APP_REDIRECT_URI with the URI you set in step 1C.
+E. Replace YOUR_APP_CLIENT_ID and YOUR_APP_CLIENT_SECRET with the values you copied and saved in step 1D. Replace YOUR_APP_REDIRECT_URI with the URI you set in step 1C.
 
 ## Step 3. Start Using Spotipy
 
