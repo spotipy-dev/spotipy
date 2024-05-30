@@ -7,16 +7,11 @@ test_reqs = [
     'mock==2.0.0'
 ]
 
-doc_reqs = [
-    'Sphinx>=1.5.2'
-]
-
 memcache_cache_reqs = [
     'pymemcache>=3.5.2'
 ]
 
 extra_reqs = {
-    'doc': doc_reqs,
     'test': test_reqs,
     'memcache': memcache_cache_reqs
 }
