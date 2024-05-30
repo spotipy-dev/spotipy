@@ -36,6 +36,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Drop support for EOL Python 3.7.
 
 
+### Fixed
+- Seperated the test_current_user_save_and_usave_tracks unit test into test_current_user_save_tracks and test_current_user_unsave_tracks in the user endpoint test suite to improve unit test clarity and effectiveness for their respective user endpoints methods (current_user_saved_tracks_add, current_user_saved_tracks).
+
 ## [2.23.0] - 2023-04-07
 
 ### Added
