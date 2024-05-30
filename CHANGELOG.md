@@ -18,9 +18,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changes the YouTube video link for authentication tutorial (the old video was in low definition, the new one is in high definition)
 - Updated links to Spotify in documentation 
 
-
-## [2.23.1] - 2023-12-09
-
 ### Fixed
 - Seperated the test_current_user_save_and_usave_tracks unit test into test_current_user_save_tracks and test_current_user_unsave_tracks in the user endpoint test suite to improve unit test clarity and effectiveness for their respective user endpoints methods (current_user_saved_tracks_add, current_user_saved_tracks).
 
