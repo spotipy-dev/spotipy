@@ -100,7 +100,7 @@ class Spotify:
     #
     # Unfortunately the IANA specification is out of date and doesn't include the new types
     # show and episode. Additionally, for the user URI, it does not specify which characters
-    # are valid for usernames, so the assumption is alphanumeric which coincidentially are also
+    # are valid for usernames, so the assumption is alphanumeric which coincidentally are also
     # the same ones base-62 uses.
     # In limited manual exploration this seems to hold true, as newly accounts are assigned an
     # identifier that looks like the base-62 of all other IDs, but some older accounts only have
@@ -1751,7 +1751,7 @@ class Spotify:
             tlist = [self._get_id("track", t) for t in tracks]
             results = self._get("audio-features/?ids=" + ",".join(tlist))
         # the response has changed, look for the new style first, and if
-        # its not there, fallback on the old style
+        # it's not there, fallback on the old style
         if "audio_features" in results:
             return results["audio_features"]
         else:
@@ -1939,7 +1939,7 @@ class Spotify:
     def add_to_queue(self, uri, device_id=None):
         """ Adds a song to the end of a user's queue
 
-            If device A is currently playing music and you try to add to the queue
+            If device A is currently playing music, and you try to add to the queue
             and pass in the id for device B, you will get a
             'Player command failed: Restriction violated' error
             I therefore recommend leaving device_id as None so that the active device is targeted

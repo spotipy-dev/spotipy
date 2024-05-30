@@ -41,7 +41,7 @@ class SpotifyStateError(SpotifyOauthError):
     def __init__(self, local_state=None, remote_state=None, message=None,
                  error=None, error_description=None, *args, **kwargs):
         if not message:
-            message = ("Expected " + local_state + " but recieved "
+            message = ("Expected " + local_state + " but received "
                        + remote_state)
         super(SpotifyOauthError, self).__init__(message, error,
                                                 error_description, *args,
@@ -310,7 +310,7 @@ class SpotifyOAuth(SpotifyAuthBase):
              * requests_session: A Requests session
              * requests_timeout: Optional, tell Requests to stop waiting for a response after
                                  a given number of seconds
-             * open_browser: Optional, whether or not the web browser should be opened to
+             * open_browser: Optional, whether the web browser should be opened to
                              authorize a user
              * cache_handler: An instance of the `CacheHandler` class to handle
                               getting and saving cached authorization tokens.
@@ -659,7 +659,7 @@ class SpotifyPKCE(SpotifyAuthBase):
              * requests_timeout: Optional, tell Requests to stop waiting for a response after
                                  a given number of seconds
              * requests_session: A Requests session
-             * open_browser: Optional, whether or not the web browser should be opened to
+             * open_browser: Optional, whether the web browser should be opened to
                              authorize a user
              * cache_handler: An instance of the `CacheHandler` class to handle
                               getting and saving cached authorization tokens.
@@ -995,7 +995,7 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
     Authentication Code flow. Use the SpotifyPKCE auth manager instead
     of SpotifyImplicitGrant.
 
-    SpotifyPKCE contains all of the functionality of
+    SpotifyPKCE contains all the functionality of
     SpotifyImplicitGrant, plus automatic response retrieval and
     refreshable tokens. Only a few replacements need to be made:
 
