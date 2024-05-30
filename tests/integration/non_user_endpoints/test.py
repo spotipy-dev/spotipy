@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from spotipy import (
     Spotify,
     SpotifyClientCredentials,
@@ -54,6 +52,16 @@ class AuthTestSpotipy(unittest.TestCase):
     heavyweight_ep1_id = '68kq3bNz6hEuq8NtdfwERG'
     heavyweight_ep1_url = 'https://open.spotify.com/episode/68kq3bNz6hEuq8NtdfwERG'
     reply_all_ep1_urn = 'spotify:episode:1KHjbpnmNpFmNTczQmTZlR'
+
+    american_gods_urn = 'spotify:audiobook:1IcM9Untg6d3ktuwObYGcN'
+    american_gods_id = '1IcM9Untg6d3ktuwObYGcN'
+    american_gods_url = 'https://open.spotify.com/audiobook/1IcM9Untg6d3ktuwObYGcN'
+
+    four_books = [
+        'spotify:audiobook:1IcM9Untg6d3ktuwObYGcN',
+        'spotify:audiobook:37sRC6carIX2Vf3Vv716T7',
+        'spotify:audiobook:1Gep4UJ95xQawA55OgRI8n',
+        'spotify:audiobook:4Sm381mcf5gBsi9yfhqgVB']
 
     @classmethod
     def setUpClass(self):
@@ -455,3 +463,31 @@ class AuthTestSpotipy(unittest.TestCase):
         self.assertTrue(isinstance(markets, list))
         self.assertIn("US", markets)
         self.assertIn("GB", markets)
+
+    def test_get_audiobook(self):
+        audiobook = self.spotify.get_audiobook(self.american_gods_urn, market="US")
+        print(audiobook)
+        self.assertTrue(audiobook['name'] ==
+                        'American Gods: The Tenth Anniversary Edition: A Novel')
+
+    def test_get_audiobook_bad_urn(self):
+        with self.assertRaises(SpotifyException):
+            self.spotify.get_audiobook("bogus_urn", market="US")
+
+    def test_get_audiobooks(self):
+        results = self.spotify.get_audiobooks(self.four_books, market="US")
+        self.assertTrue('audiobooks' in results)
+        self.assertTrue(len(results['audiobooks']) == 4)
+        self.assertTrue(results['audiobooks'][0]['name'] ==
+                        'American Gods: The Tenth Anniversary Edition: A Novel')
+        self.assertTrue(results['audiobooks'][1]['name'] == 'The Da Vinci Code: A Novel')
+        self.assertTrue(results['audiobooks'][2]['name'] == 'Outlander')
+        self.assertTrue(results['audiobooks'][3]['name'] == 'Pachinko: A Novel')
+
+    def test_get_audiobook_chapters(self):
+        results = self.spotify.get_audiobook_chapters(
+            self.american_gods_urn, market="US", limit=10, offset=5)
+        self.assertTrue('items' in results)
+        self.assertTrue(len(results['items']) == 10)
+        self.assertTrue(results['items'][0]['chapter_number'] == 5)
+        self.assertTrue(results['items'][9]['chapter_number'] == 14)

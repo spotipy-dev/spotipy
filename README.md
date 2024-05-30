@@ -1,12 +1,26 @@
 # Spotipy
 
-##### A lightweight Python library for the Spotify Web API
+##### Spotipy is a lightweight Python library for the [Spotify Web API](https://developer.spotify.com/documentation/web-api). With Spotipy you get full access to all of the music data provided by the Spotify platform.
 
-![Tests](https://github.com/plamere/spotipy/workflows/Tests/badge.svg?branch=master) [![Documentation Status](https://readthedocs.org/projects/spotipy/badge/?version=latest)](https://spotipy.readthedocs.io/en/latest/?badge=latest)
+![Tests](https://github.com/plamere/spotipy/workflows/Tests/badge.svg?branch=master) [![Documentation Status](https://readthedocs.org/projects/spotipy/badge/?version=master)](https://spotipy.readthedocs.io/en/latest/?badge=master)
+
+## Table of Contents
+
+- [Features](#features)
+- [Documentation](#documentation)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Reporting Issues](#reporting-issues)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Features
+
+Spotipy supports all of the features of the Spotify Web API including access to all end points, and support for user authorization. For details on the capabilities you are encouraged to review the [Spotify Web API](https://developer.spotify.com/web-api/) documentation.
 
 ## Documentation
 
-Spotipy's full documentation is online at [Spotipy Documentation](http://spotipy.readthedocs.org/).
+Spotipy's [full documentation is online](http://spotipy.readthedocs.org/). Some function may need a [specific scope](https://developer.spotify.com/documentation/web-api/concepts/scopes). If you do not define the scope properly `ERROR 401 Unauthorized, permission missing` may occur.
 
 ## Installation
 
@@ -30,10 +44,9 @@ pip install spotipy --upgrade
 
 A full set of examples can be found in the [online documentation](http://spotipy.readthedocs.org/) and in the [Spotipy examples directory](https://github.com/plamere/spotipy/tree/master/examples).
 
-To get started, install spotipy and create an app on https://developers.spotify.com/.
-Add your new ID and SECRET to your environment:
+To get started, [install spotipy](#installation), create a new account or log in on https://developers.spotify.com/. Go to the [dashboard](https://developer.spotify.com/dashboard), create an app and add your new ID and SECRET (ID and SECRET can be found on an app setting) to your environment ([step-by-step video](https://www.youtube.com/watch?v=kaBVN8uP358)):
 
-### Without user authentication
+### Example without user authentication
 
 ```python
 import spotipy
@@ -46,8 +59,20 @@ results = sp.search(q='weezer', limit=20)
 for idx, track in enumerate(results['tracks']['items']):
     print(idx, track['name'])
 ```
+Expected result:
+```
+0 Island In The Sun
+1 Say It Ain't So
+2 Buddy Holly
+.
+.
+.
+18 Troublemaker
+19 Feels Like Summer
+```
 
-### With user authentication
+
+### Example with user authentication
 
 A redirect URI must be added to your application at [My Dashboard](https://developer.spotify.com/dashboard/applications) to access user authenticated features.
 
@@ -65,6 +90,12 @@ for idx, item in enumerate(results['items']):
     track = item['track']
     print(idx, track['artists'][0]['name'], " – ", track['name'])
 ```
+Expected result will be the list of music that you liked. For example if you liked Red and Sunflower, the result will be:
+```
+0 Post Malone  –  Sunflower - Spider-Man: Into the Spider-Verse
+1 Taylor Swift  –  Red
+```
+
 
 ## Reporting Issues
 
@@ -77,3 +108,9 @@ Don’t forget to add the *Spotipy* tag, and any other relevant tags as well, be
 If you have suggestions, bugs or other issues specific to this library,
 file them [here](https://github.com/plamere/spotipy/issues).
 Or just send a pull request.
+
+## Contributing
+
+If you are a developer with Python experience, and you would like to contribute to Spotipy, please be sure to follow the guidelines listed on documentation page
+
+> #### [Visit the guideline](https://spotipy.readthedocs.io/en/#contribute)
