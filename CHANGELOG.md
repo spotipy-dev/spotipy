@@ -15,7 +15,7 @@ Add your changes below.
 -
 
 ### Removed
--
+- `mock` no longer listed as a test dependency. Only built-in `unittest.mock` is actually used.
 
 ## [2.24.0] - 2024-05-30
 
