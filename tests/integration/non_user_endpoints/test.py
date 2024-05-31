@@ -355,11 +355,11 @@ class AuthTestSpotipy(unittest.TestCase):
         self.assertTrue(results['albums']['items'][0]
                         ['name'].find('Pinkerton') >= 0)
 
-    # def test_track_search(self):
-    #     results = self.spotify.search(q='el scorcho weezer', type='track')
-    #     self.assertTrue('tracks' in results)
-    #     self.assertTrue(len(results['tracks']['items']) > 0)
-    #     self.assertTrue(results['tracks']['items'][0]['name'] == 'El Scorcho')
+    def test_track_search(self):
+        results = self.spotify.search(q='el scorcho weezer', type='track')
+        self.assertTrue('tracks' in results)
+        self.assertTrue(len(results['tracks']['items']) > 0)
+        self.assertTrue(results['tracks']['items'][0]['name'] == 'El Scorcho')
 
     def test_user(self):
         user = self.spotify.user(user='plamere')
