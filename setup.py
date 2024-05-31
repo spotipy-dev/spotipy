@@ -3,16 +3,11 @@ from setuptools import setup
 with open("README.md") as f:
     long_description = f.read()
 
-test_reqs = [
-    'mock==2.0.0'
-]
-
 memcache_cache_reqs = [
     'pymemcache>=3.5.2'
 ]
 
 extra_reqs = {
-    'test': test_reqs,
     'memcache': memcache_cache_reqs
 }
 
@@ -34,7 +29,6 @@ setup(
         "requests>=2.25.0",
         "urllib3>=1.26.0"
     ],
-    tests_require=test_reqs,
     extras_require=extra_reqs,
     license='MIT',
     packages=['spotipy'])
