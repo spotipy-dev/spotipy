@@ -558,3 +558,44 @@ class SpotifyPKCETests(unittest.TestCase):
         c_user = self.spotify.current_user()
         user = self.spotify.user(c_user['id'])
         self.assertEqual(c_user['display_name'], user['display_name'])
+
+
+class SpotifyQueueApiTests(unittest.TestCase):
+
+    @classmethod
+    def setUp(self):
+        self.spotify = Spotify(auth="test_token")
+
+    def test_get_queue(self, mock_get):
+        # Mock the response from _get
+        mock_get.return_value = {'songs': ['song1', 'song2']}
+
+        # Call the queue function
+        response = self.spotify.queue()
+
+        # Check if the correct endpoint is called
+        mock_get.assert_called_with("me/player/queue")
+
+        # Check if the response is as expected
+        self.assertEqual(response, {'songs': ['song1', 'song2']})
+
+    def test_add_to_queue(self, mock_post):
+        test_uri = 'spotify:track:123'
+
+        # Call the add_to_queue function
+        self.spotify.add_to_queue(test_uri)
+
+        # Check if the correct endpoint is called
+        endpoint = "me/player/queue?uri=%s" % test_uri
+        mock_post.assert_called_with(endpoint)
+
+    def test_add_to_queue_with_device_id(self, mock_post):
+        test_uri = 'spotify:track:123'
+        device_id = 'device123'
+
+        # Call the add_to_queue function with a device_id
+        self.spotify.add_to_queue(test_uri, device_id=device_id)
+
+        # Check if the correct endpoint is called
+        endpoint = "me/player/queue?uri=%s&device_id=%s" % (test_uri, device_id)
+        mock_post.assert_called_with(endpoint)
