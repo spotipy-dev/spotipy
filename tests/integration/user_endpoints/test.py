@@ -62,6 +62,12 @@ class SpotipyPlaylistApiTest(unittest.TestCase):
     def tearDownClass(cls):
         cls.spotify.current_user_unfollow_playlist(cls.new_playlist['id'])
 
+    def test_track_search(self):
+        results = self.spotify.search(q='el scorcho weezer', type='track')
+        self.assertTrue('tracks' in results)
+        self.assertTrue(len(results['tracks']['items']) > 0)
+        self.assertTrue(results['tracks']['items'][0]['name'] == 'El Scorcho')
+
     def test_user_playlists(self):
         playlists = self.spotify.user_playlists(self.username, limit=5)
         self.assertTrue('items' in playlists)
