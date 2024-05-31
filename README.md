@@ -7,12 +7,10 @@
 ## Table of Contents
 
 - [Features](#features)
-- [Documentation](#documentation)
 - [Installation](#installation)
 - [Quick Start](#quick-start)
 - [Reporting Issues](#reporting-issues)
 - [Contributing](#contributing)
-- [License](#license)
 
 ## Features
 
