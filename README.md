@@ -18,10 +18,6 @@
 
 Spotipy supports all of the features of the Spotify Web API including access to all end points, and support for user authorization. For details on the capabilities you are encouraged to review the [Spotify Web API](https://developer.spotify.com/web-api/) documentation.
 
-## Documentation
-
-Spotipy's [full documentation is online](http://spotipy.readthedocs.org/). Some function may need a [specific scope](https://developer.spotify.com/documentation/web-api/concepts/scopes). If you do not define the scope properly `ERROR 401 Unauthorized, permission missing` may occur.
-
 ## Installation
 
 ```bash
