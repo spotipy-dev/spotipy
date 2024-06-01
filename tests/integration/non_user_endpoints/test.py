@@ -355,6 +355,15 @@ class AuthTestSpotipy(unittest.TestCase):
         self.assertTrue(results['albums']['items'][0]
                         ['name'].find('Pinkerton') >= 0)
 
+    # Test that the feature doesn't work anymore
+    # Currently only works while authenticated, see `tests/integration/user_endpoints`
+    def test_track_search(self):
+        results = self.spotify.search(q='el scorcho weezer', type='track')
+        self.assertTrue('tracks' in results)
+        self.assertTrue(len(results['tracks']['items']) > 0)
+        # Change back to == if this test starts failing AKA the feature works again
+        self.assertTrue(results['tracks']['items'][0]['name'] != 'El Scorcho')
+
     def test_user(self):
         user = self.spotify.user(user='plamere')
         self.assertTrue(user['uri'] == 'spotify:user:plamere')

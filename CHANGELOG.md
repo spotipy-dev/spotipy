@@ -12,7 +12,7 @@ Add your changes below.
 -
 
 ### Fixed
--
+- Fix `test_track_search`, moving it to authenticated tests
 
 ### Removed
 - `mock` no longer listed as a test dependency. Only built-in `unittest.mock` is actually used.
