@@ -361,7 +361,7 @@ class AuthTestSpotipy(unittest.TestCase):
     # https://github.com/spotipy-dev/spotipy/pull/1128
     def test_track_search(self):
         results = self.spotify.search(q='el scorcho weezer', type='track')
-        self.assertTrue('tracks' in results)
+        self.assertTrue('chapters' in results)
         self.assertTrue(len(results['chapters']['items']) > 0)
         self.assertTrue(results['chapters']['items'][0]['restrictions'] == {
             "reason": "payment_required"
