@@ -357,6 +357,7 @@ class AuthTestSpotipy(unittest.TestCase):
 
     # Test that the feature doesn't work anymore
     # Currently only works while authenticated, see `tests/integration/user_endpoints`
+    # https://github.com/spotipy-dev/spotipy/pull/1128
     def test_track_search(self):
         results = self.spotify.search(q='el scorcho weezer', type='track')
         self.assertTrue('tracks' in results)
