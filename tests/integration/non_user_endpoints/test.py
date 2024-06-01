@@ -262,7 +262,7 @@ class AuthTestSpotipy(unittest.TestCase):
             all(len(results_multiple[country]['artists']['items']) > 0 for country in
                 results_multiple))
         self.assertTrue(all(len(results_all[country]['artists']
-                        ['items']) > 0 for country in results_all))
+                                ['items']) > 0 for country in results_all))
         self.assertTrue(
             all(len(results_tuple[country]['artists']['items']) > 0 for country in results_tuple))
 
@@ -271,9 +271,9 @@ class AuthTestSpotipy(unittest.TestCase):
             all(len(results_multiple[country]['tracks']['items']) > 0 for country in
                 results_multiple))
         self.assertTrue(all(len(results_all[country]['tracks']
-                        ['items']) > 0 for country in results_all))
+                                ['items']) > 0 for country in results_all))
         self.assertTrue(all(len(results_tuple[country]['tracks']
-                        ['items']) > 0 for country in results_tuple))
+                                ['items']) > 0 for country in results_tuple))
 
         # Asserts artist name is the first artist result in all searches
         self.assertTrue(all(results_multiple[country]['artists']['items']
@@ -306,7 +306,8 @@ class AuthTestSpotipy(unittest.TestCase):
         self.assertEqual(len(results_limited['AU']['tracks']['items']), 0)
 
         item_count = sum([len(market_result['artists']['items']) + len(market_result['tracks']
-                         ['items']) for market_result in results_limited.values()])
+                                                                       ['items']) for market_result in
+                          results_limited.values()])
 
         self.assertEqual(item_count, total)
 
@@ -361,9 +362,9 @@ class AuthTestSpotipy(unittest.TestCase):
     def test_track_search(self):
         results = self.spotify.search(q='el scorcho weezer', type='track')
         self.assertTrue('tracks' in results)
-        self.assertTrue(len(results['tracks']['items']) > 0)
-        # Change back to == if this test starts failing AKA the feature works again
-        self.assertTrue(results['tracks']['items'][0]['name'] != 'El Scorcho')
+        self.assertTrue(len(results['chapters']['items']) > 0)
+        self.assertTrue(results['chapters']['items'][0]['restrictions'] == {"reason": "payment_required"})
+        # self.assertTrue(results['tracks']['items'][0]['name'] == 'El Scorcho')
 
     def test_user(self):
         user = self.spotify.user(user='plamere')
