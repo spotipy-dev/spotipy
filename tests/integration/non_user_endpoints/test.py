@@ -355,11 +355,11 @@ class AuthTestSpotipy(unittest.TestCase):
         self.assertTrue(results['albums']['items'][0]
                         ['name'].find('Pinkerton') >= 0)
 
-    # def test_track_search(self):
-    #     results = self.spotify.search(q='el scorcho weezer', type='track')
-    #     self.assertTrue('tracks' in results)
-    #     self.assertTrue(len(results['tracks']['items']) > 0)
-    #     self.assertTrue(results['tracks']['items'][0]['name'] == 'El Scorcho')
+    def test_track_search(self):
+        results = self.spotify.search(q='el scorcho weezer', type='track')
+        self.assertTrue('tracks' in results)
+        self.assertTrue(len(results['tracks']['items']) > 0)
+        self.assertTrue(results['tracks']['items'][0]['name'] == 'El Scorcho')
 
     def test_user(self):
         user = self.spotify.user(user='plamere')
@@ -466,7 +466,6 @@ class AuthTestSpotipy(unittest.TestCase):
 
     def test_get_audiobook(self):
         audiobook = self.spotify.get_audiobook(self.american_gods_urn, market="US")
-        print(audiobook)
         self.assertTrue(audiobook['name'] ==
                         'American Gods: The Tenth Anniversary Edition: A Novel')
 
