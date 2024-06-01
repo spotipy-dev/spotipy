@@ -305,9 +305,9 @@ class AuthTestSpotipy(unittest.TestCase):
         self.assertEqual(len(results_limited['AU']['artists']['items']), 2)
         self.assertEqual(len(results_limited['AU']['tracks']['items']), 0)
 
-        item_count = sum([len(market_result['artists']['items']) + len(market_result['tracks']
-                                                                       ['items']) for market_result in
-                          results_limited.values()])
+        item_count = sum([len(market_result['artists']['items'])
+                          + len(market_result['tracks']['items'])
+                          for market_result in results_limited.values()])
 
         self.assertEqual(item_count, total)
 
@@ -363,7 +363,9 @@ class AuthTestSpotipy(unittest.TestCase):
         results = self.spotify.search(q='el scorcho weezer', type='track')
         self.assertTrue('tracks' in results)
         self.assertTrue(len(results['chapters']['items']) > 0)
-        self.assertTrue(results['chapters']['items'][0]['restrictions'] == {"reason": "payment_required"})
+        self.assertTrue(results['chapters']['items'][0]['restrictions'] == {
+            "reason": "payment_required"
+        })
         # self.assertTrue(results['tracks']['items'][0]['name'] == 'El Scorcho')
 
     def test_user(self):
