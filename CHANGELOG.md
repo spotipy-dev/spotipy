@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Changed
+- Made some updates to TUTORIAL.md to more closely match the current layout of Spotify's Developer Dashboard and the process for creating an app
+
+### Added
+- Added directions to install Spotipy in TUTORIAL.md (pip install spotipy --upgrade)
+
 ### Added
 
 - Added support for audiobook endpoints: get_audiobook, get_audiobooks, and get_audiobook_chapters.
