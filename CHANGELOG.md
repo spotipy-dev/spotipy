@@ -13,11 +13,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added integration tests for audiobook endpoints.
 - Removed `python 2.7` from GitHub Actions CI workflow. Python v2.7 reached end of life support and is no longer supported by Ubuntu 20.04.
 - Removed `python 3.6` from GitHub Actions CI workflow. Ubuntu 20.04 is not available in GitHub Actions for `python 3.6`.
+- Added directions to install Spotipy in TUTORIAL.md (pip install spotipy --upgrade)
 
 ### Changed
 - Changes the YouTube video link for authentication tutorial (the old video was in low definition, the new one is in high definition)
 - Updated links to Spotify in documentation
 - Improve usability on README.md
+- Made updates to TUTORIAL.md to more closely match the current layout of Spotify's Developer Dashboard and the process for creating an app
 
 ## [2.23.0] - 2023-04-07
 
