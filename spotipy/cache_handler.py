@@ -4,7 +4,8 @@ __all__ = [
     'DjangoSessionCacheHandler',
     'FlaskSessionCacheHandler',
     'MemoryCacheHandler',
-    'RedisCacheHandler']
+    'RedisCacheHandler',
+    'MemcacheCacheHandler']
 
 import errno
 import json
@@ -80,7 +81,7 @@ class CacheFileHandler(CacheHandler):
             f.close()
             token_info = json.loads(token_info_string)
 
-        except IOError as error:
+        except OSError as error:
             if error.errno == errno.ENOENT:
                 logger.debug("cache does not exist at: %s", self.cache_path)
             else:
@@ -93,7 +94,7 @@ class CacheFileHandler(CacheHandler):
             f = open(self.cache_path, "w")
             f.write(json.dumps(token_info, cls=self.encoder_cls))
             f.close()
-        except IOError:
+        except OSError:
             logger.warning('Couldn\'t write token to cache at: %s',
                            self.cache_path)
 
@@ -208,3 +209,34 @@ class RedisCacheHandler(CacheHandler):
             self.redis.set(self.key, json.dumps(token_info))
         except RedisError as e:
             logger.warning('Error saving token to cache: ' + str(e))
+
+
+class MemcacheCacheHandler(CacheHandler):
+    """A Cache handler that stores the token info in Memcache using the pymemcache client
+    """
+    def __init__(self, memcache, key=None) -> None:
+        """
+        Parameters:
+            * memcache: memcache client object provided by pymemcache
+            (https://pymemcache.readthedocs.io/en/latest/getting_started.html)
+            * key: May be supplied, will otherwise be generated
+                   (takes precedence over `token_info`)
+        """
+        self.memcache = memcache
+        self.key = key if key else 'token_info'
+
+    def get_cached_token(self):
+        from pymemcache import MemcacheError
+        try:
+            token_info = self.memcache.get(self.key)
+            if token_info:
+                return json.loads(token_info.decode())
+        except MemcacheError as e:
+            logger.warning('Error getting token from cache' + str(e))
+
+    def save_token_to_cache(self, token_info):
+        from pymemcache import MemcacheError
+        try:
+            self.memcache.set(self.key, json.dumps(token_info))
+        except MemcacheError as e:
+            logger.warning('Error saving token to cache' + str(e))
