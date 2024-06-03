@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from spotipy import (
     Spotify,
     SpotifyClientCredentials,
@@ -488,7 +486,6 @@ class AuthTestSpotipy(unittest.TestCase):
 
     def test_get_audiobook(self):
         audiobook = self.spotify.get_audiobook(self.american_gods_urn, market="US")
-        print(audiobook)
         self.assertTrue(audiobook['name'] ==
                         'American Gods: The Tenth Anniversary Edition: A Novel')
 

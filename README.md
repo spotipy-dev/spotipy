@@ -2,25 +2,19 @@
 
 ##### Spotipy is a lightweight Python library for the [Spotify Web API](https://developer.spotify.com/documentation/web-api). With Spotipy you get full access to all of the music data provided by the Spotify platform.
 
-![Tests](https://github.com/plamere/spotipy/workflows/Tests/badge.svg?branch=master) [![Documentation Status](https://readthedocs.org/projects/spotipy/badge/?version=latest)](https://spotipy.readthedocs.io/en/latest/?badge=latest)
+![Tests](https://github.com/plamere/spotipy/workflows/Tests/badge.svg?branch=master) [![Documentation Status](https://readthedocs.org/projects/spotipy/badge/?version=master)](https://spotipy.readthedocs.io/en/latest/?badge=master)
 
 ## Table of Contents
 
 - [Features](#features)
-- [Documentation](#documentation)
 - [Installation](#installation)
 - [Quick Start](#quick-start)
 - [Reporting Issues](#reporting-issues)
 - [Contributing](#contributing)
-- [License](#license)
 
 ## Features
 
 Spotipy supports all of the features of the Spotify Web API including access to all end points, and support for user authorization. For details on the capabilities you are encouraged to review the [Spotify Web API](https://developer.spotify.com/web-api/) documentation.
-
-## Documentation
-
-Spotipy's [full documentation is online](http://spotipy.readthedocs.org/). Some function may need a [specific scope](https://developer.spotify.com/documentation/web-api/concepts/scopes). If you do not define the scope properly `ERROR 401 Unauthorized, permission missing` may occur.
 
 ## Installation
 
