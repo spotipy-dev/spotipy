@@ -1,4 +1,3 @@
-
 # -*- coding: utf-8 -*-
 
 """ Shows a user's playlists. This needs to be authenticated via OAuth) """

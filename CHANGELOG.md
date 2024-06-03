@@ -33,6 +33,7 @@ Add your changes below.
 - Added `update` field to `current_user_follow_playlist`.
 
 ### Changed
+- Changes the YouTube video link for authentication tutorial (the old video was in low definition, the new one is in high definition)
 - Fixed error obfuscation when Spotify class is being inherited and an error is raised in the Child's `__init__`
 - Replaced `artist_albums(album_type=...)` with `artist_albums(include_groups=...)` due to an API change.
 - Updated `_regex_spotify_url` to ignore `/intl-<countrycode>` in Spotify links
