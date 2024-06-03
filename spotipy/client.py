@@ -342,13 +342,10 @@ class Spotify:
         return self._internal_call("PUT", url, payload, kwargs)
 
     def next(self, result):
-        """ Returns the next result given a paged result.
+        """ returns the next result given a paged result
 
             Parameters:
-                result - The previously returned paged result.
-            
-            Returns:
-                dict: A dictionary containing the next result if it exists, otherwise None.
+                - result - a previously returned paged result
         """
         if result["next"]:
             return self._get(result["next"])
@@ -356,13 +353,10 @@ class Spotify:
             return None
 
     def previous(self, result):
-        """ Returns the previous result given a paged result.
+        """ returns the previous result given a paged result
 
             Parameters:
-                result - A previously returned paged result.
-
-            Returns:
-                dict: A dictionary containing the previous result it it exists, otherwise None.
+                - result - a previously returned paged result
         """
         if result["previous"]:
             return self._get(result["previous"])
@@ -370,53 +364,42 @@ class Spotify:
             return None
 
     def track(self, track_id, market=None):
-        """ Returns a single track given the track's Spotify ID, URI, or URL.
+        """ returns a single track given the track's ID, URI or URL
 
             Parameters:
-                track_id - Spotify ID, URI, or URL.
-                market - ISO 3166-1 alpha-2 country code. Defaults to None.
-
-            Returns:
-                dict: A dictionary containing the track if it exists, otherwise None.
+                - track_id - a spotify URI, URL or ID
+                - market - an ISO 3166-1 alpha-2 country code.
         """
 
         trid = self._get_id("track", track_id)
         return self._get("tracks/" + trid, market=market)
 
     def tracks(self, tracks, market=None):
-        """ Returns a list of tracks given a list of Spotify track IDs, URIs, or URLs.
+        """ returns a list of tracks given a list of track IDs, URIs, or URLs
 
             Parameters:
-                tracks - A list of Spotify track IDs, URIs, or URLs. Maximum: 50 IDs.
-                market - An ISO 3166-1 alpha-2 country code. Defaults to None.
-
-            dict: A dictionary containing the tracks if they exist, otherwise None.
+                - tracks - a list of spotify URIs, URLs or IDs. Maximum: 50 IDs.
+                - market - an ISO 3166-1 alpha-2 country code.
         """
 
         tlist = [self._get_id("track", t) for t in tracks]
         return self._get("tracks/?ids=" + ",".join(tlist), market=market)
 
     def artist(self, artist_id):
-        """ Returns a single artist given the artist's Spotify ID, URI, or URL.
+        """ returns a single artist given the artist's ID, URI or URL
 
             Parameters:
-                artist_id - An artist's Spotify ID, URI, or URL.
-
-            Returns:
-                dict: A dictionary containing the artist if they exist, otherwise None.
+                - artist_id - an artist ID, URI or URL
         """
 
         trid = self._get_id("artist", artist_id)
         return self._get("artists/" + trid)
 
     def artists(self, artists):
-        """ Returns a dictionary containing artists given the artists' Spotify ID, URI, or URL.
+        """ returns a list of artists given the artist IDs, URIs, or URLs
 
             Parameters:
-                artists - A list of artists' Spotify ID, URI, or URL.
-
-            Returns:
-                dict: A dictionary containing the artists if they exists, otherwise None.
+                - artists - a list of  artist IDs, URIs or URLs
         """
 
         tlist = [self._get_id("artist", a) for a in artists]
@@ -456,42 +439,34 @@ class Spotify:
         )
 
     def artist_top_tracks(self, artist_id, country="US"):
-        """ Returns Spotify catalog info about an artist's top 10 tracks by country.
+        """ Get Spotify catalog information about an artist's top 10 tracks
+            by country.
 
             Parameters:
-                artist_id - the artist's Spotify ID, URI, or URL.
-                country - ISO 3166-1 alpha-2 country code. Defaults to "US".
-
-            Returns:
-                dict: A dictionary containing the artist's top 10 tracks by country.
+                - artist_id - the artist ID, URI or URL
+                - country - limit the response to one particular country.
         """
 
         trid = self._get_id("artist", artist_id)
         return self._get("artists/" + trid + "/top-tracks", country=country)
 
     def artist_related_artists(self, artist_id):
-        """ Returns Spotify catalog info about artists similar to specified artist.
-            Similarity is based on analysis of the Spotify community's listening history.
+        """ Get Spotify catalog information about artists similar to an
+            identified artist. Similarity is based on analysis of the
+            Spotify community's listening history.
 
             Parameters:
-                artist_id - the artist's Spotify ID, URI, or URL.
-
-            Returns:
-                dict: A dictionary containing artists similar to specified artist.
+                - artist_id - the artist ID, URI or URL
         """
-        
         trid = self._get_id("artist", artist_id)
         return self._get("artists/" + trid + "/related-artists")
 
     def album(self, album_id, market=None):
-        """ Returns an album given the album's Spotify ID, URI, or URL.
+        """ returns a single album given the album's ID, URIs or URL
 
             Parameters:
-                album_id - the album's Spotify ID, URI, or URL.
-                market - An ISO 3166-1 alpha-2 country code. Defaults to None.
-
-            Returns:
-                dict: A dictionary containing an album.
+                - album_id - the album ID, URI or URL
+                - market - an ISO 3166-1 alpha-2 country code
         """
 
         trid = self._get_id("album", album_id)
@@ -501,16 +476,14 @@ class Spotify:
             return self._get("albums/" + trid)
 
     def album_tracks(self, album_id, limit=50, offset=0, market=None):
-        """ Returns Spotify catalog info about an album's tracks.
+        """ Get Spotify catalog information about an album's tracks
 
             Parameters:
-                album_id - The album's Spotify ID, URI, or URL.
-                limit  - The limit of the number of track's to return. Defaults to 50.
-                offset - The index of the first track to return. Defaults to 0.
-                market - An ISO 3166-1 alpha-2 country code. Defaults to None.
+                - album_id - the album ID, URI or URL
+                - limit  - the number of items to return
+                - offset - the index of the first item to return
+                - market - an ISO 3166-1 alpha-2 country code.
 
-            Returns:
-                dict: A dictionary containing an album's tracks.
         """
 
         trid = self._get_id("album", album_id)
@@ -519,14 +492,11 @@ class Spotify:
         )
 
     def albums(self, albums, market=None):
-        """ Returns albums given the albums' Spotify ID, URI, or URL.
+        """ returns a list of albums given the album IDs, URIs, or URLs
 
             Parameters:
-                albums - A list of album Spotify IDs, URIs, or URLs.
-                market - An ISO 3166-1 alpha-2 country code. Defaults to None.
-
-            Returns:
-                dict: A dictionary containing albums.
+                - albums - a list of  album IDs, URIs or URLs
+                - market - an ISO 3166-1 alpha-2 country code
         """
 
         tlist = [self._get_id("album", a) for a in albums]
@@ -536,56 +506,47 @@ class Spotify:
             return self._get("albums/?ids=" + ",".join(tlist))
 
     def show(self, show_id, market=None):
-        """ Returns a show given the show's Spotify ID, URI, or URL.
+        """ returns a single show given the show's ID, URIs or URL
 
             Parameters:
-                show_id - The show's Spotify ID, URI, or URL.
-                market - An ISO 3166-1 alpha-2 country code. Defaults to None.
-                         The show must be available in the given market.
-                         If user-based authorization is in use, the user's country
-                         takes precedence. If neither market nor user country are
-                         provided, the content is considered unavailable for the client.
-
-            Returns:
-                dict: A dictionary containing the show's information if it exists, otherwise None.
+                - show_id - the show ID, URI or URL
+                - market - an ISO 3166-1 alpha-2 country code.
+                           The show must be available in the given market.
+                           If user-based authorization is in use, the user's country
+                           takes precedence. If neither market nor user country are
+                           provided, the content is considered unavailable for the client.
         """
 
         trid = self._get_id("show", show_id)
         return self._get("shows/" + trid, market=market)
 
     def shows(self, shows, market=None):
-        """ Returns shows given the shows' Spotify ID, URI, or URL.
+        """ returns a list of shows given the show IDs, URIs, or URLs
 
             Parameters:
-                shows - A list of show Spotify IDs, URIs, or URLs.
-                market - An ISO 3166-1 alpha-2 country code. Defaults to None.
-                         The show must be available in the given market.
-                         If user-based authorization is in use, the user's country
-                         takes precedence. If neither market nor user country are
-                         provided, the content is considered unavailable for the client.
-
-            Returns:
-                dict: A dictionary containing the shows' information if they exist, otherwise None.
+                - shows - a list of show IDs, URIs or URLs
+                - market - an ISO 3166-1 alpha-2 country code.
+                           Only shows available in the given market will be returned.
+                           If user-based authorization is in use, the user's country
+                           takes precedence. If neither market nor user country are
+                           provided, the content is considered unavailable for the client.
         """
 
         tlist = [self._get_id("show", s) for s in shows]
         return self._get("shows/?ids=" + ",".join(tlist), market=market)
 
     def show_episodes(self, show_id, limit=50, offset=0, market=None):
-        """ Returns Spotify catalog information about a show's episodes.
+        """ Get Spotify catalog information about a show's episodes
 
             Parameters:
-                show_id - The show's Spotify ID, URI, or URL.
-                limit  - The limit of the number of episodes to return. Defaults to 50.
-                offset - The index of the first show to return. Defaults 0.
-                market - An ISO 3166-1 alpha-2 country code. Defaults to None.
-                         The show must be available in the given market.
-                         If user-based authorization is in use, the user's country
-                         takes precedence. If neither market nor user country are
-                         provided, the content is considered unavailable for the client.
-
-            Returns:
-                dict: A dictionary containing Spotify catalog information about a show's episodes.
+                - show_id - the show ID, URI or URL
+                - limit  - the number of items to return
+                - offset - the index of the first item to return
+                - market - an ISO 3166-1 alpha-2 country code.
+                           Only episodes available in the given market will be returned.
+                           If user-based authorization is in use, the user's country
+                           takes precedence. If neither market nor user country are
+                           provided, the content is considered unavailable for the client.
         """
 
         trid = self._get_id("show", show_id)
