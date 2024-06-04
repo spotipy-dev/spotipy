@@ -56,3 +56,6 @@ docs/_build/
 
 .*
 archive
+
+# Ignore main.py
+main.py
