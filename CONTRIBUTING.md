@@ -55,9 +55,9 @@ Don't forget to add a short description of your change in the [CHANGELOG](CHANGE
  - Add to changelog:
 
        ## Unreleased
+       Add your changes below.
 
        ### Added
-       - Replace with changes
 
        ### Fixed
 
