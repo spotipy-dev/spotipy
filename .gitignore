@@ -56,3 +56,6 @@ docs/_build/
 
 .*
 archive
+
+# Main 
+main.py
