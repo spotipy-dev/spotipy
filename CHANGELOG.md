@@ -8,12 +8,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 Add your changes below.
 
-### Changed
-- Made some updates to TUTORIAL.md to more closely match the current layout of Spotify's Developer Dashboard and the process for creating an app
-
-### Added
-- Added directions to install Spotipy in TUTORIAL.md (pip install spotipy --upgrade)
-
 ### Added
 - Added unit tests for queue functions
 
@@ -30,14 +24,12 @@ Add your changes below.
 - Added support for audiobook endpoints: `get_audiobook`, `get_audiobooks`, and `get_audiobook_chapters`.
 - Added integration tests for audiobook endpoints.
 - Added `update` field to `current_user_follow_playlist`.
-- Added directions to install Spotipy in TUTORIAL.md (pip install spotipy --upgrade)
 
 ### Changed
 - Fixed error obfuscation when Spotify class is being inherited and an error is raised in the Child's `__init__`
 - Replaced `artist_albums(album_type=...)` with `artist_albums(include_groups=...)` due to an API change.
 - Updated `_regex_spotify_url` to ignore `/intl-<countrycode>` in Spotify links
 - Improved README, docs and examples
-- Made some updates to TUTORIAL.md to more closely match the current layout of Spotify's Developer Dashboard and the process for creating an app
 
 ### Fixed
 - Readthedocs build
