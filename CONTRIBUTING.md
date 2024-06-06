@@ -27,7 +27,9 @@ $ source env/bin/activate
 (env) $ python -m unittest discover -v tests
 ```
 
-### Lint
+### Code Style
+
+Spotipy adheres to the Google Python Style guide: https://google.github.io/styleguide/pyguide.html
 
 To automatically fix the code style:
 
