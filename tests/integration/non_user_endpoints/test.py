@@ -106,6 +106,11 @@ class AuthTestSpotipy(unittest.TestCase):
         self.assertTrue('artists' in results)
         self.assertTrue(len(results['artists']) == 2)
 
+    def test_artists_mixed_ids(self):
+        results = self.spotify.artists([self.weezer_urn, self.radiohead_id, self.qotsa_url])
+        self.assertTrue('artists' in results)
+        self.assertTrue(len(results['artists']) == 3)
+
     def test_album_urn(self):
         album = self.spotify.album(self.pinkerton_urn)
         self.assertTrue(album['name'] == 'Pinkerton')
