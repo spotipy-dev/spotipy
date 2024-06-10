@@ -112,6 +112,10 @@ class AuthTestSpotipy(unittest.TestCase):
         artist = self.spotify.artist(self.radiohead_url)
         self.assertTrue(artist['name'] == 'Radiohead')
 
+    def test_artist_id(self):
+        artist = self.spotify.artist(self.radiohead_id)
+        self.assertTrue(artist['name'] == 'Radiohead')
+
     def test_artists(self):
         results = self.spotify.artists([self.weezer_urn, self.radiohead_urn])
         self.assertTrue('artists' in results)
