@@ -264,7 +264,7 @@ class AuthTestSpotipy(unittest.TestCase):
     #         all('artists' in results_multiple[country] for country in results_multiple))
     #     self.assertTrue(all('artists' in results_all[country] for country in results_all))
     #     self.assertTrue(all('artists' in results_tuple[country] for country in results_tuple))
-    #     self.assertTrue(all('artists' in results_limited[country] for country in results_limited))
+    #    self.assertTrue(all('artists' in results_limited[country] for country in results_limited))
 
     #     # Asserts 'tracks' property is present in all responses
     #     self.assertTrue(
@@ -280,7 +280,7 @@ class AuthTestSpotipy(unittest.TestCase):
     #     self.assertTrue(all(len(results_all[country]['artists']
     #                     ['items']) > 0 for country in results_all))
     #     self.assertTrue(
-    #         all(len(results_tuple[country]['artists']['items']) > 0 for country in results_tuple))
+    #        all(len(results_tuple[country]['artists']['items']) > 0 for country in results_tuple))
 
     #     # Asserts 'tracks' list is nonempty in unlimited searches
     #     self.assertTrue(
@@ -303,8 +303,8 @@ class AuthTestSpotipy(unittest.TestCase):
 
     #     # Asserts track name is present in responses from specified markets
     #     self.assertTrue(all('Dancing Queen' in
-    #                         [item['name'] for item in results_multiple[country]['tracks']['items']]
-    #                         for country in results_multiple))
+    #                     [item['name'] for item in results_multiple[country]['tracks']['items']]
+    #                     for country in results_multiple))
     #     self.assertTrue(all('Dancing Queen' in
     #                         [item['name'] for item in results_tuple[country]['tracks']['items']]
     #                         for country in results_tuple))
