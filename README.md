@@ -103,6 +103,10 @@ If you have suggestions, bugs or other issues specific to this library,
 file them [here](https://github.com/plamere/spotipy/issues).
 Or just send a pull request.
 
+## Community
+
+A strong community is the backbone of any successful open-source project. At Spotipy, we are committed to fostering a welcoming and collaborative environment where developers of all skill levels can come together to share ideas, contribute to the codebase, and support each other. Whether you’re a seasoned contributor or a newcomer, we encourage you to join our discussions on [(https://discord.gg/BjfgKNeJ)] to participate in our feature requests and bug reports, and engage with fellow users and developers. 
+
 ## Contributing
 
 If you are a developer with Python experience, and you would like to contribute to Spotipy, please be sure to follow the guidelines listed on documentation page
