@@ -245,86 +245,86 @@ class AuthTestSpotipy(unittest.TestCase):
             total_limited_results += len(results_limited[country]['artists']['items'])
         self.assertTrue(total_limited_results <= total)
 
-    # def test_multiple_types_search_with_multiple_markets(self):
-    #     total = 14
+    def test_multiple_types_search_with_multiple_markets(self):
+        total = 14
 
-    #     countries_list = ['GB', 'US', 'AU']
-    #     countries_tuple = ('GB', 'US', 'AU')
+        countries_list = ['GB', 'US', 'AU']
+        countries_tuple = ('GB', 'US', 'AU')
 
-    #     results_multiple = self.spotify.search_markets(q='abba', type='artist,track',
-    #                                                    markets=countries_list)
-    #     results_all = self.spotify.search_markets(q='abba', type='artist,track')
-    #     results_tuple = self.spotify.search_markets(q='abba', type='artist,track',
-    #                                                 markets=countries_tuple)
-    #     results_limited = self.spotify.search_markets(q='abba', limit=3, type='artist,track',
-    #                                                   markets=countries_list, total=total)
+        results_multiple = self.spotify.search_markets(q='abba', type='artist,track',
+                                                       markets=countries_list)
+        results_all = self.spotify.search_markets(q='abba', type='artist,track')
+        results_tuple = self.spotify.search_markets(q='abba', type='artist,track',
+                                                    markets=countries_tuple)
+        results_limited = self.spotify.search_markets(q='abba', limit=3, type='artist,track',
+                                                      markets=countries_list, total=total)
 
-    #     # Asserts 'artists' property is present in all responses
-    #     self.assertTrue(
-    #         all('artists' in results_multiple[country] for country in results_multiple))
-    #     self.assertTrue(all('artists' in results_all[country] for country in results_all))
-    #     self.assertTrue(all('artists' in results_tuple[country] for country in results_tuple))
-    #    self.assertTrue(all('artists' in results_limited[country] for country in results_limited))
+        # Asserts 'artists' property is present in all responses
+        self.assertTrue(
+            all('artists' in results_multiple[country] for country in results_multiple))
+        self.assertTrue(all('artists' in results_all[country] for country in results_all))
+        self.assertTrue(all('artists' in results_tuple[country] for country in results_tuple))
+        self.assertTrue(all('artists' in results_limited[country] for country in results_limited))
 
-    #     # Asserts 'tracks' property is present in all responses
-    #     self.assertTrue(
-    #         all('tracks' in results_multiple[country] for country in results_multiple))
-    #     self.assertTrue(all('tracks' in results_all[country] for country in results_all))
-    #     self.assertTrue(all('tracks' in results_tuple[country] for country in results_tuple))
-    #     self.assertTrue(all('tracks' in results_limited[country] for country in results_limited))
+        # Asserts 'tracks' property is present in all responses
+        self.assertTrue(
+            all('tracks' in results_multiple[country] for country in results_multiple))
+        self.assertTrue(all('tracks' in results_all[country] for country in results_all))
+        self.assertTrue(all('tracks' in results_tuple[country] for country in results_tuple))
+        self.assertTrue(all('tracks' in results_limited[country] for country in results_limited))
 
-    #     # Asserts 'artists' list is nonempty in unlimited searches
-    #     self.assertTrue(
-    #         all(len(results_multiple[country]['artists']['items']) > 0 for country in
-    #             results_multiple))
-    #     self.assertTrue(all(len(results_all[country]['artists']
-    #                     ['items']) > 0 for country in results_all))
-    #     self.assertTrue(
-    #        all(len(results_tuple[country]['artists']['items']) > 0 for country in results_tuple))
+        # Asserts 'artists' list is nonempty in unlimited searches
+        self.assertTrue(
+            all(len(results_multiple[country]['artists']['items']) > 0 for country in
+                results_multiple))
+        self.assertTrue(all(len(results_all[country]['artists']
+                        ['items']) > 0 for country in results_all))
+        self.assertTrue(
+            all(len(results_tuple[country]['artists']['items']) > 0 for country in results_tuple))
 
-    #     # Asserts 'tracks' list is nonempty in unlimited searches
-    #     self.assertTrue(
-    #         all(len(results_multiple[country]['tracks']['items']) > 0 for country in
-    #             results_multiple))
-    #     self.assertTrue(all(len(results_all[country]['tracks']
-    #                     ['items']) > 0 for country in results_all))
-    #     self.assertTrue(all(len(results_tuple[country]['tracks']
-    #                     ['items']) > 0 for country in results_tuple))
+        # Asserts 'tracks' list is nonempty in unlimited searches
+        self.assertTrue(
+            all(len(results_multiple[country]['tracks']['items']) > 0 for country in
+                results_multiple))
+        self.assertTrue(all(len(results_all[country]['tracks']
+                        ['items']) > 0 for country in results_all))
+        self.assertTrue(all(len(results_tuple[country]['tracks']
+                        ['items']) > 0 for country in results_tuple))
 
-    #     # Asserts artist name is the first artist result in all searches
-    #     self.assertTrue(all(results_multiple[country]['artists']['items']
-    #                         [0]['name'] == 'ABBA' for country in results_multiple))
-    #     self.assertTrue(all(results_all[country]['artists']['items']
-    #                         [0]['name'] == 'ABBA' for country in results_all))
-    #     self.assertTrue(all(results_tuple[country]['artists']['items']
-    #                         [0]['name'] == 'ABBA' for country in results_tuple))
-    #     self.assertTrue(all(results_limited[country]['artists']['items']
-    #                         [0]['name'] == 'ABBA' for country in results_limited))
+        # Asserts artist name is the first artist result in all searches
+        self.assertTrue(all(results_multiple[country]['artists']['items']
+                            [0]['name'] == 'ABBA' for country in results_multiple))
+        self.assertTrue(all(results_all[country]['artists']['items']
+                            [0]['name'] == 'ABBA' for country in results_all))
+        self.assertTrue(all(results_tuple[country]['artists']['items']
+                            [0]['name'] == 'ABBA' for country in results_tuple))
+        self.assertTrue(all(results_limited[country]['artists']['items']
+                            [0]['name'] == 'ABBA' for country in results_limited))
 
-    #     # Asserts track name is present in responses from specified markets
-    #     self.assertTrue(all('Dancing Queen' in
-    #                     [item['name'] for item in results_multiple[country]['tracks']['items']]
-    #                     for country in results_multiple))
-    #     self.assertTrue(all('Dancing Queen' in
-    #                         [item['name'] for item in results_tuple[country]['tracks']['items']]
-    #                         for country in results_tuple))
+        # Asserts track name is present in responses from specified markets
+        self.assertTrue(all('Dancing Queen' in
+                            [item['name'] for item in results_multiple[country]['tracks']['items']]
+                            for country in results_multiple))
+        self.assertTrue(all('Dancing Queen' in
+                            [item['name'] for item in results_tuple[country]['tracks']['items']]
+                            for country in results_tuple))
 
-    #     # Asserts expected number of items are returned based on the total
-    #     # 3 artists + 3 tracks = 6 items returned from first market
-    #     # 3 artists + 3 tracks = 6 items returned from second market
-    #     # 2 artists + 0 tracks = 2 items returned from third market
-    #     # 14 items returned total
-    #     self.assertEqual(len(results_limited['GB']['artists']['items']), 3)
-    #     self.assertEqual(len(results_limited['GB']['tracks']['items']), 3)
-    #     self.assertEqual(len(results_limited['US']['artists']['items']), 3)
-    #     self.assertEqual(len(results_limited['US']['tracks']['items']), 3)
-    #     self.assertEqual(len(results_limited['AU']['artists']['items']), 2)
-    #     self.assertEqual(len(results_limited['AU']['tracks']['items']), 0)
+        # Asserts expected number of items are returned based on the total
+        # 3 artists + 3 tracks = 6 items returned from first market
+        # 3 artists + 3 tracks = 6 items returned from second market
+        # 2 artists + 0 tracks = 2 items returned from third market
+        # 14 items returned total
+        self.assertEqual(len(results_limited['GB']['artists']['items']), 3)
+        self.assertEqual(len(results_limited['GB']['tracks']['items']), 3)
+        self.assertEqual(len(results_limited['US']['artists']['items']), 3)
+        self.assertEqual(len(results_limited['US']['tracks']['items']), 3)
+        self.assertEqual(len(results_limited['AU']['artists']['items']), 2)
+        self.assertEqual(len(results_limited['AU']['tracks']['items']), 0)
 
-    #     item_count = sum([len(market_result['artists']['items']) + len(market_result['tracks']
-    #                      ['items']) for market_result in results_limited.values()])
+        item_count = sum([len(market_result['artists']['items']) + len(market_result['tracks']
+                         ['items']) for market_result in results_limited.values()])
 
-    #     self.assertEqual(item_count, total)
+        self.assertEqual(item_count, total)
 
     def test_artist_albums(self):
         results = self.spotify.artist_albums(self.weezer_urn)
@@ -480,24 +480,24 @@ class AuthTestSpotipy(unittest.TestCase):
         self.assertIn("US", markets)
         self.assertIn("GB", markets)
 
-    # def test_get_audiobook(self):
-    #     audiobook = self.spotify.get_audiobook(self.american_gods_urn, market="US")
-    #     self.assertTrue(audiobook['name'] ==
-    #                     'American Gods: The Tenth Anniversary Edition: A Novel')
+    def test_get_audiobook(self):
+        audiobook = self.spotify.get_audiobook(self.american_gods_urn, market="US")
+        self.assertTrue(audiobook['name'] ==
+                        'American Gods: The Tenth Anniversary Edition: A Novel')
 
     def test_get_audiobook_bad_urn(self):
         with self.assertRaises(SpotifyException):
             self.spotify.get_audiobook("bogus_urn", market="US")
 
-    # def test_get_audiobooks(self):
-    #     results = self.spotify.get_audiobooks(self.four_books, market="US")
-    #     self.assertTrue('audiobooks' in results)
-    #     self.assertTrue(len(results['audiobooks']) == 4)
-    #     self.assertTrue(results['audiobooks'][0]['name'] ==
-    #                     'American Gods: The Tenth Anniversary Edition: A Novel')
-    #     self.assertTrue(results['audiobooks'][1]['name'] == 'The Da Vinci Code: A Novel')
-    #     self.assertTrue(results['audiobooks'][2]['name'] == 'Outlander')
-    #     self.assertTrue(results['audiobooks'][3]['name'] == 'Pachinko: A Novel')
+    def test_get_audiobooks(self):
+        results = self.spotify.get_audiobooks(self.four_books, market="US")
+        self.assertTrue('audiobooks' in results)
+        self.assertTrue(len(results['audiobooks']) == 4)
+        self.assertTrue(results['audiobooks'][0]['name'] ==
+                        'American Gods: The Tenth Anniversary Edition: A Novel')
+        self.assertTrue(results['audiobooks'][1]['name'] == 'The Da Vinci Code: A Novel')
+        self.assertTrue(results['audiobooks'][2]['name'] == 'Outlander')
+        self.assertTrue(results['audiobooks'][3]['name'] == 'Pachinko: A Novel')
 
     def test_get_audiobook_chapters(self):
         results = self.spotify.get_audiobook_chapters(
