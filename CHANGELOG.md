@@ -10,6 +10,8 @@ Add your changes below.
 
 ### Added
 - Added unit tests for queue functions
+- Added sections in CONTRIBUTING.md on how to fork/clone repo and how to submit pull requests to improve usability
+- Added section in CONTRIBUTING.md containing information of the author/contributors to remain consistant with spotipy API webpage
 
 ### Fixed
 -
