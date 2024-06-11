@@ -10,6 +10,7 @@ Add your changes below.
 
 ### Added
 - Added unit tests for queue functions
+- Added rate/request limit to FAQ
 
 ### Fixed
 -
