@@ -1,3 +1,4 @@
+from __future__ import annotations
 """ Shows a user's playlists (need to be authenticated via oauth) """
 
 __all__ = ["CLIENT_CREDS_ENV_VARS", "prompt_for_user_token"]
@@ -139,11 +140,16 @@ class Retry(urllib3.Retry):
     """
     Custom class for printing a warning when a rate/request limit is reached.
     """
-    def is_retry(
-        self, method: str, status_code: int, has_retry_after: bool = False
-    ) -> bool:
-        retry = super().is_retry(method, status_code, has_retry_after)
-        if retry:
-            # message could be more "professional", but it's good enough for now
-            logging.warning("Your application has reached a rate/request limit")
-        return retry
+    def increment(
+            self,
+            method: str | None = None,
+            url: str | None = None,
+            response: urllib3.BaseHTTPResponse | None = None,
+            error: Exception | None = None,
+            _pool: urllib3.connectionpool.ConnectionPool | None = None,
+            _stacktrace: TracebackType | None = None,
+    ) -> urllib3.Retry:
+        retry_header = response.headers.get("Retry-After")
+        if self.is_retry(method, response.status, bool(retry_header)):
+            logging.warning(f"Your application has reached a rate/request limit. Wait time: {retry_header}")
+        return super().increment(method, url, response=response, _pool=_pool)
