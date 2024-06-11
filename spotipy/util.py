@@ -131,3 +131,17 @@ def normalize_scope(scope):
         return " ".join(sorted(scopes))
     else:
         return None
+
+
+class Retry(urllib3.Retry):
+    """
+    Custom class for printing a warning when a rate/request limit is reached.
+    """
+    def is_retry(
+        self, method: str, status_code: int, has_retry_after: bool = False
+    ) -> bool:
+        retry = super().is_retry(method, status_code, has_retry_after)
+        if retry:
+            # message could be more "professional", but it's good enough for now
+            logging.warning("Your application has reached a rate/request limit")
+        return retry

@@ -10,6 +10,7 @@ Add your changes below.
 
 ### Added
 - Added unit tests for queue functions
+- Added custom `urllib3.Retry` class for printing a warning when a rate/request limit is reached.
 
 ### Fixed
 -

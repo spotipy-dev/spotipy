@@ -11,6 +11,7 @@ import requests
 import urllib3
 
 from spotipy.exceptions import SpotifyException
+from spotipy.util import Retry
 
 from collections import defaultdict
 
@@ -220,7 +221,7 @@ class Spotify:
 
     def _build_session(self):
         self._session = requests.Session()
-        retry = urllib3.Retry(
+        retry = Retry(
             total=self.retries,
             connect=None,
             read=False,
