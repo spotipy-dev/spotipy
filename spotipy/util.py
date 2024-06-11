@@ -8,6 +8,8 @@ import warnings
 
 import spotipy
 
+import urllib3
+
 LOGGER = logging.getLogger(__name__)
 
 CLIENT_CREDS_ENV_VARS = {

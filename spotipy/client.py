@@ -8,7 +8,6 @@ import re
 import warnings
 
 import requests
-import urllib3
 
 from spotipy.exceptions import SpotifyException
 from spotipy.util import Retry
