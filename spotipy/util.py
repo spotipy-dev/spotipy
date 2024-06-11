@@ -6,6 +6,7 @@ __all__ = ["CLIENT_CREDS_ENV_VARS", "prompt_for_user_token"]
 import logging
 import os
 import warnings
+from types import TracebackType
 
 import spotipy
 
