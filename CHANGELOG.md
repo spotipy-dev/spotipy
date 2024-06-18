@@ -10,6 +10,7 @@ Add your changes below.
 
 ### Added
 - Added unit tests for queue functions
+- Added detailed function docstrings to 'util.py', including descriptions and special sections that lists arguments, returns, and raises.
 
 ### Fixed
 -
