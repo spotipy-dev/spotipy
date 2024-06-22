@@ -12,7 +12,7 @@ If you see a version number, Python is already installed. If not, you can downlo
 **2. pip package manager** 
 
 You can check to see if you have pip installed by opening up Terminal and typing the following command: pip --version
-If you see a version number, pip is installed, and you're ready to proceed. If not, instructions for downloading the latest version of pip can be found      here: https://pip.pypa.io/en/stable/cli/pip_download/
+If you see a version number, pip is installed, and you're ready to proceed. If not, instructions for downloading the latest version of pip can be found here: https://pip.pypa.io/en/stable/cli/pip_download/
 
 A. After ensuring that pip is installed, run the following command in Terminal to install Spotipy: pip install spotipy --upgrade
 
@@ -92,7 +92,7 @@ In most cases, the recent Python version is Python 3. You may need to update Pyt
 
 B. Encountering package error:
 
-If you are seeing an error "ModuleNotFoundError: No module named 'spotipy'", this means you have not installed the package. This may occur if you followed the installation and setup (up to Step 3, Part D) and attempted to run the app with the missing package.
+If you are seeing an error "ModuleNotFoundError: No module named 'spotipy'", this means you have not installed the package.
 Run the command:
 ```
 pip install spotipy
