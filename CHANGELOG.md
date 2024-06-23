@@ -43,6 +43,12 @@ Add your changes below.
 ### Removed
 - Drop support for EOL Python 3.7
 
+## [2.23.1] - 2023-10-30
+
+### Added
+
+- Added an additional FAQ addressing the hidden limit of 50 shows per request for the API endpoints related to accessing/adding/deleting current user saved shows suffixed by "current_user_saved_shows" in client.py, resulting in an unexplained HTTP error response.
+
 ## [2.23.0] - 2023-04-07
 
 ### Added
