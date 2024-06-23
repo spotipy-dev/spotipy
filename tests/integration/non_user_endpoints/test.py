@@ -60,15 +60,16 @@ class AuthTestSpotipy(unittest.TestCase):
     heavyweight_ep1_url = 'https://open.spotify.com/episode/68kq3bNz6hEuq8NtdfwERG'
     reply_all_ep1_urn = 'spotify:episode:1KHjbpnmNpFmNTczQmTZlR'
 
+    # The following audiobooks are currently available in the GB market
+    # but might not be in other markets
     dune_urn = 'spotify:audiobook:7iHfbu1YPACw6oZPAFJtqe'
     dune_id = '7iHfbu1YPACw6oZPAFJtqe'
     dune_url = 'https://open.spotify.com/audiobook/7iHfbu1YPACw6oZPAFJtqe'
-
     four_books = [
         'spotify:audiobook:7iHfbu1YPACw6oZPAFJtqe',
-        'spotify:audiobook:37sRC6carIX2Vf3Vv716T7',
-        'spotify:audiobook:1Gep4UJ95xQawA55OgRI8n',
-        'spotify:audiobook:18yVqkdbdRvS24c0Ilj2ci']
+        'spotify:audiobook:67VtmjZitn25TWocsyAEyh',
+        'spotify:audiobook:06huRZtBf5vArKHydJI80C',
+        'spotify:audiobook:6LtiFKiudPhwEmxpLatuGx']
 
     @classmethod
     def setUpClass(self):
@@ -485,7 +486,7 @@ class AuthTestSpotipy(unittest.TestCase):
         self.assertIn("GB", markets)
 
     def test_get_audiobook(self):
-        audiobook = self.spotify.get_audiobook(self.dune_urn, market="US")
+        audiobook = self.spotify.get_audiobook(self.dune_urn)
         self.assertTrue(audiobook['name'] ==
                         'Dune: Book One in the Dune Chronicles')
 
@@ -494,14 +495,17 @@ class AuthTestSpotipy(unittest.TestCase):
             self.spotify.get_audiobook("bogus_urn", market="US")
 
     def test_get_audiobooks(self):
-        results = self.spotify.get_audiobooks(self.four_books, market="US")
+        results = self.spotify.get_audiobooks(self.four_books)
         self.assertTrue('audiobooks' in results)
         self.assertTrue(len(results['audiobooks']) == 4)
         self.assertTrue(results['audiobooks'][0]['name']
                         == 'Dune: Book One in the Dune Chronicles')
-        self.assertTrue(results['audiobooks'][1]['name'] == 'The Da Vinci Code: A Novel')
-        self.assertTrue(results['audiobooks'][2]['name'] == 'Outlander')
-        self.assertTrue(results['audiobooks'][3]['name'] == 'The Fifth Season: Booktrack Edition')
+        self.assertTrue(results['audiobooks'][1]['name'] == 'The Helper')
+        self.assertTrue(results['audiobooks'][2]['name'] == 'Lies and Weddings')
+        self.assertTrue(results['audiobooks'][3]['name'] ==
+                        ('Alastair Campbell Talks Politics: An unmissable, new, illustrated '
+                         'non-fiction book about politics and government for young people '
+                         'for 2024 (Talks)'))
 
     def test_get_audiobook_chapters(self):
         results = self.spotify.get_audiobook_chapters(
