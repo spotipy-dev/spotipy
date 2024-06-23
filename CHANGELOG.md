@@ -6,18 +6,42 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+Add your changes below.
 
 ### Added
+- Added unit tests for queue functions
+- Added detailed function docstrings to 'util.py', including descriptions and special sections that lists arguments, returns, and raises.
+- Updated order of instructions for Python and pip package manager installation in TUTORIAL.md
+- Updated TUTORIAL.md instructions to match current layout of Spotify Developer Dashboard
+- Added test_artist_id, test_artist_url, and test_artists_mixed_ids to non_user_endpoints test.py
 
-- Added support for audiobook endpoints: get_audiobook, get_audiobooks, and get_audiobook_chapters.
+### Fixed
+- Audiobook integration tests
+- Edited docstrings for certain functions in client.py for functions that are no longer in use and have been replaced.
+
+### Removed
+- `mock` no longer listed as a test dependency. Only built-in `unittest.mock` is actually used.
+
+## [2.24.0] - 2024-05-30
+
+### Added
+- Added `MemcacheCacheHandler`, a cache handler that stores the token info using pymemcache.
+- Added support for audiobook endpoints: `get_audiobook`, `get_audiobooks`, and `get_audiobook_chapters`.
 - Added integration tests for audiobook endpoints.
-- Removed `python 2.7` from GitHub Actions CI workflow. Python v2.7 reached end of life support and is no longer supported by Ubuntu 20.04.
-- Removed `python 3.6` from GitHub Actions CI workflow. Ubuntu 20.04 is not available in GitHub Actions for `python 3.6`.
+- Added `update` field to `current_user_follow_playlist`.
 
 ### Changed
-- Changes the YouTube video link for authentication tutorial (the old video was in low definition, the new one is in high definition)
-- Updated links to Spotify in documentation
-- Edited docstrings for certain functions in client.py for functions that are no longer in use and have been replaced.
+- Fixed error obfuscation when Spotify class is being inherited and an error is raised in the Child's `__init__`
+- Replaced `artist_albums(album_type=...)` with `artist_albums(include_groups=...)` due to an API change.
+- Updated `_regex_spotify_url` to ignore `/intl-<countrycode>` in Spotify links
+- Improved README, docs and examples
+
+### Fixed
+- Readthedocs build
+- Split `test_current_user_save_and_usave_tracks` unit test
+
+### Removed
+- Drop support for EOL Python 3.7
 
 ## [2.23.0] - 2023-04-07
 
@@ -61,7 +85,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Incorrect `category_id` input for test_category
 - Assertion value for `test_categories_limit_low` and `test_categories_limit_high`
-- Pin Github Actions Runner to Ubuntu 20 for Py27
+- Pin GitHub Actions Runner to Ubuntu 20 for Py27
 - Fixed potential error where `found` variable in `test_artist_related_artists` is undefined if for loop never evaluates to true
 - Fixed false positive test `test_new_releases` which looks up the wrong property of the JSON response object and always evaluates to true
 
@@ -86,13 +110,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added `RedisCacheHandler`, a cache handler that stores the token info in Redis.
-- Changed URI handling in `client.Spotify._get_id()` to remove qureies if provided by error.
+- Changed URI handling in `client.Spotify._get_id()` to remove queries if provided by error.
 - Added a new parameter to `RedisCacheHandler` to allow custom keys (instead of the default `token_info` key)
 - Simplify check for existing token in `RedisCacheHandler`
 
 ### Changed
 
-- Removed Python 3.5 and added Python 3.9 in Github Action
+- Removed Python 3.5 and added Python 3.9 in GitHub Action
 
 ## [2.19.0] - 2021-08-12
 
@@ -105,7 +129,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fixed a bug in `CacheFileHandler.__init__`: The documentation says that the username will be retrieved from the environment, but it wasn't.
-- Fixed a bug in the initializers for the auth managers that produced a spurious warning message if you provide a cache handler and you set a value for the "SPOTIPY_CLIENT_USERNAME" environment variable.
+- Fixed a bug in the initializers for the auth managers that produced a spurious warning message if you provide a cache handler, and you set a value for the "SPOTIPY_CLIENT_USERNAME" environment variable.
 - Use generated MIT license and fix license type in `pip show`
 
 ## [2.18.0] - 2021-04-13
@@ -146,7 +170,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The docs for the `auth` parameter of `Spotify.init` use the term "access token" instead of "authorization token"
 - Changed docs for `search` to mention that you can provide multiple types to search for
 - The query parameters of requests are now logged
-- Deprecate specifing `cache_path` or `username` directly to `SpotifyOAuth`, `SpotifyPKCE`, and `SpotifyImplicitGrant` constructors, instead directing users to use the `CacheFileHandler` cache handler
+- Deprecate specifying `cache_path` or `username` directly to `SpotifyOAuth`, `SpotifyPKCE`, and `SpotifyImplicitGrant` constructors, instead directing users to use the `CacheFileHandler` cache handler
 - Removed requirement for examples/app.py to specify port multiple times (only SPOTIPY_REDIRECT_URI needs to contain the port)
 
 ### Added
@@ -247,7 +271,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     authorization/authentication web api errors details.
 - Added `SpotifyStateError` subclass of `SpotifyOauthError`
 - Allow extending `SpotifyClientCredentials` and `SpotifyOAuth`
-- Added the market paramter to `album_tracks`
+- Added the market parameter to `album_tracks`
 
 ### Deprecated
 
@@ -298,7 +322,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - retries
     - status_retries
     - backoff_factor
-- Spin up a local webserver to auto-fill authentication URL
+- Spin up a local webserver to autofill authentication URL
 - Use session in SpotifyAuthBase
 - Logging used instead of print statements
 
@@ -401,7 +425,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for `current_user_saved_albums_contains`
 - Support for `user_unfollow_artists`
 - Support for `user_unfollow_users`
-- Lint with flake8 using Github action
+- Lint with flake8 using GitHub action
 
 ### Changed
 
@@ -453,7 +477,7 @@ Fixed bug in auto retry logic
 
 ## [2.3.3] - 2015-04-01
 
-Aadded client credential flow
+Added client credential flow
 
 ## [2.3.2] - 2015-03-31
 
@@ -497,7 +521,7 @@ Support for "Your Music" tracks (add, delete, get), with examples
 
 ## [1.45.0] - 2014-07-07
 
-Support for related artists endpoint. Don't use cache auth codes when scope changes
+Support for related artists' endpoint. Don't use cache auth codes when scope changes
 
 ## [1.44.0] - 2014-07-03
 
