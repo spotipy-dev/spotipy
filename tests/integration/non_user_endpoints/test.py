@@ -54,21 +54,21 @@ class AuthTestSpotipy(unittest.TestCase):
     heavyweight_urn = 'spotify:show:5c26B28vZMN8PG0Nppmn5G'
     heavyweight_id = '5c26B28vZMN8PG0Nppmn5G'
     heavyweight_url = 'https://open.spotify.com/show/5c26B28vZMN8PG0Nppmn5G'
-    reply_all_urn = 'spotify:show:7gozmLqbcbr6PScMjc0Zl4'
+    reply_all_urn = 'spotify:show:7iHfbu1YPACw6oZPAFJtqe'
     heavyweight_ep1_urn = 'spotify:episode:68kq3bNz6hEuq8NtdfwERG'
     heavyweight_ep1_id = '68kq3bNz6hEuq8NtdfwERG'
     heavyweight_ep1_url = 'https://open.spotify.com/episode/68kq3bNz6hEuq8NtdfwERG'
     reply_all_ep1_urn = 'spotify:episode:1KHjbpnmNpFmNTczQmTZlR'
 
-    american_gods_urn = 'spotify:audiobook:1IcM9Untg6d3ktuwObYGcN'
-    american_gods_id = '1IcM9Untg6d3ktuwObYGcN'
-    american_gods_url = 'https://open.spotify.com/audiobook/1IcM9Untg6d3ktuwObYGcN'
+    dune_urn = 'spotify:audiobook:7iHfbu1YPACw6oZPAFJtqe'
+    dune_id = '7iHfbu1YPACw6oZPAFJtqe'
+    dune_url = 'https://open.spotify.com/audiobook/7iHfbu1YPACw6oZPAFJtqe'
 
     four_books = [
-        'spotify:audiobook:1IcM9Untg6d3ktuwObYGcN',
+        'spotify:audiobook:7iHfbu1YPACw6oZPAFJtqe',
         'spotify:audiobook:37sRC6carIX2Vf3Vv716T7',
         'spotify:audiobook:1Gep4UJ95xQawA55OgRI8n',
-        'spotify:audiobook:4Sm381mcf5gBsi9yfhqgVB']
+        'spotify:audiobook:18yVqkdbdRvS24c0Ilj2ci']
 
     @classmethod
     def setUpClass(self):
@@ -337,7 +337,7 @@ class AuthTestSpotipy(unittest.TestCase):
 
         def find_album():
             for album in results['items']:
-                if album['name'] == 'Death to False Metal':
+                if 'Weezer' in album['name']:  # Weezer has many albums containing Weezer
                     return True
             return False
 
@@ -485,9 +485,9 @@ class AuthTestSpotipy(unittest.TestCase):
         self.assertIn("GB", markets)
 
     def test_get_audiobook(self):
-        audiobook = self.spotify.get_audiobook(self.american_gods_urn, market="US")
+        audiobook = self.spotify.get_audiobook(self.dune_urn, market="US")
         self.assertTrue(audiobook['name'] ==
-                        'American Gods: The Tenth Anniversary Edition: A Novel')
+                        'Dune: Book One in the Dune Chronicles')
 
     def test_get_audiobook_bad_urn(self):
         with self.assertRaises(SpotifyException):
@@ -497,15 +497,15 @@ class AuthTestSpotipy(unittest.TestCase):
         results = self.spotify.get_audiobooks(self.four_books, market="US")
         self.assertTrue('audiobooks' in results)
         self.assertTrue(len(results['audiobooks']) == 4)
-        self.assertTrue(results['audiobooks'][0]['name'] ==
-                        'American Gods: The Tenth Anniversary Edition: A Novel')
+        self.assertTrue(results['audiobooks'][0]['name']
+                        == 'Dune: Book One in the Dune Chronicles')
         self.assertTrue(results['audiobooks'][1]['name'] == 'The Da Vinci Code: A Novel')
         self.assertTrue(results['audiobooks'][2]['name'] == 'Outlander')
-        self.assertTrue(results['audiobooks'][3]['name'] == 'Pachinko: A Novel')
+        self.assertTrue(results['audiobooks'][3]['name'] == 'The Fifth Season: Booktrack Edition')
 
     def test_get_audiobook_chapters(self):
         results = self.spotify.get_audiobook_chapters(
-            self.american_gods_urn, market="US", limit=10, offset=5)
+            self.dune_urn, market="US", limit=10, offset=5)
         self.assertTrue('items' in results)
         self.assertTrue(len(results['items']) == 10)
         self.assertTrue(results['items'][0]['chapter_number'] == 5)
