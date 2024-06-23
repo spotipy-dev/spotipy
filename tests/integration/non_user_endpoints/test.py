@@ -483,12 +483,12 @@ class AuthTestSpotipy(unittest.TestCase):
         self.assertIn("US", markets)
         self.assertIn("GB", markets)
 
-    def test_artist_search(self):
-        results = self.spotify.search(q='test', type='audiobook')
+    def test_audiobook_search(self):
+        results = self.spotify.search(q='test', type='audiobook', market="US")
         from pprint import pprint
         pprint(results)
         self.assertTrue('audiobooks' in results)
-    
+
     def test_get_audiobook(self):
         audiobook = self.spotify.get_audiobook(self.dune_urn, market="US")
         self.assertTrue(audiobook['name'] ==
