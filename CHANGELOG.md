@@ -16,7 +16,7 @@ Add your changes below.
 - Added test_artist_id, test_artist_url, and test_artists_mixed_ids to non_user_endpoints test.py
 
 ### Fixed
--
+- Audiobook integration tests
 
 ### Removed
 - `mock` no longer listed as a test dependency. Only built-in `unittest.mock` is actually used.

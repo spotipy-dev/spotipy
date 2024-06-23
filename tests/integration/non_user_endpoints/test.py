@@ -60,8 +60,6 @@ class AuthTestSpotipy(unittest.TestCase):
     heavyweight_ep1_url = 'https://open.spotify.com/episode/68kq3bNz6hEuq8NtdfwERG'
     reply_all_ep1_urn = 'spotify:episode:1KHjbpnmNpFmNTczQmTZlR'
 
-    # The following audiobooks are currently available in the GB market
-    # but might not be in other markets
     dune_urn = 'spotify:audiobook:7iHfbu1YPACw6oZPAFJtqe'
     dune_id = '7iHfbu1YPACw6oZPAFJtqe'
     dune_url = 'https://open.spotify.com/audiobook/7iHfbu1YPACw6oZPAFJtqe'
