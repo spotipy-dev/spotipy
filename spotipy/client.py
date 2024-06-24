@@ -841,11 +841,9 @@ class Spotify:
         collaborative=None,
         description=None,
     ):
-        warnings.warn(
-            "You should use `playlist_change_details(playlist_id, ...)` instead",
-            DeprecationWarning,
-        )
-        """ Changes a playlist's name and/or public/private state
+        """ This function is no longer in use, please use the recommended function in the warning!
+
+            Changes a playlist's name and/or public/private state
 
             Parameters:
                 - user - the id of the user
@@ -855,12 +853,18 @@ class Spotify:
                 - collaborative - optional is the playlist collaborative
                 - description - optional description of the playlist
         """
+        warnings.warn(
+            "You should use `playlist_change_details(playlist_id, ...)` instead",
+            DeprecationWarning,
+        )
 
         return self.playlist_change_details(playlist_id, name, public,
                                             collaborative, description)
 
     def user_playlist_unfollow(self, user, playlist_id):
-        """ Unfollows (deletes) a playlist for a user
+        """ This function is no longer in use, please use the recommended function in the warning!
+
+            Unfollows (deletes) a playlist for a user
 
             Parameters:
                 - user - the id of the user
@@ -875,11 +879,9 @@ class Spotify:
     def user_playlist_add_tracks(
         self, user, playlist_id, tracks, position=None
     ):
-        warnings.warn(
-            "You should use `playlist_add_items(playlist_id, tracks)` instead",
-            DeprecationWarning,
-        )
-        """ Adds tracks to a playlist
+        """ This function is no longer in use, please use the recommended function in the warning!
+
+            Adds tracks to a playlist
 
             Parameters:
                 - user - the id of the user
@@ -887,17 +889,20 @@ class Spotify:
                 - tracks - a list of track URIs, URLs or IDs
                 - position - the position to add the tracks
         """
+        warnings.warn(
+            "You should use `playlist_add_items(playlist_id, tracks)` instead",
+            DeprecationWarning,
+        )
+
         tracks = [self._get_uri("track", tid) for tid in tracks]
         return self.playlist_add_items(playlist_id, tracks, position)
 
     def user_playlist_add_episodes(
         self, user, playlist_id, episodes, position=None
     ):
-        warnings.warn(
-            "You should use `playlist_add_items(playlist_id, episodes)` instead",
-            DeprecationWarning,
-        )
-        """ Adds episodes to a playlist
+        """ This function is no longer in use, please use the recommended function in the warning!
+
+            Adds episodes to a playlist
 
             Parameters:
                 - user - the id of the user
@@ -905,11 +910,18 @@ class Spotify:
                 - episodes - a list of track URIs, URLs or IDs
                 - position - the position to add the episodes
         """
+        warnings.warn(
+            "You should use `playlist_add_items(playlist_id, episodes)` instead",
+            DeprecationWarning,
+        )
+
         episodes = [self._get_uri("episode", tid) for tid in episodes]
         return self.playlist_add_items(playlist_id, episodes, position)
 
     def user_playlist_replace_tracks(self, user, playlist_id, tracks):
-        """ Replace all tracks in a playlist for a user
+        """ This function is no longer in use, please use the recommended function in the warning!
+
+            Replace all tracks in a playlist for a user
 
             Parameters:
                 - user - the id of the user
@@ -931,7 +943,9 @@ class Spotify:
         range_length=1,
         snapshot_id=None,
     ):
-        """ Reorder tracks in a playlist from a user
+        """ This function is no longer in use, please use the recommended function in the warning!
+
+            Reorder tracks in a playlist from a user
 
             Parameters:
                 - user - the id of the user
@@ -954,14 +968,15 @@ class Spotify:
     def user_playlist_remove_all_occurrences_of_tracks(
         self, user, playlist_id, tracks, snapshot_id=None
     ):
-        """ Removes all occurrences of the given tracks from the given playlist
+        """ This function is no longer in use, please use the recommended function in the warning!
+
+            Removes all occurrences of the given tracks from the given playlist
 
             Parameters:
                 - user - the id of the user
                 - playlist_id - the id of the playlist
                 - tracks - the list of track ids to remove from the playlist
                 - snapshot_id - optional id of the playlist snapshot
-
         """
         warnings.warn(
             "You should use `playlist_remove_all_occurrences_of_items"
@@ -975,7 +990,9 @@ class Spotify:
     def user_playlist_remove_specific_occurrences_of_tracks(
         self, user, playlist_id, tracks, snapshot_id=None
     ):
-        """ Removes all occurrences of the given tracks from the given playlist
+        """ This function is no longer in use, please use the recommended function in the warning!
+
+            Removes all occurrences of the given tracks from the given playlist
 
             Parameters:
                 - user - the id of the user
@@ -1009,13 +1026,13 @@ class Spotify:
         )
 
     def user_playlist_follow_playlist(self, playlist_owner_id, playlist_id):
-        """
-        Add the current authenticated user as a follower of a playlist.
+        """ This function is no longer in use, please use the recommended function in the warning!
 
-        Parameters:
-            - playlist_owner_id - the user id of the playlist owner
-            - playlist_id - the id of the playlist
+            Add the current authenticated user as a follower of a playlist.
 
+            Parameters:
+                - playlist_owner_id - the user id of the playlist owner
+                - playlist_id - the id of the playlist
         """
         warnings.warn(
             "You should use `current_user_follow_playlist(playlist_id)` instead",
@@ -1026,15 +1043,15 @@ class Spotify:
     def user_playlist_is_following(
         self, playlist_owner_id, playlist_id, user_ids
     ):
-        """
-        Check to see if the given users are following the given playlist
+        """ This function is no longer in use, please use the recommended function in the warning!
 
-        Parameters:
-            - playlist_owner_id - the user id of the playlist owner
-            - playlist_id - the id of the playlist
-            - user_ids - the ids of the users that you want to check to see
-                if they follow the playlist. Maximum: 5 ids.
+            Check to see if the given users are following the given playlist
 
+            Parameters:
+                - playlist_owner_id - the user id of the playlist owner
+                - playlist_id - the id of the playlist
+                - user_ids - the ids of the users that you want to check to see
+                    if they follow the playlist. Maximum: 5 ids.
         """
         warnings.warn(
             "You should use `playlist_is_following(playlist_id, user_ids)` instead",

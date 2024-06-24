@@ -10,10 +10,15 @@ Add your changes below.
 
 ### Added
 - Added unit tests for queue functions
+- Added detailed function docstrings to 'util.py', including descriptions and special sections that lists arguments, returns, and raises.
+- Updated order of instructions for Python and pip package manager installation in TUTORIAL.md
+- Updated TUTORIAL.md instructions to match current layout of Spotify Developer Dashboard
+- Added test_artist_id, test_artist_url, and test_artists_mixed_ids to non_user_endpoints test.py
 - Added custom `urllib3.Retry` class for printing a warning when a rate/request limit is reached.
 
 ### Fixed
--
+- Audiobook integration tests
+- Edited docstrings for certain functions in client.py for functions that are no longer in use and have been replaced.
 
 ### Removed
 - `mock` no longer listed as a test dependency. Only built-in `unittest.mock` is actually used.
