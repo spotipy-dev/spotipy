@@ -302,30 +302,6 @@ If you think you've found a bug, let us know at
 Contribute
 ==========
 
-Spotipy authored by Paul Lamere (plamere) with contributions by:
-
-  - Daniel Beaudry (`danbeaudry on Github <https://github.com/danbeaudry>`_)
-  - Faruk Emre Sahin (`fsahin on Github <https://github.com/fsahin>`_)
-  - George (`rogueleaderr on Github <https://github.com/rogueleaderr>`_)
-  - Henry Greville (`sethaurus on Github <https://github.com/sethaurus>`_)
-  - Hugo van Kemanade (`hugovk on Github <https://github.com/hugovk>`_)
-  - José Manuel Pérez (`JMPerez on Github <https://github.com/JMPerez>`_)
-  - Lucas Nunno (`lnunno on Github <https://github.com/lnunno>`_)
-  - Lynn Root (`econchick on Github <https://github.com/econchick>`_)
-  - Matt Dennewitz (`mattdennewitz on Github <https://github.com/mattdennewitz>`_)
-  - Matthew Duck (`mattduck on Github <https://github.com/mattduck>`_)
-  - Michael Thelin (`thelinmichael on Github <https://github.com/thelinmichael>`_)
-  - Ryan Choi (`ryankicks on Github <https://github.com/ryankicks>`_)
-  - Simon Metson (`drsm79 on Github <https://github.com/drsm79>`_)
-  - Steve Winton (`swinton on Github <https://github.com/swinton>`_)
-  - Tim Balzer (`timbalzer on Github <https://github.com/timbalzer>`_)
-  - `corycorycory on Github <https://github.com/corycorycory>`_
-  - Nathan Coleman (`nathancoleman on Github <https://github.com/nathancoleman>`_) 
-  - Michael Birtwell (`mbirtwell on Github <https://github.com/mbirtwell>`_)
-  - Harrison Hayes (`Harrison97 on Github <https://github.com/Harrison97>`_)
-  - Stephane Bruckert (`stephanebruckert on Github <https://github.com/stephanebruckert>`_)
-  - Ritiek Malhotra (`ritiek on Github <https://github.com/ritiek>`_)
-
 If you are a developer with Python experience, and you would like to contribute to Spotipy, please
 be sure to follow the guidelines listed below:
 
@@ -402,4 +378,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-
