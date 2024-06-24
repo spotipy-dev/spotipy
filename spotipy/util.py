@@ -166,4 +166,9 @@ class Retry(urllib3.Retry):
         if self.is_retry(method, response.status, bool(retry_header)):
             logging.warning("Your application has reached a rate/request limit. "
                             f"Retry will occur after: {retry_header}")
-        return super().increment(method, url, response=response, error=error, _pool=_pool, _stacktrace=_stacktrace)
+        return super().increment(method,
+                                 url,
+                                 response=response,
+                                 error=error,
+                                 _pool=_pool,
+                                 _stacktrace=_stacktrace)
