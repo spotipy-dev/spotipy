@@ -14,6 +14,7 @@ Add your changes below.
 - Updated order of instructions for Python and pip package manager installation in TUTORIAL.md
 - Updated TUTORIAL.md instructions to match current layout of Spotify Developer Dashboard
 - Added test_artist_id, test_artist_url, and test_artists_mixed_ids to non_user_endpoints test.py
+- Added rate/request limit to FAQ
 
 ### Fixed
 - Audiobook integration tests
