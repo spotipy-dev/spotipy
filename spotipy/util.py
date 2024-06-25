@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 """ Shows a user's playlists. This needs to be authenticated via OAuth. """
 
 __all__ = ["CLIENT_CREDS_ENV_VARS", "prompt_for_user_token"]
@@ -5,8 +7,11 @@ __all__ = ["CLIENT_CREDS_ENV_VARS", "prompt_for_user_token"]
 import logging
 import os
 import warnings
+from types import TracebackType
 
 import spotipy
+
+import urllib3
 
 LOGGER = logging.getLogger(__name__)
 
@@ -142,3 +147,29 @@ def normalize_scope(scope):
         return " ".join(sorted(scopes))
     else:
         return None
+
+
+class Retry(urllib3.Retry):
+    """
+    Custom class for printing a warning when a rate/request limit is reached.
+    """
+    def increment(
+            self,
+            method: str | None = None,
+            url: str | None = None,
+            response: urllib3.BaseHTTPResponse | None = None,
+            error: Exception | None = None,
+            _pool: urllib3.connectionpool.ConnectionPool | None = None,
+            _stacktrace: TracebackType | None = None,
+    ) -> urllib3.Retry:
+        if response:
+            retry_header = response.headers.get("Retry-After")
+            if self.is_retry(method, response.status, bool(retry_header)):
+                logging.warning("Your application has reached a rate/request limit. "
+                                f"Retry will occur after: {retry_header}")
+        return super().increment(method,
+                                 url,
+                                 response=response,
+                                 error=error,
+                                 _pool=_pool,
+                                 _stacktrace=_stacktrace)

@@ -15,6 +15,7 @@ Add your changes below.
 - Updated TUTORIAL.md instructions to match current layout of Spotify Developer Dashboard
 - Added test_artist_id, test_artist_url, and test_artists_mixed_ids to non_user_endpoints test.py
 - Added rate/request limit to FAQ
+- Added custom `urllib3.Retry` class for printing a warning when a rate/request limit is reached.
 
 ### Fixed
 - Audiobook integration tests
