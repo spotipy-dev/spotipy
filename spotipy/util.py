@@ -162,10 +162,11 @@ class Retry(urllib3.Retry):
             _pool: urllib3.connectionpool.ConnectionPool | None = None,
             _stacktrace: TracebackType | None = None,
     ) -> urllib3.Retry:
-        retry_header = response.headers.get("Retry-After")
-        if self.is_retry(method, response.status, bool(retry_header)):
-            logging.warning("Your application has reached a rate/request limit. "
-                            f"Retry will occur after: {retry_header}")
+        if response:
+            retry_header = response.headers.get("Retry-After")
+            if self.is_retry(method, response.status, bool(retry_header)):
+                logging.warning("Your application has reached a rate/request limit. "
+                                f"Retry will occur after: {retry_header}")
         return super().increment(method,
                                  url,
                                  response=response,
