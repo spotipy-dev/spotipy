@@ -27,10 +27,12 @@ Add your changes below.
 ## [2.24.0] - 2024-05-30
 
 ### Added
+
 - Added `MemcacheCacheHandler`, a cache handler that stores the token info using pymemcache.
 - Added support for audiobook endpoints: `get_audiobook`, `get_audiobooks`, and `get_audiobook_chapters`.
 - Added integration tests for audiobook endpoints.
 - Added `update` field to `current_user_follow_playlist`.
+- Added env_variable_setup.rst to docs and associated images to docs/images. This is a written walkthrough based on the environment variable authentication tutorial video.
 
 ### Changed
 - Fixed error obfuscation when Spotify class is being inherited and an error is raised in the Child's `__init__`
