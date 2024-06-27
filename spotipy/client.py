@@ -1099,7 +1099,7 @@ class Spotify:
                 - playlist_id - the id of the playlist
         """
         return self._delete(
-            f"playlists/{self._get_id("playlist", playlist_id)}/followers"
+            f"playlists/{self._get_id('playlist', playlist_id)}/followers"
         )
 
     def playlist_add_items(
