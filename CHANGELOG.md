@@ -20,7 +20,7 @@ Add your changes below.
 ### Fixed
 - Audiobook integration tests
 - Edited docstrings for certain functions in client.py for functions that are no longer in use and have been replaced.
-- `current_user_unfollow_playlist()` now supports more the only playlist ids
+- `current_user_unfollow_playlist()` now supports playlist IDs, URLs, and URIs rather than previously where it only supported playlist IDs.
 
 ### Removed
 - `mock` no longer listed as a test dependency. Only built-in `unittest.mock` is actually used.
