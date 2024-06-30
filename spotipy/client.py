@@ -1096,10 +1096,10 @@ class Spotify:
             user
 
             Parameters:
-                - name - the name of the playlist
+                - playlist_id - the id of the playlist
         """
         return self._delete(
-            f"playlists/{playlist_id}/followers"
+            f"playlists/{self._get_id('playlist', playlist_id)}/followers"
         )
 
     def playlist_add_items(
