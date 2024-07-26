@@ -51,6 +51,7 @@ class CacheFileHandler(CacheHandler):
 
     def __init__(self,
                  cache_path=None,
+                 unique_hash=None,
                  username=None,
                  encoder_cls=None):
         """
@@ -67,6 +68,8 @@ class CacheFileHandler(CacheHandler):
             self.cache_path = cache_path
         else:
             cache_path = ".cache"
+            if unique_hash:
+                cache_path += "-" + str(unique_hash)
             username = (username or os.getenv(CLIENT_CREDS_ENV_VARS["client_username"]))
             if username:
                 cache_path += "-" + str(username)

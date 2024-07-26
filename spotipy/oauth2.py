@@ -13,6 +13,7 @@ import os
 import time
 import warnings
 import webbrowser
+import hashlib
 
 import requests
 import urllib.parse as urllibparse
@@ -349,8 +350,9 @@ class SpotifyOAuth(SpotifyAuthBase):
         else:
             username = (username or os.getenv(CLIENT_CREDS_ENV_VARS["client_username"]))
             self.cache_handler = CacheFileHandler(
+                unique_hash=hashlib.sha256(client_secret.encode('utf-8')).hexdigest()[:7],
                 username=username,
-                cache_path=cache_path
+                cache_path=cache_path,
             )
         self.proxies = proxies
         self.requests_timeout = requests_timeout
