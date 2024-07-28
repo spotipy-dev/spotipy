@@ -17,6 +17,7 @@ Add your changes below.
 - Added rate/request limit to FAQ
 - Added custom `urllib3.Retry` class for printing a warning when a rate/request limit is reached.
 - Added `personalized_playlist.py`, `track_recommendations.py`, and `audio_features_analysis.py` to `/examples`.
+- Discord badge in README
 
 ### Fixed
 - Audiobook integration tests
