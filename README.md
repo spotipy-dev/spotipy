@@ -2,7 +2,7 @@
 
 ##### Spotipy is a lightweight Python library for the [Spotify Web API](https://developer.spotify.com/documentation/web-api). With Spotipy you get full access to all of the music data provided by the Spotify platform.
 
-![Tests](https://github.com/plamere/spotipy/workflows/Tests/badge.svg?branch=master) [![Documentation Status](https://readthedocs.org/projects/spotipy/badge/?version=master)](https://spotipy.readthedocs.io/en/latest/?badge=master) [![Discord server](https://img.shields.io/discord/1244611850700849183?style=flat&logo=discord&logoColor=7289DA&color=7289DA)](https://discord.gg/HP6xcPsTPJ)
+![tests](https://github.com/plamere/spotipy/workflows/Tests/badge.svg?branch=master) [![Documentation Status](https://readthedocs.org/projects/spotipy/badge/?version=master)](https://spotipy.readthedocs.io/en/latest/?badge=master) [![Discord server](https://img.shields.io/discord/1244611850700849183?style=flat&logo=discord&logoColor=7289DA&color=7289DA)](https://discord.gg/HP6xcPsTPJ)
 
 ## Table of Contents
 
