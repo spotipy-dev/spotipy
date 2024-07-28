@@ -4,10 +4,6 @@
 
 ![Tests](https://github.com/plamere/spotipy/workflows/Tests/badge.svg?branch=master) [![Documentation Status](https://readthedocs.org/projects/spotipy/badge/?version=master)](https://spotipy.readthedocs.io/en/latest/?badge=master) [![](https://dcbadge.limes.pink/api/server/https://discord.gg/HP6xcPsTPJ?style=flat)](https://discord.gg/HP6xcPsTPJ)
 
-
-
-
-
 ## Table of Contents
 
 - [Features](#features)
