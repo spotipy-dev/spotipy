@@ -219,8 +219,8 @@ class Spotify:
         self._session.mount('https://', adapter)
 
     def _auth_headers(self):
-        if self._auth:
-            return {"Authorization": f"Bearer {self._auth}"}
+        if self.access_token:
+            return {"Authorization": "Bearer {0}".format(self.access_token)}
         if not self.auth_manager:
             return {}
         try:
