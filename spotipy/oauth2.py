@@ -11,6 +11,7 @@ import logging
 import os
 import time
 import webbrowser
+import warnings
 
 import requests
 import urllib.parse as urllibparse
