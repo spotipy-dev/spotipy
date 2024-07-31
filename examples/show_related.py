@@ -1,4 +1,3 @@
-
 # shows related artists for the given seed artist
 
 from spotipy.oauth2 import SpotifyClientCredentials

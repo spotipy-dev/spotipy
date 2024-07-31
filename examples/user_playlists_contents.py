@@ -25,8 +25,7 @@ if __name__ == '__main__':
             print(playlist['name'])
             print('  total tracks', playlist['tracks']['total'])
 
-            results = sp.playlist(playlist['id'], fields="tracks,next")
-            tracks = results['tracks']
+            tracks = sp.playlist_items(playlist['id'], fields="items,next", additional_types=('tracks', ))
             show_tracks(tracks)
 
             while tracks['next']:

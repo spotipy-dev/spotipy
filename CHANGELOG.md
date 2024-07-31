@@ -12,44 +12,94 @@ Rebasing master onto v3 doesn't require a changelog update.
 
 ### Added
 
-* `Scope` - An enum which contains all of the authorization scopes (see [here](https://github.com/plamere/spotipy/issues/652#issuecomment-797461311)).
+- `Scope` - An enum which contains all of the authorization scopes (see [here](https://github.com/plamere/spotipy/issues/652#issuecomment-797461311)).
 
 ### Changed
 
-* Made `CacheHandler` an abstract base class
-* Modified the return structure of the `audio_features` function (wrapping the [Get Audio Features for Several Tracks](https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-several-audio-features) API) to conform to the return structure of the similar methods listed below. The functions wrapping these APIs do not unwrap the single key JSON response, and this is currently the only function that does this.
-    * [Get Several Tracks](https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-several-tracks)
-    * [Get Multiple Artists](https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-multiple-artists)
-    * [Get Multiple Albums](https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-multiple-albums)
-* Renamed the `auth` parameter of `Spotify.__init__` to `access_token` for better clarity.
-* Removed the `client_credentials_manager` and `oauth_manager` parameters because they are redundant.
-* Replaced the `set_auth` and `auth_manager` properties with standard attributes.
+- Made `CacheHandler` an abstract base class
+- Modified the return structure of the `audio_features` function (wrapping the [Get Audio Features for Several Tracks](https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-several-audio-features) API) to conform to the return structure of the similar methods listed below. The functions wrapping these APIs do not unwrap the single key JSON response, and this is currently the only function that does this.
+  - [Get Several Tracks](https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-several-tracks)
+  - [Get Multiple Artists](https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-multiple-artists)
+  - [Get Multiple Albums](https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-multiple-albums)
+- Renamed the `auth` parameter of `Spotify.__init__` to `access_token` for better clarity.
+- Removed the `client_credentials_manager` and `oauth_manager` parameters because they are redundant.
+- Replaced the `set_auth` and `auth_manager` properties with standard attributes.
 
 ### Removed
 
-* Removed the following deprecated methods from `Spotify`:
-    * `playlist_tracks`
-    * `user_playlist`
-    * `user_playlist_tracks`
-    * `user_playlist_change_details`
-    * `user_playlist_unfollow`
-    * `user_playlist_add_tracks`
-    * `user_playlist_replace_tracks`
-    * `user_playlist_reorder_tracks`
-    * `user_playlist_remove_all_occurrences_of_tracks`
-    * `user_playlist_remove_specific_occurrences_of_tracks`
-    * `user_playlist_follow_playlist`
-    * `user_playlist_is_following`
+- Removed the following deprecated methods from `Spotify`:
+  - `playlist_tracks`
+  - `user_playlist`
+  - `user_playlist_tracks`
+  - `user_playlist_change_details`
+  - `user_playlist_unfollow`
+  - `user_playlist_add_tracks`
+  - `user_playlist_replace_tracks`
+  - `user_playlist_reorder_tracks`
+  - `user_playlist_remove_all_occurrences_of_tracks`
+  - `user_playlist_remove_specific_occurrences_of_tracks`
+  - `user_playlist_follow_playlist`
+  - `user_playlist_is_following`
 
-* Removed the deprecated `as_dict` parameter from the `get_access_token` method of `SpotifyOAuth` and `SpotifyPKCE`.
-* Removed the deprecated `get_cached_token` and `_save_token_info` methods of `SpotifyOAuth` and `SpotifyPKCE`.
-* Removed `SpotifyImplicitGrant`.
-* Removed `prompt_for_user_token`.
+- Removed the deprecated `as_dict` parameter from the `get_access_token` method of `SpotifyOAuth` and `SpotifyPKCE`.
+- Removed the deprecated `get_cached_token` and `_save_token_info` methods of `SpotifyOAuth` and `SpotifyPKCE`.
+- Removed `SpotifyImplicitGrant`.
+- Removed `prompt_for_user_token`.
 
-## Unreleased [2.x.x]
 
-- Modified docstring for playlist_add_items() to accept "only URIs or URLs",
-  with intended deprecation for IDs in v3
+## Unreleased [2.25.0]
+Add your changes below.
+
+### Added
+- Added unit tests for queue functions
+- Added detailed function docstrings to 'util.py', including descriptions and special sections that lists arguments, returns, and raises.
+- Updated order of instructions for Python and pip package manager installation in TUTORIAL.md
+- Updated TUTORIAL.md instructions to match current layout of Spotify Developer Dashboard
+- Added test_artist_id, test_artist_url, and test_artists_mixed_ids to non_user_endpoints test.py
+- Added rate/request limit to FAQ
+- Added custom `urllib3.Retry` class for printing a warning when a rate/request limit is reached.
+
+### Fixed
+- Audiobook integration tests
+- Edited docstrings for certain functions in client.py for functions that are no longer in use and have been replaced.
+- `current_user_unfollow_playlist()` now supports playlist IDs, URLs, and URIs rather than previously where it only supported playlist IDs.
+
+### Removed
+- `mock` no longer listed as a test dependency. Only built-in `unittest.mock` is actually used.
+
+## [2.24.0] - 2024-05-30
+
+### Added
+- Added `MemcacheCacheHandler`, a cache handler that stores the token info using pymemcache.
+- Added support for audiobook endpoints: `get_audiobook`, `get_audiobooks`, and `get_audiobook_chapters`.
+- Added integration tests for audiobook endpoints.
+- Added `update` field to `current_user_follow_playlist`.
+
+### Changed
+- Fixed error obfuscation when Spotify class is being inherited and an error is raised in the Child's `__init__`
+- Replaced `artist_albums(album_type=...)` with `artist_albums(include_groups=...)` due to an API change.
+- Updated `_regex_spotify_url` to ignore `/intl-<countrycode>` in Spotify links
+- Improved README, docs and examples
+
+### Fixed
+- Readthedocs build
+- Split `test_current_user_save_and_usave_tracks` unit test
+
+### Removed
+- Drop support for EOL Python 3.7
+
+## [2.23.0] - 2023-04-07
+
+### Added
+- Added optional `encoder_cls` argument to `CacheFileHandler`, which overwrite default encoder for token before writing to disk
+- Integration tests for searching multiple types in multiple markets (non-user endpoints)
+- Publish to PyPI action
+
+### Fixed
+- Fixed the regex for matching playlist URIs with the format spotify:user:USERNAME:playlist:PLAYLISTID.
+- `search_markets` now factors the counts of all types in the `total`  rather than just the first type ([#534](https://github.com/spotipy-dev/spotipy/issues/534))
+
+## [2.22.1] - 2023-01-23
 
 ### Added
 
@@ -57,11 +107,15 @@ Rebasing master onto v3 doesn't require a changelog update.
 - Added Comment to README - Getting Started for user to add URI to app in Spotify Developer Dashboard. 
 - Added playlist_add_tracks.py to example folder
 
+### Changed
+
+- Modified docstring for playlist_add_items() to accept "only URIs or URLs",
+  with intended deprecation for IDs in v3
+
 ### Fixed
 
+- Path traversal vulnerability that may lead to type confusion in URI handling code
 - Update contributing.md
-
-### Removed
 
 ## [2.22.0] - 2022-12-10
 
@@ -76,7 +130,7 @@ Rebasing master onto v3 doesn't require a changelog update.
 
 - Incorrect `category_id` input for test_category
 - Assertion value for `test_categories_limit_low` and `test_categories_limit_high`
-- Pin Github Actions Runner to Ubuntu 20 for Py27
+- Pin GitHub Actions Runner to Ubuntu 20 for Py27
 - Fixed potential error where `found` variable in `test_artist_related_artists` is undefined if for loop never evaluates to true
 - Fixed false positive test `test_new_releases` which looks up the wrong property of the JSON response object and always evaluates to true
 
@@ -101,13 +155,13 @@ Rebasing master onto v3 doesn't require a changelog update.
 ### Added
 
 - Added `RedisCacheHandler`, a cache handler that stores the token info in Redis.
-- Changed URI handling in `client.Spotify._get_id()` to remove qureies if provided by error.
+- Changed URI handling in `client.Spotify._get_id()` to remove queries if provided by error.
 - Added a new parameter to `RedisCacheHandler` to allow custom keys (instead of the default `token_info` key)
 - Simplify check for existing token in `RedisCacheHandler`
 
 ### Changed
 
-- Removed Python 3.5 and added Python 3.9 in Github Action
+- Removed Python 3.5 and added Python 3.9 in GitHub Action
 
 ## [2.19.0] - 2021-08-12
 
@@ -120,7 +174,7 @@ Rebasing master onto v3 doesn't require a changelog update.
 ### Fixed
 
 - Fixed a bug in `CacheFileHandler.__init__`: The documentation says that the username will be retrieved from the environment, but it wasn't.
-- Fixed a bug in the initializers for the auth managers that produced a spurious warning message if you provide a cache handler and you set a value for the "SPOTIPY_CLIENT_USERNAME" environment variable.
+- Fixed a bug in the initializers for the auth managers that produced a spurious warning message if you provide a cache handler, and you set a value for the "SPOTIPY_CLIENT_USERNAME" environment variable.
 - Use generated MIT license and fix license type in `pip show`
 
 ### Fixed
@@ -165,7 +219,7 @@ Rebasing master onto v3 doesn't require a changelog update.
 - The docs for the `auth` parameter of `Spotify.init` use the term "access token" instead of "authorization token"
 - Changed docs for `search` to mention that you can provide multiple types to search for
 - The query parameters of requests are now logged
-- Deprecate specifing `cache_path` or `username` directly to `SpotifyOAuth`, `SpotifyPKCE`, and `SpotifyImplicitGrant` constructors, instead directing users to use the `CacheFileHandler` cache handler
+- Deprecate specifying `cache_path` or `username` directly to `SpotifyOAuth`, `SpotifyPKCE`, and `SpotifyImplicitGrant` constructors, instead directing users to use the `CacheFileHandler` cache handler
 - Removed requirement for examples/app.py to specify port multiple times (only SPOTIPY_REDIRECT_URI needs to contain the port)
 
 ### Added
@@ -266,7 +320,7 @@ Rebasing master onto v3 doesn't require a changelog update.
     authorization/authentication web api errors details.
 - Added `SpotifyStateError` subclass of `SpotifyOauthError`
 - Allow extending `SpotifyClientCredentials` and `SpotifyOAuth`
-- Added the market paramter to `album_tracks`
+- Added the market parameter to `album_tracks`
 
 ### Deprecated
 
@@ -317,7 +371,7 @@ Rebasing master onto v3 doesn't require a changelog update.
     - retries
     - status_retries
     - backoff_factor
-- Spin up a local webserver to auto-fill authentication URL
+- Spin up a local webserver to autofill authentication URL
 - Use session in SpotifyAuthBase
 - Logging used instead of print statements
 
@@ -420,13 +474,16 @@ Rebasing master onto v3 doesn't require a changelog update.
 - Support for `current_user_saved_albums_contains`
 - Support for `user_unfollow_artists`
 - Support for `user_unfollow_users`
-- Lint with flake8 using Github action
+- Lint with flake8 using GitHub action
 
 ### Changed
 
 - Fix typos in doc
 - Start following [SemVer](https://semver.org) properly
 
+### Changed
+
+- Made instructions in the CONTRIBUTING.md file more clear such that it is easier to onboard and there are no conflicts with TUTORIAL.md
 ## [2.5.0] - 2020-01-11
 
 Added follow and player endpoints
@@ -469,7 +526,7 @@ Fixed bug in auto retry logic
 
 ## [2.3.3] - 2015-04-01
 
-Aadded client credential flow
+Added client credential flow
 
 ## [2.3.2] - 2015-03-31
 
@@ -513,7 +570,7 @@ Support for "Your Music" tracks (add, delete, get), with examples
 
 ## [1.45.0] - 2014-07-07
 
-Support for related artists endpoint. Don't use cache auth codes when scope changes
+Support for related artists' endpoint. Don't use cache auth codes when scope changes
 
 ## [1.44.0] - 2014-07-03
 

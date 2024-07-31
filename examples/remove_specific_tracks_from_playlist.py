@@ -15,8 +15,7 @@ if len(sys.argv) > 2:
         track_ids.append({"uri": tid, "positions": [int(pos)]})
 else:
     print(
-        "Usage: %s playlist_id track_id,pos track_id,pos ..." %
-        (sys.argv[0],))
+        f"Usage: {sys.argv[0]} playlist_id track_id,pos track_id,pos ...")
     sys.exit()
 
 scope = 'playlist-modify-public'
