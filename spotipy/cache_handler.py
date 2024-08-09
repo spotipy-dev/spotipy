@@ -1,3 +1,18 @@
+from __future__ import annotations
+
+import errno
+import json
+import logging
+import os
+from abc import ABC, abstractmethod
+from json import JSONEncoder
+from pathlib import Path
+from typing import TypedDict
+
+from redis import RedisError
+
+from .util import CLIENT_CREDS_ENV_VARS
+
 __all__ = [
     "CacheHandler",
     "CacheFileHandler",
@@ -8,22 +23,16 @@ __all__ = [
     "MemcacheCacheHandler",
 ]
 
-import errno
-import json
-import logging
-import os
-from abc import ABC, abstractmethod
-from json import JSONEncoder
-from pathlib import Path
-from typing import Dict, Optional, Type, Union
-
-from redis import RedisError
-
-from .util import CLIENT_CREDS_ENV_VARS
-
 logger = logging.getLogger(__name__)
 
-TokenInfoType = Dict[str, Union[str, int]]
+
+class TokenInfo(TypedDict):
+    access_token: str
+    token_type: str
+    scope: str
+    expires_in: int
+    refresh_token: str
+    expires_at: int
 
 
 class CacheHandler(ABC):
@@ -37,11 +46,11 @@ class CacheHandler(ABC):
     """
 
     @abstractmethod
-    def get_cached_token(self) -> Optional[TokenInfoType]:
+    def get_cached_token(self) -> TokenInfo | None:
         """Get and return a token_info dictionary object."""
 
     @abstractmethod
-    def save_token_to_cache(self, token_info: TokenInfoType) -> None:
+    def save_token_to_cache(self, token_info: TokenInfo) -> None:
         """Save a token_info dictionary object to the cache and return None."""
 
 
@@ -50,9 +59,9 @@ class CacheFileHandler(CacheHandler):
 
     def __init__(
         self,
-        cache_path: Optional[str] = None,
-        username: Optional[str] = None,
-        encoder_cls: Optional[Type[JSONEncoder]] = None,
+        cache_path: str | None = None,
+        username: str | None = None,
+        encoder_cls: type[JSONEncoder] | None = None,
     ) -> None:
         """
         Initialize CacheFileHandler instance.
@@ -71,9 +80,9 @@ class CacheFileHandler(CacheHandler):
                 cache_path += "-" + str(username)
             self.cache_path = cache_path
 
-    def get_cached_token(self) -> Optional[TokenInfoType]:
+    def get_cached_token(self) -> TokenInfo | None:
         """Get cached token from file."""
-        token_info: Optional[TokenInfoType] = None
+        token_info: TokenInfo | None = None
 
         try:
             with Path(self.cache_path).open("r") as f:
@@ -87,7 +96,7 @@ class CacheFileHandler(CacheHandler):
 
         return token_info
 
-    def save_token_to_cache(self, token_info: TokenInfoType) -> None:
+    def save_token_to_cache(self, token_info: TokenInfo) -> None:
         """Save token cache to file."""
         try:
             with Path(self.cache_path).open("w") as f:
