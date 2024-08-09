@@ -14,7 +14,6 @@ import logging
 import os
 from abc import ABC, abstractmethod
 from json import JSONEncoder
-from pathlib import Path
 from typing import Dict, Optional, Type, Union
 
 from redis import RedisError
@@ -62,7 +61,6 @@ class CacheFileHandler(CacheHandler):
         :param encoder_cls: (Optional) JSON encoder class to override default.
         """
         self.encoder_cls = encoder_cls
-
         if cache_path:
             self.cache_path = cache_path
         else:
@@ -77,8 +75,11 @@ class CacheFileHandler(CacheHandler):
         token_info: Optional[TokenInfoType] = None
 
         try:
-            with Path(self.cache_path).open("r") as f:
-                token_info = json.load(f)
+            f = open(self.cache_path)
+            token_info_string = f.read()
+            f.close()
+            token_info = json.loads(token_info_string)
+
         except OSError as error:
             if error.errno == errno.ENOENT:
                 logger.debug("cache does not exist at: %s", self.cache_path)
@@ -90,10 +91,12 @@ class CacheFileHandler(CacheHandler):
     def save_token_to_cache(self, token_info: TokenInfoType) -> None:
         """Save token cache to file."""
         try:
-            with Path(self.cache_path).open("r") as f:
-                json.dump(token_info, f, cls=self.encoder_cls)
+            f = open(self.cache_path, "w")
+            f.write(json.dumps(token_info, cls=self.encoder_cls))
+            f.close()
         except OSError:
             logger.warning("Couldn't write token to cache at: %s", self.cache_path)
+
 
 
 
