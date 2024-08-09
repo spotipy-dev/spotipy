@@ -28,5 +28,8 @@ build-backend = "setuptools.build_meta"
 dev-dependencies = [
     "mypy>=1.11.1",
     "pylint>=3.2.6",
+    "flake8>=7.1.1",
+    "isort>=5.13.2",
+    "autopep8>=2.3.1",
 ]
 

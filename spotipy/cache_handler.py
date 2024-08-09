@@ -1,21 +1,25 @@
 __all__ = [
-    'CacheHandler',
-    'CacheFileHandler',
-    'DjangoSessionCacheHandler',
-    'FlaskSessionCacheHandler',
-    'MemoryCacheHandler',
-    'RedisCacheHandler',
-    'MemcacheCacheHandler']
+    "CacheHandler",
+    "CacheFileHandler",
+    "DjangoSessionCacheHandler",
+    "FlaskSessionCacheHandler",
+    "MemoryCacheHandler",
+    "RedisCacheHandler",
+    "MemcacheCacheHandler",
+]
 
 import errno
 import json
 import logging
 import os
 from abc import ABC, abstractmethod
-from .util import CLIENT_CREDS_ENV_VARS
-from typing import Dict, Union
+from json import JSONEncoder
+from pathlib import Path
+from typing import Dict, Optional, Type, Union
 
 from redis import RedisError
+
+from .util import CLIENT_CREDS_ENV_VARS
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +37,7 @@ class CacheHandler(ABC):
     """
 
     @abstractmethod
-    def get_cached_token(self) -> TokenInfoType:
+    def get_cached_token(self) -> Optional[TokenInfoType]:
         """Get and return a token_info dictionary object."""
 
     @abstractmethod
@@ -42,42 +46,38 @@ class CacheHandler(ABC):
 
 
 class CacheFileHandler(CacheHandler):
-    """
-    Handles reading and writing cached Spotify authorization tokens
-    as json files on disk.
-    """
+    """Read and write cached Spotify authorization tokens as json files on disk."""
 
-    def __init__(self,
-                 cache_path=None,
-                 username=None,
-                 encoder_cls=None):
+    def __init__(
+        self,
+        cache_path: Optional[str] = None,
+        username: Optional[str] = None,
+        encoder_cls: Optional[Type[JSONEncoder]] = None,
+    ) -> None:
         """
-        Parameters:
-             * cache_path: May be supplied, will otherwise be generated
-                           (takes precedence over `username`)
-             * username: May be supplied or set as environment variable
-                         (will set `cache_path` to `.cache-{username}`)
-             * encoder_cls: May be supplied as a means of overwriting the
-                        default serializer used for writing tokens to disk
+        Initialize CacheFileHandler instance.
+
+        :param cache_path: (Optional) Path to cache. (Will override 'username')
+        :param username: (Optional) Client username. (Can also be supplied via env var.)
+        :param encoder_cls: (Optional) JSON encoder class to override default.
         """
         self.encoder_cls = encoder_cls
-        if cache_path:
-            self.cache_path = cache_path
-        else:
-            cache_path = ".cache"
-            username = (username or os.getenv(CLIENT_CREDS_ENV_VARS["client_username"]))
-            if username:
-                cache_path += "-" + str(username)
-            self.cache_path = cache_path
 
-    def get_cached_token(self):
-        token_info = None
+        username = username or os.getenv(CLIENT_CREDS_ENV_VARS["client_username"])
+
+        self.cache_path = (
+            cache_path
+            if cache_path is not None
+            else ".cache" + (f"-{username}" if username is not None else "")
+        )
+
+    def get_cached_token(self) -> Optional[TokenInfoType]:
+        """Get cached token from file."""
+        token_info: Optional[TokenInfoType] = None
 
         try:
-            f = open(self.cache_path)
-            token_info_string = f.read()
-            f.close()
-            token_info = json.loads(token_info_string)
+            with Path(self.cache_path).open("r") as f:
+                token_info = json.load(f)
 
         except OSError as error:
             if error.errno == errno.ENOENT:
@@ -87,14 +87,13 @@ class CacheFileHandler(CacheHandler):
 
         return token_info
 
-    def save_token_to_cache(self, token_info):
+    def save_token_to_cache(self, token_info: TokenInfoType) -> None:
+        """Save token cache to file."""
         try:
-            f = open(self.cache_path, "w")
-            f.write(json.dumps(token_info, cls=self.encoder_cls))
-            f.close()
+            with Path(self.cache_path).open("w") as f:
+                json.dump(token_info, f, cls=self.encoder_cls)
         except OSError:
-            logger.warning('Couldn\'t write token to cache at: %s',
-                           self.cache_path)
+            logger.warning("Couldn't write token to cache at: %s", self.cache_path)
 
 
 class MemoryCacheHandler(CacheHandler):

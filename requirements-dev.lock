@@ -14,23 +14,31 @@ astroid==3.2.4
     # via pylint
 async-timeout==4.0.3
     # via redis
+autopep8==2.3.1
 certifi==2024.7.4
     # via requests
 charset-normalizer==3.3.2
     # via requests
 dill==0.3.8
     # via pylint
+flake8==7.1.1
 idna==3.7
     # via requests
 isort==5.13.2
     # via pylint
 mccabe==0.7.0
+    # via flake8
     # via pylint
 mypy==1.11.1
 mypy-extensions==1.0.0
     # via mypy
 platformdirs==4.2.2
     # via pylint
+pycodestyle==2.12.1
+    # via autopep8
+    # via flake8
+pyflakes==3.2.0
+    # via flake8
 pylint==3.2.6
 pymemcache==4.0.0
     # via spotipy
@@ -39,6 +47,7 @@ redis==5.0.8
 requests==2.32.3
     # via spotipy
 tomli==2.0.1
+    # via autopep8
     # via mypy
     # via pylint
 tomlkit==0.13.0
