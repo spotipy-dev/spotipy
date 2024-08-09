@@ -6,7 +6,6 @@ import logging
 import os
 from abc import ABC, abstractmethod
 from json import JSONEncoder
-from pathlib import Path
 from typing import TypedDict
 
 from redis import RedisError
