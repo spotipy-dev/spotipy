@@ -85,7 +85,7 @@ class CacheFileHandler(CacheHandler):
         token_info: TokenInfo | None = None
 
         try:
-            with Path(self.cache_path).open("r") as f:
+            with open(self.cache_path) as f:
                 token_info = json.load(f)
 
         except OSError as error:
@@ -99,7 +99,7 @@ class CacheFileHandler(CacheHandler):
     def save_token_to_cache(self, token_info: TokenInfo) -> None:
         """Save token cache to file."""
         try:
-            with Path(self.cache_path).open("w") as f:
+            with open(self.cache_path, "w") as f:
                 json.dump(token_info, f, cls=self.encoder_cls)
         except OSError:
             logger.warning("Couldn't write token to cache at: %s", self.cache_path)
