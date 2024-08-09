@@ -11,14 +11,17 @@ import errno
 import json
 import logging
 import os
-from spotipy.util import CLIENT_CREDS_ENV_VARS
+from abc import ABC, abstractmethod
+from .util import CLIENT_CREDS_ENV_VARS
+from typing import Dict, Union
 
 from redis import RedisError
 
 logger = logging.getLogger(__name__)
 
+TokenInfoType = Dict[str, Union[str, int]]
 
-class CacheHandler():
+class CacheHandler(ABC):
     """
     An abstraction layer for handling the caching and retrieval of
     authorization tokens.
@@ -28,19 +31,13 @@ class CacheHandler():
     structure as the CacheHandler class.
     """
 
-    def get_cached_token(self):
-        """
-        Get and return a token_info dictionary object.
-        """
-        # return token_info
-        raise NotImplementedError()
+    @abstractmethod
+    def get_cached_token(self) -> TokenInfoType:
+        """Get and return a token_info dictionary object."""
 
-    def save_token_to_cache(self, token_info):
-        """
-        Save a token_info dictionary object to the cache and return None.
-        """
-        raise NotImplementedError()
-        return None
+    @abstractmethod
+    def save_token_to_cache(self, token_info: TokenInfoType) -> None:
+        """Save a token_info dictionary object to the cache and return None."""
 
 
 class CacheFileHandler(CacheHandler):
