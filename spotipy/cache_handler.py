@@ -98,8 +98,6 @@ class CacheFileHandler(CacheHandler):
             logger.warning("Couldn't write token to cache at: %s", self.cache_path)
 
 
-
-
 class MemoryCacheHandler(CacheHandler):
     """
     A cache handler that simply stores the token info in memory as an
