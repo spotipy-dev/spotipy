@@ -21,6 +21,7 @@ logger = logging.getLogger(__name__)
 
 TokenInfoType = Dict[str, Union[str, int]]
 
+
 class CacheHandler(ABC):
     """
     An abstraction layer for handling the caching and retrieval of
@@ -211,6 +212,7 @@ class RedisCacheHandler(CacheHandler):
 class MemcacheCacheHandler(CacheHandler):
     """A Cache handler that stores the token info in Memcache using the pymemcache client
     """
+
     def __init__(self, memcache, key=None) -> None:
         """
         Parameters:
