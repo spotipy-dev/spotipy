@@ -18,6 +18,7 @@ Add your changes below.
 - Added custom `urllib3.Retry` class for printing a warning when a rate/request limit is reached.
 - Added `personalized_playlist.py`, `track_recommendations.py`, and `audio_features_analysis.py` to `/examples`.
 - Discord badge in README
+- Type annotations to `spotipy.cache_handler`
 
 ### Fixed
 - Audiobook integration tests
