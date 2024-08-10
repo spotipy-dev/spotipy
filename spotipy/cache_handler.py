@@ -7,8 +7,9 @@ import os
 from abc import ABC, abstractmethod
 from json import JSONEncoder
 from typing import TypedDict
-
+import redis
 from redis import RedisError
+import redis.client
 
 from .util import CLIENT_CREDS_ENV_VARS
 
@@ -178,37 +179,36 @@ class FlaskSessionCacheHandler(CacheHandler):
 
 
 class RedisCacheHandler(CacheHandler):
-    """
-    A cache handler that stores the token info in the Redis.
-    """
+    """A cache handler that stores the token info in the Redis."""
 
-    def __init__(self, redis, key=None):
+    def __init__(self, redis_obj: redis.client.Redis, key: str | None = None) -> None:
         """
-        Parameters:
-            * redis: Redis object provided by redis-py library
-            (https://github.com/redis/redis-py)
-            * key: May be supplied, will otherwise be generated
-                   (takes precedence over `token_info`)
-        """
-        self.redis = redis
-        self.key = key if key else 'token_info'
+        Initialize RedisCacheHandler instance.
 
-    def get_cached_token(self):
+        :param redis: The Redis object to function as the cache
+        :param key: (Optional) The key to used to store the token in the cache
+        """
+        self.redis = redis_obj
+        self.key = key if key else "token_info"
+
+    def get_cached_token(self) -> TokenInfo | None:
+        """Fetch cache token from the Redis."""
         token_info = None
         try:
             token_info = self.redis.get(self.key)
-            if token_info:
-                return json.loads(token_info)
+            if token_info is not None:
+                token_info = json.loads(token_info)
         except RedisError as e:
-            logger.warning('Error getting token from cache: ' + str(e))
+            logger.warning("Error getting token from cache: %s", str(e))
 
         return token_info
 
-    def save_token_to_cache(self, token_info):
+    def save_token_to_cache(self, token_info: TokenInfo) -> None:
+        """Cache token in the Redis."""
         try:
             self.redis.set(self.key, json.dumps(token_info))
         except RedisError as e:
-            logger.warning('Error saving token to cache: ' + str(e))
+            logger.warning("Error saving token to cache: %s", str(e))
 
 
 class MemcacheCacheHandler(CacheHandler):
