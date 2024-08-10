@@ -101,23 +101,22 @@ class CacheFileHandler(CacheHandler):
 
 
 class MemoryCacheHandler(CacheHandler):
-    """
-    A cache handler that simply stores the token info in memory as an
-    instance attribute of this class. The token info will be lost when this
-    instance is freed.
-    """
+    """Cache handler that stores the token non-persistently as an instance attribute."""
 
-    def __init__(self, token_info=None):
+    def __init__(self, token_info: TokenInfo | None = None) -> None:
         """
-        Parameters:
-            * token_info: The token info to store in memory. Can be None.
+        Initialize MemoryCacheHandler instance.
+
+        :param token_info: Optional initial cached token
         """
         self.token_info = token_info
 
-    def get_cached_token(self):
+    def get_cached_token(self) -> TokenInfo | None:
+        """Retrieve the cached token from the instance."""
         return self.token_info
 
-    def save_token_to_cache(self, token_info):
+    def save_token_to_cache(self, token_info: TokenInfo) -> None:
+        """Cache the token in this instance."""
         self.token_info = token_info
 
 
