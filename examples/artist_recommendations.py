@@ -31,8 +31,7 @@ def get_artist(name):
 def show_recommendations_for_artist(artist):
     results = sp.recommendations(seed_artists=[artist['id']])
     for track in results['tracks']:
-        logger.info('Recommendation: %s - %s', track['name'],
-                    track['artists'][0]['name'])
+        logger.info(f'Recommendation: {track["name"]} - {track["artists"][0]["name"]}')
 
 
 def main():

@@ -38,7 +38,7 @@ def show_artist_albums(artist):
     for album in albums:
         name = album['name']
         if name not in seen:
-            logger.info('ALBUM: %s', name)
+            logger.info('ALBUM: {name}')
             seen.add(name)
 
 
@@ -48,7 +48,7 @@ def main():
     if artist:
         show_artist_albums(artist)
     else:
-        logger.error("Can't find artist: %s", artist)
+        logger.error(f"Can't find artist: {artist}")
 
 
 if __name__ == '__main__':
