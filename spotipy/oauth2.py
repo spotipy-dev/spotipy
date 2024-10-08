@@ -20,32 +20,10 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import parse_qsl, urlparse
 
 from spotipy.cache_handler import CacheFileHandler, CacheHandler
+from spotipy.exceptions import SpotifyOauthError, SpotifyStateError
 from spotipy.util import CLIENT_CREDS_ENV_VARS, get_host_port, normalize_scope
 
 logger = logging.getLogger(__name__)
-
-
-class SpotifyOauthError(Exception):
-    """ Error during Auth Code or Implicit Grant flow """
-
-    def __init__(self, message, error=None, error_description=None, *args, **kwargs):
-        self.error = error
-        self.error_description = error_description
-        self.__dict__.update(kwargs)
-        super().__init__(message, *args, **kwargs)
-
-
-class SpotifyStateError(SpotifyOauthError):
-    """ The state sent and state received were different """
-
-    def __init__(self, local_state=None, remote_state=None, message=None,
-                 error=None, error_description=None, *args, **kwargs):
-        if not message:
-            message = ("Expected " + local_state + " but received "
-                       + remote_state)
-        super(SpotifyOauthError, self).__init__(message, error,
-                                                error_description, *args,
-                                                **kwargs)
 
 
 def _make_authorization_headers(client_id, client_secret):
