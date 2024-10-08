@@ -1,4 +1,5 @@
 __all__ = [
+    "SpotifyAuthBase",
     "SpotifyClientCredentials",
     "SpotifyOAuth",
     "SpotifyOauthError",

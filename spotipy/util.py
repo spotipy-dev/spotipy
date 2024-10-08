@@ -2,14 +2,10 @@ from __future__ import annotations
 
 """ Shows a user's playlists. This needs to be authenticated via OAuth. """
 
-__all__ = ["CLIENT_CREDS_ENV_VARS"]
+__all__ = ["CLIENT_CREDS_ENV_VARS", "Retry", "get_host_port", "normalize_scope"]
 
 import logging
-import os
-import warnings
 from types import TracebackType
-
-import spotipy
 
 import urllib3
 
@@ -25,7 +21,7 @@ CLIENT_CREDS_ENV_VARS = {
 
 def get_host_port(netloc):
     """ Split the network location string into host and port and returns a tuple
-        where the host is a string and the the port is an integer.
+        where the host is a string and the port is an integer.
 
         Parameters:
             - netloc - a string representing the network location.
