@@ -88,8 +88,8 @@ class AuthTestSpotipy(unittest.TestCase):
         bad_tracks = ['spotify:track:bad']
         input = self.four_tracks + bad_tracks
         results = self.spotify.audio_features(input)
-        self.assertTrue(len(results['audio_features']) == len(input))
-        for track in results['audio_features'][:-1]:
+        self.assertTrue(len(results) == len(input))
+        for track in results[:-1]:
             if track is not None:
                 assert ('speechiness' in track)
         self.assertTrue(results[-1] is None)
