@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from spotipy import Scope
+
 """ Shows a user's playlists. This needs to be authenticated via OAuth. """
 
 __all__ = ["CLIENT_CREDS_ENV_VARS", "get_host_port", "normalize_scope", "Retry"]
@@ -51,6 +53,8 @@ def normalize_scope(scope):
             scopes = scope.split(',')
 
         elif isinstance(scope, Iterable):
+            if all(isinstance(s, Scope) for s in scope):
+                return Scope.make_string(scope)
             scopes = scope
         else:
             raise Exception(
