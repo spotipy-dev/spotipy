@@ -57,7 +57,7 @@ def normalize_scope(scope):
                 return Scope.make_string(scope)
             scopes = scope
         else:
-            raise Exception(
+            raise TypeError(
                 "Unsupported scope value, please either provide a list of scopes, "
                 "or a string of scopes separated by commas."
             )
