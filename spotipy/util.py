@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from spotipy import Scope
+from spotipy.scope import Scope
 
 """ Shows a user's playlists. This needs to be authenticated via OAuth. """
 
