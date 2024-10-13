@@ -2,14 +2,10 @@ from __future__ import annotations
 
 """ Shows a user's playlists. This needs to be authenticated via OAuth. """
 
-__all__ = ["CLIENT_CREDS_ENV_VARS"]
+__all__ = ["CLIENT_CREDS_ENV_VARS", "get_host_port", "normalize_scope", "Retry"]
 
 import logging
-import os
-import warnings
 from types import TracebackType
-
-import spotipy
 
 import urllib3
 
