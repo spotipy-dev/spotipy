@@ -6,6 +6,7 @@ __all__ = ["CLIENT_CREDS_ENV_VARS", "get_host_port", "normalize_scope", "Retry"]
 
 import logging
 from types import TracebackType
+from collections.abc import Iterable
 
 import urllib3
 
@@ -48,7 +49,8 @@ def normalize_scope(scope):
     if scope:
         if isinstance(scope, str):
             scopes = scope.split(',')
-        elif isinstance(scope, list) or isinstance(scope, tuple):
+
+        elif isinstance(scope, Iterable):
             scopes = scope
         else:
             raise Exception(
