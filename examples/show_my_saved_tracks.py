@@ -9,8 +9,7 @@ scope = 'user-library-read'
 def show_tracks(results):
     for item in results['items']:
         track = item['track']
-        print("%32.32s %s" % (track['artists'][0]['name'], track['name']))
-
+        print(f"{track['artists'][0]['name']:<32.32} {track['name']}")
 
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
 

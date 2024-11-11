@@ -83,9 +83,9 @@ class CacheFileHandler(CacheHandler):
 
         except OSError as error:
             if error.errno == errno.ENOENT:
-                logger.debug("cache does not exist at: %s", self.cache_path)
+                logger.debug(f"cache does not exist at: {self.cache_path}")
             else:
-                logger.warning("Couldn't read cache at: %s", self.cache_path)
+                logger.warning(f"Couldn't read cache at: {self.cache_path}")
 
         return token_info
 
@@ -95,8 +95,7 @@ class CacheFileHandler(CacheHandler):
             f.write(json.dumps(token_info, cls=self.encoder_cls))
             f.close()
         except OSError:
-            logger.warning('Couldn\'t write token to cache at: %s',
-                           self.cache_path)
+            logger.warning(f"Couldn\'t write token to cache at: {self.cache_path}")
 
 
 class MemoryCacheHandler(CacheHandler):
@@ -214,6 +213,7 @@ class RedisCacheHandler(CacheHandler):
 class MemcacheCacheHandler(CacheHandler):
     """A Cache handler that stores the token info in Memcache using the pymemcache client
     """
+
     def __init__(self, memcache, key=None) -> None:
         """
         Parameters:

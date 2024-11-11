@@ -11,10 +11,7 @@ client_credentials_manager = SpotifyClientCredentials()
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 sp.trace = False
 
-if len(sys.argv) > 1:
-    artist_name = ' '.join(sys.argv[1:])
-else:
-    artist_name = 'weezer'
+artist_name = ' '.join(sys.argv[1:]) if len(sys.argv) > 1 else 'weezer'
 
 results = sp.search(q=artist_name, limit=50)
 tids = []

@@ -263,8 +263,9 @@ class Spotify:
         if self.language is not None:
             headers["Accept-Language"] = self.language
 
-        logger.debug('Sending %s to %s with Params: %s Headers: %s and Body: %r ',
-                     method, url, args.get("params"), headers, args.get('data'))
+        logger.debug(
+            f"Sending {method} to {url} with Params: {args.get('params')} \
+                Headers: {headers} and Body: {args.get('data')!r}")
 
         try:
             response = self._session.request(
@@ -290,9 +291,8 @@ class Spotify:
                 reason = None
 
             logger.error(
-                'HTTP Error for %s to %s with Params: %s returned %s due to %s',
-                method, url, args.get("params"), response.status_code, msg
-            )
+                f'HTTP Error for {method} to {url} with Params: {args.get("params")} \
+                    returned {response.status_code} due to {msg}')
 
             raise SpotifyException(
                 response.status_code,
@@ -317,7 +317,7 @@ class Spotify:
         except ValueError:
             results = None
 
-        logger.debug('RESULTS: %s', results)
+        logger.debug(f'RESULTS: {results}')
         return results
 
     def _get(self, url, args=None, payload=None, **kwargs):

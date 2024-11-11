@@ -13,15 +13,8 @@ def get_args():
 
 def main():
     args = get_args()
-
-    if args.playlist is None:
-        # Uses the Spotify Global Top 50 playlist
-        spotipy.Spotify(auth_manager=SpotifyOAuth()).current_user_follow_playlist(
-            '37i9dQZEVXbMDoHDwVN2tF')
-
-    else:
-        spotipy.Spotify(auth_manager=SpotifyOAuth()).current_user_follow_playlist(args.playlist)
-
+    playlist = args.playlist or '37i9dQZEVXbMDoHDwVN2tF' # default is Spotify Global Top 50 playlist 
+    spotipy.Spotify(auth_manager=SpotifyOAuth()).current_user_follow_playlist(playlist)
 
 if __name__ == '__main__':
     main()

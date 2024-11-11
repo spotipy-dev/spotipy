@@ -10,10 +10,7 @@ import sys
 client_credentials_manager = SpotifyClientCredentials()
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
-if len(sys.argv) > 1:
-    tid = sys.argv[1]
-else:
-    tid = 'spotify:track:4TTV7EcfroSLWzXRY6gLv6'
+tid = sys.argv[1] if len(sys.argv) > 1 else 'spotify:track:4TTV7EcfroSLWzXRY6gLv6'
 
 start = time.time()
 analysis = sp.audio_analysis(tid)

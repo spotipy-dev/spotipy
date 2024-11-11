@@ -7,9 +7,7 @@ from spotipy.oauth2 import SpotifyOAuth
 def show_tracks(results):
     for i, item in enumerate(results['items']):
         track = item['track']
-        print(
-            "   %d %32.32s %s" %
-            (i, track['artists'][0]['name'], track['name']))
+        print(f"{i:2d} {track['artists'][0]['name']:<32.32} {track['name']}")
 
 
 if __name__ == '__main__':
