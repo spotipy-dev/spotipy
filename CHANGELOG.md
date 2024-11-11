@@ -28,6 +28,11 @@ Add your changes below.
 ### Removed
 - `mock` no longer listed as a test dependency. Only built-in `unittest.mock` is actually used.
 
+## [2.24.1] - 2024-11-11
+
+### Changed
+- replaced %s strings with f-strings
+
 ## [2.24.0] - 2024-05-30
 
 ### Added
