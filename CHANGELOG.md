@@ -19,6 +19,7 @@ Add your changes below.
 - Added `personalized_playlist.py`, `track_recommendations.py`, and `audio_features_analysis.py` to `/examples`.
 - Discord badge in README
 - Added `SpotifyBaseException` and moved all exceptions to `exceptions.py`
+- Added note about browser troubleshooting to the headless.py example
 
 ### Fixed
 - Audiobook integration tests
