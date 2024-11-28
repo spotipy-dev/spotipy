@@ -19,6 +19,7 @@ Add your changes below.
 - Added `personalized_playlist.py`, `track_recommendations.py`, and `audio_features_analysis.py` to `/examples`.
 - Discord badge in README
 - Added `SpotifyBaseException` and moved all exceptions to `exceptions.py`
+- Updated documentation for `Client.current_user_top_artists` to indicate maximum number of artists limit
 
 ### Fixed
 - Audiobook integration tests
