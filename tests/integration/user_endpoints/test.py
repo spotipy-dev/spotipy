@@ -376,6 +376,7 @@ class SpotipyBrowseApiTests(unittest.TestCase):
         response = self.spotify.new_releases(limit=50)
         self.assertLessEqual(len(response['albums']['items']), 50)
 
+
 class SpotipyFollowApiTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
