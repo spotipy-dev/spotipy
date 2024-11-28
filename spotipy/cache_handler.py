@@ -214,7 +214,6 @@ class RedisCacheHandler(CacheHandler):
 class MemcacheCacheHandler(CacheHandler):
     """A Cache handler that stores the token info in Memcache using the pymemcache client
     """
-
     def __init__(self, memcache, key=None) -> None:
         """
         Parameters:
