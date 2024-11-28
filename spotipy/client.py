@@ -450,17 +450,6 @@ class Spotify:
         trid = self._get_id("artist", artist_id)
         return self._get("artists/" + trid + "/top-tracks", country=country)
 
-    def artist_related_artists(self, artist_id):
-        """ Get Spotify catalog information about artists similar to an
-            identified artist. Similarity is based on analysis of the
-            Spotify community's listening history.
-
-            Parameters:
-                - artist_id - the artist ID, URI or URL
-        """
-        trid = self._get_id("artist", artist_id)
-        return self._get("artists/" + trid + "/related-artists")
-
     def album(self, album_id, market=None):
         """ returns a single album given the album's ID, URIs or URL
 
@@ -1563,39 +1552,6 @@ class Spotify:
         """
         return self._delete("me/following?type=user&ids=" + ",".join(ids))
 
-    def featured_playlists(
-        self, locale=None, country=None, timestamp=None, limit=20, offset=0
-    ):
-        """ Get a list of Spotify featured playlists
-
-            Parameters:
-                - locale - The desired language, consisting of a lowercase ISO
-                  639-1 alpha-2 language code and an uppercase ISO 3166-1 alpha-2
-                  country code, joined by an underscore.
-
-                - country - An ISO 3166-1 alpha-2 country code.
-
-                - timestamp - A timestamp in ISO 8601 format:
-                  yyyy-MM-ddTHH:mm:ss. Use this parameter to specify the user's
-                  local time to get results tailored for that specific date and
-                  time in the day
-
-                - limit - The maximum number of items to return. Default: 20.
-                  Minimum: 1. Maximum: 50
-
-                - offset - The index of the first item to return. Default: 0
-                  (the first object). Use with limit to get the next set of
-                  items.
-        """
-        return self._get(
-            "browse/featured-playlists",
-            locale=locale,
-            country=country,
-            timestamp=timestamp,
-            limit=limit,
-            offset=offset,
-        )
-
     def new_releases(self, country=None, limit=20, offset=0):
         """ Get a list of new album releases featured in Spotify
 
@@ -1612,168 +1568,6 @@ class Spotify:
         return self._get(
             "browse/new-releases", country=country, limit=limit, offset=offset
         )
-
-    def category(self, category_id, country=None, locale=None):
-        """ Get info about a category
-
-            Parameters:
-                - category_id - The Spotify category ID for the category.
-
-                - country - An ISO 3166-1 alpha-2 country code.
-                - locale - The desired language, consisting of an ISO 639-1 alpha-2
-                  language code and an ISO 3166-1 alpha-2 country code, joined
-                  by an underscore.
-        """
-        return self._get(
-            "browse/categories/" + category_id,
-            country=country,
-            locale=locale,
-        )
-
-    def categories(self, country=None, locale=None, limit=20, offset=0):
-        """ Get a list of categories
-
-            Parameters:
-                - country - An ISO 3166-1 alpha-2 country code.
-                - locale - The desired language, consisting of an ISO 639-1 alpha-2
-                  language code and an ISO 3166-1 alpha-2 country code, joined
-                  by an underscore.
-
-                - limit - The maximum number of items to return. Default: 20.
-                  Minimum: 1. Maximum: 50
-
-                - offset - The index of the first item to return. Default: 0
-                  (the first object). Use with limit to get the next set of
-                  items.
-        """
-        return self._get(
-            "browse/categories",
-            country=country,
-            locale=locale,
-            limit=limit,
-            offset=offset,
-        )
-
-    def category_playlists(
-        self, category_id=None, country=None, limit=20, offset=0
-    ):
-        """ Get a list of playlists for a specific Spotify category
-
-            Parameters:
-                - category_id - The Spotify category ID for the category.
-
-                - country - An ISO 3166-1 alpha-2 country code.
-
-                - limit - The maximum number of items to return. Default: 20.
-                  Minimum: 1. Maximum: 50
-
-                - offset - The index of the first item to return. Default: 0
-                  (the first object). Use with limit to get the next set of
-                  items.
-        """
-        return self._get(
-            "browse/categories/" + category_id + "/playlists",
-            country=country,
-            limit=limit,
-            offset=offset,
-        )
-
-    def recommendations(
-        self,
-        seed_artists=None,
-        seed_genres=None,
-        seed_tracks=None,
-        limit=20,
-        country=None,
-        **kwargs
-    ):
-        """ Get a list of recommended tracks for one to five seeds.
-            (at least one of `seed_artists`, `seed_tracks` and `seed_genres`
-            are needed)
-
-            Parameters:
-                - seed_artists - a list of artist IDs, URIs or URLs
-                - seed_tracks - a list of track IDs, URIs or URLs
-                - seed_genres - a list of genre names. Available genres for
-                                recommendations can be found by calling
-                                recommendation_genre_seeds
-
-                - country - An ISO 3166-1 alpha-2 country code. If provided,
-                            all results will be playable in this country.
-
-                - limit - The maximum number of items to return. Default: 20.
-                          Minimum: 1. Maximum: 100
-
-                - min/max/target_<attribute> - For the tuneable track
-                    attributes listed in the documentation, these values
-                    provide filters and targeting on results.
-        """
-        params = dict(limit=limit)
-        if seed_artists:
-            params["seed_artists"] = ",".join(
-                [self._get_id("artist", a) for a in seed_artists]
-            )
-        if seed_genres:
-            params["seed_genres"] = ",".join(seed_genres)
-        if seed_tracks:
-            params["seed_tracks"] = ",".join(
-                [self._get_id("track", t) for t in seed_tracks]
-            )
-        if country:
-            params["market"] = country
-
-        for attribute in [
-            "acousticness",
-            "danceability",
-            "duration_ms",
-            "energy",
-            "instrumentalness",
-            "key",
-            "liveness",
-            "loudness",
-            "mode",
-            "popularity",
-            "speechiness",
-            "tempo",
-            "time_signature",
-            "valence",
-        ]:
-            for prefix in ["min_", "max_", "target_"]:
-                param = prefix + attribute
-                if param in kwargs:
-                    params[param] = kwargs[param]
-        return self._get("recommendations", **params)
-
-    def recommendation_genre_seeds(self):
-        """ Get a list of genres available for the recommendations function.
-        """
-        return self._get("recommendations/available-genre-seeds")
-
-    def audio_analysis(self, track_id):
-        """ Get audio analysis for a track based upon its Spotify ID
-            Parameters:
-                - track_id - a track URI, URL or ID
-        """
-        trid = self._get_id("track", track_id)
-        return self._get("audio-analysis/" + trid)
-
-    def audio_features(self, tracks=[]):
-        """ Get audio features for one or multiple tracks based upon their Spotify IDs
-            Parameters:
-                - tracks - a list of track URIs, URLs or IDs, maximum: 100 ids
-        """
-        if isinstance(tracks, str):
-            trackid = self._get_id("track", tracks)
-            results = self._get("audio-features/?ids=" + trackid)
-        else:
-            tlist = [self._get_id("track", t) for t in tracks]
-            results = self._get("audio-features/?ids=" + ",".join(tlist))
-        # the response has changed, look for the new style first, and if
-        # it's not there, fallback on the old style
-        if "audio_features" in results:
-            return results["audio_features"]
-        else:
-            return results
 
     def devices(self):
         """ Get a list of user's available devices.
@@ -1864,7 +1658,7 @@ class Spotify:
         return self._put(self._append_device_id("me/player/pause", device_id))
 
     def next_track(self, device_id=None):
-        """ Skip user's playback to next track.
+        """ Skip user's playback to next .
 
             Parameters:
                 - device_id - device target for playback
