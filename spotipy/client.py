@@ -460,8 +460,8 @@ class Spotify:
         """
         warnings.warn(
             "You're using `artist_related_artists(...)`, "
-            "which is marked as deprecated by Spotify."
-            DeprecationWarning,
+            "which is marked as deprecated by Spotify.",
+            DeprecationWarning
         )
         trid = self._get_id("artist", artist_id)
         return self._get("artists/" + trid + "/related-artists")
@@ -1594,7 +1594,7 @@ class Spotify:
         """
         warnings.warn(
             "You're using `featured_playlists(...)`, "
-            "which is marked as deprecated by Spotify."
+            "which is marked as deprecated by Spotify.",
             DeprecationWarning,
         )
         return self._get(
@@ -1683,7 +1683,7 @@ class Spotify:
         """
         warnings.warn(
             "You're using `category_playlists(...)`, "
-            "which is marked as deprecated by Spotify."
+            "which is marked as deprecated by Spotify.",
             DeprecationWarning,
         )
         return self._get(
@@ -1725,7 +1725,7 @@ class Spotify:
         """
         warnings.warn(
             "You're using `recommendations(...)`, "
-            "which is marked as deprecated by Spotify."
+            "which is marked as deprecated by Spotify.",
             DeprecationWarning,
         )
 
@@ -1777,7 +1777,7 @@ class Spotify:
         """
         warnings.warn(
             "You're using `audio_analysis(...)`, "
-            "which is marked as deprecated by Spotify."
+            "which is marked as deprecated by Spotify.",
             DeprecationWarning,
         )
         trid = self._get_id("track", track_id)
@@ -1790,7 +1790,7 @@ class Spotify:
         """
         warnings.warn(
             "You're using `audio_features(...)`, "
-            "which is marked as deprecated by Spotify."
+            "which is marked as deprecated by Spotify.",
             DeprecationWarning,
         )
 
