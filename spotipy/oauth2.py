@@ -240,7 +240,7 @@ class SpotifyClientCredentials(SpotifyAuthBase):
         )
 
         logger.debug(
-            "sending POST request to {} with Headers: {} and Body: {!r}".format(
+            "Sending POST request to {} with Headers: {} and Body: {!r}".format(
                 self.OAUTH_TOKEN_URL, headers, payload)
         )
 
@@ -532,7 +532,7 @@ class SpotifyOAuth(SpotifyAuthBase):
         headers = self._make_authorization_headers()
 
         logger.debug(
-            "sending POST request to {} with Headers: {} and Body: {!r}".format(
+            "Sending POST request to {} with Headers: {} and Body: {!r}".format(
                 self.OAUTH_TOKEN_URL, headers, payload)
         )
 
@@ -562,7 +562,7 @@ class SpotifyOAuth(SpotifyAuthBase):
         headers = self._make_authorization_headers()
 
         logger.debug(
-            "sending POST request to {} with Headers: {} and Body: {!r}".format(
+            "Sending POST request to {} with Headers: {} and Body: {!r}".format(
                 self.OAUTH_TOKEN_URL, headers, payload)
         )
 
@@ -888,7 +888,7 @@ class SpotifyPKCE(SpotifyAuthBase):
         headers = {"Content-Type": "application/x-www-form-urlencoded"}
 
         logger.debug(
-            "sending POST request to {} with Headers: {} and Body: {!r}".format(
+            "Sending POST request to {} with Headers: {} and Body: {!r}".format(
                 self.OAUTH_TOKEN_URL, headers, payload)
         )
 
@@ -919,7 +919,7 @@ class SpotifyPKCE(SpotifyAuthBase):
         headers = {"Content-Type": "application/x-www-form-urlencoded"}
 
         logger.debug(
-            "sending POST request to {} with Headers: {} and Body: {!r}".format(
+            "Sending POST request to {} with Headers: {} and Body: {!r}".format(
                 self.OAUTH_TOKEN_URL, headers, payload)
         )
 

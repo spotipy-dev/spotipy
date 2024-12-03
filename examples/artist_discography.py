@@ -20,10 +20,7 @@ def get_args():
 def get_artist(name):
     results = sp.search(q='artist:' + name, type='artist')
     items = results['artists']['items']
-    if len(items) > 0:
-        return items[0]
-    else:
-        return None
+    return items[0] if items else None
 
 
 def show_album_tracks(album):
