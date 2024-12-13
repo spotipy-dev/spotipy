@@ -263,8 +263,8 @@ class Spotify:
         if self.language is not None:
             headers["Accept-Language"] = self.language
 
-        logger.debug('Sending {} to {} with Params: {} Headers: {} and Body: {!r} '.format(
-                method, url, args.get("params"), headers, args.get('data')))
+        logger.debug(f"Sending {method} to {url} with Params: "
+                     f"{args.get('params')} Headers: {headers} and Body: {args.get('data')!r}")
 
         try:
             response = self._session.request(
@@ -289,11 +289,8 @@ class Spotify:
                 msg = response.text or None
                 reason = None
 
-            logger.error(
-                'HTTP Error for {} to {} with Params: {} returned {} due to {}'.format(
-                    method, url, args.get("params"), response.status_code, msg
-                )
-            )
+            logger.error(f"HTTP Error for {method} to {url} with Params: "
+                         f"{args.get('params')} returned {response.status_code} due to {msg}")
 
             raise SpotifyException(
                 response.status_code,
@@ -2035,11 +2032,9 @@ class Spotify:
     def _search_multiple_markets(self, q, limit, offset, type, markets, total):
         if total and limit > total:
             limit = total
-            warnings.warn(
-                "limit was auto-adjusted to equal {} as it must not be higher than total".format(
-                    total),
-                UserWarning,
-            )
+            warnings.warn(f"limit was auto-adjusted to equal {total} "
+                          f"as it must not be higher than total",
+                          UserWarning)
 
         results = defaultdict(dict)
         item_types = [item_type + "s" for item_type in type.split(",")]

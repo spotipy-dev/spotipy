@@ -217,10 +217,8 @@ class SpotifyClientCredentials(SpotifyAuthBase):
             self.client_id, self.client_secret
         )
 
-        logger.debug(
-            "Sending POST request to {} with Headers: {} and Body: {!r}".format(
-                self.OAUTH_TOKEN_URL, headers, payload)
-        )
+        logger.debug(f"Sending POST request to {self.OAUTH_TOKEN_URL} with Headers: "
+                     f"{headers} and Body: {payload}")
 
         try:
             response = self._session.post(
@@ -509,10 +507,8 @@ class SpotifyOAuth(SpotifyAuthBase):
 
         headers = self._make_authorization_headers()
 
-        logger.debug(
-            "Sending POST request to {} with Headers: {} and Body: {!r}".format(
-                self.OAUTH_TOKEN_URL, headers, payload)
-        )
+        logger.debug(f"Sending POST request to {self.OAUTH_TOKEN_URL} with Headers: "
+                     f"{headers} and Body: {payload}")
 
         try:
             response = self._session.post(
@@ -539,10 +535,8 @@ class SpotifyOAuth(SpotifyAuthBase):
 
         headers = self._make_authorization_headers()
 
-        logger.debug(
-            "Sending POST request to {} with Headers: {} and Body: {!r}".format(
-                self.OAUTH_TOKEN_URL, headers, payload)
-        )
+        logger.debug(f"Sending POST request to {self.OAUTH_TOKEN_URL} with Headers: "
+                     f"{headers} and Body: {payload}")
 
         try:
             response = self._session.post(
@@ -786,10 +780,8 @@ class SpotifyPKCE(SpotifyAuthBase):
             prompt = "Enter the URL you were redirected to: "
         else:
             url = self.get_authorize_url()
-            prompt = (
-                "Go to the following URL: {}\n"
-                "Enter the URL you were redirected to: ".format(url)
-            )
+            prompt = (f"Go to the following URL: {url}\n"
+                      f"Enter the URL you were redirected to: ")
         response = self._get_user_input(prompt)
         state, code = self.parse_auth_response_url(response)
         if self.state is not None and self.state != state:
@@ -865,10 +857,8 @@ class SpotifyPKCE(SpotifyAuthBase):
 
         headers = {"Content-Type": "application/x-www-form-urlencoded"}
 
-        logger.debug(
-            "Sending POST request to {} with Headers: {} and Body: {!r}".format(
-                self.OAUTH_TOKEN_URL, headers, payload)
-        )
+        logger.debug(f"Sending POST request to {self.OAUTH_TOKEN_URL} with Headers: "
+                     f"{headers} and Body: {payload}")
 
         try:
             response = self._session.post(
@@ -896,10 +886,8 @@ class SpotifyPKCE(SpotifyAuthBase):
 
         headers = {"Content-Type": "application/x-www-form-urlencoded"}
 
-        logger.debug(
-            "Sending POST request to {} with Headers: {} and Body: {!r}".format(
-                self.OAUTH_TOKEN_URL, headers, payload)
-        )
+        logger.debug(f"Sending POST request to {self.OAUTH_TOKEN_URL} with Headers: "
+                     f"{headers} and Body: {payload}")
 
         try:
             response = self._session.post(

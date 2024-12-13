@@ -55,7 +55,7 @@ def show_artist(artist):
     logger.info(f'===={artist["name"]}====')
     logger.info(f'Popularity: {artist["popularity"]}')
     if len(artist['genres']) > 0:
-        logger.info('Genres: {}'.format(','.join(artist['genres'])))
+        logger.info(f"Genres: {', '.join(artist['genres'])}")
 
 
 def main():
