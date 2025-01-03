@@ -19,6 +19,14 @@ Add your changes below.
 - Added `personalized_playlist.py`, `track_recommendations.py`, and `audio_features_analysis.py` to `/examples`.
 - Discord badge in README
 - Added `SpotifyBaseException` and moved all exceptions to `exceptions.py`
+- Marked the following methods as deprecated:
+  - artist_related_artists
+  - recommendations
+  - audio_features
+  - audio_analysis
+  - featured_playlists
+  - category_playlists
+- Added FAQ entry for inaccessible playlists
 
 ### Fixed
 - Audiobook integration tests

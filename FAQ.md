@@ -74,3 +74,9 @@ sp = spotipy.Spotify(
 )
 ```
 The error raised is a `spotipy.exceptions.SpotifyException`
+
+### I get a 404 when trying to access a Spotify-owned playlist
+
+Spotify has begun restricting access to algorithmic and Spotify-owned editorial playlists.
+Only applications with an existing extended mode will still have access to these playlists.
+Read more about this change here: [Introducing some changes to our Web API](https://developer.spotify.com/blog/2024-11-27-changes-to-the-web-api)
