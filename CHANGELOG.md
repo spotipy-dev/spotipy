@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Add your changes below.
 
 ### Added
+
+### Fixed
+
+### Removed
+
+## [2.25.0] - 2025-03-01
+
+### Added
 - Added unit tests for queue functions
 - Added detailed function docstrings to 'util.py', including descriptions and special sections that lists arguments, returns, and raises.
 - Updated order of instructions for Python and pip package manager installation in TUTORIAL.md
