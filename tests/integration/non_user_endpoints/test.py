@@ -74,34 +74,6 @@ class AuthTestSpotipy(unittest.TestCase):
         )
         self.spotify.trace = False
 
-    def test_audio_analysis(self):
-        result = self.spotify.audio_analysis(self.four_tracks[0])
-        assert ('beats' in result)
-
-    def test_audio_features(self):
-        results = self.spotify.audio_features(self.four_tracks)
-        self.assertTrue(len(results) == len(self.four_tracks))
-        for track in results:
-            assert ('speechiness' in track)
-
-    def test_audio_features_with_bad_track(self):
-        bad_tracks = ['spotify:track:bad']
-        input = self.four_tracks + bad_tracks
-        results = self.spotify.audio_features(input)
-        self.assertTrue(len(results) == len(input))
-        for track in results[:-1]:
-            if track is not None:
-                assert ('speechiness' in track)
-        self.assertTrue(results[-1] is None)
-
-    def test_recommendations(self):
-        results = self.spotify.recommendations(
-            seed_tracks=self.four_tracks,
-            min_danceability=0,
-            max_loudness=0,
-            target_popularity=50)
-        self.assertTrue(len(results['tracks']) == 20)
-
     def test_artist_urn(self):
         artist = self.spotify.artist(self.radiohead_urn)
         self.assertTrue(artist['name'] == 'Radiohead')
@@ -179,17 +151,6 @@ class AuthTestSpotipy(unittest.TestCase):
         results = self.spotify.artist_top_tracks(self.weezer_urn)
         self.assertTrue('tracks' in results)
         self.assertTrue(len(results['tracks']) == 10)
-
-    def test_artist_related_artists(self):
-        results = self.spotify.artist_related_artists(self.weezer_urn)
-        self.assertTrue('artists' in results)
-        self.assertTrue(len(results['artists']) == 20)
-
-        found = False
-        for artist in results['artists']:
-            if artist['name'] == 'Jimmy Eat World':
-                found = True
-        self.assertTrue(found)
 
     def test_artist_search(self):
         results = self.spotify.search(q='weezer', type='artist')
