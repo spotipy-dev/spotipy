@@ -13,6 +13,7 @@ Add your changes below.
 
 ### Fixed
 - Fixed scripts in examples directory that didn't run correctly
+- Updated documentation for `Client.current_user_top_artists` to indicate maximum number of artists limit
 
 ### Changed
 - Updated get_cached_token and save_token_to_cache methods to utilize Python's Context Management Protocol
