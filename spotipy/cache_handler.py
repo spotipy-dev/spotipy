@@ -80,7 +80,7 @@ class CacheFileHandler(CacheHandler):
             with open(self.cache_path) as f:
                 token_info_string = f.read()
                 token_info = json.loads(token_info_string)
-        except OSError as error:
+        except IOError as error:
             if error.errno == errno.ENOENT:
                 logger.debug(f"cache does not exist at: {self.cache_path}")
             else:
