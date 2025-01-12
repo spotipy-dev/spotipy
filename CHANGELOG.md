@@ -13,6 +13,7 @@ Add your changes below.
 
 ### Fixed
 - Fixed scripts in examples directory that didn't run correctly
+- Updated documentation for `Client.current_user_top_artists` to indicate maximum number of artists limit
 
 ### Removed
 
