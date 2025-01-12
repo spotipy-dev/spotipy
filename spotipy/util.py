@@ -1,14 +1,17 @@
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 
-""" Shows a user's playlists (need to be authenticated via oauth) """
+""" Shows a user's playlists. This needs to be authenticated via OAuth. """
 
 __all__ = ["CLIENT_CREDS_ENV_VARS", "prompt_for_user_token"]
 
 import logging
 import os
 import warnings
+from types import TracebackType
 
 import spotipy
+
+import urllib3
 
 LOGGER = logging.getLogger(__name__)
 
@@ -37,21 +40,18 @@ def prompt_for_user_token(
         "    spotipy.Spotify(auth_manager=auth_manager)",
         DeprecationWarning
     )
-    """ prompts the user to login if necessary and returns
-        the user token suitable for use with the spotipy.Spotify
-        constructor
+    """Prompt the user to login if necessary and returns a user token
+       suitable for use with the spotipy.Spotify constructor.
 
         Parameters:
-
-         - username - the Spotify username (optional)
-         - scope - the desired scope of the request (optional)
-         - client_id - the client id of your app (required)
-         - client_secret - the client secret of your app (required)
-         - redirect_uri - the redirect URI of your app (required)
-         - cache_path - path to location to save tokens (optional)
-         - oauth_manager - Oauth manager object (optional)
-         - show_dialog - If true, a login prompt always shows (optional, defaults to False)
-
+            - username - the Spotify username. (optional)
+            - scope - the desired scope of the request. (optional)
+            - client_id - the client ID of your app. (required)
+            - client_secret - the client secret of your app. (required)
+            - redirect_uri - the redirect URI of your app. (required)
+            - cache_path - path to location to save tokens. (required)
+            - oauth_manager - OAuth manager object. (optional)
+            - show_dialog - If True, a login prompt always shows or defaults to False. (optional)
     """
     if not oauth_manager:
         if not client_id:
@@ -109,6 +109,12 @@ def prompt_for_user_token(
 
 
 def get_host_port(netloc):
+    """ Split the network location string into host and port and returns a tuple
+        where the host is a string and the the port is an integer.
+
+        Parameters:
+            - netloc - a string representing the network location.
+    """
     if ":" in netloc:
         host, port = netloc.split(":", 1)
         port = int(port)
@@ -120,6 +126,14 @@ def get_host_port(netloc):
 
 
 def normalize_scope(scope):
+    """Normalize the scope to verify that it is a list or tuple. A string
+    input will split the string by commas to create a list of scopes.
+    A list or tuple input is used directly.
+
+    Parameters:
+        - scope - a string representing scopes separated by commas,
+                  or a list/tuple of scopes.
+    """
     if scope:
         if isinstance(scope, str):
             scopes = scope.split(',')
@@ -128,8 +142,34 @@ def normalize_scope(scope):
         else:
             raise Exception(
                 "Unsupported scope value, please either provide a list of scopes, "
-                "or a string of scopes separated by commas"
+                "or a string of scopes separated by commas."
             )
         return " ".join(sorted(scopes))
     else:
         return None
+
+
+class Retry(urllib3.Retry):
+    """
+    Custom class for printing a warning when a rate/request limit is reached.
+    """
+    def increment(
+            self,
+            method: str | None = None,
+            url: str | None = None,
+            response: urllib3.BaseHTTPResponse | None = None,
+            error: Exception | None = None,
+            _pool: urllib3.connectionpool.ConnectionPool | None = None,
+            _stacktrace: TracebackType | None = None,
+    ) -> urllib3.Retry:
+        if response:
+            retry_header = response.headers.get("Retry-After")
+            if self.is_retry(method, response.status, bool(retry_header)):
+                logging.warning("Your application has reached a rate/request limit. "
+                                f"Retry will occur after: {retry_header}")
+        return super().increment(method,
+                                 url,
+                                 response=response,
+                                 error=error,
+                                 _pool=_pool,
+                                 _stacktrace=_stacktrace)

@@ -4,6 +4,8 @@ import logging
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 
+scope = 'playlist-modify-public'
+
 logger = logging.getLogger('examples.unfollow_playlist')
 logging.basicConfig(level='DEBUG')
 
@@ -23,7 +25,7 @@ def get_args():
 
 def main():
     args = get_args()
-    sp = spotipy.Spotify(auth_manager=SpotifyOAuth())
+    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
     sp.current_user_unfollow_playlist(args.playlist)
 
 

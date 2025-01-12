@@ -8,63 +8,6 @@ Welcome to Spotipy!
 <https://developer.spotify.com/documentation/web-api/>`_. With *Spotipy*
 you get full access to all of the music data provided by the Spotify platform.
 
-Assuming you set the ``SPOTIPY_CLIENT_ID`` and ``SPOTIPY_CLIENT_SECRET``
-environment variables (here is a `video <https://youtu.be/kaBVN8uP358>`_ explaining how to do so). For a longer tutorial with examples included, refer to this `video playlist <https://www.youtube.com/watch?v=tmt5SdvTqUI&list=PLqgOPibB_QnzzcaOFYmY2cQjs35y0is9N&index=1>`_. Below is a quick example of using *Spotipy* to list the
-names of all the albums released by the artist 'Birdy'::
-
-    import spotipy
-    from spotipy.oauth2 import SpotifyClientCredentials
-
-    birdy_uri = 'spotify:artist:2WX2uTcsvV5OnS0inACecP'
-    spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
-
-    results = spotify.artist_albums(birdy_uri, album_type='album')
-    albums = results['items']
-    while results['next']:
-        results = spotify.next(results)
-        albums.extend(results['items'])
-
-    for album in albums:
-        print(album['name'])
-
-Here's another example showing how to get 30 second samples and cover art
-for the top 10 tracks for Led Zeppelin::
-
-    import spotipy
-    from spotipy.oauth2 import SpotifyClientCredentials
-
-    lz_uri = 'spotify:artist:36QJpDe2go2KgaRleHCDTp'
-
-    spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
-    results = spotify.artist_top_tracks(lz_uri)
-
-    for track in results['tracks'][:10]:
-        print('track    : ' + track['name'])
-        print('audio    : ' + track['preview_url'])
-        print('cover art: ' + track['album']['images'][0]['url'])
-        print()
-
-Finally, here's an example that will get the URL for an artist image given the
-artist's name::
-
-    import spotipy
-    import sys
-    from spotipy.oauth2 import SpotifyClientCredentials
-
-    spotify = spotipy.Spotify(auth_manager=SpotifyClientCredentials())
-
-    if len(sys.argv) > 1:
-        name = ' '.join(sys.argv[1:])
-    else:
-        name = 'Radiohead'
-
-    results = spotify.search(q='artist:' + name, type='artist')
-    items = results['artists']['items']
-    if len(items) > 0:
-        artist = items[0]
-        print(artist['name'], artist['images'][0]['url'])
-
-
 Features
 ========
 
@@ -80,7 +23,8 @@ Install or upgrade *Spotipy* with::
 
     pip install spotipy --upgrade
 
-Or you can get the source from github at https://github.com/plamere/spotipy
+You can also obtain the source code from the `Spotify GitHub repository <https://github.com/plamere/spotipy>`_.
+
 
 Getting Started
 ===============
@@ -90,18 +34,26 @@ All methods require user authorization. You will need to register your app at
 to get the credentials necessary to make authorized calls
 (a *client id* and *client secret*).
 
+
+
 *Spotipy* supports two authorization flows:
 
-  - The **Authorization Code flow** This method is suitable for long-running applications
+  - **Authorization Code flow** This method is suitable for long-running applications
     which the user logs into once. It provides an access token that can be refreshed.
 
     .. note:: Requires you to add a redirect URI to your application at 
               `My Dashboard <https://developer.spotify.com/dashboard/applications>`_.
               See `Redirect URI`_ for more details.
 
-  - The **Client Credentials flow**  The method makes it possible
+  - **Client Credentials flow**  This method makes it possible
     to authenticate your requests to the Spotify Web API and to obtain
     a higher rate limit than you would with the Authorization Code flow.
+
+
+For guidance on setting your app credentials watch this `video tutorial <https://youtu.be/kaBVN8uP358>`_ or follow the
+`Spotipy Tutorial for Beginners <https://github.com/spotipy-dev/spotipy/blob/2.22.1/TUTORIAL.md>`_.
+
+For a longer tutorial with examples included, refer to this `video playlist <https://www.youtube.com/watch?v=tmt5SdvTqUI&list=PLqgOPibB_QnzzcaOFYmY2cQjs35y0is9N&index=1>`_. 
 
 
 Authorization Code Flow
@@ -138,6 +90,7 @@ on Windows)::
     export SPOTIPY_CLIENT_ID='your-spotify-client-id'
     export SPOTIPY_CLIENT_SECRET='your-spotify-client-secret'
     export SPOTIPY_REDIRECT_URI='your-app-redirect-url'
+
 
 Scopes
 ------
@@ -232,19 +185,77 @@ cache handler ``CacheHandler``. The default cache handler ``CacheFileHandler`` i
 An instance of that new class can then be passed as a parameter when
 creating ``SpotifyOAuth``, ``SpotifyPKCE`` or ``SpotifyImplicitGrant``.
 The following handlers are available and defined in the URL above.
+
   - ``CacheFileHandler``
   - ``MemoryCacheHandler``
   - ``DjangoSessionCacheHandler``
   - ``FlaskSessionCacheHandler``
   - ``RedisCacheHandler``
+  - ``MemcacheCacheHandler``: install with dependency using ``pip install "spotipy[pymemcache]"``
 
 Feel free to contribute new cache handlers to the repo.
 
+
 Examples
 =======================
+ 
+Here is an example of using *Spotipy* to list the
+names of all the albums released by the artist 'Birdy'::
+
+    import spotipy
+    from spotipy.oauth2 import SpotifyClientCredentials
+
+    birdy_uri = 'spotify:artist:2WX2uTcsvV5OnS0inACecP'
+    spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
+
+    results = spotify.artist_albums(birdy_uri, album_type='album')
+    albums = results['items']
+    while results['next']:
+        results = spotify.next(results)
+        albums.extend(results['items'])
+
+    for album in albums:
+        print(album['name'])
+
+Here's another example showing how to get 30 second samples and cover art
+for the top 10 tracks for Led Zeppelin::
+
+    import spotipy
+    from spotipy.oauth2 import SpotifyClientCredentials
+
+    lz_uri = 'spotify:artist:36QJpDe2go2KgaRleHCDTp'
+
+    spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
+    results = spotify.artist_top_tracks(lz_uri)
+
+    for track in results['tracks'][:10]:
+        print('track    : ' + track['name'])
+        print('audio    : ' + track['preview_url'])
+        print('cover art: ' + track['album']['images'][0]['url'])
+        print()
+
+Finally, here's an example that will get the URL for an artist image given the
+artist's name::
+
+    import spotipy
+    import sys
+    from spotipy.oauth2 import SpotifyClientCredentials
+
+    spotify = spotipy.Spotify(auth_manager=SpotifyClientCredentials())
+
+    if len(sys.argv) > 1:
+        name = ' '.join(sys.argv[1:])
+    else:
+        name = 'Radiohead'
+
+    results = spotify.search(q='artist:' + name, type='artist')
+    items = results['artists']['items']
+    if len(items) > 0:
+        artist = items[0]
+        print(artist['name'], artist['images'][0]['url'])
 
 There are many more examples of how to use *Spotipy* in the `Examples
-Directory <https://github.com/plamere/spotipy/tree/master/examples>`_ on Github
+Directory <https://github.com/plamere/spotipy/tree/master/examples>`_ on GitHub.
 
 API Reference
 ==============
@@ -285,35 +296,11 @@ You can ask questions about Spotipy on Stack Overflow.   Don’t forget to add t
     http://stackoverflow.com/questions/ask
 
 If you think you've found a bug, let us know at
-`Spotify Issues <https://github.com/plamere/spotipy/issues>`_
+`Spotipy Issues <https://github.com/plamere/spotipy/issues>`_
 
 
 Contribute
 ==========
-
-Spotipy authored by Paul Lamere (plamere) with contributions by:
-
-  - Daniel Beaudry (`danbeaudry on Github <https://github.com/danbeaudry>`_)
-  - Faruk Emre Sahin (`fsahin on Github <https://github.com/fsahin>`_)
-  - George (`rogueleaderr on Github <https://github.com/rogueleaderr>`_)
-  - Henry Greville (`sethaurus on Github <https://github.com/sethaurus>`_)
-  - Hugo van Kemanade (`hugovk on Github <https://github.com/hugovk>`_)
-  - José Manuel Pérez (`JMPerez on Github <https://github.com/JMPerez>`_)
-  - Lucas Nunno (`lnunno on Github <https://github.com/lnunno>`_)
-  - Lynn Root (`econchick on Github <https://github.com/econchick>`_)
-  - Matt Dennewitz (`mattdennewitz on Github <https://github.com/mattdennewitz>`_)
-  - Matthew Duck (`mattduck on Github <https://github.com/mattduck>`_)
-  - Michael Thelin (`thelinmichael on Github <https://github.com/thelinmichael>`_)
-  - Ryan Choi (`ryankicks on Github <https://github.com/ryankicks>`_)
-  - Simon Metson (`drsm79 on Github <https://github.com/drsm79>`_)
-  - Steve Winton (`swinton on Github <https://github.com/swinton>`_)
-  - Tim Balzer (`timbalzer on Github <https://github.com/timbalzer>`_)
-  - `corycorycory on Github <https://github.com/corycorycory>`_
-  - Nathan Coleman (`nathancoleman on Github <https://github.com/nathancoleman>`_) 
-  - Michael Birtwell (`mbirtwell on Github <https://github.com/mbirtwell>`_)
-  - Harrison Hayes (`Harrison97 on Github <https://github.com/Harrison97>`_)
-  - Stephane Bruckert (`stephanebruckert on Github <https://github.com/stephanebruckert>`_)
-  - Ritiek Malhotra (`ritiek on Github <https://github.com/ritiek>`_)
 
 If you are a developer with Python experience, and you would like to contribute to Spotipy, please
 be sure to follow the guidelines listed below:
@@ -325,7 +312,7 @@ Export the needed Environment variables:::
     export SPOTIPY_REDIRECT_URI=http://localhost:8080 # Make url is set in app you created to get your ID and SECRET
 
 Create virtual environment, install dependencies, run tests:::
-    $ virtualenv --python=python3.7 env
+    $ virtualenv --python=python3.12 env
     (env) $ pip install --user -e .
     (env) $ python -m unittest discover -v tests
 
@@ -391,4 +378,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-
