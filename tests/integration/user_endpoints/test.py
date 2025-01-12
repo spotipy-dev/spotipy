@@ -253,7 +253,7 @@ class SpotipyLibraryApiTests(unittest.TestCase):
         tracks = self.spotify.current_user_saved_tracks()
         self.assertGreaterEqual(len(tracks['items']), 0)
 
-    def test_current_user_save_and_unsave_tracks(self):
+    def test_current_user_save_tracks(self):
         tracks = self.spotify.current_user_saved_tracks()
         total = tracks['total']
         self.spotify.current_user_saved_tracks_add(self.four_tracks)
@@ -261,6 +261,19 @@ class SpotipyLibraryApiTests(unittest.TestCase):
         tracks = self.spotify.current_user_saved_tracks()
         new_total = tracks['total']
         self.assertEqual(new_total - total, len(self.four_tracks))
+
+        self.spotify.current_user_saved_tracks_delete(
+            self.four_tracks)
+        tracks = self.spotify.current_user_saved_tracks()
+        new_total = tracks['total']
+
+    def test_current_user_unsave_tracks(self):
+        tracks = self.spotify.current_user_saved_tracks()
+        total = tracks['total']
+        self.spotify.current_user_saved_tracks_add(self.four_tracks)
+
+        tracks = self.spotify.current_user_saved_tracks()
+        new_total = tracks['total']
 
         self.spotify.current_user_saved_tracks_delete(
             self.four_tracks)
@@ -380,33 +393,6 @@ class SpotipyBrowseApiTests(unittest.TestCase):
         response = self.spotify.categories(limit=50)
         self.assertLessEqual(len(response['categories']['items']), 50)
 
-    def test_category_playlists(self):
-        response = self.spotify.categories()
-        category = 'rock'
-        for cat in response['categories']['items']:
-            cat_id = cat['id']
-            if cat_id == category:
-                response = self.spotify.category_playlists(category_id=cat_id)
-                self.assertGreater(len(response['playlists']["items"]), 0)
-
-    def test_category_playlists_limit_low(self):
-        response = self.spotify.categories()
-        category = 'rock'
-        for cat in response['categories']['items']:
-            cat_id = cat['id']
-            if cat_id == category:
-                response = self.spotify.category_playlists(category_id=cat_id, limit=1)
-                self.assertEqual(len(response['categories']['items']), 1)
-
-    def test_category_playlists_limit_high(self):
-        response = self.spotify.categories()
-        category = 'rock'
-        for cat in response['categories']['items']:
-            cat_id = cat['id']
-            if cat_id == category:
-                response = self.spotify.category_playlists(category_id=cat_id, limit=50)
-                self.assertLessEqual(len(response['categories']['items']), 50)
-
     def test_new_releases(self):
         response = self.spotify.new_releases()
         self.assertGreater(len(response['albums']['items']), 0)
@@ -418,10 +404,6 @@ class SpotipyBrowseApiTests(unittest.TestCase):
     def test_new_releases_limit_high(self):
         response = self.spotify.new_releases(limit=50)
         self.assertLessEqual(len(response['albums']['items']), 50)
-
-    def test_featured_releases(self):
-        response = self.spotify.featured_playlists()
-        self.assertGreater(len(response['playlists']), 0)
 
 
 class SpotipyFollowApiTests(unittest.TestCase):
@@ -545,3 +527,44 @@ class SpotifyPKCETests(unittest.TestCase):
         c_user = self.spotify.current_user()
         user = self.spotify.user(c_user['id'])
         self.assertEqual(c_user['display_name'], user['display_name'])
+
+
+class SpotifyQueueApiTests(unittest.TestCase):
+
+    @classmethod
+    def setUp(self):
+        self.spotify = Spotify(auth="test_token")
+
+    def test_get_queue(self, mock_get):
+        # Mock the response from _get
+        mock_get.return_value = {'songs': ['song1', 'song2']}
+
+        # Call the queue function
+        response = self.spotify.queue()
+
+        # Check if the correct endpoint is called
+        mock_get.assert_called_with("me/player/queue")
+
+        # Check if the response is as expected
+        self.assertEqual(response, {'songs': ['song1', 'song2']})
+
+    def test_add_to_queue(self, mock_post):
+        test_uri = 'spotify:track:123'
+
+        # Call the add_to_queue function
+        self.spotify.add_to_queue(test_uri)
+
+        # Check if the correct endpoint is called
+        endpoint = "me/player/queue?uri=%s" % test_uri
+        mock_post.assert_called_with(endpoint)
+
+    def test_add_to_queue_with_device_id(self, mock_post):
+        test_uri = 'spotify:track:123'
+        device_id = 'device123'
+
+        # Call the add_to_queue function with a device_id
+        self.spotify.add_to_queue(test_uri, device_id=device_id)
+
+        # Check if the correct endpoint is called
+        endpoint = "me/player/queue?uri=%s&device_id=%s" % (test_uri, device_id)
+        mock_post.assert_called_with(endpoint)

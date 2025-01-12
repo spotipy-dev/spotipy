@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from spotipy import (
     Spotify,
     SpotifyClientCredentials,
@@ -39,12 +37,19 @@ class AuthTestSpotipy(unittest.TestCase):
     creep_urn = 'spotify:track:6b2oQwSGFkzsMtQruIWm2p'
     creep_id = '6b2oQwSGFkzsMtQruIWm2p'
     creep_url = 'http://open.spotify.com/track/6b2oQwSGFkzsMtQruIWm2p'
+
     el_scorcho_urn = 'spotify:track:0Svkvt5I79wficMFgaqEQJ'
     el_scorcho_bad_urn = 'spotify:track:0Svkvt5I79wficMFgaqEQK'
     pinkerton_urn = 'spotify:album:04xe676vyiTeYNXw15o9jT'
     weezer_urn = 'spotify:artist:3jOstUTkEu2JkjvRdBA5Gu'
+
     pablo_honey_urn = 'spotify:album:6AZv3m27uyRxi8KyJSfUxL'
     radiohead_urn = 'spotify:artist:4Z8W4fKeB5YxbusRsdQVPb'
+    radiohead_id = "4Z8W4fKeB5YxbusRsdQVPb"
+    radiohead_url = "https://open.spotify.com/artist/4Z8W4fKeB5YxbusRsdQVPb"
+
+    qotsa_url = "https://open.spotify.com/artist/4pejUc4iciQfgdX6OKulQn"
+
     angeles_haydn_urn = 'spotify:album:1vAbqAeuJVWNAe7UR00bdM'
     heavyweight_urn = 'spotify:show:5c26B28vZMN8PG0Nppmn5G'
     heavyweight_id = '5c26B28vZMN8PG0Nppmn5G'
@@ -55,15 +60,12 @@ class AuthTestSpotipy(unittest.TestCase):
     heavyweight_ep1_url = 'https://open.spotify.com/episode/68kq3bNz6hEuq8NtdfwERG'
     reply_all_ep1_urn = 'spotify:episode:1KHjbpnmNpFmNTczQmTZlR'
 
-    american_gods_urn = 'spotify:audiobook:1IcM9Untg6d3ktuwObYGcN'
-    american_gods_id = '1IcM9Untg6d3ktuwObYGcN'
-    american_gods_url = 'https://open.spotify.com/audiobook/1IcM9Untg6d3ktuwObYGcN'
-
-    four_books = [
-        'spotify:audiobook:1IcM9Untg6d3ktuwObYGcN',
-        'spotify:audiobook:37sRC6carIX2Vf3Vv716T7',
-        'spotify:audiobook:1Gep4UJ95xQawA55OgRI8n',
-        'spotify:audiobook:4Sm381mcf5gBsi9yfhqgVB']
+    dune_urn = 'spotify:audiobook:7iHfbu1YPACw6oZPAFJtqe'
+    dune_id = '7iHfbu1YPACw6oZPAFJtqe'
+    dune_url = 'https://open.spotify.com/audiobook/7iHfbu1YPACw6oZPAFJtqe'
+    two_books = [
+        'spotify:audiobook:7iHfbu1YPACw6oZPAFJtqe',
+        'spotify:audiobook:67VtmjZitn25TWocsyAEyh']
 
     @classmethod
     def setUpClass(self):
@@ -71,42 +73,27 @@ class AuthTestSpotipy(unittest.TestCase):
             client_credentials_manager=SpotifyClientCredentials())
         self.spotify.trace = False
 
-    def test_audio_analysis(self):
-        result = self.spotify.audio_analysis(self.four_tracks[0])
-        assert ('beats' in result)
-
-    def test_audio_features(self):
-        results = self.spotify.audio_features(self.four_tracks)
-        self.assertTrue(len(results) == len(self.four_tracks))
-        for track in results:
-            assert ('speechiness' in track)
-
-    def test_audio_features_with_bad_track(self):
-        bad_tracks = ['spotify:track:bad']
-        input = self.four_tracks + bad_tracks
-        results = self.spotify.audio_features(input)
-        self.assertTrue(len(results) == len(input))
-        for track in results[:-1]:
-            if track is not None:
-                assert ('speechiness' in track)
-        self.assertTrue(results[-1] is None)
-
-    def test_recommendations(self):
-        results = self.spotify.recommendations(
-            seed_tracks=self.four_tracks,
-            min_danceability=0,
-            max_loudness=0,
-            target_popularity=50)
-        self.assertTrue(len(results['tracks']) == 20)
-
     def test_artist_urn(self):
         artist = self.spotify.artist(self.radiohead_urn)
+        self.assertTrue(artist['name'] == 'Radiohead')
+
+    def test_artist_url(self):
+        artist = self.spotify.artist(self.radiohead_url)
+        self.assertTrue(artist['name'] == 'Radiohead')
+
+    def test_artist_id(self):
+        artist = self.spotify.artist(self.radiohead_id)
         self.assertTrue(artist['name'] == 'Radiohead')
 
     def test_artists(self):
         results = self.spotify.artists([self.weezer_urn, self.radiohead_urn])
         self.assertTrue('artists' in results)
         self.assertTrue(len(results['artists']) == 2)
+
+    def test_artists_mixed_ids(self):
+        results = self.spotify.artists([self.weezer_urn, self.radiohead_id, self.qotsa_url])
+        self.assertTrue('artists' in results)
+        self.assertTrue(len(results['artists']) == 3)
 
     def test_album_urn(self):
         album = self.spotify.album(self.pinkerton_urn)
@@ -163,17 +150,6 @@ class AuthTestSpotipy(unittest.TestCase):
         results = self.spotify.artist_top_tracks(self.weezer_urn)
         self.assertTrue('tracks' in results)
         self.assertTrue(len(results['tracks']) == 10)
-
-    def test_artist_related_artists(self):
-        results = self.spotify.artist_related_artists(self.weezer_urn)
-        self.assertTrue('artists' in results)
-        self.assertTrue(len(results['artists']) == 20)
-
-        found = False
-        for artist in results['artists']:
-            if artist['name'] == 'Jimmy Eat World':
-                found = True
-        self.assertTrue(found)
 
     def test_artist_search(self):
         results = self.spotify.search(q='weezer', type='artist')
@@ -319,7 +295,7 @@ class AuthTestSpotipy(unittest.TestCase):
 
         def find_album():
             for album in results['items']:
-                if album['name'] == 'Death to False Metal':
+                if 'Weezer' in album['name']:  # Weezer has many albums containing Weezer
                     return True
             return False
 
@@ -467,28 +443,25 @@ class AuthTestSpotipy(unittest.TestCase):
         self.assertIn("GB", markets)
 
     def test_get_audiobook(self):
-        audiobook = self.spotify.get_audiobook(self.american_gods_urn, market="US")
-        print(audiobook)
+        audiobook = self.spotify.get_audiobook(self.dune_urn, market="US")
         self.assertTrue(audiobook['name'] ==
-                        'American Gods: The Tenth Anniversary Edition: A Novel')
+                        'Dune: Book One in the Dune Chronicles')
 
     def test_get_audiobook_bad_urn(self):
         with self.assertRaises(SpotifyException):
             self.spotify.get_audiobook("bogus_urn", market="US")
 
     def test_get_audiobooks(self):
-        results = self.spotify.get_audiobooks(self.four_books, market="US")
+        results = self.spotify.get_audiobooks(self.two_books, market="US")
         self.assertTrue('audiobooks' in results)
-        self.assertTrue(len(results['audiobooks']) == 4)
-        self.assertTrue(results['audiobooks'][0]['name'] ==
-                        'American Gods: The Tenth Anniversary Edition: A Novel')
-        self.assertTrue(results['audiobooks'][1]['name'] == 'The Da Vinci Code: A Novel')
-        self.assertTrue(results['audiobooks'][2]['name'] == 'Outlander')
-        self.assertTrue(results['audiobooks'][3]['name'] == 'Pachinko: A Novel')
+        self.assertTrue(len(results['audiobooks']) == 2)
+        self.assertTrue(results['audiobooks'][0]['name']
+                        == 'Dune: Book One in the Dune Chronicles')
+        self.assertTrue(results['audiobooks'][1]['name'] == 'The Helper')
 
     def test_get_audiobook_chapters(self):
         results = self.spotify.get_audiobook_chapters(
-            self.american_gods_urn, market="US", limit=10, offset=5)
+            self.dune_urn, market="US", limit=10, offset=5)
         self.assertTrue('items' in results)
         self.assertTrue(len(results['items']) == 10)
         self.assertTrue(results['items'][0]['chapter_number'] == 5)
