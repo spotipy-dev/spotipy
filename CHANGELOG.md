@@ -9,8 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Add your changes below.
 
 ### Added
+- Added examples for audiobooks, shows and episodes methods to examples directory
 
 ### Fixed
+- Fixed scripts in examples directory that didn't run correctly
 
 ### Removed
 
