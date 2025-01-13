@@ -1178,7 +1178,7 @@ class Spotify:
         """ Get the current user's top artists
 
             Parameters:
-                - limit - the number of entities to return
+                - limit - the number of entities to return (max 50)
                 - offset - the index of the first entity to return
                 - time_range - Over what time frame are the affinities computed
                   Valid-values: short_term, medium_term, long_term

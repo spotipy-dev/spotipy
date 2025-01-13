@@ -7,8 +7,8 @@ from spotipy.oauth2 import SpotifyOAuth
 
 
 if len(sys.argv) > 2:
-    playlist_id = sys.argv[2]
-    track_ids = sys.argv[3:]
+    playlist_id = sys.argv[1]
+    track_ids = sys.argv[2:]
 else:
     print(f"Usage: {sys.argv[0]} playlist_id track_id ...")
     sys.exit()

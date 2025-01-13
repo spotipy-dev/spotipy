@@ -3,21 +3,26 @@
 
     given a list of track IDs show the artist and track name
 '''
-from spotipy.oauth2 import SpotifyClientCredentials
-import sys
+from spotipy.oauth2 import SpotifyOAuth
 import spotipy
+import argparse
+
+
+def get_args():
+    parser = argparse.ArgumentParser(description='Print artist and track name given a list of track IDs')
+    parser.add_argument('-u', '--uris', nargs='+',
+                        required=True, help='Track ids')
+    return parser.parse_args()
+
+
+def main():
+    args = get_args()
+    sp = spotipy.Spotify(auth_manager=SpotifyOAuth())
+    track_list = sp.tracks(args.uris)
+    for track in track_list['tracks']:
+        print(track['name'] + ' - ' + track['artists'][0]['name'])
+
 
 if __name__ == '__main__':
-    max_tracks_per_call = 50
-    if len(sys.argv) > 1:
-        file = open(sys.argv[1])
-    else:
-        file = sys.stdin
-    tids = file.read().split()
+    main()
 
-    auth_manager = SpotifyClientCredentials()
-    sp = spotipy.Spotify(auth_manager=auth_manager)
-    for start in range(0, len(tids), max_tracks_per_call):
-        results = sp.tracks(tids[start: start + max_tracks_per_call])
-        for track in results['tracks']:
-            print(track['name'] + ' - ' + track['artists'][0]['name'])
