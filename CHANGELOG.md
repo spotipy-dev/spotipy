@@ -12,6 +12,7 @@ Add your changes below.
 ### Added
 
 - Added examples for audiobooks, shows and episodes methods to examples directory
+- Use newer string formatters (https://pyformat.info)
 
 ### Fixed
 

@@ -217,10 +217,8 @@ class SpotifyClientCredentials(SpotifyAuthBase):
             self.client_id, self.client_secret
         )
 
-        logger.debug(
-            "sending POST request to %s with Headers: %s and Body: %r",
-            self.OAUTH_TOKEN_URL, headers, payload
-        )
+        logger.debug(f"Sending POST request to {self.OAUTH_TOKEN_URL} with Headers: "
+                     f"{headers} and Body: {payload}")
 
         try:
             response = self._session.post(
@@ -401,9 +399,9 @@ class SpotifyOAuth(SpotifyAuthBase):
         auth_url = self.get_authorize_url()
         try:
             webbrowser.open(auth_url)
-            logger.info("Opened %s in your browser", auth_url)
+            logger.info(f"Opened {auth_url} in your browser")
         except webbrowser.Error:
-            logger.error("Please navigate here: %s", auth_url)
+            logger.error(f"Please navigate here: {auth_url}")
 
     def _get_auth_response_interactive(self, open_browser=False):
         if open_browser:
@@ -412,8 +410,8 @@ class SpotifyOAuth(SpotifyAuthBase):
         else:
             url = self.get_authorize_url()
             prompt = (
-                "Go to the following URL: {}\n"
-                "Enter the URL you were redirected to: ".format(url)
+                f"Go to the following URL: {url}\n"
+                "Enter the URL you were redirected to: "
             )
         response = self._get_user_input(prompt)
         state, code = SpotifyOAuth.parse_auth_response_url(response)
@@ -457,12 +455,11 @@ class SpotifyOAuth(SpotifyAuthBase):
             if redirect_port:
                 return self._get_auth_response_local_server(redirect_port)
             else:
-                logger.warning('Using `%s` as redirect URI without a port. '
-                               'Specify a port (e.g. `%s:8080`) to allow '
+                logger.warning(f'Using `{redirect_host}` as redirect URI without a port. '
+                               f'Specify a port (e.g. `{redirect_host}:8080`) to allow '
                                'automatic retrieval of authentication code '
                                'instead of having to copy and paste '
-                               'the URL your browser is redirected to.',
-                               redirect_host, redirect_host)
+                               'the URL your browser is redirected to.')
 
         return self._get_auth_response_interactive(open_browser=open_browser)
 
@@ -510,10 +507,8 @@ class SpotifyOAuth(SpotifyAuthBase):
 
         headers = self._make_authorization_headers()
 
-        logger.debug(
-            "sending POST request to %s with Headers: %s and Body: %r",
-            self.OAUTH_TOKEN_URL, headers, payload
-        )
+        logger.debug(f"Sending POST request to {self.OAUTH_TOKEN_URL} with Headers: "
+                     f"{headers} and Body: {payload}")
 
         try:
             response = self._session.post(
@@ -540,10 +535,8 @@ class SpotifyOAuth(SpotifyAuthBase):
 
         headers = self._make_authorization_headers()
 
-        logger.debug(
-            "sending POST request to %s with Headers: %s and Body: %r",
-            self.OAUTH_TOKEN_URL, headers, payload
-        )
+        logger.debug(f"Sending POST request to {self.OAUTH_TOKEN_URL} with Headers: "
+                     f"{headers} and Body: {payload}")
 
         try:
             response = self._session.post(
@@ -733,9 +726,9 @@ class SpotifyPKCE(SpotifyAuthBase):
         auth_url = self.get_authorize_url(state)
         try:
             webbrowser.open(auth_url)
-            logger.info("Opened %s in your browser", auth_url)
+            logger.info(f"Opened {auth_url} in your browser")
         except webbrowser.Error:
-            logger.error("Please navigate here: %s", auth_url)
+            logger.error(f"Please navigate here: {auth_url}")
 
     def _get_auth_response(self, open_browser=None):
         logger.info('User authentication requires interaction with your '
@@ -759,12 +752,11 @@ class SpotifyPKCE(SpotifyAuthBase):
             if redirect_port:
                 return self._get_auth_response_local_server(redirect_port)
             else:
-                logger.warning('Using `%s` as redirect URI without a port. '
-                               'Specify a port (e.g. `%s:8080`) to allow '
+                logger.warning(f'Using `{redirect_host}` as redirect URI without a port. '
+                               f'Specify a port (e.g. `{redirect_host}:8080`) to allow '
                                'automatic retrieval of authentication code '
                                'instead of having to copy and paste '
-                               'the URL your browser is redirected to.',
-                               redirect_host, redirect_host)
+                               'the URL your browser is redirected to.')
         return self._get_auth_response_interactive(open_browser=open_browser)
 
     def _get_auth_response_local_server(self, redirect_port):
@@ -788,10 +780,8 @@ class SpotifyPKCE(SpotifyAuthBase):
             prompt = "Enter the URL you were redirected to: "
         else:
             url = self.get_authorize_url()
-            prompt = (
-                "Go to the following URL: {}\n"
-                "Enter the URL you were redirected to: ".format(url)
-            )
+            prompt = (f"Go to the following URL: {url}\n"
+                      f"Enter the URL you were redirected to: ")
         response = self._get_user_input(prompt)
         state, code = self.parse_auth_response_url(response)
         if self.state is not None and self.state != state:
@@ -867,10 +857,8 @@ class SpotifyPKCE(SpotifyAuthBase):
 
         headers = {"Content-Type": "application/x-www-form-urlencoded"}
 
-        logger.debug(
-            "sending POST request to %s with Headers: %s and Body: %r",
-            self.OAUTH_TOKEN_URL, headers, payload
-        )
+        logger.debug(f"Sending POST request to {self.OAUTH_TOKEN_URL} with Headers: "
+                     f"{headers} and Body: {payload}")
 
         try:
             response = self._session.post(
@@ -898,10 +886,8 @@ class SpotifyPKCE(SpotifyAuthBase):
 
         headers = {"Content-Type": "application/x-www-form-urlencoded"}
 
-        logger.debug(
-            "sending POST request to %s with Headers: %s and Body: %r",
-            self.OAUTH_TOKEN_URL, headers, payload
-        )
+        logger.debug(f"Sending POST request to {self.OAUTH_TOKEN_URL} with Headers: "
+                     f"{headers} and Body: {payload}")
 
         try:
             response = self._session.post(
@@ -1152,9 +1138,9 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
         auth_url = self.get_authorize_url(state)
         try:
             webbrowser.open(auth_url)
-            logger.info("Opened %s in your browser", auth_url)
+            logger.info(f"Opened {auth_url} in your browser")
         except webbrowser.Error:
-            logger.error("Please navigate here: %s", auth_url)
+            logger.error(f"Please navigate here: {auth_url}")
 
     def get_auth_response(self, state=None):
         """ Gets a new auth **token** with user interaction """
