@@ -456,6 +456,11 @@ class Spotify:
             Parameters:
                 - artist_id - the artist ID, URI or URL
         """
+        warnings.warn(
+            "You're using `artist_related_artists(...)`, "
+            "which is marked as deprecated by Spotify.",
+            DeprecationWarning
+        )
         trid = self._get_id("artist", artist_id)
         return self._get("artists/" + trid + "/related-artists")
 
@@ -1490,7 +1495,7 @@ class Spotify:
         """ Get the current user's top artists
 
             Parameters:
-                - limit - the number of entities to return
+                - limit - the number of entities to return (max 50)
                 - offset - the index of the first entity to return
                 - time_range - Over what time frame are the affinities computed
                   Valid-values: short_term, medium_term, long_term
@@ -1585,6 +1590,11 @@ class Spotify:
                   (the first object). Use with limit to get the next set of
                   items.
         """
+        warnings.warn(
+            "You're using `featured_playlists(...)`, "
+            "which is marked as deprecated by Spotify.",
+            DeprecationWarning,
+        )
         return self._get(
             "browse/featured-playlists",
             locale=locale,
@@ -1669,6 +1679,11 @@ class Spotify:
                   (the first object). Use with limit to get the next set of
                   items.
         """
+        warnings.warn(
+            "You're using `category_playlists(...)`, "
+            "which is marked as deprecated by Spotify.",
+            DeprecationWarning,
+        )
         return self._get(
             "browse/categories/" + category_id + "/playlists",
             country=country,
@@ -1706,6 +1721,12 @@ class Spotify:
                     attributes listed in the documentation, these values
                     provide filters and targeting on results.
         """
+        warnings.warn(
+            "You're using `recommendations(...)`, "
+            "which is marked as deprecated by Spotify.",
+            DeprecationWarning,
+        )
+
         params = dict(limit=limit)
         if seed_artists:
             params["seed_artists"] = ",".join(
@@ -1752,6 +1773,11 @@ class Spotify:
             Parameters:
                 - track_id - a track URI, URL or ID
         """
+        warnings.warn(
+            "You're using `audio_analysis(...)`, "
+            "which is marked as deprecated by Spotify.",
+            DeprecationWarning,
+        )
         trid = self._get_id("track", track_id)
         return self._get("audio-analysis/" + trid)
 
@@ -1760,6 +1786,12 @@ class Spotify:
             Parameters:
                 - tracks - a list of track URIs, URLs or IDs, maximum: 100 ids
         """
+        warnings.warn(
+            "You're using `audio_features(...)`, "
+            "which is marked as deprecated by Spotify.",
+            DeprecationWarning,
+        )
+
         if isinstance(tracks, str):
             trackid = self._get_id("track", tracks)
             results = self._get("audio-features/?ids=" + trackid)

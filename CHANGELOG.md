@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Add your changes below.
 
 ### Added
+- Added examples for audiobooks, shows and episodes methods to examples directory
+- Use newer string formatters (https://pyformat.info)
+
+### Fixed
+- Fixed scripts in examples directory that didn't run correctly
+- Updated documentation for `Client.current_user_top_artists` to indicate maximum number of artists limit
+
+### Removed
+
+## [2.25.0] - 2025-03-01
+
+### Added
 - Added unit tests for queue functions
 - Added detailed function docstrings to 'util.py', including descriptions and special sections that lists arguments, returns, and raises.
 - Updated order of instructions for Python and pip package manager installation in TUTORIAL.md
@@ -19,7 +31,14 @@ Add your changes below.
 - Added `personalized_playlist.py`, `track_recommendations.py`, and `audio_features_analysis.py` to `/examples`.
 - Discord badge in README
 - Added `SpotifyBaseException` and moved all exceptions to `exceptions.py`
-- Use newer string formatters (https://pyformat.info)
+- Marked the following methods as deprecated:
+  - artist_related_artists
+  - recommendations
+  - audio_features
+  - audio_analysis
+  - featured_playlists
+  - category_playlists
+- Added FAQ entry for inaccessible playlists
 
 ### Fixed
 - Audiobook integration tests
