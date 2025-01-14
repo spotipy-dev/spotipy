@@ -16,7 +16,9 @@ def get_args():
 
 def main():
     args = get_args()
-    sp.current_user_follow_playlist(args.playlist)
+    # Uses Lofi Girl playlist
+    playlist = args.playlist or '0vvXsWCC9xrXsKd4FyS8kM'
+    spotipy.Spotify(auth_manager=SpotifyOAuth()).current_user_follow_playlist(playlist)
 
 if __name__ == '__main__':
     main()

@@ -555,7 +555,7 @@ class SpotifyQueueApiTests(unittest.TestCase):
         self.spotify.add_to_queue(test_uri)
 
         # Check if the correct endpoint is called
-        endpoint = "me/player/queue?uri=%s" % test_uri
+        endpoint = f"me/player/queue?uri={test_uri}"
         mock_post.assert_called_with(endpoint)
 
     def test_add_to_queue_with_device_id(self, mock_post):
@@ -566,5 +566,5 @@ class SpotifyQueueApiTests(unittest.TestCase):
         self.spotify.add_to_queue(test_uri, device_id=device_id)
 
         # Check if the correct endpoint is called
-        endpoint = "me/player/queue?uri=%s&device_id=%s" % (test_uri, device_id)
+        endpoint = f"me/player/queue?uri={test_uri}&device_id={device_id}"
         mock_post.assert_called_with(endpoint)
