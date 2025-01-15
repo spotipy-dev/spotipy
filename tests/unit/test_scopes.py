@@ -20,8 +20,8 @@ class SpotipyScopeTest(TestCase):
         normalized_scope_string_2 = self.normalize_scope(scope_string)
 
         self.assertEqual(scope_string, "")
-        self.assertEqual(normalized_scope_string, "")
-        self.assertEqual(normalized_scope_string_2, "")
+        self.assertEqual(normalized_scope_string, None)
+        self.assertEqual(normalized_scope_string_2, None)
 
         converted_scopes = Scope.from_string(scope_string)
         self.assertEqual(converted_scopes, set())
@@ -82,10 +82,10 @@ class SpotipyScopeTest(TestCase):
     def test_normalize_scope(self):
 
         normalized_scope_string = self.normalize_scope([])
-        self.assertEqual(normalized_scope_string, "")
+        self.assertEqual(normalized_scope_string, None)
 
         normalized_scope_string_2 = self.normalize_scope(())
-        self.assertEqual(normalized_scope_string_2, "")
+        self.assertEqual(normalized_scope_string_2, None)
 
         self.assertIsNone(self.normalize_scope(None))
 

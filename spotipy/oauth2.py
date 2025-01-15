@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 __all__ = [
     "SpotifyClientCredentials",
     "SpotifyOAuth",
@@ -15,48 +13,22 @@ import time
 import webbrowser
 
 import requests
-# Workaround to support both python 2 & 3
-import six
-import six.moves.urllib.parse as urllibparse
-from six.moves.BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
-from six.moves.urllib_parse import parse_qsl, urlparse
+import urllib.parse as urllibparse
+from http.server import BaseHTTPRequestHandler, HTTPServer
+from urllib.parse import parse_qsl, urlparse
 
 from spotipy.cache_handler import CacheFileHandler, CacheHandler
-from spotipy.util import CLIENT_CREDS_ENV_VARS, get_host_port
-from spotipy.scope import Scope
-from typing import Iterable
-import re
+from spotipy.exceptions import SpotifyOauthError, SpotifyStateError
+from spotipy.util import CLIENT_CREDS_ENV_VARS, get_host_port, normalize_scope
 
 logger = logging.getLogger(__name__)
 
 
-class SpotifyOauthError(Exception):
-    """ Error during Auth Code or Implicit Grant flow """
-
-    def __init__(self, message, error=None, error_description=None, *args, **kwargs):
-        self.error = error
-        self.error_description = error_description
-        self.__dict__.update(kwargs)
-        super(SpotifyOauthError, self).__init__(message, *args, **kwargs)
-
-
-class SpotifyStateError(SpotifyOauthError):
-    """ The state sent and state received were different """
-
-    def __init__(self, local_state=None, remote_state=None, message=None,
-                 error=None, error_description=None, *args, **kwargs):
-        if not message:
-            message = f"Expected {local_state} but recieved {remote_state}"
-        super(SpotifyOauthError, self).__init__(message, error,
-                                                error_description, *args,
-                                                **kwargs)
-
-
 def _make_authorization_headers(client_id, client_secret):
     auth_header = base64.b64encode(
-        six.text_type(f"{client_id}:{client_secret}").encode("ascii")
+        f"{client_id}:{client_secret}".encode("ascii")
     )
-    return {"Authorization": f'Basic {auth_header.decode("ascii")}'}
+    return {"Authorization": f"Basic {auth_header.decode('ascii')}"}
 
 
 def _ensure_value(value, env_key):
@@ -68,8 +40,7 @@ def _ensure_value(value, env_key):
     return _val
 
 
-class SpotifyAuthBase(object):
-
+class SpotifyAuthBase:
     def __init__(self, requests_session):
         if isinstance(requests_session, requests.Session):
             self._session = requests_session
@@ -171,9 +142,7 @@ class SpotifyAuthBase(object):
             error_description = None
 
         raise SpotifyOauthError(
-            'error: {0}, error_description: {1}'.format(
-                error, error_description
-            ),
+            f'error: {error}, error_description: {error_description}',
             error=error,
             error_description=error_description
         )
@@ -225,7 +194,7 @@ class SpotifyClientCredentials(SpotifyAuthBase):
 
         """
 
-        super(SpotifyClientCredentials, self).__init__(requests_session)
+        super().__init__(requests_session)
 
         self.client_id = client_id
         self.client_secret = client_secret
@@ -344,7 +313,7 @@ class SpotifyOAuth(SpotifyAuthBase):
                              authorize a user
         """
 
-        super(SpotifyOAuth, self).__init__(requests_session)
+        super().__init__(requests_session)
 
         self.client_id = client_id
         self.client_secret = client_secret
@@ -594,7 +563,7 @@ class SpotifyPKCE(SpotifyAuthBase):
     """ Implements PKCE Authorization Flow for client apps
 
     This auth manager enables *user and non-user* endpoints with only
-    a client secret, redirect uri, and username. When the app requests
+    a client ID, redirect URI, and username. When the app requests
     an access token for the first time, the user is prompted to
     authorize the new client app. After authorizing the app, the client
     app is then given both access and refresh tokens. This is the
@@ -651,7 +620,7 @@ class SpotifyPKCE(SpotifyAuthBase):
                              authorize a user
         """
 
-        super(SpotifyPKCE, self).__init__(requests_session)
+        super().__init__(requests_session)
         self.client_id = client_id
         self.redirect_uri = redirect_uri
         self.state = state
@@ -686,15 +655,8 @@ class SpotifyPKCE(SpotifyAuthBase):
         length = random.randint(33, 96)
 
         # The seeded length generates between a 44 and 128 base64 characters encoded string
-        try:
-            import secrets
-            verifier = secrets.token_urlsafe(length)
-        except ImportError:  # For python 3.5 support
-            import base64
-            import os
-            rand_bytes = os.urandom(length)
-            verifier = base64.urlsafe_b64encode(rand_bytes).decode('utf-8').replace('=', '')
-        return verifier
+        import secrets
+        return secrets.token_urlsafe(length)
 
     def _get_code_challenge(self):
         """ Spotify PCKE code challenge - See step 1 of the reference guide below
