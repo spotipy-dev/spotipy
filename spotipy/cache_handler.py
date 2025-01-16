@@ -101,7 +101,6 @@ class CacheFileHandler(CacheHandler):
             logger.warning(f"Couldn't write token to cache at: {self.cache_path}")
 
 
-
 class MemoryCacheHandler(CacheHandler):
     """Cache handler that stores the token non-persistently as an instance attribute."""
 
@@ -141,7 +140,7 @@ class DjangoSessionCacheHandler(CacheHandler):
     def get_cached_token(self):
         token_info = None
         try:
-            token_info = self.request.session['token_info']
+            token_info = self.request.session["token_info"]
         except KeyError:
             logger.debug("Token not found in the session")
 
@@ -149,7 +148,7 @@ class DjangoSessionCacheHandler(CacheHandler):
 
     def save_token_to_cache(self, token_info):
         try:
-            self.request.session['token_info'] = token_info
+            self.request.session["token_info"] = token_info
         except Exception as e:
             logger.warning(f"Error saving token to cache: {e}")
 
@@ -202,7 +201,6 @@ class RedisCacheHandler(CacheHandler):
         except RedisError as e:
             logger.warning(f"Error getting token from cache: {e}")
 
-
         return token_info
 
     def save_token_to_cache(self, token_info: TokenInfo) -> None:
@@ -213,10 +211,8 @@ class RedisCacheHandler(CacheHandler):
             logger.warning(f"Error saving token to cache: {e}")
 
 
-
 class MemcacheCacheHandler(CacheHandler):
-    """A Cache handler that stores the token info in Memcache using the pymemcache client
-    """
+    """A Cache handler that stores the token info in Memcache using the pymemcache client"""
 
     def __init__(self, memcache, key=None) -> None:
         """
@@ -227,10 +223,11 @@ class MemcacheCacheHandler(CacheHandler):
                    (takes precedence over `token_info`)
         """
         self.memcache = memcache
-        self.key = key if key else 'token_info'
+        self.key = key if key else "token_info"
 
     def get_cached_token(self):
         from pymemcache import MemcacheError
+
         try:
             token_info = self.memcache.get(self.key)
             if token_info:
@@ -240,6 +237,7 @@ class MemcacheCacheHandler(CacheHandler):
 
     def save_token_to_cache(self, token_info):
         from pymemcache import MemcacheError
+
         try:
             self.memcache.set(self.key, json.dumps(token_info))
         except MemcacheError as e:
