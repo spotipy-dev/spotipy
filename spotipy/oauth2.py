@@ -376,7 +376,7 @@ class SpotifyOAuth(SpotifyAuthBase):
         urlparams = urllibparse.urlencode(payload)
 
         return f"{self.OAUTH_AUTHORIZE_URL}?{urlparams}"
-    
+
     def parse_response_code(self, url):
         """ Parse the response code in the given response url
 
