@@ -52,6 +52,7 @@ Rebasing master onto v3 doesn't require a changelog update.
 ### Added
 
 - Added examples for audiobooks, shows and episodes methods to examples directory
+- Use newer string formatters (https://pyformat.info)
 
 ### Fixed
 

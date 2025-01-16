@@ -38,6 +38,5 @@ recommendations = sp.recommendations(
 
 # Display the recommendations
 for i, track in enumerate(recommendations['tracks']):
-    print(
-        f"{i+1}. {track['name']} by {', '.join([artist['name'] for artist in track['artists']])}"
-    )
+    print(f"{i+1}. {track['name']} by "
+          f"{', '.join([artist['name'] for artist in track['artists']])}")
