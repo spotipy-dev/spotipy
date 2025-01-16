@@ -10,7 +10,7 @@ if len(sys.argv) > 1:
 else:
     urn = 'spotify:artist:3jOstUTkEu2JkjvRdBA5Gu'
 
-sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
+sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials())
 
 artist = sp.artist(urn)
 pprint(artist)

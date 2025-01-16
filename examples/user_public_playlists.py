@@ -6,14 +6,10 @@ import sys
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
-client_credentials_manager = SpotifyClientCredentials()
-sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+auth_manager = SpotifyClientCredentials()
+sp = spotipy.Spotify(auth_manager=auth_manager)
 
-user = 'spotify'
-
-if len(sys.argv) > 1:
-    user = sys.argv[1]
-
+user = sys.argv[1] if len(sys.argv) > 1 else 'spotify'
 playlists = sp.user_playlists(user)
 
 while playlists:

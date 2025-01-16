@@ -68,10 +68,9 @@ class AuthTestSpotipy(unittest.TestCase):
         'spotify:audiobook:67VtmjZitn25TWocsyAEyh']
 
     @classmethod
-    def setUpClass(self):
-        self.spotify = Spotify(
-            client_credentials_manager=SpotifyClientCredentials())
-        self.spotify.trace = False
+    def setUpClass(cls):
+        cls.spotify = Spotify(auth_manager=SpotifyClientCredentials())
+        cls.spotify.trace = False
 
     def test_artist_urn(self):
         artist = self.spotify.artist(self.radiohead_urn)
@@ -203,8 +202,10 @@ class AuthTestSpotipy(unittest.TestCase):
                             [0]['name'] == 'Weezer' for country in results_limited))
 
         total_limited_results = 0
-        for country in results_limited:
-            total_limited_results += len(results_limited[country]['artists']['items'])
+        total_limited_results = sum(
+            len(results_limited[country]['artists']['items'])
+            for country in results_limited
+        )
         self.assertTrue(total_limited_results <= total)
 
     def test_multiple_types_search_with_multiple_markets(self):
@@ -302,9 +303,9 @@ class AuthTestSpotipy(unittest.TestCase):
         self.assertTrue(find_album())
 
     def test_search_timeout(self):
-        client_credentials_manager = SpotifyClientCredentials()
+        auth_manager = SpotifyClientCredentials()
         sp = spotipy.Spotify(requests_timeout=0.01,
-                             client_credentials_manager=client_credentials_manager)
+                             auth_manager=auth_manager)
 
         # depending on the timing or bandwidth, this raises a timeout or connection error
         self.assertRaises((requests.exceptions.Timeout, requests.exceptions.ConnectionError),
@@ -313,17 +314,15 @@ class AuthTestSpotipy(unittest.TestCase):
     @unittest.skip("flaky test, need a better method to test retries")
     def test_max_retries_reached_get(self):
         spotify_no_retry = Spotify(
-            client_credentials_manager=SpotifyClientCredentials(),
+            auth_manager=SpotifyClientCredentials(),
             retries=0)
-        i = 0
-        while i < 100:
+        for _ in range(100):
             try:
                 spotify_no_retry.search(q='foo')
             except SpotifyException as e:
                 self.assertIsInstance(e, SpotifyException)
                 self.assertEqual(e.http_status, 429)
                 return
-            i += 1
         self.fail()
 
     def test_album_search(self):
@@ -415,13 +414,13 @@ class AuthTestSpotipy(unittest.TestCase):
         with self.assertRaises(SpotifyException) as cm:
             self.spotify.user_playlist_create(
                 "spotify", "Best hits of the 90s")
-        self.assertTrue(cm.exception.http_status == 401 or cm.exception.http_status == 403)
+        self.assertTrue(cm.exception.http_status in [401, 403])
 
     def test_custom_requests_session(self):
         sess = requests.Session()
         sess.headers["user-agent"] = "spotipy-test"
         with_custom_session = spotipy.Spotify(
-            client_credentials_manager=SpotifyClientCredentials(),
+            auth_manager=SpotifyClientCredentials(),
             requests_session=sess)
         self.assertTrue(
             with_custom_session.user(
@@ -430,7 +429,7 @@ class AuthTestSpotipy(unittest.TestCase):
 
     def test_force_no_requests_session(self):
         with_no_session = spotipy.Spotify(
-            client_credentials_manager=SpotifyClientCredentials(),
+            auth_manager=SpotifyClientCredentials(),
             requests_session=False)
         self.assertNotIsInstance(with_no_session._session, requests.Session)
         user = with_no_session.user(user="akx")

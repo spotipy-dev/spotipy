@@ -5,10 +5,10 @@ import unittest
 import unittest.mock as mock
 import urllib.parse as urllibparse
 
-from spotipy import SpotifyOAuth, SpotifyImplicitGrant, SpotifyPKCE
-from spotipy.cache_handler import MemoryCacheHandler
+from spotipy import SpotifyOAuth, SpotifyPKCE
 from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOauthError
 from spotipy.oauth2 import SpotifyStateError
+from spotipy import MemoryCacheHandler, CacheFileHandler
 
 patch = mock.patch
 DEFAULT = mock.DEFAULT
@@ -38,10 +38,6 @@ def _make_oauth(*args, **kwargs):
     return SpotifyOAuth("CLID", "CLISEC", "REDIR", "STATE", *args, **kwargs)
 
 
-def _make_implicitgrantauth(*args, **kwargs):
-    return SpotifyImplicitGrant("CLID", "REDIR", "STATE", *args, **kwargs)
-
-
 def _make_pkceauth(*args, **kwargs):
     return SpotifyPKCE("CLID", "REDIR", "STATE", *args, **kwargs)
 
@@ -60,13 +56,12 @@ class OAuthCacheTest(unittest.TestCase):
         opener.return_value = _token_file(json.dumps(tok, ensure_ascii=False))
         is_token_expired.return_value = False
 
-        spot = _make_oauth(scope, path)
+        cache_handler = CacheFileHandler(cache_path=path)
+        spot = _make_oauth(scope, cache_handler=cache_handler)
         cached_tok = spot.validate_token(spot.cache_handler.get_cached_token())
-        cached_tok_legacy = spot.get_cached_token()
 
         opener.assert_called_with(path)
         self.assertIsNotNone(cached_tok)
-        self.assertIsNotNone(cached_tok_legacy)
         self.assertEqual(refresh_access_token.call_count, 0)
 
     @patch.multiple(SpotifyOAuth,
@@ -83,7 +78,8 @@ class OAuthCacheTest(unittest.TestCase):
         opener.return_value = token_file
         refresh_access_token.return_value = fresh_tok
 
-        spot = _make_oauth(scope, path)
+        cache_handler = CacheFileHandler(cache_path=path)
+        spot = _make_oauth(scope, cache_handler=cache_handler)
         spot.validate_token(spot.cache_handler.get_cached_token())
 
         is_token_expired.assert_called_with(expired_tok)
@@ -103,7 +99,9 @@ class OAuthCacheTest(unittest.TestCase):
         opener.return_value = _token_file(json.dumps(tok, ensure_ascii=False))
         is_token_expired.return_value = False
 
-        spot = _make_oauth(requested_scope, path)
+        cache_handler = CacheFileHandler(cache_path=path)
+
+        spot = _make_oauth(requested_scope, cache_handler=cache_handler)
         cached_tok = spot.validate_token(spot.cache_handler.get_cached_token())
 
         opener.assert_called_with(path)
@@ -119,23 +117,9 @@ class OAuthCacheTest(unittest.TestCase):
         fi = _fake_file()
         opener.return_value = fi
 
-        spot = SpotifyOAuth("CLID", "CLISEC", "REDIR", "STATE", scope, path)
+        cache_handler = CacheFileHandler(cache_path=path)
+        spot = SpotifyOAuth("CLID", "CLISEC", "REDIR", "STATE", scope, cache_handler=cache_handler)
         spot.cache_handler.save_token_to_cache(tok)
-
-        opener.assert_called_with(path, 'w')
-        self.assertTrue(fi.write.called)
-
-    @patch('spotipy.cache_handler.open', create=True)
-    def test_saves_to_cache_path_legacy(self, opener):
-        scope = "playlist-modify-private"
-        path = ".cache-username"
-        tok = _make_fake_token(1, 1, scope)
-
-        fi = _fake_file()
-        opener.return_value = fi
-
-        spot = SpotifyOAuth("CLID", "CLISEC", "REDIR", "STATE", scope, path)
-        spot._save_token_info(tok)
 
         opener.assert_called_with(path, 'w')
         self.assertTrue(fi.write.called)
@@ -244,141 +228,6 @@ class TestSpotifyClientCredentials(unittest.TestCase):
         self.assertEqual(error.exception.error, 'invalid_client')
 
 
-class ImplicitGrantCacheTest(unittest.TestCase):
-
-    @patch.object(SpotifyImplicitGrant, "is_token_expired", DEFAULT)
-    @patch('spotipy.cache_handler.open', create=True)
-    def test_gets_from_cache_path(self, opener, is_token_expired):
-        scope = "playlist-modify-private"
-        path = ".cache-username"
-        tok = _make_fake_token(1, 1, scope)
-
-        opener.return_value = _token_file(json.dumps(tok, ensure_ascii=False))
-        is_token_expired.return_value = False
-
-        spot = _make_implicitgrantauth(scope, path)
-        cached_tok = spot.cache_handler.get_cached_token()
-        cached_tok_legacy = spot.get_cached_token()
-
-        opener.assert_called_with(path)
-        self.assertIsNotNone(cached_tok)
-        self.assertIsNotNone(cached_tok_legacy)
-
-    @patch.object(SpotifyImplicitGrant, "is_token_expired", DEFAULT)
-    @patch('spotipy.cache_handler.open', create=True)
-    def test_expired_token_returns_none(self, opener, is_token_expired):
-        scope = "playlist-modify-private"
-        path = ".cache-username"
-        expired_tok = _make_fake_token(0, None, scope)
-
-        token_file = _token_file(json.dumps(expired_tok, ensure_ascii=False))
-        opener.return_value = token_file
-
-        spot = _make_implicitgrantauth(scope, path)
-        cached_tok = spot.validate_token(spot.cache_handler.get_cached_token())
-
-        is_token_expired.assert_called_with(expired_tok)
-        opener.assert_any_call(path)
-        self.assertIsNone(cached_tok)
-
-    @patch.object(SpotifyImplicitGrant, "is_token_expired", DEFAULT)
-    @patch('spotipy.cache_handler.open', create=True)
-    def test_badly_scoped_token_bails(self, opener, is_token_expired):
-        token_scope = "playlist-modify-public"
-        requested_scope = "playlist-modify-private"
-        path = ".cache-username"
-        tok = _make_fake_token(1, 1, token_scope)
-
-        opener.return_value = _token_file(json.dumps(tok, ensure_ascii=False))
-        is_token_expired.return_value = False
-
-        spot = _make_implicitgrantauth(requested_scope, path)
-        cached_tok = spot.validate_token(spot.cache_handler.get_cached_token())
-
-        opener.assert_called_with(path)
-        self.assertIsNone(cached_tok)
-
-    @patch('spotipy.cache_handler.open', create=True)
-    def test_saves_to_cache_path(self, opener):
-        scope = "playlist-modify-private"
-        path = ".cache-username"
-        tok = _make_fake_token(1, 1, scope)
-
-        fi = _fake_file()
-        opener.return_value = fi
-
-        spot = SpotifyImplicitGrant("CLID", "REDIR", "STATE", scope, path)
-        spot.cache_handler.save_token_to_cache(tok)
-
-        opener.assert_called_with(path, 'w')
-        self.assertTrue(fi.write.called)
-
-    @patch('spotipy.cache_handler.open', create=True)
-    def test_saves_to_cache_path_legacy(self, opener):
-        scope = "playlist-modify-private"
-        path = ".cache-username"
-        tok = _make_fake_token(1, 1, scope)
-
-        fi = _fake_file()
-        opener.return_value = fi
-
-        spot = SpotifyImplicitGrant("CLID", "REDIR", "STATE", scope, path)
-        spot._save_token_info(tok)
-
-        opener.assert_called_with(path, 'w')
-        self.assertTrue(fi.write.called)
-
-
-class TestSpotifyImplicitGrant(unittest.TestCase):
-
-    def test_get_authorize_url_doesnt_pass_state_by_default(self):
-        auth = SpotifyImplicitGrant("CLID", "REDIR")
-
-        url = auth.get_authorize_url()
-
-        parsed_url = urllibparse.urlparse(url)
-        parsed_qs = urllibparse.parse_qs(parsed_url.query)
-        self.assertNotIn('state', parsed_qs)
-
-    def test_get_authorize_url_passes_state_from_constructor(self):
-        state = "STATE"
-        auth = SpotifyImplicitGrant("CLID", "REDIR", state)
-
-        url = auth.get_authorize_url()
-
-        parsed_url = urllibparse.urlparse(url)
-        parsed_qs = urllibparse.parse_qs(parsed_url.query)
-        self.assertEqual(parsed_qs['state'][0], state)
-
-    def test_get_authorize_url_passes_state_from_func_call(self):
-        state = "STATE"
-        auth = SpotifyImplicitGrant("CLID", "REDIR", "NOT STATE")
-
-        url = auth.get_authorize_url(state=state)
-
-        parsed_url = urllibparse.urlparse(url)
-        parsed_qs = urllibparse.parse_qs(parsed_url.query)
-        self.assertEqual(parsed_qs['state'][0], state)
-
-    def test_get_authorize_url_does_not_show_dialog_by_default(self):
-        auth = SpotifyImplicitGrant("CLID", "REDIR")
-
-        url = auth.get_authorize_url()
-
-        parsed_url = urllibparse.urlparse(url)
-        parsed_qs = urllibparse.parse_qs(parsed_url.query)
-        self.assertNotIn('show_dialog', parsed_qs)
-
-    def test_get_authorize_url_shows_dialog_when_requested(self):
-        auth = SpotifyImplicitGrant("CLID", "REDIR", show_dialog=True)
-
-        url = auth.get_authorize_url()
-
-        parsed_url = urllibparse.urlparse(url)
-        parsed_qs = urllibparse.parse_qs(parsed_url.query)
-        self.assertTrue(parsed_qs['show_dialog'])
-
-
 class SpotifyPKCECacheTest(unittest.TestCase):
 
     @patch.multiple(SpotifyPKCE,
@@ -393,13 +242,12 @@ class SpotifyPKCECacheTest(unittest.TestCase):
         opener.return_value = _token_file(json.dumps(tok, ensure_ascii=False))
         is_token_expired.return_value = False
 
-        spot = _make_pkceauth(scope, path)
+        cache_handler = CacheFileHandler(cache_path=path)
+        spot = _make_pkceauth(scope, cache_handler=cache_handler)
         cached_tok = spot.cache_handler.get_cached_token()
-        cached_tok_legacy = spot.get_cached_token()
 
         opener.assert_called_with(path)
         self.assertIsNotNone(cached_tok)
-        self.assertIsNotNone(cached_tok_legacy)
         self.assertEqual(refresh_access_token.call_count, 0)
 
     @patch.multiple(SpotifyPKCE,
@@ -416,7 +264,8 @@ class SpotifyPKCECacheTest(unittest.TestCase):
         opener.return_value = token_file
         refresh_access_token.return_value = fresh_tok
 
-        spot = _make_pkceauth(scope, path)
+        cache_handler = CacheFileHandler(cache_path=path)
+        spot = _make_pkceauth(scope, cache_handler=cache_handler)
         spot.validate_token(spot.cache_handler.get_cached_token())
 
         is_token_expired.assert_called_with(expired_tok)
@@ -436,7 +285,8 @@ class SpotifyPKCECacheTest(unittest.TestCase):
         opener.return_value = _token_file(json.dumps(tok, ensure_ascii=False))
         is_token_expired.return_value = False
 
-        spot = _make_pkceauth(requested_scope, path)
+        cache_handler = CacheFileHandler(cache_path=path)
+        spot = _make_pkceauth(requested_scope, cache_handler=cache_handler)
         cached_tok = spot.validate_token(spot.cache_handler.get_cached_token())
 
         opener.assert_called_with(path)
@@ -452,23 +302,9 @@ class SpotifyPKCECacheTest(unittest.TestCase):
         fi = _fake_file()
         opener.return_value = fi
 
-        spot = SpotifyPKCE("CLID", "REDIR", "STATE", scope, path)
+        cache_handler = CacheFileHandler(cache_path=path)
+        spot = SpotifyPKCE("CLID", "REDIR", "STATE", scope, cache_handler=cache_handler)
         spot.cache_handler.save_token_to_cache(tok)
-
-        opener.assert_called_with(path, 'w')
-        self.assertTrue(fi.write.called)
-
-    @patch('spotipy.cache_handler.open', create=True)
-    def test_saves_to_cache_path_legacy(self, opener):
-        scope = "playlist-modify-private"
-        path = ".cache-username"
-        tok = _make_fake_token(1, 1, scope)
-
-        fi = _fake_file()
-        opener.return_value = fi
-
-        spot = SpotifyPKCE("CLID", "REDIR", "STATE", scope, path)
-        spot._save_token_info(tok)
 
         opener.assert_called_with(path, 'w')
         self.assertTrue(fi.write.called)

@@ -36,7 +36,14 @@ class TokenInfo(TypedDict):
 
 
 class CacheHandler(ABC):
-    """An ABC for handling the caching and retrieval of authorization tokens."""
+    """
+    An abstraction layer for handling the caching and retrieval of
+    authorization tokens.
+
+    Clients are expected to subclass this class and override the
+    get_cached_token and save_token_to_cache methods with the same
+    type signatures of this class.
+    """
 
     @abstractmethod
     def get_cached_token(self) -> TokenInfo | None:
@@ -70,7 +77,7 @@ class CacheFileHandler(CacheHandler):
             cache_path = ".cache"
             username = username or os.getenv(CLIENT_CREDS_ENV_VARS["client_username"])
             if username:
-                cache_path += "-" + str(username)
+                cache_path += f"-{username}"
             self.cache_path = cache_path
 
     def get_cached_token(self) -> TokenInfo | None:
@@ -212,7 +219,8 @@ class RedisCacheHandler(CacheHandler):
 
 
 class MemcacheCacheHandler(CacheHandler):
-    """A Cache handler that stores the token info in Memcache using the pymemcache client"""
+    """A Cache handler that stores the token info in Memcache using the pymemcache client
+    """
 
     def __init__(self, memcache, key=None) -> None:
         """

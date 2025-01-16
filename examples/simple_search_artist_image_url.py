@@ -4,14 +4,10 @@ import sys
 from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy
 
-sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
+sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials())
 
-if len(sys.argv) > 1:
-    name = ' '.join(sys.argv[1:])
-else:
-    name = 'Radiohead'
-
-results = sp.search(q='artist:' + name, type='artist')
+name = ' '.join(sys.argv[1:]) if len(sys.argv) > 1 else 'Radiohead'
+results = sp.search(q=f'artist:{name}', type='artist')
 items = results['artists']['items']
 if len(items) > 0:
     artist = items[0]

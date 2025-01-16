@@ -18,7 +18,7 @@ def get_args():
 
 
 def get_artist(name):
-    results = sp.search(q='artist:' + name, type='artist')
+    results = sp.search(q=f'artist:{name}', type='artist')
     items = results['artists']['items']
     return items[0] if items else None
 
@@ -66,6 +66,6 @@ def main():
 
 
 if __name__ == '__main__':
-    client_credentials_manager = SpotifyClientCredentials()
-    sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+    auth_manager = SpotifyClientCredentials()
+    sp = spotipy.Spotify(auth_manager=auth_manager)
     main()
