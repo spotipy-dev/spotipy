@@ -8,4 +8,4 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
 
 results = sp.current_user_playlists(limit=50)
 for i, item in enumerate(results['items']):
-    print("%d %s" % (i, item['name']))
+    print(f"{i} {item['name']}")

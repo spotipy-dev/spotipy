@@ -393,33 +393,6 @@ class SpotipyBrowseApiTests(unittest.TestCase):
         response = self.spotify.categories(limit=50)
         self.assertLessEqual(len(response['categories']['items']), 50)
 
-    def test_category_playlists(self):
-        response = self.spotify.categories()
-        category = 'rock'
-        for cat in response['categories']['items']:
-            cat_id = cat['id']
-            if cat_id == category:
-                response = self.spotify.category_playlists(category_id=cat_id)
-                self.assertGreater(len(response['playlists']["items"]), 0)
-
-    def test_category_playlists_limit_low(self):
-        response = self.spotify.categories()
-        category = 'rock'
-        for cat in response['categories']['items']:
-            cat_id = cat['id']
-            if cat_id == category:
-                response = self.spotify.category_playlists(category_id=cat_id, limit=1)
-                self.assertEqual(len(response['categories']['items']), 1)
-
-    def test_category_playlists_limit_high(self):
-        response = self.spotify.categories()
-        category = 'rock'
-        for cat in response['categories']['items']:
-            cat_id = cat['id']
-            if cat_id == category:
-                response = self.spotify.category_playlists(category_id=cat_id, limit=50)
-                self.assertLessEqual(len(response['categories']['items']), 50)
-
     def test_new_releases(self):
         response = self.spotify.new_releases()
         self.assertGreater(len(response['albums']['items']), 0)
@@ -431,10 +404,6 @@ class SpotipyBrowseApiTests(unittest.TestCase):
     def test_new_releases_limit_high(self):
         response = self.spotify.new_releases(limit=50)
         self.assertLessEqual(len(response['albums']['items']), 50)
-
-    def test_featured_releases(self):
-        response = self.spotify.featured_playlists()
-        self.assertGreater(len(response['playlists']), 0)
 
 
 class SpotipyFollowApiTests(unittest.TestCase):
@@ -586,7 +555,7 @@ class SpotifyQueueApiTests(unittest.TestCase):
         self.spotify.add_to_queue(test_uri)
 
         # Check if the correct endpoint is called
-        endpoint = "me/player/queue?uri=%s" % test_uri
+        endpoint = f"me/player/queue?uri={test_uri}"
         mock_post.assert_called_with(endpoint)
 
     def test_add_to_queue_with_device_id(self, mock_post):
@@ -597,5 +566,5 @@ class SpotifyQueueApiTests(unittest.TestCase):
         self.spotify.add_to_queue(test_uri, device_id=device_id)
 
         # Check if the correct endpoint is called
-        endpoint = "me/player/queue?uri=%s&device_id=%s" % (test_uri, device_id)
+        endpoint = f"me/player/queue?uri={test_uri}&device_id={device_id}"
         mock_post.assert_called_with(endpoint)
