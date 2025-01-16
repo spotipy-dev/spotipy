@@ -219,7 +219,7 @@ class Spotify:
 
     def _auth_headers(self):
         if self.access_token:
-            return {"Authorization": "Bearer {0}".format(self.access_token)}
+            return {"Authorization": f"Bearer {self.access_token}"}
         if not self.auth_manager:
             return {}
         try:
@@ -361,7 +361,7 @@ class Spotify:
         """
 
         tlist = [self._get_id("track", t) for t in tracks]
-        return self._get("tracks/?ids=" + ",".join(tlist), market=market)
+        return self._get(f"tracks/?ids={','.join(tlist)}", market=market)
 
     def artist(self, artist_id):
         """ returns a single artist given the artist's ID, URI or URL
@@ -381,7 +381,7 @@ class Spotify:
         """
 
         tlist = [self._get_id("artist", a) for a in artists]
-        return self._get("artists/?ids=" + ",".join(tlist))
+        return self._get(f"artists/?ids={','.join(tlist)}")
 
     def artist_albums(
         self, artist_id, album_type=None, include_groups=None, country=None, limit=20, offset=0
@@ -485,9 +485,9 @@ class Spotify:
 
         tlist = [self._get_id("album", a) for a in albums]
         if market is not None:
-            return self._get("albums/?ids=" + ",".join(tlist) + '&market=' + market)
+            return self._get(f"albums/?ids={','.join(tlist)}&market={market}")
         else:
-            return self._get("albums/?ids=" + ",".join(tlist))
+            return self._get(f"albums/?ids={','.join(tlist)}")
 
     def show(self, show_id, market=None):
         """ returns a single show given the show's ID, URIs or URL
@@ -517,7 +517,7 @@ class Spotify:
         """
 
         tlist = [self._get_id("show", s) for s in shows]
-        return self._get("shows/?ids=" + ",".join(tlist), market=market)
+        return self._get(f"shows/?ids={','.join(tlist)}", market=market)
 
     def show_episodes(self, show_id, limit=50, offset=0, market=None):
         """ Get Spotify catalog information about a show's episodes
@@ -566,7 +566,7 @@ class Spotify:
         """
 
         tlist = [self._get_id("episode", e) for e in episodes]
-        return self._get("episodes/?ids=" + ",".join(tlist), market=market)
+        return self._get(f"episodes/?ids={','.join(tlist)}", market=market)
 
     def search(self, q, limit=10, offset=0, type="track", market=None):
         """ searches for an item
@@ -911,7 +911,7 @@ class Spotify:
         """
         endpoint = "playlists/{}/followers/contains?ids={}"
         return self._get(
-            endpoint.format(playlist_id, ",".join(user_ids))
+            f"playlists/{playlist_id}/followers/contains?ids={','.join(user_ids)}"
         )
 
     def me(self):
@@ -953,7 +953,7 @@ class Spotify:
         if albums is None:
             albums = []
         alist = [self._get_id("album", a) for a in albums]
-        return self._put("me/albums?ids=" + ",".join(alist))
+        return self._put(f"me/albums?ids={','.join(alist)}")
 
     def current_user_saved_albums_delete(self, albums=None):
         """ Remove one or more albums from the current user's
@@ -965,17 +965,19 @@ class Spotify:
         if albums is None:
             albums = []
         alist = [self._get_id("album", a) for a in albums]
-        return self._delete("me/albums/?ids=" + ",".join(alist))
+        return self._delete(f"me/albums/?ids={','.join(alist)}")
 
-    def current_user_saved_albums_contains(self, albums=[]):
+    def current_user_saved_albums_contains(self, albums=None):
         """ Check if one or more albums is already saved in
             the current Spotify user’s “Your Music” library.
 
             Parameters:
                 - albums - a list of album URIs, URLs or IDs
         """
+        if albums is None:
+            albums = []
         alist = [self._get_id("album", a) for a in albums]
-        return self._get("me/albums/contains?ids=" + ",".join(alist))
+        return self._get(f"me/albums/contains?ids={','.join(alist)}")
 
     def current_user_saved_tracks(self, limit=20, offset=0, market=None):
         """ Gets a list of the tracks saved in the current authorized user's
@@ -996,7 +998,7 @@ class Spotify:
                 - tracks - a list of track URIs, URLs or IDs
         """
         tlist = [] if tracks is None else [self._get_id("track", t) for t in tracks]
-        return self._put("me/tracks/?ids=" + ",".join(tlist))
+        return self._put(f"me/tracks/?ids={','.join(tlist)}")
 
     def current_user_saved_tracks_delete(self, tracks=None):
         """ Remove one or more tracks from the current user's
@@ -1006,7 +1008,7 @@ class Spotify:
                 - tracks - a list of track URIs, URLs or IDs
         """
         tlist = [] if tracks is None else [self._get_id("track", t) for t in tracks]
-        return self._delete("me/tracks/?ids=" + ",".join(tlist))
+        return self._delete(f"me/tracks/?ids={','.join(tlist)}")
 
     def current_user_saved_tracks_contains(self, tracks=None):
         """ Check if one or more tracks is already saved in
@@ -1016,7 +1018,7 @@ class Spotify:
                 - tracks - a list of track URIs, URLs or IDs
         """
         tlist = [] if tracks is None else [self._get_id("track", t) for t in tracks]
-        return self._get("me/tracks/contains?ids=" + ",".join(tlist))
+        return self._get(f"me/tracks/contains?ids={','.join(tlist)}")
 
     def current_user_saved_episodes(self, limit=20, offset=0, market=None):
         """ Gets a list of the episodes saved in the current authorized user's
@@ -1040,7 +1042,7 @@ class Spotify:
         elist = []
         if episodes is not None:
             elist = [self._get_id("episode", e) for e in episodes]
-        return self._put("me/episodes/?ids=" + ",".join(elist))
+        return self._put(f"me/episodes/?ids={','.join(elist)}")
 
     def current_user_saved_episodes_delete(self, episodes=None):
         """ Remove one or more episodes from the current user's
@@ -1052,7 +1054,7 @@ class Spotify:
         elist = []
         if episodes is not None:
             elist = [self._get_id("episode", e) for e in episodes]
-        return self._delete("me/episodes/?ids=" + ",".join(elist))
+        return self._delete(f"me/episodes/?ids={','.join(elist)}")
 
     def current_user_saved_episodes_contains(self, episodes=None):
         """ Check if one or more episodes is already saved in
@@ -1064,7 +1066,7 @@ class Spotify:
         elist = []
         if episodes is not None:
             elist = [self._get_id("episode", e) for e in episodes]
-        return self._get("me/episodes/contains?ids=" + ",".join(elist))
+        return self._get(f"me/episodes/contains?ids={','.join(elist)}")
 
     def current_user_saved_shows(self, limit=20, offset=0, market=None):
         """ Gets a list of the shows saved in the current authorized user's
@@ -1087,7 +1089,7 @@ class Spotify:
         if shows is None:
             shows = []
         slist = [self._get_id("show", s) for s in shows]
-        return self._put("me/shows?ids=" + ",".join(slist))
+        return self._put(f"me/shows?ids={','.join(slist)}")
 
     def current_user_saved_shows_delete(self, shows=None):
         """ Remove one or more shows from the current user's
@@ -1099,7 +1101,7 @@ class Spotify:
         if shows is None:
             shows = []
         slist = [self._get_id("show", s) for s in shows]
-        return self._delete("me/shows/?ids=" + ",".join(slist))
+        return self._delete(f"me/shows/?ids={','.join(slist)}")
 
     def current_user_saved_shows_contains(self, shows=None):
         """ Check if one or more shows is already saved in
@@ -1112,7 +1114,7 @@ class Spotify:
         if shows is None:
             shows = []
         slist = [self._get_id("show", s) for s in shows]
-        return self._get("me/shows/contains?ids=" + ",".join(slist))
+        return self._get(f"me/shows/contains?ids={','.join(slist)}")
 
     def current_user_followed_artists(self, limit=20, after=None):
         """ Gets a list of the artists followed by the current authorized user
@@ -1123,9 +1125,7 @@ class Spotify:
                           request
 
         """
-        return self._get(
-            "me/following", type="artist", limit=limit, after=after
-        )
+        return self._get(f"me/following?type=artist&limit={limit}&after={after}")
 
     def current_user_following_artists(self, ids=None):
         """ Check if the current user is following certain artists
@@ -1209,7 +1209,7 @@ class Spotify:
         """
         if ids is None:
             ids = []
-        return self._put("me/following?type=artist&ids=" + ",".join(ids))
+        return self._put(f"me/following?type=artist&ids={','.join(ids)}")
 
     def user_follow_users(self, ids=None):
         """ Follow one or more users
@@ -1218,7 +1218,7 @@ class Spotify:
         """
         if ids is None:
             ids = []
-        return self._put("me/following?type=user&ids=" + ",".join(ids))
+        return self._put(f"me/following?type=user&ids={','.join(ids)}")
 
     def user_unfollow_artists(self, ids=None):
         """ Unfollow one or more artists
@@ -1227,7 +1227,7 @@ class Spotify:
         """
         if ids is None:
             ids = []
-        return self._delete("me/following?type=artist&ids=" + ",".join(ids))
+        return self._delete(f"me/following?type=artist&ids={','.join(ids)}")
 
     def user_unfollow_users(self, ids=None):
         """ Unfollow one or more users
@@ -1236,7 +1236,7 @@ class Spotify:
         """
         if ids is None:
             ids = []
-        return self._delete("me/following?type=user&ids=" + ",".join(ids))
+        return self._delete(f"me/following?type=user&ids={','.join(ids)}")
 
     def featured_playlists(
         self, locale=None, country=None, timestamp=None, limit=20, offset=0
@@ -1470,7 +1470,7 @@ class Spotify:
             results = self._get(f"audio-features/?ids={trackid}")
         else:
             tlist = [self._get_id("track", t) for t in tracks]
-            results = self._get("audio-features/?ids=" + ",".join(tlist))
+            results = self._get(f"audio-features/?ids={','.join(tlist)}")
         # the response has changed, look for the new style first, and if
         # it's not there, fallback on the old style
         if "audio_features" in results:
@@ -1730,7 +1730,7 @@ class Spotify:
             )
 
         results = defaultdict(dict)
-        item_types = [item_type + "s" for item_type in type.split(",")]
+        item_types = [f"{item_type}s" for item_type in type.split(",")]
         count = 0
 
         for country in markets:

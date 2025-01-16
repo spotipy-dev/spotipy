@@ -24,6 +24,7 @@ Rebasing master onto v3 doesn't require a changelog update.
 * Renamed the `auth` parameter of `Spotify.__init__` to `access_token` for better clarity.
 * Removed the `client_credentials_manager` and `oauth_manager` parameters because they are redundant.
 * Replaced the `set_auth` and `auth_manager` properties with standard attributes.
+* Replaced string concatenations and `str.format()` with f-strings
 
 ### Removed
 
@@ -207,10 +208,6 @@ Rebasing master onto v3 doesn't require a changelog update.
 * Fixed a bug in `CacheFileHandler.__init__`: The documentation says that the username will be retrieved from the environment, but it wasn't.
 * Fixed a bug in the initializers for the auth managers that produced a spurious warning message if you provide a cache handler, and you set a value for the "SPOTIPY_CLIENT_USERNAME" environment variable.
 * Use generated MIT license and fix license type in `pip show`
-
-### Fixed
-
-* Fixed a bug in `CacheFileHandler.__init__`: The documentation says that the username will be retrieved from the environment, but it wasn't.
 
 ## [2.18.0] - 2021-04-13
 
