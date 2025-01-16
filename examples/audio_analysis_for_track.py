@@ -1,11 +1,11 @@
 # shows audio analysis for the given track
 
-from spotipy.oauth2 import SpotifyClientCredentials
 import json
-import spotipy
-import time
 import sys
+import time
 
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
 
 client_credentials_manager = SpotifyClientCredentials()
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)

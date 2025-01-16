@@ -11,13 +11,13 @@ import base64
 import logging
 import os
 import time
+import urllib.parse as urllibparse
 import warnings
 import webbrowser
-
-import requests
-import urllib.parse as urllibparse
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import parse_qsl, urlparse
+
+import requests
 
 from spotipy.cache_handler import CacheFileHandler, CacheHandler
 from spotipy.exceptions import SpotifyOauthError, SpotifyStateError

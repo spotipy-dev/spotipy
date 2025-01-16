@@ -42,11 +42,11 @@ To verify the code style:
 To make sure if the import lists are stored correctly:
 
     pip install isort
-    isort . -c -v
+    isort . -c
 
 Sort them automatically with:
 
-    isort . -v
+    isort .
 
 ### Changelog
 

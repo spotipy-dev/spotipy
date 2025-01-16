@@ -1,9 +1,10 @@
 # shows track info for a URN or URL
 
-from spotipy.oauth2 import SpotifyClientCredentials
-import spotipy
 import sys
 from pprint import pprint
+
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
 
 if len(sys.argv) > 1:
     urn = sys.argv[1]

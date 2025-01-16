@@ -1,6 +1,7 @@
 # Follow a playlist
 
 import argparse
+
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 

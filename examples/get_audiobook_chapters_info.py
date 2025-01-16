@@ -4,6 +4,7 @@ Usage: get_audiobooks_chapters_info.py -a audiobook_id
 """
 
 import argparse
+
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 

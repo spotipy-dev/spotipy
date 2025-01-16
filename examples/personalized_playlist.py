@@ -1,10 +1,10 @@
-import spotipy
-from spotipy.oauth2 import SpotifyOAuth
-
 # Import the extra necessary libraries for this example
 # These libraries are not included in the default packages
 import pandas as pd
 from sklearn.cluster import KMeans
+
+import spotipy
+from spotipy.oauth2 import SpotifyOAuth
 
 # Set up Spotify credentials
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(

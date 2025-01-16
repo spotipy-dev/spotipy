@@ -1,5 +1,5 @@
-from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
 
 lz_uri = 'spotify:artist:36QJpDe2go2KgaRleHCDTp'
 

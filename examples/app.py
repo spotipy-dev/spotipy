@@ -24,8 +24,10 @@ Run app.py
 """
 
 import os
-from flask import Flask, session, request, redirect
+
+from flask import Flask, redirect, request, session
 from flask_session import Session
+
 import spotipy
 
 app = Flask(__name__)

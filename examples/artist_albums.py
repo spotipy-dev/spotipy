@@ -1,8 +1,8 @@
 import argparse
 import logging
 
-from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
 
 logger = logging.getLogger('examples.artist_albums')
 logging.basicConfig(level='INFO')

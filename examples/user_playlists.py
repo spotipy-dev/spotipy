@@ -1,6 +1,7 @@
 # Shows a user's playlists (need to be authenticated via oauth)
 
 import sys
+
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 

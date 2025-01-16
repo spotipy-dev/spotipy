@@ -2,10 +2,11 @@
 
 # usage: featured_artists.py spotify:album:[album urn]
 
-from spotipy.oauth2 import SpotifyClientCredentials
 import sys
-import spotipy
 from pprint import pprint
+
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
 
 if len(sys.argv) > 1:
     urn = sys.argv[1]

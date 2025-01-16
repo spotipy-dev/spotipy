@@ -24,4 +24,4 @@ jobs:
           flake8 . --count --show-source --statistics
       - name: Check sorted imports with isort
         run: |
-          isort . -c -v
+          isort . -c

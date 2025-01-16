@@ -1,11 +1,9 @@
-from spotipy import (
-    Spotify,
-    SpotifyClientCredentials,
-    SpotifyException
-)
-import spotipy
 import unittest
+
 import requests
+
+import spotipy
+from spotipy import Spotify, SpotifyClientCredentials, SpotifyException
 
 
 class AuthTestSpotipy(unittest.TestCase):
