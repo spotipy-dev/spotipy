@@ -25,6 +25,5 @@ for item in tracks:
         tracks.remove(item)
         i += 1
 
-
 # print result
-print("Playlist length: " + str(len(tracks)) + "\nExcluding: " + str(i))
+print(f"Playlist length: {len(tracks)}\nExcluding: {i}")

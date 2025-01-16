@@ -19,14 +19,17 @@ from urllib.parse import parse_qsl, urlparse
 
 from spotipy.cache_handler import CacheFileHandler, CacheHandler
 from spotipy.exceptions import SpotifyOauthError, SpotifyStateError
-from spotipy.util import CLIENT_CREDS_ENV_VARS, get_host_port, normalize_scope
+from spotipy.util import CLIENT_CREDS_ENV_VARS, get_host_port
+from spotipy.scope import Scope
+from typing import Iterable
+import re
 
 logger = logging.getLogger(__name__)
 
 
 def _make_authorization_headers(client_id, client_secret):
     auth_header = base64.b64encode(
-        str(client_id + ":" + client_secret).encode("ascii")
+        f"{client_id}:{client_secret}".encode("ascii")
     )
     return {"Authorization": f"Basic {auth_header.decode('ascii')}"}
 
@@ -41,18 +44,51 @@ def _ensure_value(value, env_key):
 
 
 class SpotifyAuthBase:
+
     def __init__(self, requests_session):
         if isinstance(requests_session, requests.Session):
             self._session = requests_session
-        else:
-            if requests_session:  # Build a new session.
-                self._session = requests.Session()
-            else:  # Use the Requests API module as a "session".
-                from requests import api
-                self._session = api
+        elif requests_session:  # Build a new session.
+            self._session = requests.Session()
+        else:  # Use the Requests API module as a "session".
+            from requests import api
+            self._session = api
 
     def _normalize_scope(self, scope):
-        return normalize_scope(scope)
+        """
+        Accepts a string of scopes, or an iterable with elements of type
+        `Scope` or `str` and returns a space-separated string of scopes.
+        Returns `None` if the argument is `None`.
+        """
+
+        # TODO: do we need to sort the scopes?
+
+        if isinstance(scope, str):
+            # allow for any separator(s) between the scopes other than a word
+            # character or a hyphen
+            scopes = re.split(pattern=r"[^\w-]+", string=scope)
+            return " ".join(sorted(scopes))
+
+        if isinstance(scope, Iterable):
+
+            # Assume all of the iterable's elements are of the same type.
+            # If the iterable is empty, then return None.
+            first_element = next(iter(scope), None)
+
+            if isinstance(first_element, str):
+                return " ".join(sorted(scope))
+            if isinstance(first_element, Scope):
+                return Scope.make_string(scope)
+            if first_element is None:
+                return ""
+
+        elif scope is None:
+            return None
+
+        raise TypeError(
+            "Unsupported type for scopes: %s. Expected either a string of scopes, or "
+            "an Iterable with elements of type `Scope` or `str`." % type(scope)
+        )
 
     @property
     def client_id(self):
@@ -169,9 +205,10 @@ class SpotifyClientCredentials(SpotifyAuthBase):
         self.proxies = proxies
         self.requests_timeout = requests_timeout
         if cache_handler:
-            assert issubclass(cache_handler.__class__, CacheHandler), \
-                "cache_handler must be a subclass of CacheHandler: " + str(type(cache_handler)) \
-                + " != " + str(CacheHandler)
+            assert issubclass(
+                cache_handler.__class__, CacheHandler
+            ), f"cache_handler must be a subclass of CacheHandler:\
+            {str(type(cache_handler))} != {str(CacheHandler)}"
             self.cache_handler = cache_handler
         else:
             self.cache_handler = CacheFileHandler()
@@ -289,12 +326,14 @@ class SpotifyOAuth(SpotifyAuthBase):
         self.scope = self._normalize_scope(scope)
 
         if cache_handler:
-            assert issubclass(cache_handler.__class__, CacheHandler), \
-                "cache_handler must be a subclass of CacheHandler: " + str(type(cache_handler)) \
-                + " != " + str(CacheHandler)
+            assert issubclass(
+                cache_handler.__class__, CacheHandler
+            ), f"cache_handler must be a subclass of CacheHandler:\
+                {str(type(cache_handler))} != {str(CacheHandler)}"
             self.cache_handler = cache_handler
         else:
             self.cache_handler = CacheFileHandler()
+
         self.proxies = proxies
         self.requests_timeout = requests_timeout
         self.show_dialog = show_dialog
@@ -345,18 +384,17 @@ class SpotifyOAuth(SpotifyAuthBase):
                 - url - the response url
         """
         _, code = self.parse_auth_response_url(url)
-        if code is None:
-            return url
-        else:
-            return code
+        return url if code is None else code
 
     @staticmethod
     def parse_auth_response_url(url):
         query_s = urlparse(url).query
         form = dict(parse_qsl(query_s))
         if "error" in form:
-            raise SpotifyOauthError(f"Received error from auth server: {form['error']}",
-                                    error=form["error"])
+            raise SpotifyOauthError(
+                f"Received error from auth server: {form['error']}",
+                error=form["error"]
+            )
         return tuple(form.get(param) for param in ["state", "code"])
 
     def _make_authorization_headers(self):
@@ -376,10 +414,7 @@ class SpotifyOAuth(SpotifyAuthBase):
             prompt = "Enter the URL you were redirected to: "
         else:
             url = self.get_authorize_url()
-            prompt = (
-                "Go to the following URL: {}\n"
-                "Enter the URL you were redirected to: ".format(url)
-            )
+            prompt = f"Go to the following URL: {url}\nEnter the URL you were redirected to: "
         response = self._get_user_input(prompt)
         state, code = SpotifyOAuth.parse_auth_response_url(response)
         if self.state is not None and self.state != state:
@@ -565,6 +600,16 @@ class SpotifyPKCE(SpotifyAuthBase):
              * scope: Optional, either a string of scopes, or an iterable with elements of type
                       `Scope` or `str`. E.g.,
                       {Scope.user_modify_playback_state, Scope.user_library_read}
+             * cache_path: (deprecated) Optional, will otherwise be generated
+                           (takes precedence over `username`)
+             * username: (deprecated) Optional or set as environment variable
+                         (will set `cache_path` to `.cache-{username}`)
+             * proxies: Optional, proxy for the requests library to route through
+             * requests_timeout: Optional, tell Requests to stop waiting for a response after
+                                 a given number of seconds
+             * requests_session: A Requests session
+             * open_browser: Optional, whether the web browser should be opened to
+                             authorize a user
              * cache_handler: An instance of the `CacheHandler` class to handle
                               getting and saving cached authorization tokens.
                               Optional, will otherwise use `CacheFileHandler`.
@@ -575,7 +620,7 @@ class SpotifyPKCE(SpotifyAuthBase):
                                  A false value disables sessions.
                                  It should generally be a good idea to keep sessions enabled
                                  for performance reasons (connection pooling).
-             * open_browser: Optional, thether or not the web browser should be opened to
+             * open_browser: Optional, whether the web browser should be opened to
                              authorize a user
         """
 
@@ -584,12 +629,15 @@ class SpotifyPKCE(SpotifyAuthBase):
         self.redirect_uri = redirect_uri
         self.state = state
         self.scope = self._normalize_scope(scope)
+
         if cache_handler:
-            assert issubclass(type(cache_handler), CacheHandler), \
-                "type(cache_handler): " + str(type(cache_handler)) + " != " + str(CacheHandler)
+            assert issubclass(cache_handler.__class__, CacheHandler), \
+                "cache_handler must be a subclass of CacheHandler: " + str(type(cache_handler)) \
+                + " != " + str(CacheHandler)
             self.cache_handler = cache_handler
         else:
             self.cache_handler = CacheFileHandler()
+
         self.proxies = proxies
         self.requests_timeout = requests_timeout
 
@@ -703,10 +751,7 @@ class SpotifyPKCE(SpotifyAuthBase):
             prompt = "Enter the URL you were redirected to: "
         else:
             url = self.get_authorize_url()
-            prompt = (
-                "Go to the following URL: {}\n"
-                "Enter the URL you were redirected to: ".format(url)
-            )
+            prompt = f"Go to the following URL: {url}\nEnter the URL you were redirected to: "
         response = self._get_user_input(prompt)
         state, code = self.parse_auth_response_url(response)
         if self.state is not None and self.state != state:
@@ -843,10 +888,7 @@ class SpotifyPKCE(SpotifyAuthBase):
                 - url - the response url
         """
         _, code = self.parse_auth_response_url(url)
-        if code is None:
-            return url
-        else:
-            return code
+        return url if code is None else code
 
     @staticmethod
     def parse_auth_response_url(url):

@@ -2,8 +2,6 @@ from __future__ import annotations
 
 from spotipy.scope import Scope
 
-""" Shows a user's playlists. This needs to be authenticated via OAuth. """
-
 __all__ = ["CLIENT_CREDS_ENV_VARS", "get_host_port", "normalize_scope", "Retry"]
 
 import logging
@@ -70,6 +68,7 @@ class Retry(urllib3.Retry):
     """
     Custom class for printing a warning when a rate/request limit is reached.
     """
+
     def increment(
             self,
             method: str | None = None,

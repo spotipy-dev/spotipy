@@ -1,6 +1,6 @@
 # Spotipy
 
-##### Spotipy is a lightweight Python library for the [Spotify Web API](https://developer.spotify.com/documentation/web-api). With Spotipy you get full access to all of the music data provided by the Spotify platform.
+##### Spotipy is a lightweight Python library for the [Spotify Web API](https://developer.spotify.com/documentation/web-api). With Spotipy you get full access to all of the music data provided by the Spotify platform
 
 ![Integration tests](https://github.com/spotipy-dev/spotipy/actions/workflows/integration_tests.yml/badge.svg?branch=master) [![Documentation Status](https://readthedocs.org/projects/spotipy/badge/?version=master)](https://spotipy.readthedocs.io/en/latest/?badge=master) [![Discord server](https://img.shields.io/discord/1244611850700849183?style=flat&logo=discord&logoColor=7289DA&color=7289DA)](https://discord.gg/HP6xcPsTPJ)
 
@@ -22,7 +22,7 @@ Spotipy supports all of the features of the Spotify Web API including access to 
 pip install spotipy
 ```
 
-alternatively, for Windows users 
+alternatively, for Windows users
 
 ```bash
 py -m pip install spotipy
@@ -38,7 +38,7 @@ pip install spotipy --upgrade
 
 A full set of examples can be found in the [online documentation](http://spotipy.readthedocs.org/) and in the [Spotipy examples directory](https://github.com/plamere/spotipy/tree/master/examples).
 
-To get started, [install spotipy](#installation), create a new account or log in on https://developers.spotify.com/. Go to the [dashboard](https://developer.spotify.com/dashboard), create an app and add your new ID and SECRET (ID and SECRET can be found on an app setting) to your environment ([step-by-step video](https://www.youtube.com/watch?v=kaBVN8uP358)):
+To get started, [install spotipy](#installation), create a new account or log in on [developers.spotify.com](https://developers.spotify.com/). Go to the [dashboard](https://developer.spotify.com/dashboard), create an app and add your new ID and SECRET (ID and SECRET can be found on an app setting) to your environment ([step-by-step video](https://www.youtube.com/watch?v=kaBVN8uP358)):
 
 ### Example without user authentication
 
@@ -53,7 +53,9 @@ results = sp.search(q='weezer', limit=20)
 for idx, track in enumerate(results['tracks']['items']):
     print(idx, track['name'])
 ```
+
 Expected result:
+
 ```
 0 Island In The Sun
 1 Say It Ain't So
@@ -64,7 +66,6 @@ Expected result:
 18 Troublemaker
 19 Feels Like Summer
 ```
-
 
 ### Example with user authentication
 
@@ -84,12 +85,13 @@ for idx, item in enumerate(results['items']):
     track = item['track']
     print(idx, track['artists'][0]['name'], " – ", track['name'])
 ```
+
 Expected result will be the list of music that you liked. For example if you liked Red and Sunflower, the result will be:
+
 ```
 0 Post Malone  –  Sunflower - Spider-Man: Into the Spider-Verse
 1 Taylor Swift  –  Red
 ```
-
 
 ## Reporting Issues
 

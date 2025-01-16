@@ -9,11 +9,7 @@ from spotipy.oauth2 import SpotifyClientCredentials
 auth_manager = SpotifyClientCredentials()
 sp = spotipy.Spotify(auth_manager=auth_manager)
 
-user = 'spotify'
-
-if len(sys.argv) > 1:
-    user = sys.argv[1]
-
+user = sys.argv[1] if len(sys.argv) > 1 else 'spotify'
 playlists = sp.user_playlists(user)
 
 while playlists:
@@ -25,7 +21,4 @@ while playlists:
              playlists['offset'],
              playlist['uri'],
              playlist['name']))
-    if playlists['next']:
-        playlists = sp.next(playlists)
-    else:
-        playlists = None
+    playlists = sp.next(playlists) if playlists['next'] else None

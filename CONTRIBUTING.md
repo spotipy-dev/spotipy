@@ -18,7 +18,7 @@ $env:SPOTIPY_CLIENT_USERNAME="client_username_here"
 $env:SPOTIPY_REDIRECT_URI="http://localhost:8080" 
 ```
 
-### Create virtual environment, install dependencies, run tests:
+### Create virtual environment, install dependencies, run tests
 
 ```bash
 $ virtualenv --python=python3 env
@@ -50,9 +50,9 @@ Don't forget to add a short description of your change in the [CHANGELOG](CHANGE
 
 ### Publishing (by maintainer)
 
- - Bump version in setup.py
- - Bump and date changelog
- - Add to changelog:
+- Bump version in setup.py
+- Bump and date changelog
+- Add to changelog:
 
        ## Unreleased
        Add your changes below.
@@ -63,9 +63,8 @@ Don't forget to add a short description of your change in the [CHANGELOG](CHANGE
 
        ### Removed
 
- - Commit changes
- - Push tag to trigger PyPI build & release workflow
- - Create github release https://github.com/plamere/spotipy/releases with the changelog content
+- Commit changes
+- Push tag to trigger PyPI build & release workflow
+- Create github release <https://github.com/plamere/spotipy/releases> with the changelog content
    for the version and a short name that describes the main addition
- - Verify doc uses latest https://readthedocs.org/projects/spotipy/
- 
+- Verify doc uses latest <https://readthedocs.org/projects/spotipy/>

@@ -88,9 +88,7 @@ def currently_playing():
         return redirect('/')
     spotify = spotipy.Spotify(auth_manager=auth_manager)
     track = spotify.current_user_playing_track()
-    if not track is None:
-        return track
-    return "No track currently playing."
+    return track if track is not None else "No track currently playing."
 
 
 @app.route('/current_user')
