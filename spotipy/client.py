@@ -1688,7 +1688,7 @@ class Spotify:
                 - device_id - device id to append
         """
         if device_id:
-           path += f"&device_id={device_id}" if "?" in path else f"?device_id={device_id}"
+            path += f"&device_id={device_id}" if "?" in path else f"?device_id={device_id}"
         return path
 
     def _get_id(self, type, id):

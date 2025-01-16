@@ -68,6 +68,7 @@ class Retry(urllib3.Retry):
     """
     Custom class for printing a warning when a rate/request limit is reached.
     """
+
     def increment(
             self,
             method: str | None = None,

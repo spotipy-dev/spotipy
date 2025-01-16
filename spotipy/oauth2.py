@@ -19,7 +19,10 @@ from urllib.parse import parse_qsl, urlparse
 
 from spotipy.cache_handler import CacheFileHandler, CacheHandler
 from spotipy.exceptions import SpotifyOauthError, SpotifyStateError
-from spotipy.util import CLIENT_CREDS_ENV_VARS, get_host_port, normalize_scope
+from spotipy.util import CLIENT_CREDS_ENV_VARS, get_host_port
+from spotipy.scope import Scope
+from typing import Iterable
+import re
 
 logger = logging.getLogger(__name__)
 
@@ -41,6 +44,7 @@ def _ensure_value(value, env_key):
 
 
 class SpotifyAuthBase:
+
     def __init__(self, requests_session):
         if isinstance(requests_session, requests.Session):
             self._session = requests_session
@@ -372,7 +376,7 @@ class SpotifyOAuth(SpotifyAuthBase):
         urlparams = urllibparse.urlencode(payload)
 
         return f"{self.OAUTH_AUTHORIZE_URL}?{urlparams}"
-
+    
     def parse_response_code(self, url):
         """ Parse the response code in the given response url
 
@@ -388,8 +392,8 @@ class SpotifyOAuth(SpotifyAuthBase):
         form = dict(parse_qsl(query_s))
         if "error" in form:
             raise SpotifyOauthError(
-                f'Received error from auth server: {form["error"]}',
-                error=form["error"],
+                f"Received error from auth server: {form['error']}",
+                error=form["error"]
             )
         return tuple(form.get(param) for param in ["state", "code"])
 
@@ -616,7 +620,7 @@ class SpotifyPKCE(SpotifyAuthBase):
                                  A false value disables sessions.
                                  It should generally be a good idea to keep sessions enabled
                                  for performance reasons (connection pooling).
-             * open_browser: Optional, thether or not the web browser should be opened to
+             * open_browser: Optional, whether the web browser should be opened to
                              authorize a user
         """
 
@@ -627,10 +631,9 @@ class SpotifyPKCE(SpotifyAuthBase):
         self.scope = self._normalize_scope(scope)
 
         if cache_handler:
-            assert issubclass(
-                cache_handler.__class__, CacheHandler
-            ), f"cache_handler must be a subclass of CacheHandler:\
-                {str(type(cache_handler))} != {str(CacheHandler)}"
+            assert issubclass(cache_handler.__class__, CacheHandler), \
+                "cache_handler must be a subclass of CacheHandler: " + str(type(cache_handler)) \
+                + " != " + str(CacheHandler)
             self.cache_handler = cache_handler
         else:
             self.cache_handler = CacheFileHandler()
