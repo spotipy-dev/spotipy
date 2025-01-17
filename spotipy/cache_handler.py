@@ -196,7 +196,7 @@ class RedisCacheHandler(CacheHandler):
         :param key: (Optional) The key to used to store the token in the cache
         """
         self.redis = redis_obj
-        self.key = key if key else "token_info"
+        self.key = key or "token_info"
 
     def get_cached_token(self) -> TokenInfo | None:
         """Fetch cache token from the Redis."""
@@ -231,7 +231,7 @@ class MemcacheCacheHandler(CacheHandler):
                    (takes precedence over `token_info`)
         """
         self.memcache = memcache
-        self.key = key if key else "token_info"
+        self.key = key or "token_info"
 
     def get_cached_token(self):
         from pymemcache import MemcacheError
