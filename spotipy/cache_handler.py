@@ -77,16 +77,15 @@ class CacheFileHandler(CacheHandler):
         token_info = None
 
         try:
-            f = open(self.cache_path)
-            token_info_string = f.read()
-            f.close()
+            with open(self.cache_path, encoding='utf-8') as f:
+                token_info_string = f.read()
             token_info = json.loads(token_info_string)
 
         except OSError as error:
             if error.errno == errno.ENOENT:
-                logger.debug(f"cache does not exist at: {self.cache_path}")
+                logger.debug("cache does not exist at: %s", self.cache_path)
             else:
-                logger.warning(f"Couldn't read cache at: {self.cache_path}")
+                logger.warning("Couldn't read cache at: %s", self.cache_path)
 
         return token_info
 
