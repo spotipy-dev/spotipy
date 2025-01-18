@@ -2,8 +2,8 @@ import io
 import json
 import unittest
 import unittest.mock as mock
-from unittest.mock import mock_open
 import urllib.parse as urllibparse
+from unittest.mock import mock_open
 
 from spotipy import SpotifyImplicitGrant, SpotifyOAuth, SpotifyPKCE
 from spotipy.cache_handler import MemoryCacheHandler
