@@ -83,6 +83,7 @@ Rebasing master onto v3 doesn't require a changelog update.
   - featured_playlists
   - category_playlists
 - Added FAQ entry for inaccessible playlists
+- Type annotations to `spotipy.cache_handler`
 
 ### Fixed
 
