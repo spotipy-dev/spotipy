@@ -87,8 +87,6 @@ class CacheFileHandler(CacheHandler):
                 logger.warning("Couldn't read cache at: %s", self.cache_path)
         except json.JSONDecodeError:
             logger.warning("Couldn't decode JSON from cache at: %s", self.cache_path)
-        except json.JSONDecodeError:
-            logger.warning("Couldn't decode JSON from cache at: %s", self.cache_path)
 
         return token_info
 
@@ -215,6 +213,7 @@ class RedisCacheHandler(CacheHandler):
 class MemcacheCacheHandler(CacheHandler):
     """A Cache handler that stores the token info in Memcache using the pymemcache client
     """
+
     def __init__(self, memcache, key=None) -> None:
         """
         Parameters:

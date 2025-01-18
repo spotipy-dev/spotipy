@@ -103,14 +103,12 @@ Add your changes below.
 
 - Fixed the regex for matching playlist URIs with the format spotify:user:USERNAME:playlist:PLAYLISTID.
 - `search_markets` now factors the counts of all types in the `total` rather than just the first type ([#534](https://github.com/spotipy-dev/spotipy/issues/534))
-- `search_markets` now factors the counts of all types in the `total` rather than just the first type ([#534](https://github.com/spotipy-dev/spotipy/issues/534))
 
 ## [2.22.1] - 2023-01-23
 
 ### Added
 
 - Add alternative module installation instruction to README
-- Added Comment to README - Getting Started for user to add URI to app in Spotify Developer Dashboard.
 - Added Comment to README - Getting Started for user to add URI to app in Spotify Developer Dashboard.
 - Added playlist_add_tracks.py to example folder
 
