@@ -1,6 +1,9 @@
 name: Unit tests
 
-on: [push, synchronize]
+on:
+  push:
+  pull_request:
+    types: [synchronize]
 
 jobs:
   build:
