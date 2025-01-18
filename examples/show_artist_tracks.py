@@ -2,9 +2,10 @@
 
 # usage: python tracks.py [artist name]
 
-from spotipy.oauth2 import SpotifyClientCredentials
-import spotipy
 import sys
+
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
 
 client_credentials_manager = SpotifyClientCredentials()
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)

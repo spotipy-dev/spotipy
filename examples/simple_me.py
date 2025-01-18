@@ -1,5 +1,6 @@
-import spotipy
 from pprint import pprint
+
+import spotipy
 
 
 def main():

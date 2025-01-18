@@ -1,8 +1,9 @@
 # shows related artists for the given seed artist
 
-from spotipy.oauth2 import SpotifyClientCredentials
-import spotipy
 import sys
+
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
 
 if len(sys.argv) > 1:
     artist_name = sys.argv[1]

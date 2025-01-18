@@ -5,7 +5,6 @@ import sys
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 
-
 if len(sys.argv) > 2:
     playlist_id = sys.argv[1]
     track_ids = sys.argv[2:]

@@ -1,11 +1,11 @@
-import spotipy
-from spotipy.oauth2 import SpotifyClientCredentials
-
+import matplotlib.pyplot as plt
 # Import the extra necessary libraries for this example
 # These libraries are not included in the default packages
 import pandas as pd
-import matplotlib.pyplot as plt
 import seaborn as sns
+
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
 
 # Set up Spotify credentials
 client_credentials_manager = SpotifyClientCredentials()

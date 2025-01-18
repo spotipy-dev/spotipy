@@ -1,14 +1,13 @@
 import io
 import json
 import unittest
-
 import unittest.mock as mock
 import urllib.parse as urllibparse
 
-from spotipy import SpotifyOAuth, SpotifyImplicitGrant, SpotifyPKCE
+from spotipy import SpotifyImplicitGrant, SpotifyOAuth, SpotifyPKCE
 from spotipy.cache_handler import MemoryCacheHandler
-from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOauthError
-from spotipy.oauth2 import SpotifyStateError
+from spotipy.oauth2 import (SpotifyClientCredentials, SpotifyOauthError,
+                            SpotifyStateError)
 
 patch = mock.patch
 DEFAULT = mock.DEFAULT
@@ -487,8 +486,8 @@ class TestSpotifyPKCE(unittest.TestCase):
         self.assertTrue(auth.code_challenge)
 
     def test_code_verifier_and_code_challenge_are_correct(self):
-        import hashlib
         import base64
+        import hashlib
         auth = SpotifyPKCE("CLID", "REDIR")
         auth.get_pkce_handshake_parameters()
         self.assertEqual(auth.code_challenge,

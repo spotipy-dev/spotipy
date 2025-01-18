@@ -9,9 +9,9 @@ import os
 import warnings
 from types import TracebackType
 
-import spotipy
-
 import urllib3
+
+import spotipy
 
 LOGGER = logging.getLogger(__name__)
 

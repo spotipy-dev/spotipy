@@ -1,8 +1,8 @@
 # Shows the name of the artist/band and their image by giving a link
 import sys
 
-from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
 
 sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
 

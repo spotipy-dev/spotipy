@@ -40,6 +40,10 @@ Add your changes below.
   - category_playlists
 - Added FAQ entry for inaccessible playlists
 
+### Changed
+
+- Split test and lint workflows
+
 ### Fixed
 - Audiobook integration tests
 - Edited docstrings for certain functions in client.py for functions that are no longer in use and have been replaced.

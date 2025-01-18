@@ -1,7 +1,7 @@
+from pprint import pprint
+
 import spotipy
 import spotipy.util as util
-
-from pprint import pprint
 
 while True:
     username = input("Type the Spotify user ID to use: ")

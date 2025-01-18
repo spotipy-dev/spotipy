@@ -29,7 +29,7 @@ $ source env/bin/activate
 
 ### Lint
 
-To automatically fix the code style:
+To automatically fix some of the code style:
 
     pip install autopep8
     autopep8 --in-place --aggressive --recursive .
@@ -42,7 +42,11 @@ To verify the code style:
 To make sure if the import lists are stored correctly:
 
     pip install isort
-    isort . -c -v
+    isort . -c
+
+Sort them automatically with:
+
+    isort .
 
 ### Changelog
 

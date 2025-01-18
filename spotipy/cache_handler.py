@@ -11,9 +11,10 @@ import errno
 import json
 import logging
 import os
-from spotipy.util import CLIENT_CREDS_ENV_VARS
 
 from redis import RedisError
+
+from spotipy.util import CLIENT_CREDS_ENV_VARS
 
 logger = logging.getLogger(__name__)
 

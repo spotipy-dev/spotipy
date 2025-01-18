@@ -1,9 +1,10 @@
 # Shows artist info for a URN or URL
 
-from spotipy.oauth2 import SpotifyClientCredentials
-import spotipy
-import sys
 import pprint
+import sys
+
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
 
 if len(sys.argv) > 1:
     username = sys.argv[1]

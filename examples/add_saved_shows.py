@@ -4,6 +4,7 @@ Usage: add_saved_shows.py -s show_id show_id ...
 """
 
 import argparse
+
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 
