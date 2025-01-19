@@ -43,6 +43,8 @@ Add your changes below.
 ### Changed
 
 - Split test and lint workflows
+- Updated get_cached_token and save_token_to_cache methods to utilize Python's Context Management Protocol
+- Added except clause to get_cached_token method to handle json decode errors
 
 ### Fixed
 - Audiobook integration tests
