@@ -41,7 +41,6 @@ class CacheHandler():
         Save a token_info dictionary object to the cache and return None.
         """
         raise NotImplementedError()
-        return None
 
 
 class CacheFileHandler(CacheHandler):
@@ -72,7 +71,7 @@ class CacheFileHandler(CacheHandler):
             if username:
                 cache_path += "-" + str(username)
             self.cache_path = cache_path
-            
+
     def get_cached_token(self):
         token_info = None
 
