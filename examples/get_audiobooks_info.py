@@ -4,8 +4,10 @@ Usage: get_audiobooks_info.py -a audiobook_id audiobook_id ...
 """
 
 import argparse
+
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
+
 
 def get_args():
     parser = argparse.ArgumentParser(description='Get information for a list of audiobooks')

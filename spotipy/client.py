@@ -6,13 +6,12 @@ import json
 import logging
 import re
 import warnings
+from collections import defaultdict
 
 import requests
 
 from spotipy.exceptions import SpotifyException
 from spotipy.util import Retry
-
-from collections import defaultdict
 
 logger = logging.getLogger(__name__)
 

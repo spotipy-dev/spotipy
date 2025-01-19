@@ -3,9 +3,10 @@
 
     given a list of track IDs show the artist and track name
 '''
-from spotipy.oauth2 import SpotifyOAuth
-import spotipy
 import argparse
+
+import spotipy
+from spotipy.oauth2 import SpotifyOAuth
 
 
 def get_args():

@@ -8,7 +8,13 @@ memcache_cache_reqs = [
 ]
 
 extra_reqs = {
-    'memcache': memcache_cache_reqs
+    'memcache': [
+        'pymemcache>=3.5.2'
+    ],
+    'test': [
+        'flake8>=7.1.1',
+        'isort>=5.13.2'
+    ]
 }
 
 setup(

@@ -7,9 +7,10 @@ import os
 from abc import ABC, abstractmethod
 from json import JSONEncoder
 from typing import TypedDict
+
 import redis
-from redis import RedisError
 import redis.client
+from redis import RedisError
 
 from .util import CLIENT_CREDS_ENV_VARS
 

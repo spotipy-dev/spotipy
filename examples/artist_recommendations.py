@@ -4,7 +4,6 @@ import logging
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
-
 logger = logging.getLogger('examples.artist_recommendations')
 logging.basicConfig(level='INFO')
 

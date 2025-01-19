@@ -4,6 +4,7 @@ Usage: check_show_is_saved -s show_id show_id ...
 """
 
 import argparse
+
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 

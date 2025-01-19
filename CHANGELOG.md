@@ -85,6 +85,10 @@ Rebasing master onto v3 doesn't require a changelog update.
 - Added FAQ entry for inaccessible playlists
 - Type annotations to `spotipy.cache_handler`
 
+### Changed
+
+- Split test and lint workflows
+
 ### Fixed
 
 - Audiobook integration tests

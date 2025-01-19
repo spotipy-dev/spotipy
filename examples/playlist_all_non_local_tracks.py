@@ -1,6 +1,6 @@
 # get all non-local tracks of a playlist
-from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
 
 # playlist id of global top 50
 PlaylistExample = '37i9dQZEVXbMDoHDwVN2tF'

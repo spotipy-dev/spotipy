@@ -1,7 +1,8 @@
-import spotipy
-from spotipy.oauth2 import SpotifyOAuth
 from pprint import pprint
 from time import sleep
+
+import spotipy
+from spotipy.oauth2 import SpotifyOAuth
 
 scope = "user-read-playback-state,user-modify-playback-state"
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))

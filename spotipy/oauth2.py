@@ -9,20 +9,20 @@ __all__ = [
 import base64
 import logging
 import os
+import re
 import time
+import urllib.parse as urllibparse
 import webbrowser
+from http.server import BaseHTTPRequestHandler, HTTPServer
+from typing import Iterable
+from urllib.parse import parse_qsl, urlparse
 
 import requests
-import urllib.parse as urllibparse
-from http.server import BaseHTTPRequestHandler, HTTPServer
-from urllib.parse import parse_qsl, urlparse
 
 from spotipy.cache_handler import CacheFileHandler, CacheHandler
 from spotipy.exceptions import SpotifyOauthError, SpotifyStateError
-from spotipy.util import CLIENT_CREDS_ENV_VARS, get_host_port
 from spotipy.scope import Scope
-from typing import Iterable
-import re
+from spotipy.util import CLIENT_CREDS_ENV_VARS, get_host_port
 
 logger = logging.getLogger(__name__)
 

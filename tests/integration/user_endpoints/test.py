@@ -1,14 +1,9 @@
 import os
-
-from spotipy import (
-    CLIENT_CREDS_ENV_VARS as CCEV,
-    Spotify,
-    SpotifyException,
-    SpotifyOAuth,
-    SpotifyPKCE,
-    CacheFileHandler
-)
 import unittest
+
+from spotipy import CLIENT_CREDS_ENV_VARS as CCEV
+from spotipy import (CacheFileHandler, Spotify, SpotifyException, SpotifyOAuth,
+                     SpotifyPKCE)
 from tests import helpers
 
 

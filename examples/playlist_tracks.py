@@ -1,8 +1,10 @@
-from spotipy.oauth2 import SpotifyClientCredentials
-import spotipy
 from pprint import pprint
 
-sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials())
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
+
+auth_manager = SpotifyClientCredentials()
+sp = spotipy.Spotify(auth_manager=auth_manager)
 
 pl_id = 'spotify:playlist:5RIbzhG2QqdkaP24iXLnZX'
 offset = 0

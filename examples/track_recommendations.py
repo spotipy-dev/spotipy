@@ -1,6 +1,7 @@
+import random
+
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
-import random
 
 # Set up Spotify credentials
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(

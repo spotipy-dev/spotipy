@@ -1,6 +1,7 @@
 from unittest import TestCase
-from spotipy.scope import Scope
+
 from spotipy.oauth2 import SpotifyAuthBase
+from spotipy.scope import Scope
 
 
 class SpotipyScopeTest(TestCase):
