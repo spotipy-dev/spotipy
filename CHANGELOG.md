@@ -26,6 +26,10 @@ Rebasing master onto v3 doesn't require a changelog update.
 - Replaced the `set_auth` and `auth_manager` properties with standard attributes.
 - Replaced string concatenations and `str.format()` with f-strings
 
+### Fixed
+
+- Fixed playlist_add_items() to accept only URIs and URLs and not IDs, since 'track' and 'episode' cannot be inferred from ID only
+
 ### Removed
 
 - Removed the following deprecated methods from `Spotify`:
@@ -52,7 +56,7 @@ Rebasing master onto v3 doesn't require a changelog update.
 ### Added
 
 - Added examples for audiobooks, shows and episodes methods to examples directory
-- Use newer string formatters (https://pyformat.info)
+- Use newer string formatters ([https://pyformat.info](https://pyformat.info))
 
 ### Fixed
 

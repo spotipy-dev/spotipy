@@ -787,10 +787,15 @@ class Spotify:
                 - items - a list of track/episode URIs or URLs
                 - position - the position to add the tracks
         """
+        for item in items:
+            if not self._is_uri(item) and not self._is_url(item):
+                raise RuntimeError("playlist_add_items() only accepts URIs and URLs.")
         plid = self._get_id("playlist", playlist_id)
-        ftracks = [self._get_uri("track", tid) for tid in items]
+        items = [self._url_to_uri(item) if self._is_url(item) else item for item in items]
         return self._post(
-            f"playlists/{plid}/tracks", payload=ftracks, position=position
+            f"playlists/{plid}/tracks",
+            payload=items,
+            position=position,
         )
 
     def playlist_replace_items(self, playlist_id, items):
@@ -1716,6 +1721,13 @@ class Spotify:
 
     def _is_uri(self, uri):
         return re.search(Spotify._regex_spotify_uri, uri) is not None
+
+    def _is_url(self, url):
+        return url.startswith("http")
+
+    def _url_to_uri(self, url):
+        splitted = url.split("/")
+        return "spotify:" + splitted[-2] + ":" + splitted[-1]
 
     def _search_multiple_markets(self, q, limit, offset, type, markets, total):
         if total and limit > total:
