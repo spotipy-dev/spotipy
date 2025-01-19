@@ -421,26 +421,27 @@ class SpotifyPKCECacheTest(unittest.TestCase):
         self.assertIsNotNone(cached_tok_legacy)
         self.assertEqual(refresh_access_token.call_count, 0)
 
-#     @patch.multiple(SpotifyPKCE,
-#                     is_token_expired=DEFAULT, refresh_access_token=DEFAULT)
-#     @patch('spotipy.cache_handler.open', create=True)
-#     def test_expired_token_refreshes(self, opener,
-#                                      is_token_expired, refresh_access_token):
-#         scope = "playlist-modify-private"
-#         path = ".cache-username"
-#         expired_tok = _make_fake_token(0, None, scope)
-#         fresh_tok = _make_fake_token(1, 1, scope)
+    @patch.multiple(SpotifyPKCE,
+                    is_token_expired=DEFAULT, refresh_access_token=DEFAULT)
+    @patch('spotipy.cache_handler.open', create=True)
+    def test_expired_token_refreshes(self, opener,
+                                     is_token_expired, refresh_access_token):
+        scope = "playlist-modify-private"
+        path = ".cache-username"
+        expired_tok = _make_fake_token(0, None, scope)
+        fresh_tok = _make_fake_token(1, 1, scope)
 
-#         token_file = _token_file(json.dumps(expired_tok, ensure_ascii=False))
-#         opener.return_value = token_file
-#         refresh_access_token.return_value = fresh_tok
+        token_file = _token_file(json.dumps(expired_tok, ensure_ascii=False))
+        opener.return_value.__enter__ = mock.Mock(return_value=token_file)
+        opener.return_value.__exit__ = mock.Mock(return_value=False)
+        refresh_access_token.return_value = fresh_tok
 
-#         spot = _make_pkceauth(scope, path)
-#         spot.validate_token(spot.cache_handler.get_cached_token())
+        spot = _make_pkceauth(scope, path)
+        spot.validate_token(spot.cache_handler.get_cached_token())
 
-#         is_token_expired.assert_called_with(expired_tok)
-#         refresh_access_token.assert_called_with(expired_tok['refresh_token'])
-#         opener.assert_any_call(path)
+        is_token_expired.assert_called_with(expired_tok)
+        refresh_access_token.assert_called_with(expired_tok['refresh_token'])
+        opener.assert_any_call(path, encoding='utf-8')
 
     @patch.multiple(SpotifyPKCE,
                     is_token_expired=DEFAULT, refresh_access_token=DEFAULT)
