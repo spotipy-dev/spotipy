@@ -1,12 +1,12 @@
 # get all non-local tracks of a playlist
-from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
 
 # playlist id of global top 50
 PlaylistExample = '37i9dQZEVXbMDoHDwVN2tF'
 
 # create spotipy client
-sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
+sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials())
 
 # load the first 100 songs
 tracks = []
@@ -25,6 +25,5 @@ for item in tracks:
         tracks.remove(item)
         i += 1
 
-
 # print result
-print("Playlist length: " + str(len(tracks)) + "\nExcluding: " + str(i))
+print(f"Playlist length: {len(tracks)}\nExcluding: {i}")

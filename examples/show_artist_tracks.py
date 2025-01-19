@@ -2,12 +2,13 @@
 
 # usage: python tracks.py [artist name]
 
-from spotipy.oauth2 import SpotifyClientCredentials
-import spotipy
 import sys
 
-client_credentials_manager = SpotifyClientCredentials()
-sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
+
+auth_manager = SpotifyClientCredentials()
+sp = spotipy.Spotify(auth_manager=auth_manager)
 
 if len(sys.argv) > 1:
     artist_name = ' '.join(sys.argv[1:])

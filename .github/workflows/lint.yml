@@ -1,0 +1,24 @@
+name: Lint
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"  # Lint can be done on latest Python only
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install .[test]
+      - name: Check pep8 with flake8
+        run: |
+          flake8 . --count --show-source --statistics
+      - name: Check sorted imports with isort
+        run: |
+          isort . -c

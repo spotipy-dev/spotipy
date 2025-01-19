@@ -11,9 +11,9 @@ Prerequisites
     OPTIONAL
     // in development environment for debug output
     export FLASK_ENV=development
-    // so that you can invoke the app outside of the file's directory include
+    // so that you can invoke the app outside the file's directory include
     export FLASK_APP=/path/to/spotipy/examples/app.py
- 
+
     // on Windows, use `SET` instead of `export`
 
 Run app.py
@@ -24,8 +24,10 @@ Run app.py
 """
 
 import os
-from flask import Flask, session, request, redirect
+
+from flask import Flask, redirect, request, session
 from flask_session import Session
+
 import spotipy
 
 app = Flask(__name__)
@@ -88,9 +90,7 @@ def currently_playing():
         return redirect('/')
     spotify = spotipy.Spotify(auth_manager=auth_manager)
     track = spotify.current_user_playing_track()
-    if not track is None:
-        return track
-    return "No track currently playing."
+    return track if track is not None else "No track currently playing."
 
 
 @app.route('/current_user')

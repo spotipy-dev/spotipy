@@ -1,9 +1,9 @@
-#Shows the list of all songs sung by the artist or the band
+# Shows the list of all songs sung by the artist or the band
 import argparse
 import logging
 
-from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
 
 logger = logging.getLogger('examples.artist_discography')
 logging.basicConfig(level='INFO')
@@ -18,12 +18,9 @@ def get_args():
 
 
 def get_artist(name):
-    results = sp.search(q='artist:' + name, type='artist')
+    results = sp.search(q=f'artist:{name}', type='artist')
     items = results['artists']['items']
-    if len(items) > 0:
-        return items[0]
-    else:
-        return None
+    return items[0] if items else None
 
 
 def show_album_tracks(album):
@@ -34,7 +31,7 @@ def show_album_tracks(album):
         results = sp.next(results)
         tracks.extend(results['items'])
     for i, track in enumerate(tracks):
-        logger.info('%s. %s', i+1, track['name'])
+        logger.info(f'{i + 1}. {track["name"]}')
 
 
 def show_artist_albums(artist):
@@ -44,21 +41,22 @@ def show_artist_albums(artist):
     while results['next']:
         results = sp.next(results)
         albums.extend(results['items'])
-    logger.info('Total albums: %s', len(albums))
+    logger.info(f'Total albums: {len(albums)}')
     unique = set()  # skip duplicate albums
     for album in albums:
         name = album['name'].lower()
         if name not in unique:
-            logger.info('ALBUM: %s', name)
+            logger.info(f'ALBUM: {name}')
             unique.add(name)
             show_album_tracks(album)
 
 
 def show_artist(artist):
-    logger.info('====%s====', artist['name'])
-    logger.info('Popularity: %s', artist['popularity'])
+    logger.info(f'===={artist["name"]}====')
+    logger.info(f'Popularity: {artist["popularity"]}')
     if len(artist['genres']) > 0:
-        logger.info('Genres: %s', ','.join(artist['genres']))
+        logger.info(f"Genres: {', '.join(artist['genres'])}")
+
 
 def main():
     args = get_args()
@@ -68,6 +66,6 @@ def main():
 
 
 if __name__ == '__main__':
-    client_credentials_manager = SpotifyClientCredentials()
-    sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+    auth_manager = SpotifyClientCredentials()
+    sp = spotipy.Spotify(auth_manager=auth_manager)
     main()

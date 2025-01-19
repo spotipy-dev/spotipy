@@ -12,7 +12,4 @@ while response:
     for i, item in enumerate(albums['items']):
         print(albums['offset'] + i, item['name'])
 
-    if albums['next']:
-        response = sp.next(albums)
-    else:
-        response = None
+    response = sp.next(albums) if albums['next'] else None

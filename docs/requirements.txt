@@ -1,0 +1,3 @@
+Sphinx~=8.1.3
+sphinx-rtd-theme~=3.0.2
+redis>=3.5.3

@@ -6,11 +6,11 @@ import sys
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 
-if len(sys.argv) > 3:
+if len(sys.argv) > 2:
     playlist_id = sys.argv[1]
     track_ids = sys.argv[2:]
 else:
-    print("Usage: %s playlist_id track_id ..." % (sys.argv[0],))
+    print(f"Usage: {sys.argv[0]} playlist_id track_id ...")
     sys.exit()
 
 scope = 'playlist-modify-public'

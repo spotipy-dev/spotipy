@@ -1,9 +1,10 @@
-from spotipy.oauth2 import SpotifyClientCredentials
-import spotipy
 from pprint import pprint
 
-client_credentials_manager = SpotifyClientCredentials()
-sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
+
+auth_manager = SpotifyClientCredentials()
+sp = spotipy.Spotify(auth_manager=auth_manager)
 
 search_str = 'Muse'
 result = sp.search(search_str)

@@ -1,16 +1,14 @@
-
 # shows acoustic features for tracks for the given artist
 
-from __future__ import print_function    # (at top of module)
-from spotipy.oauth2 import SpotifyClientCredentials
 import json
-import spotipy
-import time
 import sys
+import time
 
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
 
-client_credentials_manager = SpotifyClientCredentials()
-sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+auth_manager = SpotifyClientCredentials()
+sp = spotipy.Spotify(auth_manager=auth_manager)
 sp.trace = False
 
 if len(sys.argv) > 1:
@@ -33,4 +31,4 @@ for feature in features:
     analysis = sp._get(feature['analysis_url'])
     print(json.dumps(analysis, indent=4))
     print()
-print("features retrieved in %.2f seconds" % (delta,))
+print(f"features retrieved in {delta:.2f} seconds")

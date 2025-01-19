@@ -1,6 +1,7 @@
-from spotipy.oauth2 import SpotifyClientCredentials
-import spotipy
 import random
+
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
 
 '''
     generates a list of songs where the first word in each subsequent song
@@ -9,11 +10,11 @@ import random
     usage: python title_chain.py [song name]
 '''
 
-client_credentials_manager = SpotifyClientCredentials()
-sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+auth_manager = SpotifyClientCredentials()
+sp = spotipy.Spotify(auth_manager=auth_manager)
 
 
-skiplist = set(['dm', 'remix'])
+skiplist = {'dm', 'remix'}
 max_offset = 500
 seen = set()
 
