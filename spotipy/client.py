@@ -1435,6 +1435,11 @@ class Spotify:
         return self._get("recommendations", **params)
 
     def recommendation_genre_seeds(self):
+        warnings.warn(
+            "You're using `recommendation_genre_seeds(...)`, "
+            "which is marked as deprecated by Spotify.",
+            DeprecationWarning,
+        )
         """ Get a list of genres available for the recommendations function.
         """
         return self._get("recommendations/available-genre-seeds")

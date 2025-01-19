@@ -57,6 +57,7 @@ Rebasing master onto v3 doesn't require a changelog update.
 
 - Added examples for audiobooks, shows and episodes methods to examples directory
 - Use newer string formatters ([https://pyformat.info](https://pyformat.info))
+- Marked `recommendation_genre_seeds` as deprecated
 
 ### Fixed
 
