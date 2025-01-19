@@ -254,8 +254,8 @@ artist's name::
         artist = items[0]
         print(artist['name'], artist['images'][0]['url'])
 
-There are many more examples of how to use *Spotipy* in the `Examples
-Directory <https://github.com/plamere/spotipy/tree/master/examples>`_ on GitHub.
+There are many more examples of how to use *Spotipy* in the `spotipy-examples
+repository <https://github.com/spotipy-dev/spotipy-examples>`_ on GitHub.
 
 API Reference
 ==============
