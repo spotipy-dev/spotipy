@@ -72,7 +72,7 @@ class CacheFileHandler(CacheHandler):
             if username:
                 cache_path += "-" + str(username)
             self.cache_path = cache_path
-
+            
     def get_cached_token(self):
         token_info = None
 
@@ -83,9 +83,9 @@ class CacheFileHandler(CacheHandler):
 
         except OSError as error:
             if error.errno == errno.ENOENT:
-                logger.debug("cache does not exist at: %s", self.cache_path)
+                logger.debug(f"cache does not exist at: {self.cache_path}")
             else:
-                logger.warning("Couldn't read cache at: %s", self.cache_path)
+                logger.warning(f"Couldn't read cache at: {self.cache_path}")
 
         return token_info
 
