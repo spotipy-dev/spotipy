@@ -71,26 +71,28 @@ class OAuthCacheTest(unittest.TestCase):
         self.assertIsNotNone(cached_tok_legacy)
         self.assertEqual(refresh_access_token.call_count, 0)
 
-    # @patch.multiple(SpotifyOAuth,
-    #                 is_token_expired=DEFAULT, refresh_access_token=DEFAULT)
-    # @patch('spotipy.cache_handler.open', create=True)
-    # def test_expired_token_refreshes(self, opener,
-    #                                  is_token_expired, refresh_access_token):
-    #     scope = "playlist-modify-private"
-    #     path = ".cache-username"
-    #     expired_tok = _make_fake_token(0, None, scope)
-    #     fresh_tok = _make_fake_token(1, 1, scope)
+    @patch.multiple(SpotifyOAuth,
+                    is_token_expired=DEFAULT, refresh_access_token=DEFAULT)
+    @patch('spotipy.cache_handler.open', create=True)
+    def test_expired_token_refreshes(self, opener,
+                                     is_token_expired, refresh_access_token):
+        """Test that an expired token is refreshed."""
+        scope = "playlist-modify-private"
+        path = ".cache-username"
+        expired_tok = _make_fake_token(0, None, scope)
+        fresh_tok = _make_fake_token(1, 1, scope)
 
-    #     token_file = _token_file(json.dumps(expired_tok, ensure_ascii=False))
-    #     opener.return_value = token_file
-    #     refresh_access_token.return_value = fresh_tok
+        token_file = _token_file(json.dumps(expired_tok, ensure_ascii=False))
+        opener.return_value.__enter__ = mock.Mock(return_value=token_file)
+        opener.return_value.__exit__ = mock.Mock(return_value=False)
+        refresh_access_token.return_value = fresh_tok
 
-    #     spot = _make_oauth(scope, path)
-    #     spot.validate_token(spot.cache_handler.get_cached_token())
+        spot = _make_oauth(scope, path)
+        spot.validate_token(spot.cache_handler.get_cached_token())
 
-    #     is_token_expired.assert_called_with(expired_tok)
-    #     refresh_access_token.assert_called_with(expired_tok['refresh_token'])
-    #     opener.assert_any_call(path)
+        is_token_expired.assert_called_with(expired_tok)
+        refresh_access_token.assert_called_with(expired_tok['refresh_token'])
+        opener.assert_any_call(path, encoding='utf-8')
 
     @patch.multiple(SpotifyOAuth,
                     is_token_expired=DEFAULT, refresh_access_token=DEFAULT)
@@ -272,22 +274,25 @@ class ImplicitGrantCacheTest(unittest.TestCase):
         self.assertIsNotNone(cached_tok)
         self.assertIsNotNone(cached_tok_legacy)
 
-#     @patch.object(SpotifyImplicitGrant, "is_token_expired", DEFAULT)
-#     @patch('spotipy.cache_handler.open', create=True)
-#     def test_expired_token_returns_none(self, opener, is_token_expired):
-#         scope = "playlist-modify-private"
-#         path = ".cache-username"
-#         expired_tok = _make_fake_token(0, None, scope)
+    @patch.object(SpotifyImplicitGrant, "is_token_expired", DEFAULT)
+    @patch('spotipy.cache_handler.open', create=True)
+    def test_expired_token_returns_none(self, opener, is_token_expired):
+        """Test that an expired token returns None."""
+        scope = "playlist-modify-private"
+        path = ".cache-username"
+        expired_tok = _make_fake_token(0, None, scope)
 
-#         token_file = _token_file(json.dumps(expired_tok, ensure_ascii=False))
-#         opener.return_value = token_file
+        token_file = _token_file(json.dumps(expired_tok, ensure_ascii=False))
+        opener.return_value = token_file
+        opener.return_value.__enter__ = mock.Mock(return_value=token_file)
+        opener.return_value.__exit__ = mock.Mock(return_value=False)
 
-#         spot = _make_implicitgrantauth(scope, path)
-#         cached_tok = spot.validate_token(spot.cache_handler.get_cached_token())
+        spot = _make_implicitgrantauth(scope, path)
+        cached_tok = spot.validate_token(spot.cache_handler.get_cached_token())
 
-#         is_token_expired.assert_called_with(expired_tok)
-#         opener.assert_any_call(path)
-#         self.assertIsNone(cached_tok)
+        is_token_expired.assert_called_with(expired_tok)
+        opener.assert_any_call(path, encoding='utf-8')
+        self.assertIsNone(cached_tok)
 
     @patch.object(SpotifyImplicitGrant, "is_token_expired", DEFAULT)
     @patch('spotipy.cache_handler.open', create=True)
