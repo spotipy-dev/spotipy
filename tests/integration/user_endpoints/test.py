@@ -1,5 +1,6 @@
 import os
 import unittest
+from unittest.mock import patch
 
 from spotipy import CLIENT_CREDS_ENV_VARS as CCEV
 from spotipy import (Spotify, SpotifyException, SpotifyImplicitGrant,
@@ -530,6 +531,7 @@ class SpotifyQueueApiTests(unittest.TestCase):
     def setUp(self):
         self.spotify = Spotify(auth="test_token")
 
+    @patch('spotipy.client.Spotify._get')
     def test_get_queue(self, mock_get):
         # Mock the response from _get
         mock_get.return_value = {'songs': ['song1', 'song2']}
@@ -543,6 +545,7 @@ class SpotifyQueueApiTests(unittest.TestCase):
         # Check if the response is as expected
         self.assertEqual(response, {'songs': ['song1', 'song2']})
 
+    @patch('spotipy.client.Spotify._post')
     def test_add_to_queue(self, mock_post):
         test_uri = 'spotify:track:123'
 
@@ -553,6 +556,7 @@ class SpotifyQueueApiTests(unittest.TestCase):
         endpoint = f"me/player/queue?uri={test_uri}"
         mock_post.assert_called_with(endpoint)
 
+    @patch('spotipy.client.Spotify._post')
     def test_add_to_queue_with_device_id(self, mock_post):
         test_uri = 'spotify:track:123'
         device_id = 'device123'

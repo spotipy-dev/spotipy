@@ -3,7 +3,6 @@ import json
 import unittest
 import unittest.mock as mock
 import urllib.parse as urllibparse
-from unittest.mock import mock_open
 
 from spotipy import SpotifyImplicitGrant, SpotifyOAuth, SpotifyPKCE
 from spotipy.cache_handler import MemoryCacheHandler
@@ -50,8 +49,7 @@ class OAuthCacheTest(unittest.TestCase):
 
     @patch.multiple(SpotifyOAuth,
                     is_token_expired=DEFAULT, refresh_access_token=DEFAULT)
-    @patch('spotipy.cache_handler.open', side_effect=lambda *args, **
-           kwargs: mock_open(read_data='mock data')(), create=True)
+    @patch('spotipy.cache_handler.open', create=True)
     def test_gets_from_cache_path(self, opener,
                                   is_token_expired, refresh_access_token):
         """Test that the token is retrieved from the cache path."""
@@ -75,8 +73,7 @@ class OAuthCacheTest(unittest.TestCase):
 
     @patch.multiple(SpotifyOAuth,
                     is_token_expired=DEFAULT, refresh_access_token=DEFAULT)
-    @patch('spotipy.cache_handler.open', side_effect=lambda *args, **
-           kwargs: mock_open(read_data='mock data')(), create=True)
+    @patch('spotipy.cache_handler.open', create=True)
     def test_expired_token_refreshes(self, opener,
                                      is_token_expired, refresh_access_token):
         """Test that an expired token is refreshed."""
@@ -99,8 +96,7 @@ class OAuthCacheTest(unittest.TestCase):
 
     @patch.multiple(SpotifyOAuth,
                     is_token_expired=DEFAULT, refresh_access_token=DEFAULT)
-    @patch('spotipy.cache_handler.open', side_effect=lambda *args, **
-           kwargs: mock_open(read_data='mock data')(), create=True)
+    @patch('spotipy.cache_handler.open', create=True)
     def test_badly_scoped_token_bails(self, opener,
                                       is_token_expired, refresh_access_token):
         token_scope = "playlist-modify-public"
@@ -121,8 +117,7 @@ class OAuthCacheTest(unittest.TestCase):
         self.assertIsNone(cached_tok)
         self.assertEqual(refresh_access_token.call_count, 0)
 
-    @patch('spotipy.cache_handler.open', side_effect=lambda *args, **
-           kwargs: mock_open(read_data='mock data')(), create=True)
+    @patch('spotipy.cache_handler.open', create=True)
     def test_saves_to_cache_path(self, opener):
         """Test that the token is saved to the cache path."""
         scope = "playlist-modify-private"
@@ -140,8 +135,7 @@ class OAuthCacheTest(unittest.TestCase):
         opener.assert_called_with(path, 'w', encoding='utf-8')
         self.assertTrue(fi.write.called)
 
-    @patch('spotipy.cache_handler.open', side_effect=lambda *args, **
-           kwargs: mock_open(read_data='mock data')(), create=True)
+    @patch('spotipy.cache_handler.open', create=True)
     def test_saves_to_cache_path_legacy(self, opener):
         scope = "playlist-modify-private"
         path = ".cache-username"
@@ -265,8 +259,7 @@ class TestSpotifyClientCredentials(unittest.TestCase):
 class ImplicitGrantCacheTest(unittest.TestCase):
 
     @patch.object(SpotifyImplicitGrant, "is_token_expired", DEFAULT)
-    @patch('spotipy.cache_handler.open', side_effect=lambda *args, **
-           kwargs: mock_open(read_data='mock data')(), create=True)
+    @patch('spotipy.cache_handler.open', create=True)
     def test_gets_from_cache_path(self, opener, is_token_expired):
         scope = "playlist-modify-private"
         path = ".cache-username"
@@ -287,8 +280,7 @@ class ImplicitGrantCacheTest(unittest.TestCase):
         self.assertIsNotNone(cached_tok_legacy)
 
     @patch.object(SpotifyImplicitGrant, "is_token_expired", DEFAULT)
-    @patch('spotipy.cache_handler.open', side_effect=lambda *args, **
-           kwargs: mock_open(read_data='mock data')(), create=True)
+    @patch('spotipy.cache_handler.open', create=True)
     def test_expired_token_returns_none(self, opener, is_token_expired):
         """Test that an expired token returns None."""
         scope = "playlist-modify-private"
@@ -308,8 +300,7 @@ class ImplicitGrantCacheTest(unittest.TestCase):
         self.assertIsNone(cached_tok)
 
     @patch.object(SpotifyImplicitGrant, "is_token_expired", DEFAULT)
-    @patch('spotipy.cache_handler.open', side_effect=lambda *args, **
-           kwargs: mock_open(read_data='mock data')(), create=True)
+    @patch('spotipy.cache_handler.open', create=True)
     def test_badly_scoped_token_bails(self, opener, is_token_expired):
         token_scope = "playlist-modify-public"
         requested_scope = "playlist-modify-private"
@@ -328,8 +319,7 @@ class ImplicitGrantCacheTest(unittest.TestCase):
         opener.assert_called_with(path, encoding='utf-8')
         self.assertIsNone(cached_tok)
 
-    @patch('spotipy.cache_handler.open', side_effect=lambda *args, **
-           kwargs: mock_open(read_data='mock data')(), create=True)
+    @patch('spotipy.cache_handler.open', create=True)
     def test_saves_to_cache_path(self, opener):
         scope = "playlist-modify-private"
         path = ".cache-username"
@@ -346,8 +336,7 @@ class ImplicitGrantCacheTest(unittest.TestCase):
         opener.assert_called_with(path, 'w', encoding='utf-8')
         self.assertTrue(fi.write.called)
 
-    @patch('spotipy.cache_handler.open', side_effect=lambda *args, **
-           kwargs: mock_open(read_data='mock data')(), create=True)
+    @patch('spotipy.cache_handler.open', create=True)
     def test_saves_to_cache_path_legacy(self, opener):
         scope = "playlist-modify-private"
         path = ".cache-username"
@@ -419,8 +408,7 @@ class SpotifyPKCECacheTest(unittest.TestCase):
 
     @patch.multiple(SpotifyPKCE,
                     is_token_expired=DEFAULT, refresh_access_token=DEFAULT)
-    @patch('spotipy.cache_handler.open', side_effect=lambda *args, **
-           kwargs: mock_open(read_data='mock data')(), create=True)
+    @patch('spotipy.cache_handler.open', create=True)
     def test_gets_from_cache_path(self, opener,
                                   is_token_expired, refresh_access_token):
         scope = "playlist-modify-private"
@@ -444,8 +432,7 @@ class SpotifyPKCECacheTest(unittest.TestCase):
 
     @patch.multiple(SpotifyPKCE,
                     is_token_expired=DEFAULT, refresh_access_token=DEFAULT)
-    @patch('spotipy.cache_handler.open', side_effect=lambda *args, **
-           kwargs: mock_open(read_data='mock data')(), create=True)
+    @patch('spotipy.cache_handler.open', create=True)
     def test_expired_token_refreshes(self, opener,
                                      is_token_expired, refresh_access_token):
         scope = "playlist-modify-private"
@@ -467,8 +454,7 @@ class SpotifyPKCECacheTest(unittest.TestCase):
 
     @patch.multiple(SpotifyPKCE,
                     is_token_expired=DEFAULT, refresh_access_token=DEFAULT)
-    @patch('spotipy.cache_handler.open', side_effect=lambda *args, **
-           kwargs: mock_open(read_data='mock data')(), create=True)
+    @patch('spotipy.cache_handler.open', create=True)
     def test_badly_scoped_token_bails(self, opener,
                                       is_token_expired, refresh_access_token):
         token_scope = "playlist-modify-public"
@@ -489,8 +475,7 @@ class SpotifyPKCECacheTest(unittest.TestCase):
         self.assertIsNone(cached_tok)
         self.assertEqual(refresh_access_token.call_count, 0)
 
-    @patch('spotipy.cache_handler.open', side_effect=lambda *args, **
-           kwargs: mock_open(read_data='mock data')(), create=True)
+    @patch('spotipy.cache_handler.open', create=True)
     def test_saves_to_cache_path(self, opener):
         scope = "playlist-modify-private"
         path = ".cache-username"
@@ -506,8 +491,7 @@ class SpotifyPKCECacheTest(unittest.TestCase):
         opener.assert_called_with(path, 'w', encoding='utf-8')
         self.assertTrue(fi.write.called)
 
-    @patch('spotipy.cache_handler.open', side_effect=lambda *args, **
-           kwargs: mock_open(read_data='mock data')(), create=True)
+    @patch('spotipy.cache_handler.open', create=True)
     def test_saves_to_cache_path_legacy(self, opener):
         scope = "playlist-modify-private"
         path = ".cache-username"
