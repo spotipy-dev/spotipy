@@ -41,7 +41,6 @@ class CacheHandler():
         Save a token_info dictionary object to the cache and return None.
         """
         raise NotImplementedError()
-        return None
 
 
 class CacheFileHandler(CacheHandler):
@@ -77,9 +76,10 @@ class CacheFileHandler(CacheHandler):
         token_info = None
 
         try:
-            with open(self.cache_path) as f:
+            with open(self.cache_path, encoding='utf-8') as f:
                 token_info_string = f.read()
-                token_info = json.loads(token_info_string)
+            token_info = json.loads(token_info_string)
+
         except OSError as error:
             if error.errno == errno.ENOENT:
                 logger.debug(f"cache does not exist at: {self.cache_path}")
@@ -92,7 +92,7 @@ class CacheFileHandler(CacheHandler):
 
     def save_token_to_cache(self, token_info):
         try:
-            with open(self.cache_path, "w") as f:
+            with open(self.cache_path, "w", encoding='utf-8') as f:
                 f.write(json.dumps(token_info, cls=self.encoder_cls))
         except OSError:
             logger.warning(f"Couldn't write token to cache at: {self.cache_path}")
