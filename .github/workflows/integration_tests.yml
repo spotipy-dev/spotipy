@@ -4,7 +4,6 @@ on: [push, pull_request]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     env:
       SPOTIPY_CLIENT_ID: ${{ secrets.SPOTIPY_CLIENT_ID }}

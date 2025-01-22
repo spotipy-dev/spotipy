@@ -41,7 +41,6 @@ class CacheHandler():
         Save a token_info dictionary object to the cache and return None.
         """
         raise NotImplementedError()
-        return None
 
 
 class CacheFileHandler(CacheHandler):
@@ -77,24 +76,24 @@ class CacheFileHandler(CacheHandler):
         token_info = None
 
         try:
-            f = open(self.cache_path)
-            token_info_string = f.read()
-            f.close()
+            with open(self.cache_path, encoding='utf-8') as f:
+                token_info_string = f.read()
             token_info = json.loads(token_info_string)
 
         except OSError as error:
             if error.errno == errno.ENOENT:
                 logger.debug(f"cache does not exist at: {self.cache_path}")
             else:
-                logger.warning(f"Couldn't read cache at: {self.cache_path}")
+                logger.warning("Couldn't read cache at: %s", self.cache_path)
+        except json.JSONDecodeError:
+            logger.warning("Couldn't decode JSON from cache at: %s", self.cache_path)
 
         return token_info
 
     def save_token_to_cache(self, token_info):
         try:
-            f = open(self.cache_path, "w")
-            f.write(json.dumps(token_info, cls=self.encoder_cls))
-            f.close()
+            with open(self.cache_path, "w", encoding='utf-8') as f:
+                f.write(json.dumps(token_info, cls=self.encoder_cls))
         except OSError:
             logger.warning(f"Couldn't write token to cache at: {self.cache_path}")
 
@@ -214,6 +213,7 @@ class RedisCacheHandler(CacheHandler):
 class MemcacheCacheHandler(CacheHandler):
     """A Cache handler that stores the token info in Memcache using the pymemcache client
     """
+
     def __init__(self, memcache, key=None) -> None:
         """
         Parameters:
