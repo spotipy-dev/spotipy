@@ -13,6 +13,7 @@ Add your changes below.
 
 - Added examples for audiobooks, shows and episodes methods to examples directory
 - Use newer string formatters (https://pyformat.info)
+- Marked `recommendation_genre_seeds` as deprecated
 
 ### Fixed
 
