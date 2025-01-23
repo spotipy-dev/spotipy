@@ -84,9 +84,9 @@ class CacheFileHandler(CacheHandler):
             if error.errno == errno.ENOENT:
                 logger.debug(f"cache does not exist at: {self.cache_path}")
             else:
-                logger.warning("Couldn't read cache at: %s", self.cache_path)
+                logger.warning(f"Couldn't read cache at: {self.cache_path}")
         except json.JSONDecodeError:
-            logger.warning("Couldn't decode JSON from cache at: %s", self.cache_path)
+            logger.warning(f"Couldn't decode JSON from cache at: {self.cache_path}")
 
         return token_info
 
