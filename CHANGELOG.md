@@ -49,6 +49,7 @@ Add your changes below.
   - featured_playlists
   - category_playlists
 - Added FAQ entry for inaccessible playlists
+- Workflow to check for f-strings
 
 ### Changed
 
