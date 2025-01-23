@@ -1224,19 +1224,21 @@ class RequestHandler(BaseHTTPRequestHandler):
             self._write("<html><body><h1>Invalid request</h1></body></html>")
             return
 
-        self._write("""<html>
-<script>
-window.close()
-</script>
-<body>
-<h1>Authentication status: {}</h1>
-This window can be closed.
-<script>
-window.close()
-</script>
-<button class="closeButton" style="cursor: pointer" onclick="window.close();">Close Window</button>
-</body>
-</html>""".format(status))
+        self._write(f"""<html>
+    <script>
+    window.close()
+    </script>
+    <body>
+    <h1>Authentication status: {status}</h1>
+    This window can be closed.
+    <script>
+    window.close()
+    </script>
+    <button class="closeButton" style="cursor: pointer" onclick="window.close();">
+    Close Window
+    </button>
+    </body>
+    </html>""")
 
     def _write(self, text):
         return self.wfile.write(text.encode("utf-8"))
