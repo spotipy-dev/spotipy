@@ -29,19 +29,18 @@ $ source env/bin/activate
 
 ### Lint
 
+    pip install .[test]
+
 To automatically fix some of the code style:
 
-    pip install autopep8
     autopep8 --in-place --aggressive --recursive .
 
 To verify the code style:
 
-    pip install flake8
     flake8 .
 
 To make sure if the import lists are stored correctly:
 
-    pip install isort
     isort . -c
 
 Sort them automatically with:

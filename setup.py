@@ -12,7 +12,9 @@ extra_reqs = {
         'pymemcache>=3.5.2'
     ],
     'test': [
+        'autopep8>=2.3.2',
         'flake8>=7.1.1',
+        'flake8-string-format>=0.3.0',
         'isort>=5.13.2'
     ]
 }

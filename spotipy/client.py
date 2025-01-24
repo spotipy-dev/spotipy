@@ -1244,10 +1244,8 @@ class Spotify:
                 if they follow the playlist. Maximum: 5 ids.
 
         """
-        endpoint = "playlists/{}/followers/contains?ids={}"
-        return self._get(
-            endpoint.format(playlist_id, ",".join(user_ids))
-        )
+        endpoint = f"playlists/{playlist_id}/followers/contains?ids={','.join(user_ids)}"
+        return self._get(endpoint)
 
     def me(self):
         """ Get detailed profile information about the current user.
