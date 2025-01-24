@@ -18,6 +18,28 @@ $env:SPOTIPY_CLIENT_USERNAME="client_username_here"
 $env:SPOTIPY_REDIRECT_URI="http://localhost:8080" 
 ```
 
+### Branch Overview
+
+After restarting development on version 3, we decided to restrict commits to certain branches in order to push the development forward.
+To give you a flavour of what we mean, here are some examples of what PRs go where:
+
+**v3**:
+
+- any kind of refactoring
+- better documentation
+- enhancements
+- code styles
+
+**master (v2)**:
+
+- bug fixes
+- deprecations
+- new endpoints (until we release v3)
+- basic functionality
+
+Just choose v3 if you are unsure which branch to work on.
+
+
 ### Create virtual environment, install dependencies, run tests:
 
 ```bash
