@@ -48,15 +48,25 @@ class CacheHandler(ABC):
 
     @abstractmethod
     def get_cached_token(self) -> TokenInfo | None:
-        """Get and return a token_info dictionary object."""
+        """
+        Get and return a token_info dictionary object.
+
+        :return: A token_info dictionary object or None if no token is cached.
+        """
 
     @abstractmethod
     def save_token_to_cache(self, token_info: TokenInfo) -> None:
-        """Save a token_info dictionary object to the cache and return None."""
+        """
+        Save a token_info dictionary object to the cache.
+
+        :param token_info: A token_info dictionary object to be cached.
+        """
 
 
 class CacheFileHandler(CacheHandler):
-    """Read and write cached Spotify authorization tokens as json files on disk."""
+    """
+    Read and write cached Spotify authorization tokens as json files on disk.
+    """
 
     def __init__(
         self,
@@ -82,7 +92,11 @@ class CacheFileHandler(CacheHandler):
             self.cache_path = cache_path
 
     def get_cached_token(self) -> TokenInfo | None:
-        """Get cached token from file."""
+        """
+        Get cached token from file.
+
+        :return: A token_info dictionary object or None if no token is cached.
+        """
         token_info: TokenInfo | None = None
 
         try:
@@ -100,7 +114,11 @@ class CacheFileHandler(CacheHandler):
         return token_info
 
     def save_token_to_cache(self, token_info: TokenInfo) -> None:
-        """Save token cache to file."""
+        """
+        Save token cache to file.
+
+        :param token_info: A token_info dictionary object to be cached.
+        """
         try:
             f = open(self.cache_path, "w")
             f.write(json.dumps(token_info, cls=self.encoder_cls))
@@ -110,22 +128,32 @@ class CacheFileHandler(CacheHandler):
 
 
 class MemoryCacheHandler(CacheHandler):
-    """Cache handler that stores the token non-persistently as an instance attribute."""
+    """
+    Cache handler that stores the token non-persistently as an instance attribute.
+    """
 
     def __init__(self, token_info: TokenInfo | None = None) -> None:
         """
         Initialize MemoryCacheHandler instance.
 
-        :param token_info: Optional initial cached token
+        :param token_info: Optional initial cached token.
         """
         self.token_info = token_info
 
     def get_cached_token(self) -> TokenInfo | None:
-        """Retrieve the cached token from the instance."""
+        """
+        Retrieve the cached token from the instance.
+
+        :return: A token_info dictionary object or None if no token is cached.
+        """
         return self.token_info
 
     def save_token_to_cache(self, token_info: TokenInfo) -> None:
-        """Cache the token in this instance."""
+        """
+        Cache the token in this instance.
+
+        :param token_info: A token_info dictionary object to be cached.
+        """
         self.token_info = token_info
 
 
@@ -139,13 +167,18 @@ class DjangoSessionCacheHandler(CacheHandler):
 
     def __init__(self, request):
         """
-        Parameters:
-            * request: HttpRequest object provided by Django for every
-            incoming request
+        Initialize DjangoSessionCacheHandler instance.
+
+        :param request: HttpRequest object provided by Django for every incoming request.
         """
         self.request = request
 
     def get_cached_token(self):
+        """
+        Retrieve the cached token from the Django session.
+
+        :return: A token_info dictionary object or None if no token is cached.
+        """
         token_info = None
         try:
             token_info = self.request.session["token_info"]
@@ -155,6 +188,11 @@ class DjangoSessionCacheHandler(CacheHandler):
         return token_info
 
     def save_token_to_cache(self, token_info):
+        """
+        Cache the token in the Django session.
+
+        :param token_info: A token_info dictionary object to be cached.
+        """
         try:
             self.request.session["token_info"] = token_info
         except Exception as e:
@@ -164,13 +202,23 @@ class DjangoSessionCacheHandler(CacheHandler):
 class FlaskSessionCacheHandler(CacheHandler):
     """
     A cache handler that stores the token info in the session framework
-    provided by flask.
+    provided by Flask.
     """
 
     def __init__(self, session):
+        """
+        Initialize FlaskSessionCacheHandler instance.
+
+        :param session: Flask session object.
+        """
         self.session = session
 
     def get_cached_token(self):
+        """
+        Retrieve the cached token from the Flask session.
+
+        :return: A token_info dictionary object or None if no token is cached.
+        """
         token_info = None
         try:
             token_info = self.session["token_info"]
@@ -180,6 +228,11 @@ class FlaskSessionCacheHandler(CacheHandler):
         return token_info
 
     def save_token_to_cache(self, token_info):
+        """
+        Cache the token in the Flask session.
+
+        :param token_info: A token_info dictionary object to be cached.
+        """
         try:
             self.session["token_info"] = token_info
         except Exception as e:
@@ -187,20 +240,26 @@ class FlaskSessionCacheHandler(CacheHandler):
 
 
 class RedisCacheHandler(CacheHandler):
-    """A cache handler that stores the token info in the Redis."""
+    """
+    A cache handler that stores the token info in Redis.
+    """
 
     def __init__(self, redis_obj: redis.client.Redis, key: str | None = None) -> None:
         """
         Initialize RedisCacheHandler instance.
 
-        :param redis: The Redis object to function as the cache
-        :param key: (Optional) The key to used to store the token in the cache
+        :param redis_obj: The Redis object to function as the cache.
+        :param key: (Optional) The key to use to store the token in the cache.
         """
         self.redis = redis_obj
         self.key = key or "token_info"
 
     def get_cached_token(self) -> TokenInfo | None:
-        """Fetch cache token from the Redis."""
+        """
+        Fetch cached token from Redis.
+
+        :return: A token_info dictionary object or None if no token is cached.
+        """
         token_info = None
         try:
             token_info = self.redis.get(self.key)
@@ -212,7 +271,11 @@ class RedisCacheHandler(CacheHandler):
         return token_info
 
     def save_token_to_cache(self, token_info: TokenInfo) -> None:
-        """Cache token in the Redis."""
+        """
+        Cache token in Redis.
+
+        :param token_info: A token_info dictionary object to be cached.
+        """
         try:
             self.redis.set(self.key, json.dumps(token_info))
         except RedisError as e:
@@ -220,21 +283,26 @@ class RedisCacheHandler(CacheHandler):
 
 
 class MemcacheCacheHandler(CacheHandler):
-    """A Cache handler that stores the token info in Memcache using the pymemcache client
+    """
+    A cache handler that stores the token info in Memcache using the pymemcache client.
     """
 
     def __init__(self, memcache, key=None) -> None:
         """
-        Parameters:
-            * memcache: memcache client object provided by pymemcache
-            (https://pymemcache.readthedocs.io/en/latest/getting_started.html)
-            * key: May be supplied, will otherwise be generated
-                   (takes precedence over `token_info`)
+        Initialize MemcacheCacheHandler instance.
+
+        :param memcache: Memcache client object provided by pymemcache.
+        :param key: (Optional) The key to use to store the token in the cache.
         """
         self.memcache = memcache
         self.key = key or "token_info"
 
     def get_cached_token(self):
+        """
+        Fetch cached token from Memcache.
+
+        :return: A token_info dictionary object or None if no token is cached.
+        """
         from pymemcache import MemcacheError
 
         try:
@@ -245,6 +313,11 @@ class MemcacheCacheHandler(CacheHandler):
             logger.warning(f"Error getting token to cache: {e}")
 
     def save_token_to_cache(self, token_info):
+        """
+        Cache token in Memcache.
+
+        :param token_info: A token_info dictionary object to be cached.
+        """
         from pymemcache import MemcacheError
 
         try:

@@ -3,6 +3,15 @@ class SpotifyBaseException(Exception):
 
 
 class SpotifyException(SpotifyBaseException):
+    """
+    Exception raised for Spotify API errors.
+
+    :param http_status: The HTTP status code returned by the API.
+    :param code: The specific error code returned by the API.
+    :param msg: The error message returned by the API.
+    :param reason: (Optional) The reason for the error.
+    :param headers: (Optional) The headers returned by the API.
+    """
 
     def __init__(self, http_status, code, msg, reason=None, headers=None):
         self.http_status = http_status
@@ -22,7 +31,13 @@ class SpotifyException(SpotifyBaseException):
 
 
 class SpotifyOauthError(SpotifyBaseException):
-    """ Error during Auth Code or Implicit Grant flow """
+    """
+    Exception raised for errors during Auth Code or Implicit Grant flow.
+
+    :param message: The error message.
+    :param error: (Optional) The specific error code.
+    :param error_description: (Optional) A description of the error.
+    """
 
     def __init__(self, message, error=None, error_description=None, *args, **kwargs):
         self.error = error
@@ -32,7 +47,15 @@ class SpotifyOauthError(SpotifyBaseException):
 
 
 class SpotifyStateError(SpotifyOauthError):
-    """ The state sent and state received were different """
+    """
+    Exception raised when the state sent and state received are different.
+
+    :param local_state: The state sent.
+    :param remote_state: The state received.
+    :param message: (Optional) The error message.
+    :param error: (Optional) The specific error code.
+    :param error_description: (Optional) A description of the error.
+    """
 
     def __init__(self, local_state=None, remote_state=None, message=None,
                  error=None, error_description=None, *args, **kwargs):

@@ -21,11 +21,12 @@ CLIENT_CREDS_ENV_VARS = {
 
 
 def get_host_port(netloc):
-    """ Split the network location string into host and port and returns a tuple
-        where the host is a string and the the port is an integer.
+    """
+    Split the network location string into host and port and return a tuple
+    where the host is a string and the port is an integer.
 
-        Parameters:
-            - netloc - a string representing the network location.
+    :param netloc: A string representing the network location.
+    :return: A tuple containing the host and port.
     """
     if ":" in netloc:
         host, port = netloc.split(":", 1)
@@ -38,13 +39,14 @@ def get_host_port(netloc):
 
 
 def normalize_scope(scope):
-    """Normalize the scope to verify that it is a list or tuple. A string
+    """
+    Normalize the scope to verify that it is a list or tuple. A string
     input will split the string by commas to create a list of scopes.
     A list or tuple input is used directly.
 
-    Parameters:
-        - scope - a string representing scopes separated by commas,
-                  or a list/tuple of scopes.
+    :param scope: A string representing scopes separated by commas, or a list/tuple of scopes.
+    :return: A space-separated string of scopes.
+    :raises TypeError: If the scope is not a string, list, or tuple.
     """
     if scope:
         if isinstance(scope, str):
