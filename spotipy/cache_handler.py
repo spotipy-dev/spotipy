@@ -69,10 +69,10 @@ class CacheFileHandler(CacheHandler):
     """
 
     def __init__(
-        self,
-        cache_path: str | None = None,
-        username: str | None = None,
-        encoder_cls: type[JSONEncoder] | None = None,
+            self,
+            cache_path: str | None = None,
+            username: str | None = None,
+            encoder_cls: type[JSONEncoder] | None = None,
     ) -> None:
         """
         Initialize CacheFileHandler instance.
@@ -249,7 +249,7 @@ class RedisCacheHandler(CacheHandler):
         Initialize RedisCacheHandler instance.
 
         :param redis_obj: The Redis object to function as the cache.
-        :param key: (Optional) The key to use to store the token in the cache.
+        :param key: (Optional) The key used to store the token in the cache.
         """
         self.redis = redis_obj
         self.key = key or "token_info"
@@ -292,7 +292,7 @@ class MemcacheCacheHandler(CacheHandler):
         Initialize MemcacheCacheHandler instance.
 
         :param memcache: Memcache client object provided by pymemcache.
-        :param key: (Optional) The key to use to store the token in the cache.
+        :param key: (Optional) The key used to store the token in the cache.
         """
         self.memcache = memcache
         self.key = key or "token_info"

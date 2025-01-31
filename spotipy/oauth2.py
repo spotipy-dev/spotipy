@@ -207,13 +207,13 @@ class SpotifyClientCredentials(SpotifyAuthBase):
     OAUTH_TOKEN_URL = "https://accounts.spotify.com/api/token"
 
     def __init__(
-        self,
-        client_id=None,
-        client_secret=None,
-        cache_handler=None,
-        proxies=None,
-        requests_session=True,
-        requests_timeout=None
+            self,
+            client_id=None,
+            client_secret=None,
+            cache_handler=None,
+            proxies=None,
+            requests_session=True,
+            requests_timeout=None
     ):
         """
         Creates a Client Credentials Flow Manager.
@@ -227,15 +227,15 @@ class SpotifyClientCredentials(SpotifyAuthBase):
         :param client_id: Must be supplied or set as environment variable.
         :param client_secret: Must be supplied or set as environment variable.
         :param cache_handler: An instance of the `CacheHandler` class to handle
-                              getting and saving cached authorization tokens.
-                              Optional, will otherwise use `CacheFileHandler`.
+            getting and saving cached authorization tokens.
+            Optional, will otherwise use `CacheFileHandler`.
         :param proxies: Optional, proxy for the requests library to route through.
         :param requests_session: A Requests session object or a true value to create one.
-                                 A false value disables sessions.
-                                 It should generally be a good idea to keep sessions enabled
-                                 for performance reasons (connection pooling).
+            A false value disables sessions.
+            It should generally be a good idea to keep sessions enabled
+            for performance reasons (connection pooling).
         :param requests_timeout: Optional, tell Requests to stop waiting for a response after
-                                 a given number of seconds.
+            a given number of seconds.
         """
 
         super().__init__(requests_session)
@@ -259,7 +259,7 @@ class SpotifyClientCredentials(SpotifyAuthBase):
         Else fetches a new token and returns it.
 
         :param check_cache: If true, checks for a locally stored token
-                            before requesting a new token.
+            before requesting a new token.
         :return: The access token.
         """
 
@@ -344,20 +344,20 @@ class SpotifyOAuth(SpotifyAuthBase):
         :param redirect_uri: Must be supplied or set as environment variable.
         :param state: Optional, no verification is performed.
         :param scope: Optional, either a string of scopes, or an iterable with elements of type
-                      `Scope` or `str`. E.g., {Scope.user_modify_playback_state, Scope.user_library_read}.
+            `Scope` or `str`. E.g., {Scope.user_modify_playback_state, Scope.user_library_read}.
         :param cache_handler: An instance of the `CacheHandler` class to handle
-                              getting and saving cached authorization tokens.
-                              Optional, will otherwise use `CacheFileHandler`.
+            getting and saving cached authorization tokens.
+            Optional, will otherwise use `CacheFileHandler`.
         :param proxies: Optional, proxy for the requests library to route through.
         :param show_dialog: Optional, interpreted as boolean.
         :param requests_session: A Requests session object or a true value to create one.
-                                 A false value disables sessions.
-                                 It should generally be a good idea to keep sessions enabled
-                                 for performance reasons (connection pooling).
+            A false value disables sessions.
+            It should generally be a good idea to keep sessions enabled
+            for performance reasons (connection pooling).
         :param requests_timeout: Optional, tell Requests to stop waiting for a response after
-                                 a given number of seconds.
+            a given number of seconds.
         :param open_browser: Optional, whether the web browser should be opened to
-                             authorize a user.
+            authorize a user.
         """
 
         super().__init__(requests_session)
@@ -565,7 +565,7 @@ class SpotifyOAuth(SpotifyAuthBase):
 
         :param code: The response code.
         :param check_cache: If true, checks for a locally stored token
-                            before requesting a new token.
+            before requesting a new token.
         :return: The access token.
         """
         if check_cache:
@@ -673,16 +673,16 @@ class SpotifyPKCE(SpotifyAuthBase):
     OAUTH_TOKEN_URL = "https://accounts.spotify.com/api/token"
 
     def __init__(
-        self,
-        client_id=None,
-        redirect_uri=None,
-        state=None,
-        scope=None,
-        cache_handler=None,
-        proxies=None,
-        requests_timeout=None,
-        requests_session=True,
-        open_browser=True
+            self,
+            client_id=None,
+            redirect_uri=None,
+            state=None,
+            scope=None,
+            cache_handler=None,
+            proxies=None,
+            requests_timeout=None,
+            requests_session=True,
+            open_browser=True
     ):
         """
         Creates Auth Manager with the PKCE Auth flow.
@@ -691,19 +691,19 @@ class SpotifyPKCE(SpotifyAuthBase):
         :param redirect_uri: Must be supplied or set as environment variable.
         :param state: Optional, no verification is performed.
         :param scope: Optional, either a string of scopes, or an iterable with elements of type
-                      `Scope` or `str`. E.g., {Scope.user_modify_playback_state, Scope.user_library_read}.
+            `Scope` or `str`. E.g., {Scope.user_modify_playback_state, Scope.user_library_read}.
         :param cache_handler: An instance of the `CacheHandler` class to handle
-                              getting and saving cached authorization tokens.
-                              Optional, will otherwise use `CacheFileHandler`.
+            getting and saving cached authorization tokens.
+            Optional, will otherwise use `CacheFileHandler`.
         :param proxies: Optional, proxy for the requests library to route through.
         :param requests_timeout: Optional, tell Requests to stop waiting for a response after
-                                 a given number of seconds.
+            a given number of seconds.
         :param requests_session: A Requests session object or a true value to create one.
-                                 A false value disables sessions.
-                                 It should generally be a good idea to keep sessions enabled
-                                 for performance reasons (connection pooling).
+            A false value disables sessions.
+            It should generally be a good idea to keep sessions enabled
+            for performance reasons (connection pooling).
         :param open_browser: Optional, whether the web browser should be opened to
-                             authorize a user.
+            authorize a user.
         """
 
         super().__init__(requests_session)
@@ -912,7 +912,7 @@ class SpotifyPKCE(SpotifyAuthBase):
 
         :param code: The response code from authentication.
         :param check_cache: If true, checks for a locally stored token
-                            before requesting a new token.
+            before requesting a new token.
         :return: The access token.
         """
 
@@ -1031,8 +1031,6 @@ class RequestHandler(BaseHTTPRequestHandler):
 
         Parses the URL to extract the state and authorization code, or an error if present.
         Sends an HTML response indicating the authentication status.
-
-        :raises SpotifyOauthError: If an error occurs during URL parsing.
         """
         self.server.auth_code = self.server.error = None
         try:

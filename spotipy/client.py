@@ -376,15 +376,18 @@ class Spotify:
         return self._get(f"artists/?ids={','.join(tlist)}")
 
     def artist_albums(
-        self, artist_id, album_type=None, include_groups=None, country=None, limit=20, offset=0
+            self, artist_id, album_type=None, include_groups=None, country=None, limit=20, offset=0
     ):
         """
         Get Spotify catalog information about an artist's albums.
 
         :param artist_id: An artist ID, URI or URL.
         :param album_type: The type of album.
-        :param include_groups: The groups to include.
+        :param include_groups: The types of items to return. One or more of 'album', 'single',
+            'appears_on', 'compilation'. If multiple types are desired,
+            pass in a comma separated string; e.g., 'album,single'.
         :param country: An ISO 3166-1 alpha-2 country code.
+            Limit the response to one particular country.
         :param limit: The number of items to return.
         :param offset: The index of the first item to return.
         :return: The artist's albums information.
@@ -487,9 +490,11 @@ class Spotify:
         Returns a single show given the show's ID, URI or URL.
 
         :param show_id: The show ID, URI or URL.
-        :param market: An ISO 3166-1 alpha-2 country code. The show must be available in the given market.
-                       If user-based authorization is in use, the user's country takes precedence.
-                       If neither market nor user country are provided, the content is considered unavailable for the client.
+        :param market: An ISO 3166-1 alpha-2 country code.
+            The show must be available in the given market.
+            If user-based authorization is in use, the user's country takes precedence.
+            If neither market nor user country are provided,
+            the content is considered unavailable for the client.
         :return: The show information.
         """
 
@@ -501,9 +506,11 @@ class Spotify:
         Returns a list of shows given the show IDs, URIs, or URLs.
 
         :param shows: A list of show IDs, URIs or URLs.
-        :param market: An ISO 3166-1 alpha-2 country code. The shows must be available in the given market.
-                       If user-based authorization is in use, the user's country takes precedence.
-                       If neither market nor user country are provided, the content is considered unavailable for the client.
+        :param market: An ISO 3166-1 alpha-2 country code.
+            The shows must be available in the given market.
+            If user-based authorization is in use, the user's country takes precedence.
+            If neither market nor user country are provided,
+            the content is considered unavailable for the client.
         :return: The list of shows information.
         """
 
@@ -515,11 +522,13 @@ class Spotify:
         Get Spotify catalog information about a show's episodes.
 
         :param show_id: The show ID, URI or URL.
-        :param limit: The number of items to return. Default: 50.
-        :param offset: The index of the first item to return. Default: 0.
-        :param market: An ISO 3166-1 alpha-2 country code. The episodes must be available in the given market.
-                       If user-based authorization is in use, the user's country takes precedence.
-                       If neither market nor user country are provided, the content is considered unavailable for the client.
+        :param limit: The number of items to return.
+        :param offset: The index of the first item to return.
+        :param market: An ISO 3166-1 alpha-2 country code.
+            The episodes must be available in the given market.
+            If user-based authorization is in use, the user's country takes precedence.
+            If neither market nor user country are provided,
+            the content is considered unavailable for the client.
         :return: The show's episodes information.
         """
 
@@ -533,9 +542,11 @@ class Spotify:
         Returns a single episode given the episode's ID, URI or URL.
 
         :param episode_id: The episode ID, URI or URL.
-        :param market: An ISO 3166-1 alpha-2 country code. The episode must be available in the given market.
-                       If user-based authorization is in use, the user's country takes precedence.
-                       If neither market nor user country are provided, the content is considered unavailable for the client.
+        :param market: An ISO 3166-1 alpha-2 country code.
+            The episode must be available in the given market.
+            If user-based authorization is in use, the user's country takes precedence.
+            If neither market nor user country are provided,
+            the content is considered unavailable for the client.
         :return: The episode information.
         """
 
@@ -547,9 +558,11 @@ class Spotify:
         Returns a list of episodes given the episode IDs, URIs, or URLs.
 
         :param episodes: A list of episode IDs, URIs or URLs.
-        :param market: An ISO 3166-1 alpha-2 country code. The episodes must be available in the given market.
-                       If user-based authorization is in use, the user's country takes precedence.
-                       If neither market nor user country are provided, the content is considered unavailable for the client.
+        :param market: An ISO 3166-1 alpha-2 country code.
+            The episodes must be available in the given market.
+            If user-based authorization is in use, the user's country takes precedence.
+            If neither market nor user country are provided,
+            the content is considered unavailable for the client.
         :return: The list of episodes information.
         """
 
@@ -560,13 +573,19 @@ class Spotify:
         """
         Searches for an item.
 
-        :param q: The search query.
-        :param limit: The number of items to return. Default: 10.
-        :param offset: The index of the first item to return. Default: 0.
-        :param type: The type of item to search for. Default: "track".
-        :param market: An ISO 3166-1 alpha-2 country code. The item must be available in the given market.
-                       If user-based authorization is in use, the user's country takes precedence.
-                       If neither market nor user country are provided, the content is considered unavailable for the client.
+        :param q: The search query. (see how to write a query in the official documentation:
+            https://developer.spotify.com/documentation/web-api/reference/search/)
+        :param limit: The number of items to return (min = 1, default = 10, max = 50).
+        :param offset: The index of the first item to return.
+            The limit is applied within each type, not on the total response.
+        :param type: The type of item to search for. One or more of 'artist', 'album',
+            'track', 'playlist', 'show', and 'episode'.  If multiple types are desired,
+            pass in a comma separated string; e.g., 'track,album,episode'.
+        :param market: An ISO 3166-1 alpha-2 country code.
+            The item must be available in the given market.
+            If user-based authorization is in use, the user's country takes precedence.
+            If neither market nor user country are provided,
+            the content is considered unavailable for the client.
         :return: The search results.
         """
         return self._get(
@@ -577,13 +596,19 @@ class Spotify:
         """
         (Experimental) Searches multiple markets for an item.
 
-        :param q: The search query.
-        :param limit: The number of items to return per market. Default: 10.
-        :param offset: The index of the first item to return per market. Default: 0.
-        :param type: The type of item to search for. Default: "track".
-        :param markets: A list of ISO 3166-1 alpha-2 country codes. The item must be available in the given markets.
-                        If user-based authorization is in use, the user's country takes precedence.
-                        If neither market nor user country are provided, the content is considered unavailable for the client.
+        :param q: The search query. (see how to write a query in the official documentation:
+            https://developer.spotify.com/documentation/web-api/reference/search/)
+        :param limit: The number of items to return.
+        :param offset: The index of the first item to return (min = 1, default = 10, max = 50).
+            The limit is applied within each type, not on the total response.
+        :param type: The type of item to search for. One or more of 'artist', 'album',
+            'track', 'playlist', 'show', and 'episode'.  If multiple types are desired,
+            pass in a comma separated string; e.g., 'track,album,episode'.
+        :param markets: A list of ISO 3166-1 alpha-2 country codes.
+            The item must be available in the given markets.
+            If user-based authorization is in use, the user's country takes precedence.
+            If neither market nor user country are provided,
+            the content is considered unavailable for the client.
         :param total: The total number of items to return across all markets.
         :return: The search results.
         """
@@ -617,8 +642,8 @@ class Spotify:
         """
         Get current user playlists without requiring getting their profile.
 
-        :param limit: The number of items to return. Default: 50.
-        :param offset: The index of the first item to return. Default: 0.
+        :param limit: The number of items to return.
+        :param offset: The index of the first item to return.
         :return: The current user's playlists.
         """
         return self._get("me/playlists", limit=limit, offset=offset)
@@ -642,21 +667,21 @@ class Spotify:
         )
 
     def playlist_items(
-        self,
-        playlist_id,
-        fields=None,
-        limit=100,
-        offset=0,
-        market=None,
-        additional_types=("track", "episode")
+            self,
+            playlist_id,
+            fields=None,
+            limit=100,
+            offset=0,
+            market=None,
+            additional_types=("track", "episode")
     ):
         """
         Get full details of the tracks and episodes of a playlist.
 
         :param playlist_id: The playlist ID, URI or URL.
         :param fields: Which fields to return.
-        :param limit: The maximum number of tracks to return. Default: 100.
-        :param offset: The index of the first track to return. Default: 0.
+        :param limit: The maximum number of tracks to return.
+        :param offset: The index of the first track to return.
         :param market: An ISO 3166-1 alpha-2 country code.
         :param additional_types: List of item types to return. Valid types are: track and episode.
         :return: The playlist's items information.
@@ -701,8 +726,8 @@ class Spotify:
         Gets playlists of a user.
 
         :param user: The ID of the user.
-        :param limit: The number of items to return. Default: 50.
-        :param offset: The index of the first item to return. Default: 0.
+        :param limit: The number of items to return.
+        :param offset: The index of the first item to return.
         :return: The user's playlists.
         """
         return self._get(f"users/{user}/playlists", limit=limit, offset=offset)
@@ -713,8 +738,8 @@ class Spotify:
 
         :param user: The ID of the user.
         :param name: The name of the playlist.
-        :param public: Whether the playlist is public. Default: True.
-        :param collaborative: Whether the playlist is collaborative. Default: False.
+        :param public: Whether the playlist is public.
+        :param collaborative: Whether the playlist is collaborative.
         :param description: The description of the playlist.
         :return: The created playlist information.
         """
@@ -728,12 +753,12 @@ class Spotify:
         return self._post(f"users/{user}/playlists", payload=data)
 
     def playlist_change_details(
-        self,
-        playlist_id,
-        name=None,
-        public=None,
-        collaborative=None,
-        description=None,
+            self,
+            playlist_id,
+            name=None,
+            public=None,
+            collaborative=None,
+            description=None,
     ):
         """
         Change a playlist's details.
@@ -771,14 +796,15 @@ class Spotify:
         )
 
     def playlist_add_items(
-        self, playlist_id, items, position=None
+            self, playlist_id, items, position=None
     ):
         """
         Add one or more items to a user's playlist.
 
         :param playlist_id: The playlist ID, URI or URL.
         :param items: A list of item URIs, URLs or IDs.
-        :param position: The position to insert the items, a zero-based index. If omitted, the items will be appended to the playlist.
+        :param position: The position to insert the items, a zero-based index.
+            If omitted, the items will be appended to the playlist.
         :return: The response from the API.
         """
         for item in items:
@@ -806,12 +832,12 @@ class Spotify:
         return self._put(f"playlists/{plid}/tracks", payload=payload)
 
     def playlist_reorder_items(
-        self,
-        playlist_id,
-        range_start,
-        insert_before,
-        range_length=1,
-        snapshot_id=None,
+            self,
+            playlist_id,
+            range_start,
+            insert_before,
+            range_length=1,
+            snapshot_id=None,
     ):
         """
         Reorder a playlist's items.
@@ -819,7 +845,7 @@ class Spotify:
         :param playlist_id: The playlist ID, URI or URL.
         :param range_start: The position of the first item to be reordered.
         :param insert_before: The position where the items should be inserted.
-        :param range_length: The number of items to be reordered. Default: 1.
+        :param range_length: The number of items to be reordered.
         :param snapshot_id: The playlist's snapshot ID.
         :return: The response from the API.
         """
@@ -834,7 +860,7 @@ class Spotify:
         return self._put(f"playlists/{plid}/tracks", payload=payload)
 
     def playlist_remove_all_occurrences_of_items(
-        self, playlist_id, items, snapshot_id=None
+            self, playlist_id, items, snapshot_id=None
     ):
         """
         Remove all occurrences of specific items from a playlist.
@@ -853,7 +879,7 @@ class Spotify:
         return self._delete(f"playlists/{plid}/tracks", payload=payload)
 
     def playlist_remove_specific_occurrences_of_items(
-        self, playlist_id, items, snapshot_id=None
+            self, playlist_id, items, snapshot_id=None
     ):
         """
         Remove specific occurrences of items from a playlist.
@@ -882,7 +908,7 @@ class Spotify:
         Add the current authenticated user as a follower of a playlist.
 
         :param playlist_id: The ID of the playlist.
-        :param public: Whether the playlist should be followed publicly. Default: True.
+        :param public: Whether the playlist should be followed publicly.
         :return: The response from the API.
         """
         return self._put(
@@ -891,7 +917,7 @@ class Spotify:
         )
 
     def playlist_is_following(
-        self, playlist_id, user_ids
+            self, playlist_id, user_ids
     ):
         """
         Check if one or more users are following a playlist.
@@ -932,8 +958,8 @@ class Spotify:
         """
         Get a list of the albums saved in the current authorized user's library.
 
-        :param limit: The number of items to return. Default: 20.
-        :param offset: The index of the first item to return. Default: 0.
+        :param limit: The number of items to return.
+        :param offset: The index of the first item to return.
         :param market: An ISO 3166-1 alpha-2 country code.
         :return: The list of saved albums.
         """
@@ -980,8 +1006,8 @@ class Spotify:
         """
         Get a list of the tracks saved in the current authorized user's library.
 
-        :param limit: The number of items to return. Default: 20.
-        :param offset: The index of the first item to return. Default: 0.
+        :param limit: The number of items to return.
+        :param offset: The index of the first item to return.
         :param market: An ISO 3166-1 alpha-2 country code.
         :return: The list of saved tracks.
         """
@@ -1021,8 +1047,8 @@ class Spotify:
         """
         Get a list of the episodes saved in the current authorized user's library.
 
-        :param limit: The number of items to return. Default: 20.
-        :param offset: The index of the first item to return. Default: 0.
+        :param limit: The number of items to return.
+        :param offset: The index of the first item to return.
         :param market: An ISO 3166-1 alpha-2 country code.
         :return: The list of saved episodes.
         """
@@ -1068,8 +1094,8 @@ class Spotify:
         """
         Get a list of the shows saved in the current authorized user's library.
 
-        :param limit: The number of items to return. Default: 20.
-        :param offset: The index of the first item to return. Default: 0.
+        :param limit: The number of items to return.
+        :param offset: The index of the first item to return.
         :param market: An ISO 3166-1 alpha-2 country code.
         :return: The list of saved shows.
         """
@@ -1116,7 +1142,7 @@ class Spotify:
         """
         Get a list of the artists followed by the current authorized user.
 
-        :param limit: The number of artists to return. Default: 20.
+        :param limit: The number of artists to return.
         :param after: The last artist ID retrieved from the previous request.
         :return: The list of followed artists.
         """
@@ -1147,14 +1173,15 @@ class Spotify:
         )
 
     def current_user_top_artists(
-        self, limit=20, offset=0, time_range="medium_term"
+            self, limit=20, offset=0, time_range="medium_term"
     ):
         """
         Get the current user's top artists.
 
-        :param limit: The number of entities to return. Default: 20.
-        :param offset: The index of the first entity to return. Default: 0.
-        :param time_range: Over what time frame are the affinities computed. Valid values: short_term, medium_term, long_term.
+        :param limit: The number of entities to return.
+        :param offset: The index of the first entity to return.
+        :param time_range: Over what time frame are the affinities computed.
+            Valid values: short_term, medium_term, long_term.
         :return: The list of top artists.
         """
         return self._get(
@@ -1162,14 +1189,15 @@ class Spotify:
         )
 
     def current_user_top_tracks(
-        self, limit=20, offset=0, time_range="medium_term"
+            self, limit=20, offset=0, time_range="medium_term"
     ):
         """
         Get the current user's top tracks.
 
-        :param limit: The number of entities to return. Default: 20.
-        :param offset: The index of the first entity to return. Default: 0.
-        :param time_range: Over what time frame are the affinities computed. Valid values: short_term, medium_term, long_term.
+        :param limit: The number of entities to return.
+        :param offset: The index of the first entity to return.
+        :param time_range: Over what time frame are the affinities computed.
+            Valid values: short_term, medium_term, long_term.
         :return: The list of top tracks.
         """
         return self._get(
@@ -1180,9 +1208,11 @@ class Spotify:
         """
         Get the current user's recently played tracks.
 
-        :param limit: The number of entities to return. Default: 50.
-        :param after: Unix timestamp in milliseconds. Returns all items after (but not including) this cursor position. Cannot be used if before is specified.
-        :param before: Unix timestamp in milliseconds. Returns all items before (but not including) this cursor position. Cannot be used if after is specified.
+        :param limit: The number of entities to return.
+        :param after: Unix timestamp in milliseconds. Returns all items after (but not including)
+            this cursor position. Cannot be used if before is specified.
+        :param before: Unix timestamp in milliseconds. Returns all items before (but not including)
+            this cursor position. Cannot be used if after is specified.
         :return: The list of recently played tracks.
         """
         return self._get(
@@ -1237,16 +1267,17 @@ class Spotify:
         return self._delete(f"me/following?type=user&ids={','.join(ids)}")
 
     def featured_playlists(
-        self, locale=None, country=None, timestamp=None, limit=20, offset=0
+            self, locale=None, country=None, timestamp=None, limit=20, offset=0
     ):
         """
          Get a list of Spotify featured playlists.
 
-         :param locale: The desired language, consisting of an ISO 639-1 language code and an ISO 3166-1 alpha-2 country code, joined by an underscore.
+         :param locale: The desired language, consisting of an ISO 639-1 language code
+            and an ISO 3166-1 alpha-2 country code, joined by an underscore.
          :param country: An ISO 3166-1 alpha-2 country code.
          :param timestamp: A timestamp in ISO 8601 format.
-         :param limit: The number of items to return. Default: 20.
-         :param offset: The index of the first item to return. Default: 0.
+         :param limit: The number of items to return.
+         :param offset: The index of the first item to return.
          :return: The list of featured playlists.
          """
         warnings.warn(
@@ -1268,8 +1299,8 @@ class Spotify:
         Get a list of new album releases featured in Spotify.
 
         :param country: An ISO 3166-1 alpha-2 country code.
-        :param limit: The number of items to return. Default: 20.
-        :param offset: The index of the first item to return. Default: 0.
+        :param limit: The number of items to return.
+        :param offset: The index of the first item to return.
         :return: The list of new releases.
         """
         return self._get(
@@ -1278,11 +1309,13 @@ class Spotify:
 
     def category(self, category_id, country=None, locale=None):
         """
-        Get a single category used to tag items in Spotify (on, for example, the Spotify player’s “Browse” tab).
+        Get a single category used to tag items in Spotify
+        (on, for example, the Spotify player’s “Browse” tab).
 
         :param category_id: The Spotify category ID.
         :param country: An ISO 3166-1 alpha-2 country code.
-        :param locale: The desired language, consisting of an ISO 639-1 language code and an ISO 3166-1 alpha-2 country code, joined by an underscore.
+        :param locale: The desired language, consisting of an ISO 639-1 language code
+            and an ISO 3166-1 alpha-2 country code, joined by an underscore.
         :return: The category information.
         """
         return self._get(
@@ -1291,12 +1324,14 @@ class Spotify:
 
     def categories(self, country=None, locale=None, limit=20, offset=0):
         """
-        Get a list of categories used to tag items in Spotify (on, for example, the Spotify player’s “Browse” tab).
+        Get a list of categories used to tag items in Spotify
+        (on, for example, the Spotify player’s “Browse” tab).
 
         :param country: An ISO 3166-1 alpha-2 country code.
-        :param locale: The desired language, consisting of an ISO 639-1 language code and an ISO 3166-1 alpha-2 country code, joined by an underscore.
-        :param limit: The number of items to return. Default: 20.
-        :param offset: The index of the first item to return. Default: 0.
+        :param locale: The desired language, consisting of an ISO 639-1 language code
+            and an ISO 3166-1 alpha-2 country code, joined by an underscore.
+        :param limit: The number of items to return.
+        :param offset: The index of the first item to return.
         :return: The list of categories.
         """
         return self._get(
@@ -1308,15 +1343,15 @@ class Spotify:
         )
 
     def category_playlists(
-        self, category_id=None, country=None, limit=20, offset=0
+            self, category_id=None, country=None, limit=20, offset=0
     ):
         """
         Get a list of Spotify playlists tagged with a particular category.
 
         :param category_id: The Spotify category ID.
         :param country: An ISO 3166-1 alpha-2 country code.
-        :param limit: The number of items to return. Default: 20.
-        :param offset: The index of the first item to return. Default: 0.
+        :param limit: The number of items to return.
+        :param offset: The index of the first item to return.
         :return: The list of playlists.
         """
         warnings.warn(
@@ -1332,13 +1367,13 @@ class Spotify:
         )
 
     def recommendations(
-        self,
-        seed_artists=None,
-        seed_genres=None,
-        seed_tracks=None,
-        limit=20,
-        country=None,
-        **kwargs
+            self,
+            seed_artists=None,
+            seed_genres=None,
+            seed_tracks=None,
+            limit=20,
+            country=None,
+            **kwargs
     ):
         """
         Get a list of recommended tracks based on the given seed artists, genres, and tracks.
@@ -1346,7 +1381,7 @@ class Spotify:
         :param seed_artists: A list of Spotify IDs for seed artists.
         :param seed_genres: A list of seed genres.
         :param seed_tracks: A list of Spotify IDs for seed tracks.
-        :param limit: The number of items to return. Default: 20.
+        :param limit: The number of items to return.
         :param country: An ISO 3166-1 alpha-2 country code.
         :param kwargs: Additional parameters for recommendations.
         :return: The list of recommended tracks.
@@ -1493,7 +1528,7 @@ class Spotify:
         return self._put("me/player", payload=data)
 
     def start_playback(
-        self, device_id=None, context_uri=None, uris=None, offset=None, position_ms=None
+            self, device_id=None, context_uri=None, uris=None, offset=None, position_ms=None
     ):
         """
         Start or resume user's playback.
@@ -1503,6 +1538,8 @@ class Spotify:
         :param uris: List of Spotify track URIs.
         :param offset: Offset into context by index or track.
         :param position_ms: Indicates from what position to start playback.
+            Must be a positive number. Passing in a position that is greater than the length
+            of the track will cause the player to start playing the next song.
         :return: The response from the API.
         """
         if context_uri is not None and uris is not None:
@@ -1632,7 +1669,8 @@ class Spotify:
         Add a song to the end of a user's queue.
 
         If device A is currently playing music, and you try to add to the queue
-        and pass in the ID for device B, you will get a 'Player command failed: Restriction violated' error.
+        and pass in the ID for device B,
+        you will get a 'Player command failed: Restriction violated' error.
         It is recommended to leave device_id as None so that the active device is targeted.
 
         :param uri: The song URI, ID, or URL.
@@ -1774,8 +1812,8 @@ class Spotify:
 
         :param id: The Spotify ID for the audiobook.
         :param market: An ISO 3166-1 alpha-2 country code.
-        :param limit: The maximum number of items to return. Default: 20.
-        :param offset: The index of the first item to return. Default: 0.
+        :param limit: The maximum number of items to return.
+        :param offset: The index of the first item to return.
         :return: The audiobook's chapters information.
         """
         audiobook_id = self._get_id("audiobook", id)
