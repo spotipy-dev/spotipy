@@ -28,6 +28,13 @@ logger = logging.getLogger(__name__)
 
 
 def _make_authorization_headers(client_id, client_secret):
+    """
+    Create authorization headers for Spotify API requests.
+
+    :param client_id: The client ID provided by Spotify.
+    :param client_secret: The client secret provided by Spotify.
+    :return: A dictionary containing the authorization headers.
+    """
     auth_header = base64.b64encode(
         f"{client_id}:{client_secret}".encode("ascii")
     )
@@ -35,6 +42,14 @@ def _make_authorization_headers(client_id, client_secret):
 
 
 def _ensure_value(value, env_key):
+    """
+    Ensure that a value is provided, either directly or via an environment variable.
+
+    :param value: The value to check.
+    :param env_key: The key for the environment variable to check if the value is not provided.
+    :return: The value or the value from the environment variable.
+    :raises SpotifyOauthError: If neither the value nor the environment variable is set.
+    """
     env_val = CLIENT_CREDS_ENV_VARS[env_key]
     _val = value or os.getenv(env_val)
     if _val is None:
@@ -44,6 +59,11 @@ def _ensure_value(value, env_key):
 
 
 class SpotifyAuthBase:
+    """
+    Base class for Spotify authentication.
+
+    :param requests_session: A Requests session object or a boolean value to create one.
+    """
 
     def __init__(self, requests_session):
         if isinstance(requests_session, requests.Session):
@@ -59,6 +79,10 @@ class SpotifyAuthBase:
         Accepts a string of scopes, or an iterable with elements of type
         `Scope` or `str` and returns a space-separated string of scopes.
         Returns `None` if the argument is `None`.
+
+        :param scope: A string or iterable of scopes.
+        :return: A space-separated string of scopes or `None`.
+        :raises TypeError: If the scope is not a string or iterable.
         """
 
         # TODO: do we need to sort the scopes?
@@ -71,7 +95,7 @@ class SpotifyAuthBase:
 
         if isinstance(scope, Iterable):
 
-            # Assume all of the iterable's elements are of the same type.
+            # Assume all the iterable's elements are of the same type.
             # If the iterable is empty, then return None.
             first_element = next(iter(scope), None)
 
@@ -120,11 +144,24 @@ class SpotifyAuthBase:
 
     @staticmethod
     def is_token_expired(token_info):
+        """
+        Check if the token is expired.
+
+        :param token_info: The token information.
+        :return: `True` if the token is expired, `False` otherwise.
+        """
         now = int(time.time())
         return token_info["expires_at"] - now < 60
 
     @staticmethod
     def _is_scope_subset(needle_scope, haystack_scope):
+        """
+        Check if one scope is a subset of another.
+
+        :param needle_scope: The scope to check.
+        :param haystack_scope: The scope to check against.
+        :return: `True` if `needle_scope` is a subset of `haystack_scope`, `False` otherwise.
+        """
         needle_scope = set(needle_scope.split()) if needle_scope else set()
         haystack_scope = (
             set(haystack_scope.split()) if haystack_scope else set()
@@ -132,6 +169,12 @@ class SpotifyAuthBase:
         return needle_scope <= haystack_scope
 
     def _handle_oauth_error(self, http_error):
+        """
+        Handle OAuth errors.
+
+        :param http_error: The HTTP error.
+        :raises SpotifyOauthError: If an OAuth error occurs.
+        """
         response = http_error.response
         try:
             error_payload = response.json()
@@ -158,16 +201,19 @@ class SpotifyAuthBase:
 
 
 class SpotifyClientCredentials(SpotifyAuthBase):
+    """
+    Implements Client Credentials Flow for Spotify's OAuth implementation.
+    """
     OAUTH_TOKEN_URL = "https://accounts.spotify.com/api/token"
 
     def __init__(
-        self,
-        client_id=None,
-        client_secret=None,
-        cache_handler=None,
-        proxies=None,
-        requests_session=True,
-        requests_timeout=None
+            self,
+            client_id=None,
+            client_secret=None,
+            cache_handler=None,
+            proxies=None,
+            requests_session=True,
+            requests_timeout=None
     ):
         """
         Creates a Client Credentials Flow Manager.
@@ -176,26 +222,20 @@ class SpotifyClientCredentials(SpotifyAuthBase):
         Only endpoints that do not access user information can be accessed.
         This means that endpoints that require authorization scopes cannot be accessed.
         The advantage, however, of this authorization flow is that it does not require any
-        user interaction
+        user interaction.
 
-        You can either provide a client_id and client_secret to the
-        constructor or set SPOTIPY_CLIENT_ID and SPOTIPY_CLIENT_SECRET
-        environment variables
-
-        Parameters:
-             * client_id: Must be supplied or set as environment variable
-             * client_secret: Must be supplied or set as environment variable
-             * cache_handler: An instance of the `CacheHandler` class to handle
-                              getting and saving cached authorization tokens.
-                              Optional, will otherwise use `CacheFileHandler`.
-             * proxies: Optional, proxy for the requests library to route through
-             * requests_session: A Requests session object or a true value to create one.
-                                 A false value disables sessions.
-                                 It should generally be a good idea to keep sessions enabled
-                                 for performance reasons (connection pooling).
-             * requests_timeout: Optional, tell Requests to stop waiting for a response after
-                                 a given number of seconds
-
+        :param client_id: Must be supplied or set as environment variable.
+        :param client_secret: Must be supplied or set as environment variable.
+        :param cache_handler: An instance of the `CacheHandler` class to handle
+            getting and saving cached authorization tokens.
+            Optional, will otherwise use `CacheFileHandler`.
+        :param proxies: Optional, proxy for the requests library to route through.
+        :param requests_session: A Requests session object or a true value to create one.
+            A false value disables sessions.
+            It should generally be a good idea to keep sessions enabled
+            for performance reasons (connection pooling).
+        :param requests_timeout: Optional, tell Requests to stop waiting for a response after
+            a given number of seconds.
         """
 
         super().__init__(requests_session)
@@ -215,12 +255,12 @@ class SpotifyClientCredentials(SpotifyAuthBase):
 
     def get_access_token(self, check_cache=True):
         """
-        If a valid access token is in memory, returns it
-        Else fetches a new token and returns it
+        If a valid access token is in memory, returns it.
+        Else fetches a new token and returns it.
 
-            Parameters:
-            - check_cache - if true, checks for a locally stored token
-                            before requesting a new token.
+        :param check_cache: If true, checks for a locally stored token
+            before requesting a new token.
+        :return: The access token.
         """
 
         if check_cache:
@@ -234,7 +274,12 @@ class SpotifyClientCredentials(SpotifyAuthBase):
         return token_info["access_token"]
 
     def _request_access_token(self):
-        """Gets client credentials access token """
+        """
+        Gets client credentials access token.
+
+        :return: The token information.
+        :raises SpotifyOauthError: If an OAuth error occurs.
+        """
         payload = {"grant_type": "client_credentials"}
 
         headers = _make_authorization_headers(
@@ -261,8 +306,10 @@ class SpotifyClientCredentials(SpotifyAuthBase):
 
     def _add_custom_values_to_token_info(self, token_info):
         """
-        Store some values that aren't directly provided by a Web API
-        response.
+        Store some values that aren't directly provided by a Web API response.
+
+        :param token_info: The token information.
+        :return: The token information with additional values.
         """
         token_info["expires_at"] = int(time.time()) + token_info["expires_in"]
         return token_info
@@ -290,29 +337,27 @@ class SpotifyOAuth(SpotifyAuthBase):
             open_browser=True
     ):
         """
-        Creates a SpotifyOAuth object
+        Creates a SpotifyOAuth object.
 
-        Parameters:
-             * client_id: Must be supplied or set as environment variable
-             * client_secret: Must be supplied or set as environment variable
-             * redirect_uri: Must be supplied or set as environment variable
-             * state: Optional, no verification is performed
-             * scope: Optional, either a string of scopes, or an iterable with elements of type
-                      `Scope` or `str`. E.g.,
-                      {Scope.user_modify_playback_state, Scope.user_library_read}
-             * cache_handler: An instance of the `CacheHandler` class to handle
-                              getting and saving cached authorization tokens.
-                              Optional, will otherwise use `CacheFileHandler`.
-             * proxies: Optional, proxy for the requests library to route through
-             * show_dialog: Optional, interpreted as boolean
-             * requests_session: A Requests session object or a true value to create one.
-                                 A false value disables sessions.
-                                 It should generally be a good idea to keep sessions enabled
-                                 for performance reasons (connection pooling).
-             * requests_timeout: Optional, tell Requests to stop waiting for a response after
-                                 a given number of seconds
-             * open_browser: Optional, whether the web browser should be opened to
-                             authorize a user
+        :param client_id: Must be supplied or set as environment variable.
+        :param client_secret: Must be supplied or set as environment variable.
+        :param redirect_uri: Must be supplied or set as environment variable.
+        :param state: Optional, no verification is performed.
+        :param scope: Optional, either a string of scopes, or an iterable with elements of type
+            `Scope` or `str`. E.g., {Scope.user_modify_playback_state, Scope.user_library_read}.
+        :param cache_handler: An instance of the `CacheHandler` class to handle
+            getting and saving cached authorization tokens.
+            Optional, will otherwise use `CacheFileHandler`.
+        :param proxies: Optional, proxy for the requests library to route through.
+        :param show_dialog: Optional, interpreted as boolean.
+        :param requests_session: A Requests session object or a true value to create one.
+            A false value disables sessions.
+            It should generally be a good idea to keep sessions enabled
+            for performance reasons (connection pooling).
+        :param requests_timeout: Optional, tell Requests to stop waiting for a response after
+            a given number of seconds.
+        :param open_browser: Optional, whether the web browser should be opened to
+            authorize a user.
         """
 
         super().__init__(requests_session)
@@ -338,6 +383,12 @@ class SpotifyOAuth(SpotifyAuthBase):
         self.open_browser = open_browser
 
     def validate_token(self, token_info):
+        """
+        Validate the token information.
+
+        :param token_info: The token information.
+        :return: The validated token information or None if invalid.
+        """
         if token_info is None:
             return None
 
@@ -355,7 +406,11 @@ class SpotifyOAuth(SpotifyAuthBase):
         return token_info
 
     def get_authorize_url(self, state=None):
-        """ Gets the URL to use to authorize this app
+        """
+        Get the URL to use to authorize this app.
+
+        :param state: Optional, the state parameter.
+        :return: The authorization URL.
         """
         payload = {
             "client_id": self.client_id,
@@ -376,16 +431,24 @@ class SpotifyOAuth(SpotifyAuthBase):
         return f"{self.OAUTH_AUTHORIZE_URL}?{urlparams}"
 
     def parse_response_code(self, url):
-        """ Parse the response code in the given response url
+        """
+        Parse the response code in the given response URL.
 
-            Parameters:
-                - url - the response url
+        :param url: The response URL.
+        :return: The response code.
         """
         _, code = self.parse_auth_response_url(url)
         return url if code is None else code
 
     @staticmethod
     def parse_auth_response_url(url):
+        """
+        Parse the authorization response URL.
+
+        :param url: The response URL.
+        :return: A tuple containing the state and code.
+        :raises SpotifyOauthError: If an error occurs.
+        """
         query_s = urlparse(url).query
         form = dict(parse_qsl(query_s))
         if "error" in form:
@@ -407,6 +470,12 @@ class SpotifyOAuth(SpotifyAuthBase):
             logger.error(f"Please navigate here: {auth_url}")
 
     def _get_auth_response_interactive(self, open_browser=False):
+        """
+        Get the authorization response interactively.
+
+        :param open_browser: Whether to open the browser.
+        :return: The authorization code.
+        """
         if open_browser:
             self._open_auth_url()
             prompt = "Enter the URL you were redirected to: "
@@ -423,6 +492,13 @@ class SpotifyOAuth(SpotifyAuthBase):
         return code
 
     def _get_auth_response_local_server(self, redirect_port):
+        """
+        Get the authorization response using a local server.
+
+        :param redirect_port: The port on which to start the server.
+        :return: The authorization code.
+        :raises SpotifyOauthError: If an error occurs.
+        """
         server = start_local_http_server(redirect_port)
         self._open_auth_url()
         server.handle_request()
@@ -437,6 +513,12 @@ class SpotifyOAuth(SpotifyAuthBase):
             raise SpotifyOauthError("Server listening on localhost has not been accessed")
 
     def get_auth_response(self, open_browser=None):
+        """
+        Get the authorization response.
+
+        :param open_browser: Whether to open the browser.
+        :return: The authorization code.
+        """
         logger.info('User authentication requires interaction with your '
                     'web browser. Once you enter your credentials and '
                     'give authorization, you will be redirected to '
@@ -467,17 +549,24 @@ class SpotifyOAuth(SpotifyAuthBase):
         return self._get_auth_response_interactive(open_browser=open_browser)
 
     def get_authorization_code(self, response=None):
+        """
+        Get the authorization code.
+
+        :param response: The response URL.
+        :return: The authorization code.
+        """
         if response:
             return self.parse_response_code(response)
         return self.get_auth_response()
 
     def get_access_token(self, code=None, check_cache=True):
-        """ Gets the access token for the app given the code
+        """
+        Get the access token for the app given the code.
 
-            Parameters:
-                - code - the response code
-                - check_cache - if true, checks for a locally stored token
-                                before requesting a new token
+        :param code: The response code.
+        :param check_cache: If true, checks for a locally stored token
+            before requesting a new token.
+        :return: The access token.
         """
         if check_cache:
             token_info = self.validate_token(self.cache_handler.get_cached_token())
@@ -521,6 +610,13 @@ class SpotifyOAuth(SpotifyAuthBase):
             self._handle_oauth_error(http_error)
 
     def refresh_access_token(self, refresh_token):
+        """
+        Refresh the access token.
+
+        :param refresh_token: The refresh token.
+        :return: The new token information.
+        :raises SpotifyOauthError: If an error occurs.
+        """
         payload = {
             "refresh_token": refresh_token,
             "grant_type": "refresh_token",
@@ -551,8 +647,10 @@ class SpotifyOAuth(SpotifyAuthBase):
 
     def _add_custom_values_to_token_info(self, token_info):
         """
-        Store some values that aren't directly provided by a Web API
-        response.
+        Store some values that aren't directly provided by a Web API response.
+
+        :param token_info: The token information.
+        :return: The token information with additional values.
         """
         token_info["expires_at"] = int(time.time()) + token_info["expires_in"]
         token_info["scope"] = self.scope
@@ -560,7 +658,8 @@ class SpotifyOAuth(SpotifyAuthBase):
 
 
 class SpotifyPKCE(SpotifyAuthBase):
-    """ Implements PKCE Authorization Flow for client apps
+    """
+    Implements PKCE Authorization Flow for client apps.
 
     This auth manager enables *user and non-user* endpoints with only
     a client ID, redirect URI, and username. When the app requests
@@ -568,56 +667,43 @@ class SpotifyPKCE(SpotifyAuthBase):
     authorize the new client app. After authorizing the app, the client
     app is then given both access and refresh tokens. This is the
     preferred way of authorizing a mobile/desktop client.
-
     """
 
     OAUTH_AUTHORIZE_URL = "https://accounts.spotify.com/authorize"
     OAUTH_TOKEN_URL = "https://accounts.spotify.com/api/token"
 
     def __init__(
-        self,
-        client_id=None,
-        redirect_uri=None,
-        state=None,
-        scope=None,
-        cache_handler=None,
-        proxies=None,
-        requests_timeout=None,
-        requests_session=True,
-        open_browser=True
+            self,
+            client_id=None,
+            redirect_uri=None,
+            state=None,
+            scope=None,
+            cache_handler=None,
+            proxies=None,
+            requests_timeout=None,
+            requests_session=True,
+            open_browser=True
     ):
         """
         Creates Auth Manager with the PKCE Auth flow.
 
-        Parameters:
-             * client_id: Must be supplied or set as environment variable
-             * redirect_uri: Must be supplied or set as environment variable
-             * state: Optional, no verification is performed
-             * scope: Optional, either a string of scopes, or an iterable with elements of type
-                      `Scope` or `str`. E.g.,
-                      {Scope.user_modify_playback_state, Scope.user_library_read}
-             * cache_path: (deprecated) Optional, will otherwise be generated
-                           (takes precedence over `username`)
-             * username: (deprecated) Optional or set as environment variable
-                         (will set `cache_path` to `.cache-{username}`)
-             * proxies: Optional, proxy for the requests library to route through
-             * requests_timeout: Optional, tell Requests to stop waiting for a response after
-                                 a given number of seconds
-             * requests_session: A Requests session
-             * open_browser: Optional, whether the web browser should be opened to
-                             authorize a user
-             * cache_handler: An instance of the `CacheHandler` class to handle
-                              getting and saving cached authorization tokens.
-                              Optional, will otherwise use `CacheFileHandler`.
-             * proxies: Optional, proxy for the requests library to route through
-             * requests_timeout: Optional, tell Requests to stop waiting for a response after
-                                 a given number of seconds
-             * requests_session: A Requests session object or a true value to create one.
-                                 A false value disables sessions.
-                                 It should generally be a good idea to keep sessions enabled
-                                 for performance reasons (connection pooling).
-             * open_browser: Optional, whether the web browser should be opened to
-                             authorize a user
+        :param client_id: Must be supplied or set as environment variable.
+        :param redirect_uri: Must be supplied or set as environment variable.
+        :param state: Optional, no verification is performed.
+        :param scope: Optional, either a string of scopes, or an iterable with elements of type
+            `Scope` or `str`. E.g., {Scope.user_modify_playback_state, Scope.user_library_read}.
+        :param cache_handler: An instance of the `CacheHandler` class to handle
+            getting and saving cached authorization tokens.
+            Optional, will otherwise use `CacheFileHandler`.
+        :param proxies: Optional, proxy for the requests library to route through.
+        :param requests_timeout: Optional, tell Requests to stop waiting for a response after
+            a given number of seconds.
+        :param requests_session: A Requests session object or a true value to create one.
+            A false value disables sessions.
+            It should generally be a good idea to keep sessions enabled
+            for performance reasons (connection pooling).
+        :param open_browser: Optional, whether the web browser should be opened to
+            authorize a user.
         """
 
         super().__init__(requests_session)
@@ -644,9 +730,12 @@ class SpotifyPKCE(SpotifyAuthBase):
         self.open_browser = open_browser
 
     def _get_code_verifier(self):
-        """ Spotify PCKE code verifier - See step 1 of the reference guide below
+        """
+        Spotify PCKE code verifier - See step 1 of the reference guide below
         Reference:
         https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-code-flow-with-proof-key-for-code-exchange-pkce
+
+        :return: A code verifier string.
         """
         # Range (33,96) is used to select between 44-128 base64 characters for the
         # next operation. The range looks weird because base64 is 6 bytes
@@ -658,9 +747,12 @@ class SpotifyPKCE(SpotifyAuthBase):
         return secrets.token_urlsafe(length)
 
     def _get_code_challenge(self):
-        """ Spotify PCKE code challenge - See step 1 of the reference guide below
+        """
+        Spotify PCKE code challenge - See step 1 of the reference guide below
         Reference:
         https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-code-flow-with-proof-key-for-code-exchange-pkce
+
+        :return: A code challenge string.
         """
         import base64
         import hashlib
@@ -669,7 +761,12 @@ class SpotifyPKCE(SpotifyAuthBase):
         return code_challenge.replace('=', '')
 
     def get_authorize_url(self, state=None):
-        """ Gets the URL to use to authorize this app """
+        """
+        Get the URL to use to authorize this app.
+
+        :param state: Optional, the state parameter.
+        :return: The authorization URL.
+        """
         if not self.code_challenge:
             self.get_pkce_handshake_parameters()
         payload = {
@@ -755,11 +852,23 @@ class SpotifyPKCE(SpotifyAuthBase):
         return code
 
     def get_authorization_code(self, response=None):
+        """
+        Get the authorization code.
+
+        :param response: The response URL.
+        :return: The authorization code.
+        """
         if response:
             return self.parse_response_code(response)
         return self._get_auth_response()
 
     def validate_token(self, token_info):
+        """
+        Validate the token information.
+
+        :param token_info: The token information.
+        :return: The validated token information or None if invalid.
+        """
         if token_info is None:
             return None
 
@@ -778,27 +887,33 @@ class SpotifyPKCE(SpotifyAuthBase):
 
     def _add_custom_values_to_token_info(self, token_info):
         """
-        Store some values that aren't directly provided by a Web API
-        response.
+        Store some values that aren't directly provided by a Web API response.
+
+        :param token_info: The token information.
+        :return: The token information with additional values.
         """
         token_info["expires_at"] = int(time.time()) + token_info["expires_in"]
         return token_info
 
     def get_pkce_handshake_parameters(self):
+        """
+        Generate PKCE handshake parameters.
+        """
         self.code_verifier = self._get_code_verifier()
         self.code_challenge = self._get_code_challenge()
 
     def get_access_token(self, code=None, check_cache=True):
-        """ Gets the access token for the app
+        """
+        Get the access token for the app.
 
-            If the code is not given and no cached token is used, an
-            authentication window will be shown to the user to get a new
-            code.
+        If the code is not given and no cached token is used, an
+        authentication window will be shown to the user to get a new
+        code.
 
-            Parameters:
-                - code - the response code from authentication
-                - check_cache - if true, checks for a locally stored token
-                                before requesting a new token
+        :param code: The response code from authentication.
+        :param check_cache: If true, checks for a locally stored token
+            before requesting a new token.
+        :return: The access token.
         """
 
         if check_cache:
@@ -844,6 +959,13 @@ class SpotifyPKCE(SpotifyAuthBase):
             self._handle_oauth_error(http_error)
 
     def refresh_access_token(self, refresh_token):
+        """
+        Refresh the access token.
+
+        :param refresh_token: The refresh token.
+        :return: The new token information.
+        :raises SpotifyOauthError: If an error occurs.
+        """
         payload = {
             "refresh_token": refresh_token,
             "grant_type": "refresh_token",
@@ -874,21 +996,42 @@ class SpotifyPKCE(SpotifyAuthBase):
             self._handle_oauth_error(http_error)
 
     def parse_response_code(self, url):
-        """ Parse the response code in the given response url
+        """
+        Parse the response code in the given response URL.
 
-            Parameters:
-                - url - the response url
+        :param url: The response URL.
+        :return: The response code.
         """
         _, code = self.parse_auth_response_url(url)
         return url if code is None else code
 
     @staticmethod
     def parse_auth_response_url(url):
+        """
+        Parse the authorization response URL.
+
+        :param url: The response URL.
+        :return: A tuple containing the state and code.
+        :raises SpotifyOauthError: If an error occurs.
+        """
         return SpotifyOAuth.parse_auth_response_url(url)
 
 
 class RequestHandler(BaseHTTPRequestHandler):
+    """
+    Handles HTTP GET requests for the local server used in OAuth authentication.
+
+    This handler processes the OAuth redirect response, extracting the authorization
+    code or error from the URL and sending an appropriate HTML response back to the client.
+    """
+
     def do_GET(self):
+        """
+        Handle GET requests.
+
+        Parses the URL to extract the state and authorization code, or an error if present.
+        Sends an HTML response indicating the authentication status.
+        """
         self.server.auth_code = self.server.error = None
         try:
             state, auth_code = SpotifyOAuth.parse_auth_response_url(self.path)
@@ -931,6 +1074,13 @@ window.close()
 
 
 def start_local_http_server(port, handler=RequestHandler):
+    """
+    Start a local HTTP server to handle OAuth redirects.
+
+    :param port: The port on which to start the server.
+    :param handler: The request handler class to use.
+    :return: An instance of the HTTPServer.
+    """
     server = HTTPServer(("127.0.0.1", port), handler)
     server.allow_reuse_address = True
     server.auth_code = None

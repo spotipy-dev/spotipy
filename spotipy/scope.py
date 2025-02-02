@@ -46,8 +46,11 @@ class Scope(Enum):
 
     @staticmethod
     def all() -> Set['Scope']:
-        """Returns all of the authorization scopes"""
+        """
+        Returns all the authorization scopes.
 
+        :return: A set of all scopes.
+        """
         return set(Scope)
 
     @staticmethod
@@ -55,24 +58,20 @@ class Scope(Enum):
         """
         Converts an iterable of scopes to a space-separated string.
 
-        * scopes: An iterable of scopes.
-
-        returns: a space-separated string of scopes
+        :param scopes: An iterable of scopes.
+        :return: A space-separated string of scopes.
         """
         return " ".join([scope.value for scope in scopes])
 
     @staticmethod
     def from_string(scope_string: str) -> Set['Scope']:
         """
-        Converts a string of (usuallly space-separated) scopes into a
-        set of scopes
+        Converts a string of (usually space-separated) scopes into a set of scopes.
 
-        Any scope-strings that do not match any of the known scopes are
-        ignored.
+        Any scope-strings that do not match any of the known scopes are ignored.
 
-        * scope_string: a string of scopes
-
-        returns: a set of scopes.
+        :param scope_string: A string of scopes.
+        :return: A set of scopes.
         """
         scope_string_list = re.split(pattern=r"[^\w-]+", string=scope_string)
         scopes = set()

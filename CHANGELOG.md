@@ -25,6 +25,7 @@ Rebasing master onto v3 doesn't require a changelog update.
 - Removed the `client_credentials_manager` and `oauth_manager` parameters because they are redundant.
 - Replaced the `set_auth` and `auth_manager` properties with standard attributes.
 - Replaced string concatenations and `str.format()` with f-strings
+- Modified docstrings to use the reStructuredText format
 
 ### Fixed
 
