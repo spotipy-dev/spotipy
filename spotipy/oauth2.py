@@ -443,6 +443,12 @@ class SpotifyOAuth(SpotifyAuthBase):
         redirect_info = urlparse(self.redirect_uri)
         redirect_host, redirect_port = get_host_port(redirect_info.netloc)
 
+        if redirect_host=='localhost':
+            logger.warning("Using 'localhost' as a redirect URI is being deprecated. Use a loopback IP address such as 127.0.0.1 to ensure your app remains functional.")
+
+        if redirect_info.scheme == "http" and not redirect_host in ("127.0.0.1", "localhost"):
+            logger.warning("Redirect URIs using HTTP are being deprecated. To ensure your app remains functional, use HTTPS instead.")
+
         if open_browser is None:
             open_browser = self.open_browser
 
@@ -743,6 +749,12 @@ class SpotifyPKCE(SpotifyAuthBase):
         if open_browser is None:
             open_browser = self.open_browser
 
+        if redirect_host=='localhost':
+            logger.warning("Using 'localhost' as a redirect URI is being deprecated. Use a loopback IP address such as 127.0.0.1 to ensure your app remains functional.")
+
+        if redirect_info.scheme == "http" and not redirect_host in ("127.0.0.1", "localhost"):
+            logger.warning("Redirect URIs using HTTP are being deprecated. To ensure your app remains functional, use HTTPS instead.")
+
         if (
                 open_browser
                 and redirect_host in ("127.0.0.1", "localhost")
@@ -1009,7 +1021,7 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
                     (will set `cache_path` to `.cache-{username}`)
         * show_dialog: Interpreted as boolean
         """
-        logger.warning("The OAuth standard no longer recommends the Implicit "
+        logger.warning("Spotify is deprecating the Implicit "
                        "Grant Flow for client-side code. Use the SpotifyPKCE "
                        "auth manager instead of SpotifyImplicitGrant. For "
                        "more details and a guide to switching, see "

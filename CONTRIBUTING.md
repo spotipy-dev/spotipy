@@ -9,13 +9,13 @@ If you would like to contribute to spotipy follow these steps:
 export SPOTIPY_CLIENT_ID=client_id_here
 export SPOTIPY_CLIENT_SECRET=client_secret_here
 export SPOTIPY_CLIENT_USERNAME=client_username_here # This is actually an id not spotify display name and can be found [here](https://www.spotify.com/us/account/overview/)
-export SPOTIPY_REDIRECT_URI=http://localhost:8080 # Make url is set in app you created to get your ID and SECRET
+export SPOTIPY_REDIRECT_URI=http://127.0.0.1:8080 # Make url is set in app you created to get your ID and SECRET
 
 # Windows
 $env:SPOTIPY_CLIENT_ID="client_id_here"
 $env:SPOTIPY_CLIENT_SECRET="client_secret_here"
 $env:SPOTIPY_CLIENT_USERNAME="client_username_here" 
-$env:SPOTIPY_REDIRECT_URI="http://localhost:8080" 
+$env:SPOTIPY_REDIRECT_URI="http://127.0.0.1:8080" 
 ```
 
 ### Branch Overview
