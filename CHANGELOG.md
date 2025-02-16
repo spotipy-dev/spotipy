@@ -24,7 +24,7 @@ Add your changes below.
 
 - Updated get_cached_token and save_token_to_cache methods to utilize Python's Context Management Protocol
 - Added except clause to get_cached_token method to handle json decode errors
-- Added warnings and changed docs due to Spotify's deprecation of HTTP and "localhost" redirect URIs
+- Added warnings and updated docs due to Spotify's deprecation of HTTP and "localhost" redirect URIs
 
 ### Removed
 
