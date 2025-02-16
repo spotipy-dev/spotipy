@@ -443,11 +443,16 @@ class SpotifyOAuth(SpotifyAuthBase):
         redirect_info = urlparse(self.redirect_uri)
         redirect_host, redirect_port = get_host_port(redirect_info.netloc)
 
-        if redirect_host=='localhost':
-            logger.warning("Using 'localhost' as a redirect URI is being deprecated. Use a loopback IP address such as 127.0.0.1 to ensure your app remains functional.")
+        if redirect_host == 'localhost':
+            logger.warning(
+                "Using 'localhost' as a redirect URI is being deprecated. "
+                "Use a loopback IP address such as 127.0.0.1 "
+                "to ensure your app remains functional.")
 
-        if redirect_info.scheme == "http" and not redirect_host in ("127.0.0.1", "localhost"):
-            logger.warning("Redirect URIs using HTTP are being deprecated. To ensure your app remains functional, use HTTPS instead.")
+        if redirect_info.scheme == "http" and redirect_host not in ("127.0.0.1", "localhost"):
+            logger.warning(
+                "Redirect URIs using HTTP are being deprecated. "
+                "To ensure your app remains functional, use HTTPS instead.")
 
         if open_browser is None:
             open_browser = self.open_browser
@@ -749,11 +754,16 @@ class SpotifyPKCE(SpotifyAuthBase):
         if open_browser is None:
             open_browser = self.open_browser
 
-        if redirect_host=='localhost':
-            logger.warning("Using 'localhost' as a redirect URI is being deprecated. Use a loopback IP address such as 127.0.0.1 to ensure your app remains functional.")
+        if redirect_host == 'localhost':
+            logger.warning(
+                "Using 'localhost' as a redirect URI is being deprecated. "
+                "Use a loopback IP address such as 127.0.0.1 "
+                "to ensure your app remains functional.")
 
-        if redirect_info.scheme == "http" and not redirect_host in ("127.0.0.1", "localhost"):
-            logger.warning("Redirect URIs using HTTP are being deprecated. To ensure your app remains functional, use HTTPS instead.")
+        if redirect_info.scheme == "http" and not redirect_host not in ("127.0.0.1", "localhost"):
+            logger.warning(
+                "Redirect URIs using HTTP are being deprecated. "
+                "To ensure your app remains functional, use HTTPS instead.")
 
         if (
                 open_browser
