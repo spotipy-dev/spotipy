@@ -760,7 +760,7 @@ class SpotifyPKCE(SpotifyAuthBase):
                 "Use a loopback IP address such as 127.0.0.1 "
                 "to ensure your app remains functional.")
 
-        if redirect_info.scheme == "http" and not redirect_host not in ("127.0.0.1", "localhost"):
+        if redirect_info.scheme == "http" and redirect_host not in ("127.0.0.1", "localhost"):
             logger.warning(
                 "Redirect URIs using HTTP are being deprecated. "
                 "To ensure your app remains functional, use HTTPS instead.")
