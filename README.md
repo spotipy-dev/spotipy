@@ -38,7 +38,7 @@ pip install spotipy --upgrade
 
 A full set of examples can be found in the [online documentation](http://spotipy.readthedocs.org/) and in the [Spotipy examples directory](https://github.com/plamere/spotipy/tree/master/examples).
 
-To get started, [install spotipy](#installation), create a new account or log in on https://developers.spotify.com/. Go to the [dashboard](https://developer.spotify.com/dashboard), create an app and add your new ID and SECRET (ID and SECRET can be found on an app setting) to your environment ([step-by-step video](https://www.youtube.com/watch?v=kaBVN8uP358)):
+To get started, [install spotipy](#installation), create a new account or log in on https://developers.spotify.com/. Go to the [dashboard](https://developer.spotify.com/dashboard), create an app and add your new ID and SECRET (ID and SECRET can be found on an app setting) to your environment:
 
 ### Example without user authentication
 
