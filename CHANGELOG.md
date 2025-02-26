@@ -19,6 +19,7 @@ Add your changes below.
 
 - Fixed scripts in examples directory that didn't run correctly
 - Updated documentation for `Client.current_user_top_artists` to indicate maximum number of artists limit
+- Set auth cache file permissions to `600`: https://github.com/spotipy-dev/spotipy/security/advisories/GHSA-pwhh-q4h6-w599
 
 ### Changed
 

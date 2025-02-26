@@ -94,8 +94,12 @@ class CacheFileHandler(CacheHandler):
         try:
             with open(self.cache_path, "w", encoding='utf-8') as f:
                 f.write(json.dumps(token_info, cls=self.encoder_cls))
+            # https://github.com/spotipy-dev/spotipy/security/advisories/GHSA-pwhh-q4h6-w599
+            os.chmod(self.cache_path, 0o600)
         except OSError:
             logger.warning(f"Couldn't write token to cache at: {self.cache_path}")
+        except FileNotFoundError:
+            logger.warning(f"Couldn't set permissions to cache file at: {self.cache_path}")
 
 
 class MemoryCacheHandler(CacheHandler):
