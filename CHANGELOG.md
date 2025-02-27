@@ -11,9 +11,15 @@ Add your changes below.
 
 ### Added
 
+### Fixed
+
+### Removed
+
+## [2.25.1] - 2025-02-27
+
+### Added
+
 - Added examples for audiobooks, shows and episodes methods to examples directory
-- Use newer string formatters (https://pyformat.info)
-- Marked `recommendation_genre_seeds` as deprecated
 
 ### Fixed
 
@@ -26,8 +32,8 @@ Add your changes below.
 - Updated get_cached_token and save_token_to_cache methods to utilize Python's Context Management Protocol
 - Added except clause to get_cached_token method to handle json decode errors
 - Added warnings and updated docs due to Spotify's deprecation of HTTP and "localhost" redirect URIs
-
-### Removed
+- Use newer string formatters (<https://pyformat.info>)
+- Marked `recommendation_genre_seeds` as deprecated
 
 ## [2.25.0] - 2025-03-01
 
