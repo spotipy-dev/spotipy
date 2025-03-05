@@ -10,6 +10,7 @@ import warnings
 from types import TracebackType
 
 import urllib3
+import requests
 
 import spotipy
 
