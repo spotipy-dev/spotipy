@@ -11,7 +11,7 @@ from collections import defaultdict
 import requests
 
 from spotipy.exceptions import SpotifyException
-from spotipy.util import Retry
+from spotipy.util import REQUESTS_SESSION, Retry
 
 logger = logging.getLogger(__name__)
 
@@ -211,11 +211,8 @@ class Spotify:
 
     def __del__(self):
         """Make sure the connection (pool) gets closed"""
-        try:
-            if isinstance(self._session, requests.Session):
-                self._session.close()
-        except AttributeError:
-            pass
+        if getattr(self, "_session", None) and isinstance(self._session, REQUESTS_SESSION):
+            self._session.close()
 
     def _build_session(self):
         self._session = requests.Session()

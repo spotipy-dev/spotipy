@@ -22,6 +22,9 @@ CLIENT_CREDS_ENV_VARS = {
     "redirect_uri": "SPOTIPY_REDIRECT_URI",
 }
 
+# workaround for garbage collection
+REQUESTS_SESSION = requests.Session
+
 
 def prompt_for_user_token(
     username=None,
