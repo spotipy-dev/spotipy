@@ -9,6 +9,7 @@ import os
 import warnings
 from types import TracebackType
 
+import requests
 import urllib3
 
 import spotipy
@@ -21,6 +22,9 @@ CLIENT_CREDS_ENV_VARS = {
     "client_username": "SPOTIPY_CLIENT_USERNAME",
     "redirect_uri": "SPOTIPY_REDIRECT_URI",
 }
+
+# workaround for garbage collection
+REQUESTS_SESSION = requests.Session
 
 
 def prompt_for_user_token(
