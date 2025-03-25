@@ -14,7 +14,7 @@ import urllib3
 
 import spotipy
 
-LOGGER = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 CLIENT_CREDS_ENV_VARS = {
     "client_id": "SPOTIPY_CLIENT_ID",
@@ -68,7 +68,7 @@ def prompt_for_user_token(
             redirect_uri = os.getenv("SPOTIPY_REDIRECT_URI")
 
         if not client_id:
-            LOGGER.warning(
+            logger.warning(
                 """
                 You need to set your Spotify API credentials.
                 You can do this by setting environment variables like so:
@@ -170,8 +170,9 @@ class Retry(urllib3.Retry):
         if response:
             retry_header = response.headers.get("Retry-After")
             if self.is_retry(method, response.status, bool(retry_header)):
-                logging.warning("Your application has reached a rate/request limit. "
-                                f"Retry will occur after: {retry_header}")
+                retry_header = retry_header or 0
+                logger.warning("Your application has reached a rate/request limit. "
+                                f"Retry will occur after: {retry_header} s")
         return super().increment(method,
                                  url,
                                  response=response,
