@@ -27,6 +27,7 @@ Add your changes below.
 - Updated documentation for `Client.current_user_top_artists` to indicate maximum number of artists limit
 - Set auth cache file permissions to `600`: https://github.com/spotipy-dev/spotipy/security/advisories/GHSA-pwhh-q4h6-w599
 - Fixed `__del__` methods by preventing garbage collection for `requests.Session`
+- Improved retry warning by using `logger` instead of `logging` and making sure that `retry_header` is an int
 
 ### Changed
 
