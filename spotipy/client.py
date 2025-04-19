@@ -1256,10 +1256,20 @@ class Spotify:
         """
         return self.me()
 
-    def current_user_playing_track(self):
+    def current_user_playing_track(self, market=None, additional_types=("track",)):
         """ Get information about the current users currently playing track.
+
+            Parameters:
+                - market - An ISO 3166-1 alpha-2 country code or the
+                           string from_token.
+                - additional_types - list of item types to return.
+                                     valid types are: track and episode
         """
-        return self._get("me/player/currently-playing")
+        return self._get(
+            "me/player/currently-playing",
+            market=market,
+            additional_types=",".join(additional_types)
+        )
 
     def current_user_saved_albums(self, limit=20, offset=0, market=None):
         """ Gets a list of the albums saved in the current authorized user's

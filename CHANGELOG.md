@@ -11,6 +11,8 @@ Add your changes below.
 
 ### Added
 
+- Adds `additional_types` parameter to retrieve currently playing episode
+
 ### Fixed
 
 ### Removed
