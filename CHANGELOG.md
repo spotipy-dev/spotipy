@@ -15,6 +15,8 @@ Add your changes below.
 
 ### Fixed
 
+- Fixed dead link in README.md
+
 ### Removed
 
 ## [2.25.1] - 2025-02-27
