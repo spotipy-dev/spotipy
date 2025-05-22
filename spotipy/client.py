@@ -404,6 +404,10 @@ class Spotify:
     ):
         """ Get Spotify catalog information about an artist's albums
 
+            .. deprecated::
+            This method is deprecated and may be removed in a future version. Use
+            `artist_albums(..., include_groups='...')` instead.
+
             Parameters:
                 - artist_id - the artist ID, URI or URL
                 - include_groups - the types of items to return. One or more of 'album', 'single',
@@ -448,6 +452,9 @@ class Spotify:
         """ Get Spotify catalog information about artists similar to an
             identified artist. Similarity is based on analysis of the
             Spotify community's listening history.
+
+            .. deprecated::
+            This endpoint has been removed by Spotify and is no longer available.
 
             Parameters:
                 - artist_id - the artist ID, URI or URL
@@ -680,6 +687,10 @@ class Spotify:
     ):
         """ Get full details of the tracks of a playlist.
 
+            .. deprecated::
+            This method is deprecated and may be removed in a future version. Use
+            `playlist_items(playlist_id, ..., additional_types=('track',))` instead.
+
             Parameters:
                 - playlist_id - the playlist ID, URI or URL
                 - fields - which fields to return
@@ -752,18 +763,22 @@ class Spotify:
         )
 
     def user_playlist(self, user, playlist_id=None, fields=None, market=None):
-        warnings.warn(
-            "You should use `playlist(playlist_id)` instead",
-            DeprecationWarning,
-        )
-
         """ Gets a single playlist of a user
+
+            .. deprecated::
+            This method is deprecated and may be removed in a future version. Use
+            `playlist(playlist_id)` instead.
 
             Parameters:
                 - user - the id of the user
                 - playlist_id - the id of the playlist
                 - fields - which fields to return
         """
+        warnings.warn(
+            "You should use `playlist(playlist_id)` instead",
+            DeprecationWarning,
+        )
+
         if playlist_id is None:
             return self._get(f"users/{user}/starred")
         return self.playlist(playlist_id, fields=fields, market=market)
@@ -777,12 +792,11 @@ class Spotify:
         offset=0,
         market=None,
     ):
-        warnings.warn(
-            "You should use `playlist_tracks(playlist_id)` instead",
-            DeprecationWarning,
-        )
-
         """ Get full details of the tracks of a playlist owned by a user.
+
+            .. deprecated::
+            This method is deprecated and may be removed in a future version. Use
+            `playlist_tracks(playlist_id)` instead.
 
             Parameters:
                 - user - the id of the user
@@ -792,6 +806,10 @@ class Spotify:
                 - offset - the index of the first track to return
                 - market - an ISO 3166-1 alpha-2 country code.
         """
+        warnings.warn(
+            "You should use `playlist_tracks(playlist_id)` instead",
+            DeprecationWarning,
+        )
         return self.playlist_tracks(
             playlist_id,
             limit=limit,
@@ -844,6 +862,10 @@ class Spotify:
 
             Changes a playlist's name and/or public/private state
 
+            .. deprecated::
+            This method is deprecated and may be removed in a future version. Use
+            `playlist_change_details(playlist_id, ...)` instead.
+
             Parameters:
                 - user - the id of the user
                 - playlist_id - the id of the playlist
@@ -865,6 +887,10 @@ class Spotify:
 
             Unfollows (deletes) a playlist for a user
 
+            .. deprecated::
+            This method is deprecated and may be removed in a future version. Use
+            `current_user_unfollow_playlist(playlist_id)` instead.
+
             Parameters:
                 - user - the id of the user
                 - name - the name of the playlist
@@ -881,6 +907,10 @@ class Spotify:
         """ This function is no longer in use, please use the recommended function in the warning!
 
             Adds tracks to a playlist
+
+            .. deprecated::
+            This method is deprecated and may be removed in a future version. Use
+            `playlist_add_items(playlist_id, tracks)` instead.
 
             Parameters:
                 - user - the id of the user
@@ -903,6 +933,10 @@ class Spotify:
 
             Adds episodes to a playlist
 
+            .. deprecated::
+            This method is deprecated and may be removed in a future version. Use
+            `playlist_add_items(playlist_id, episodes)` instead.
+
             Parameters:
                 - user - the id of the user
                 - playlist_id - the id of the playlist
@@ -921,6 +955,10 @@ class Spotify:
         """ This function is no longer in use, please use the recommended function in the warning!
 
             Replace all tracks in a playlist for a user
+
+            .. deprecated::
+            This method is deprecated and may be removed in a future version. Use
+            `playlist_replace_items(playlist_id, tracks)` instead.
 
             Parameters:
                 - user - the id of the user
@@ -946,6 +984,10 @@ class Spotify:
 
             Reorder tracks in a playlist from a user
 
+            .. deprecated::
+            This method is deprecated and may be removed in a future version. Use
+            `playlist_reorder_items(playlist_id, ...)` instead.
+
             Parameters:
                 - user - the id of the user
                 - playlist_id - the id of the playlist
@@ -970,6 +1012,10 @@ class Spotify:
         """ This function is no longer in use, please use the recommended function in the warning!
 
             Removes all occurrences of the given tracks from the given playlist
+            
+            .. deprecated::
+            This method is deprecated and may be removed in a future version. Use
+            `playlist_remove_all_occurrences_of_items(playlist_id, tracks)` instead.
 
             Parameters:
                 - user - the id of the user
@@ -992,6 +1038,10 @@ class Spotify:
         """ This function is no longer in use, please use the recommended function in the warning!
 
             Removes all occurrences of the given tracks from the given playlist
+    
+            .. deprecated::
+            This method is deprecated and may be removed in a future version. Use
+            `playlist_remove_specific_occurrences_of_items(playlist_id, tracks)` instead.
 
             Parameters:
                 - user - the id of the user
@@ -1029,6 +1079,10 @@ class Spotify:
 
             Add the current authenticated user as a follower of a playlist.
 
+            .. deprecated::
+            This method is deprecated and may be removed in a future version. Use
+            `current_user_follow_playlist(playlist_id)` instead.
+
             Parameters:
                 - playlist_owner_id - the user id of the playlist owner
                 - playlist_id - the id of the playlist
@@ -1045,6 +1099,10 @@ class Spotify:
         """ This function is no longer in use, please use the recommended function in the warning!
 
             Check to see if the given users are following the given playlist
+
+            .. deprecated::
+            This method is deprecated and may be removed in a future version. Use
+            `playlist_is_following(playlist_id, user_ids)` instead.
 
             Parameters:
                 - playlist_owner_id - the user id of the playlist owner
@@ -1575,6 +1633,9 @@ class Spotify:
     ):
         """ Get a list of Spotify featured playlists
 
+            .. deprecated::
+            This endpoint has been removed by Spotify and is no longer available.
+
             Parameters:
                 - locale - The desired language, consisting of a lowercase ISO
                   639-1 alpha-2 language code and an uppercase ISO 3166-1 alpha-2
@@ -1671,6 +1732,9 @@ class Spotify:
     ):
         """ Get a list of playlists for a specific Spotify category
 
+            .. deprecated::
+            This endpoint has been removed by Spotify and is no longer available.
+
             Parameters:
                 - category_id - The Spotify category ID for the category.
 
@@ -1707,6 +1771,9 @@ class Spotify:
         """ Get a list of recommended tracks for one to five seeds.
             (at least one of `seed_artists`, `seed_tracks` and `seed_genres`
             are needed)
+
+            .. deprecated::
+            This endpoint has been removed by Spotify and is no longer available.
 
             Parameters:
                 - seed_artists - a list of artist IDs, URIs or URLs
@@ -1768,17 +1835,24 @@ class Spotify:
         return self._get("recommendations", **params)
 
     def recommendation_genre_seeds(self):
+        """ Get a list of genres available for the recommendations function.
+
+            .. deprecated::
+            This endpoint has been removed by Spotify and is no longer available.
+        """
         warnings.warn(
             "You're using `recommendation_genre_seeds(...)`, "
             "which is marked as deprecated by Spotify.",
             DeprecationWarning,
         )
-        """ Get a list of genres available for the recommendations function.
-        """
         return self._get("recommendations/available-genre-seeds")
 
     def audio_analysis(self, track_id):
         """ Get audio analysis for a track based upon its Spotify ID
+
+            .. deprecated::
+            This endpoint has been removed by Spotify and is no longer available.
+
             Parameters:
                 - track_id - a track URI, URL or ID
         """
@@ -1792,6 +1866,10 @@ class Spotify:
 
     def audio_features(self, tracks=[]):
         """ Get audio features for one or multiple tracks based upon their Spotify IDs
+
+            .. deprecated::
+            This endpoint has been removed by Spotify and is no longer available.
+
             Parameters:
                 - tracks - a list of track URIs, URLs or IDs, maximum: 100 ids
         """

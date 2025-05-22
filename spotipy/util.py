@@ -37,15 +37,11 @@ def prompt_for_user_token(
     oauth_manager=None,
     show_dialog=False
 ):
-    warnings.warn(
-        "'prompt_for_user_token' is deprecated."
-        "Use the following instead: "
-        "    auth_manager=SpotifyOAuth(scope=scope)"
-        "    spotipy.Spotify(auth_manager=auth_manager)",
-        DeprecationWarning
-    )
-    """Prompt the user to login if necessary and returns a user token
-       suitable for use with the spotipy.Spotify constructor.
+    """ Prompt the user to login if necessary and returns a user token
+        suitable for use with the spotipy.Spotify constructor.
+
+        .. deprecated::
+            This method is deprecated and may be removed in a future version.
 
         Parameters:
             - username - the Spotify username. (optional)
@@ -57,6 +53,14 @@ def prompt_for_user_token(
             - oauth_manager - OAuth manager object. (optional)
             - show_dialog - If True, a login prompt always shows or defaults to False. (optional)
     """
+    warnings.warn(
+        "'prompt_for_user_token' is deprecated."
+        "Use the following instead: "
+        "    auth_manager=SpotifyOAuth(scope=scope)"
+        "    spotipy.Spotify(auth_manager=auth_manager)",
+        DeprecationWarning
+    )
+
     if not oauth_manager:
         if not client_id:
             client_id = os.getenv("SPOTIPY_CLIENT_ID")

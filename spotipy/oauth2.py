@@ -186,7 +186,7 @@ class SpotifyClientCredentials(SpotifyAuthBase):
         Else fetches a new token and returns it
 
             Parameters:
-            - as_dict - a boolean indicating if returning the access token
+            - as_dict: (deprecated) a boolean indicating if returning the access token
                 as a token_info dictionary, otherwise it will be returned
                 as a string.
         """
@@ -484,8 +484,8 @@ class SpotifyOAuth(SpotifyAuthBase):
         """ Gets the access token for the app given the code
 
             Parameters:
-                - code - the response code
-                - as_dict - a boolean indicating if returning the access token
+                - code: the response code
+                - as_dict: (deprecated) a boolean indicating if returning the access token
                             as a token_info dictionary, otherwise it will be returned
                             as a string.
         """
@@ -578,6 +578,11 @@ class SpotifyOAuth(SpotifyAuthBase):
         return token_info
 
     def get_cached_token(self):
+        """ Gets the cached token for the app
+
+            .. deprecated::
+            This method is deprecated and may be removed in a future version.
+        """
         warnings.warn("Calling get_cached_token directly on the SpotifyOAuth object will be " +
                       "deprecated. Instead, please specify a CacheFileHandler instance as " +
                       "the cache_handler in SpotifyOAuth and use the CacheFileHandler's " +
@@ -1204,6 +1209,11 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
         return token_info
 
     def get_cached_token(self):
+        """ Gets the cached token for the app
+
+            .. deprecated::
+            This method is deprecated and may be removed in a future version.
+        """
         warnings.warn("Calling get_cached_token directly on the SpotifyImplicitGrant " +
                       "object will be deprecated. Instead, please specify a " +
                       "CacheFileHandler instance as the cache_handler in SpotifyOAuth " +
