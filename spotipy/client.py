@@ -1037,7 +1037,7 @@ class Spotify:
     ):
         """ This function is no longer in use, please use the recommended function in the warning!
 
-            Removes all occurrences of the given tracks from the given playlist
+            Removes specific occurrences of the given tracks from the given playlist
 
             .. deprecated::
             This endpoint has been removed by Spotify and is no longer available.
@@ -1053,8 +1053,8 @@ class Spotify:
                 - snapshot_id - optional id of the playlist snapshot
         """
         warnings.warn(
-            "You should use `playlist_remove_specific_occurrences_of_items"
-            "(playlist_id, tracks)` instead",
+            "You're using `user_playlist_remove_specific_occurrences_of_tracks(...)`, "
+            "which is marked as deprecated by Spotify.",
             DeprecationWarning,
         )
         plid = self._get_id("playlist", playlist_id)
