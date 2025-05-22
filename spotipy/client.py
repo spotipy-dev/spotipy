@@ -1012,7 +1012,7 @@ class Spotify:
         """ This function is no longer in use, please use the recommended function in the warning!
 
             Removes all occurrences of the given tracks from the given playlist
-            
+
             .. deprecated::
             This method is deprecated and may be removed in a future version. Use
             `playlist_remove_all_occurrences_of_items(playlist_id, tracks)` instead.
@@ -1038,10 +1038,9 @@ class Spotify:
         """ This function is no longer in use, please use the recommended function in the warning!
 
             Removes all occurrences of the given tracks from the given playlist
-    
+
             .. deprecated::
-            This method is deprecated and may be removed in a future version. Use
-            `playlist_remove_specific_occurrences_of_items(playlist_id, tracks)` instead.
+            This endpoint has been removed by Spotify and is no longer available.
 
             Parameters:
                 - user - the id of the user
