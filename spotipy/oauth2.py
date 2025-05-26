@@ -875,6 +875,27 @@ class SpotifyPKCE(SpotifyAuthBase):
         if self.code_verifier is None or self.code_challenge is None:
             self.get_pkce_handshake_parameters()
 
+        preflight_payload = {
+            "client_id": self.client_id,
+            "grant_type": "authorization_code",
+            "code":          "invalid_code",
+            "redirect_uri": self.redirect_uri,
+            "code_verifier": self.code_verifier,
+        }
+
+        preflight_resp = self._session.post(
+            self.OAUTH_TOKEN_URL,
+            data=preflight_payload,
+            headers={"Content-Type": "application/x-www-form-urlencoded"},
+            timeout=self.requests_timeout,
+            proxies=self.proxies
+        )
+
+        if preflight_resp.status_code == 400:
+            body = preflight_resp.json()
+            if body.get("error") == "invalid_client":
+                raise SpotifyOauthError("Invalid client_id")
+
         payload = {
             "client_id": self.client_id,
             "grant_type": "authorization_code",
