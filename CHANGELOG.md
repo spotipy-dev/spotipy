@@ -17,6 +17,7 @@ Add your changes below.
 ### Fixed
 
 - Fixed dead link in README.md
+- Corrected Spotify/Spotipy typo in documentation
 
 ### Removed
 

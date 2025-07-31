@@ -23,7 +23,7 @@ Install or upgrade *Spotipy* with::
 
     pip install spotipy --upgrade
 
-You can also obtain the source code from the `Spotify GitHub repository <https://github.com/plamere/spotipy>`_.
+You can also obtain the source code from the `Spotipy GitHub repository <https://github.com/plamere/spotipy>`_.
 
 
 Getting Started
