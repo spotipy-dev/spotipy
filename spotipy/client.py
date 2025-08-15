@@ -1599,6 +1599,37 @@ class Spotify:
             before=before,
         )
 
+    def current_user_saved_audiobooks(self, limit=20, offset=0):
+        """ Get the current user's saved audiobooks
+
+            Parameters:
+                - limit - the number of audibooks to return
+                - offset - the index of the first audibook to return
+        """
+        return self._get("me/audiobooks", limit=limit, offset=offset)
+
+    def current_user_saved_audiobooks_add(self, audiobooks=None):
+        """ Add one or more audiobooks to the current user's library.
+
+            Parameters:
+                - audiobooks - a list of audiobook URIs, URLs or IDs
+        """
+        elist = []
+        if audiobooks is not None:
+            elist = [self._get_id("audiobook", e) for e in audiobooks]
+        return self._put("me/audiobooks/?ids=" + ",".join(elist))
+
+    def current_user_saved_audiobooks_delete(self, audiobooks=None):
+        """ Remove one or more audiobooks from the current user's library.
+
+            Parameters:
+                - audiobooks - a list of audiobook URIs, URLs or IDs
+        """
+        elist = []
+        if audiobooks is not None:
+            elist = [self._get_id("audiobook", e) for e in audiobooks]
+        return self._delete("me/audiobooks/?ids=" + ",".join(elist))
+
     def user_follow_artists(self, ids=[]):
         """ Follow one or more artists
             Parameters:
