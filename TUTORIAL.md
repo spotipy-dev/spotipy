@@ -30,7 +30,7 @@ Spotipy relies on the Spotify API. In order to use the Spotify API, you'll need 
 
 A. Visit the [Spotify developer portal](https://developer.spotify.com/dashboard/). If you already have a Spotify account, click "Log in" and enter your username and password. Otherwise, click "Sign up" and follow the steps to create an account. After you've signed in or signed up, begin by clicking on your profile name at the top right of your screen and then click “Dashboard” to go to Spotify’s Developer Dashboard.
 
-B. Check the box "Accept the Spotify Developer Terms of Service" and then click "Accept the terms". On the next page, verify your email address if you haven't already. Click the "Create an App" button. Enter any name and description you'd like for your new app. Next, add "<http://localhost:1234>" (or any other port number of your choosing) to the "Redirect URI" secction. Check the box "I understand and agree with Spotify's Developer Terms of Service and Design Guidelines" and then click the "Save" button.
+B. Check the box "Accept the Spotify Developer Terms of Service" and then click "Accept the terms". On the next page, verify your email address if you haven't already. Click the "Create an App" button. Enter any name and description you'd like for your new app. Next, add "<http://127.0.0.1:1234>" (or any other port number of your choosing) to the "Redirect URI" secction. Check the box "I understand and agree with Spotify's Developer Terms of Service and Design Guidelines" and then click the "Save" button.
 
 C. Click on "Settings". Underneath "Client ID", you'll see a "View Client Secret" link. Click the link to reveal your Client secret and copy both your Client secret and your Client ID somewhere so that you can access them later.
 
