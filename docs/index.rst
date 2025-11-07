@@ -110,12 +110,12 @@ to your application at
 The ``redirect_uri`` argument or ``SPOTIPY_REDIRECT_URI`` environment variable
 must match the redirect URI added to your application in your Dashboard.
 The redirect URI can be any valid URI (it does not need to be accessible)
-such as ``http://example.com``, ``http://localhost`` or ``http://127.0.0.1:9090``.
+such as ``http://example.com`` or ``http://127.0.0.1:9090``.
 
-    .. note:: If you choose an `http`-scheme URL, and it's for `localhost` or
-     `127.0.0.1`, **AND** it specifies a port, then spotipy will instantiate
-      a server on the indicated response to receive the access token from the
-      response at the end of the oauth flow [see the code](https://github.com/plamere/spotipy/blob/master/spotipy/oauth2.py#L483-L490).
+    .. note:: If you choose an `http`-scheme URL, and it's for `127.0.0.1`,
+      **AND** it specifies a port, then spotipy will instantiate a server on
+      the indicated response to receive the access token from the response at
+      the end of the oauth flow [see the code](https://github.com/plamere/spotipy/blob/master/spotipy/oauth2.py#L483-L490).
 
 
 Client Credentials Flow
@@ -309,7 +309,7 @@ Export the needed Environment variables:::
     export SPOTIPY_CLIENT_ID=client_id_here
     export SPOTIPY_CLIENT_SECRET=client_secret_here
     export SPOTIPY_CLIENT_USERNAME=client_username_here # This is actually an id not spotify display name
-    export SPOTIPY_REDIRECT_URI=http://localhost:8080 # Make url is set in app you created to get your ID and SECRET
+    export SPOTIPY_REDIRECT_URI=http://127.0.0.1:8080 # Make url is set in app you created to get your ID and SECRET
 
 Create virtual environment, install dependencies, run tests:::
     $ virtualenv --python=python3.12 env
