@@ -26,6 +26,7 @@ Rebasing master onto v3 doesn't require a changelog update.
 - Replaced the `set_auth` and `auth_manager` properties with standard attributes.
 - Replaced string concatenations and `str.format()` with f-strings
 - Modified docstrings to use the reStructuredText format
+- Replaced `localhost` with `127.0.0.1`.
 
 ### Fixed
 
