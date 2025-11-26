@@ -26,7 +26,7 @@ Add your changes below.
 
 - Fixed dead link in README.md
 - Corrected Spotify/Spotipy typo in documentation
-- Sanitize HTML error message output for OAuth flow
+- Sanitize HTML error message output for OAuth flow: https://github.com/spotipy-dev/spotipy/security/advisories/GHSA-r77h-rpp9-w2xm
 
 ## [2.25.1] - 2025-02-27
 
