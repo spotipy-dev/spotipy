@@ -18,6 +18,7 @@ Add your changes below.
 
 - Fixed dead link in README.md
 - Corrected Spotify/Spotipy typo in documentation
+- Sanitize HTML error message output for OAuth flow
 
 ### Removed
 

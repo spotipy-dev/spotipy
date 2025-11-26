@@ -8,6 +8,7 @@ __all__ = [
 ]
 
 import base64
+import html
 import logging
 import os
 import time
@@ -1252,7 +1253,7 @@ class RequestHandler(BaseHTTPRequestHandler):
         if self.server.auth_code:
             status = "successful"
         elif self.server.error:
-            status = f"failed ({self.server.error})"
+            status = f"failed ({html.escape(str(self.server.error))})"
         else:
             self._write("<html><body><h1>Invalid request</h1></body></html>")
             return
