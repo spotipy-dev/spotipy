@@ -11,6 +11,14 @@ Add your changes below.
 
 ### Added
 
+### Fixed
+
+### Removed
+
+## [2.25.2] - 2025-11-26
+
+### Added
+
 - Adds `additional_types` parameter to retrieve currently playing episode
 - Add deprecation warnings to documentation
 
@@ -19,8 +27,6 @@ Add your changes below.
 - Fixed dead link in README.md
 - Corrected Spotify/Spotipy typo in documentation
 - Sanitize HTML error message output for OAuth flow
-
-### Removed
 
 ## [2.25.1] - 2025-02-27
 
