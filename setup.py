@@ -13,9 +13,9 @@ extra_reqs = {
     ],
     'test': [
         'autopep8>=2.3.2',
-        'flake8>=7.1.1',
-        'flake8-string-format>=0.3.0',
-        'isort>=5.13.2'
+        'flake8>=7.3.0',
+        'flake8-use-fstring>=1.4',
+        'isort>=7.0.0'
     ]
 }
 

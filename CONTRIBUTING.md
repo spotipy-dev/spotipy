@@ -39,8 +39,7 @@ To give you a flavour of what we mean, here are some examples of what PRs go whe
 
 Just choose v3 if you are unsure which branch to work on.
 
-
-### Create virtual environment, install dependencies, run tests:
+### Create virtual environment, install dependencies, run tests
 
 ```bash
 $ virtualenv --python=python3 env
@@ -51,7 +50,7 @@ $ source env/bin/activate
 
 ### Lint
 
-    pip install .[test]
+    pip install ".[test]"
 
 To automatically fix some of the code style:
 
@@ -75,9 +74,9 @@ Don't forget to add a short description of your change in the [CHANGELOG](CHANGE
 
 ### Publishing (by maintainer)
 
- - Bump version in setup.py
- - Bump and date changelog
- - Add to changelog:
+- Bump version in setup.py
+- Bump and date changelog
+- Add to changelog:
 
        ## Unreleased
        Add your changes below.
@@ -88,9 +87,8 @@ Don't forget to add a short description of your change in the [CHANGELOG](CHANGE
 
        ### Removed
 
- - Commit changes
- - Push tag to trigger PyPI build & release workflow
- - Create github release https://github.com/plamere/spotipy/releases with the changelog content
+- Commit changes
+- Push tag to trigger PyPI build & release workflow
+- Create github release <https://github.com/plamere/spotipy/releases> with the changelog content
    for the version and a short name that describes the main addition
- - Verify doc uses latest https://readthedocs.org/projects/spotipy/
- 
+- Verify doc uses latest <https://readthedocs.org/projects/spotipy/>
