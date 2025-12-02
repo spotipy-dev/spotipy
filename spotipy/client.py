@@ -694,7 +694,7 @@ class Spotify:
     def playlist(
         self,
         playlist_id: str,
-        fields=None,
+        fields: Optional[str] = None,
         market: Optional[str] = None,
         additional_types: StrListOrTuple = ("track",),
     ):
@@ -719,7 +719,7 @@ class Spotify:
     def playlist_tracks(
         self,
         playlist_id: str,
-        fields=None,
+        fields: Optional[str] = None,
         limit: int = 100,
         offset: int = 0,
         market: Optional[str] = None,
@@ -750,8 +750,8 @@ class Spotify:
 
     def playlist_items(
         self,
-        playlist_id,
-        fields=None,
+        playlist_id: str,
+        fields: Optional[str] = None,
         limit: int = 100,
         offset: int = 0,
         market: Optional[str] = None,
@@ -1989,7 +1989,9 @@ class Spotify:
         """
         return self._get("me/player/devices")
 
-    def current_playback(self, market: Optional[str] = None, additional_types=None):
+    def current_playback(
+        self, market: Optional[str] = None, additional_types: Optional[str] = None
+    ):
         """ Get information about user's current playback.
 
             Parameters:
@@ -1998,7 +2000,9 @@ class Spotify:
         """
         return self._get("me/player", market=market, additional_types=additional_types)
 
-    def currently_playing(self, market: Optional[str] = None, additional_types=None):
+    def currently_playing(
+        self, market: Optional[str] = None, additional_types: Optional[str] = None
+    ):
         """ Get user's currently playing track.
 
             Parameters:
@@ -2149,7 +2153,7 @@ class Spotify:
             )
         )
 
-    def shuffle(self, state, device_id: Optional[str] = None):
+    def shuffle(self, state: bool, device_id: Optional[str] = None):
         """ Toggle playback shuffling.
 
             Parameters:
@@ -2170,7 +2174,7 @@ class Spotify:
         """ Gets the current user's queue """
         return self._get("me/player/queue")
 
-    def add_to_queue(self, uri, device_id: Optional[str] = None):
+    def add_to_queue(self, uri: str, device_id: Optional[str] = None):
         """ Adds a song to the end of a user's queue
 
             If device A is currently playing music, and you try to add to the queue
@@ -2248,7 +2252,13 @@ class Spotify:
         return re.search(Spotify._regex_spotify_uri, uri) is not None
 
     def _search_multiple_markets(
-        self, q: str, limit: int, offset: int, type, markets: StrListOrTuple, total: int
+        self,
+        q: str,
+        limit: int,
+        offset: int,
+        type: str,
+        markets: StrListOrTuple,
+        total: Optional[int],
     ):
         if total and limit > total:
             limit = total

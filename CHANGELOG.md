@@ -11,7 +11,7 @@ Add your changes below.
 
 ### Added
 
-- Adds types to function args
+- Adds type hints to all function args
 
 ### Fixed
 

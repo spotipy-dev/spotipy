@@ -16,7 +16,7 @@ import urllib.parse as urllibparse
 import warnings
 import webbrowser
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from typing import Any, Optional, Union
+from typing import Any, Dict, Optional, Union
 from urllib.parse import parse_qsl, urlparse
 
 import requests
@@ -86,14 +86,14 @@ class SpotifyAuthBase:
         self._redirect_uri = _ensure_value(val, "redirect_uri")
 
     @staticmethod
-    def _get_user_input(prompt) -> str:
+    def _get_user_input(prompt: Union[str, object]) -> str:
         try:
             return raw_input(prompt)
         except NameError:
             return input(prompt)
 
     @staticmethod
-    def is_token_expired(token_info) -> bool:
+    def is_token_expired(token_info: Dict):
         now = int(time.time())
         return token_info["expires_at"] - now < 60
 
@@ -241,7 +241,7 @@ class SpotifyClientCredentials(SpotifyAuthBase):
         except requests.exceptions.HTTPError as http_error:
             self._handle_oauth_error(http_error)
 
-    def _add_custom_values_to_token_info(self, token_info):
+    def _add_custom_values_to_token_info(self, token_info: Dict):
         """
         Store some values that aren't directly provided by a Web API
         response.
@@ -339,7 +339,7 @@ class SpotifyOAuth(SpotifyAuthBase):
         self.show_dialog = show_dialog
         self.open_browser = open_browser
 
-    def validate_token(self, token_info):
+    def validate_token(self, token_info: Optional[Dict]):
         if token_info is None:
             return None
 
@@ -425,7 +425,7 @@ class SpotifyOAuth(SpotifyAuthBase):
             raise SpotifyStateError(self.state, state)
         return code
 
-    def _get_auth_response_local_server(self, redirect_port):
+    def _get_auth_response_local_server(self, redirect_port: int):
         server = start_local_http_server(redirect_port)
         self._open_auth_url()
         server.handle_request()
@@ -486,7 +486,7 @@ class SpotifyOAuth(SpotifyAuthBase):
         return self.get_auth_response()
 
     def get_access_token(
-        self, code: Optional[Any] = None, as_dict: bool = True, check_cache: bool = True
+        self, code: Optional[str] = None, as_dict: bool = True, check_cache: bool = True
     ):
         """ Gets the access token for the app given the code
 
@@ -575,7 +575,7 @@ class SpotifyOAuth(SpotifyAuthBase):
         except requests.exceptions.HTTPError as http_error:
             self._handle_oauth_error(http_error)
 
-    def _add_custom_values_to_token_info(self, token_info):
+    def _add_custom_values_to_token_info(self, token_info: Dict):
         """
         Store some values that aren't directly provided by a Web API
         response.
@@ -599,7 +599,7 @@ class SpotifyOAuth(SpotifyAuthBase):
                       )
         return self.validate_token(self.cache_handler.get_cached_token())
 
-    def _save_token_info(self, token_info):
+    def _save_token_info(self, token_info: Dict):
         warnings.warn("Calling _save_token_info directly on the SpotifyOAuth object will be " +
                       "deprecated. Instead, please specify a CacheFileHandler instance as " +
                       "the cache_handler in SpotifyOAuth and use the CacheFileHandler's " +
@@ -796,7 +796,7 @@ class SpotifyPKCE(SpotifyAuthBase):
                                'the URL your browser is redirected to.')
         return self._get_auth_response_interactive(open_browser=open_browser)
 
-    def _get_auth_response_local_server(self, redirect_port):
+    def _get_auth_response_local_server(self, redirect_port: int):
         server = start_local_http_server(redirect_port)
         self._open_auth_url()
         server.handle_request()
@@ -970,7 +970,7 @@ class SpotifyPKCE(SpotifyAuthBase):
                       )
         return self.validate_token(self.cache_handler.get_cached_token())
 
-    def _save_token_info(self, token_info):
+    def _save_token_info(self, token_info: Dict):
         warnings.warn("Calling _save_token_info directly on the SpotifyOAuth object will be " +
                       "deprecated. Instead, please specify a CacheFileHandler instance as " +
                       "the cache_handler in SpotifyOAuth and use the CacheFileHandler's " +
@@ -1087,7 +1087,7 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
         self.show_dialog = show_dialog
         self._session = None  # As to not break inherited __del__
 
-    def validate_token(self, token_info):
+    def validate_token(self, token_info: Optional[Dict]):
         if token_info is None:
             return None
 
@@ -1212,7 +1212,7 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
                                                         "were redirected to: ")
         return self.parse_response_token(response, state)
 
-    def _add_custom_values_to_token_info(self, token_info):
+    def _add_custom_values_to_token_info(self, token_info: Dict):
         """
         Store some values that aren't directly provided by a Web API
         response.
@@ -1237,7 +1237,7 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
                       )
         return self.validate_token(self.cache_handler.get_cached_token())
 
-    def _save_token_info(self, token_info):
+    def _save_token_info(self, token_info: Dict):
         warnings.warn("Calling _save_token_info directly on the SpotifyImplicitGrant " +
                       "object will be deprecated. Instead, please specify a " +
                       "CacheFileHandler instance as the cache_handler in SpotifyOAuth " +
@@ -1293,7 +1293,7 @@ Close Window
         return
 
 
-def start_local_http_server(port, handler=RequestHandler):
+def start_local_http_server(port: int, handler=RequestHandler):
     server = HTTPServer(("127.0.0.1", port), handler)
     server.allow_reuse_address = True
     server.auth_code = None
