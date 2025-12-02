@@ -137,6 +137,7 @@ def get_host_port(netloc: str):
 
 ScopeArgType = Union[str, StrListOrTuple]
 
+
 def normalize_scope(scope: Optional[ScopeArgType]) -> Union[str, None]:
     """Normalize the scope to verify that it is a list or tuple. A string
     input will split the string by commas to create a list of scopes.

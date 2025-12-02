@@ -138,7 +138,7 @@ class SpotifyClientCredentials(SpotifyAuthBase):
         self,
         client_id: Optional[str] = None,
         client_secret: Optional[str] = None,
-        proxies: Optional[Any] = None, 
+        proxies: Optional[Any] = None,
         requests_session: Union[requests.Session, bool] = True,
         requests_timeout: Optional[int] = None,
         cache_handler: Optional[CacheHandler] = None,
