@@ -8,7 +8,7 @@ import logging
 import os
 import warnings
 from types import TracebackType
-from typing import Optional, Union, Tuple, List
+from typing import List, Optional, Tuple, Union
 
 import requests
 import urllib3

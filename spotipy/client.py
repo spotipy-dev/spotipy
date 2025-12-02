@@ -7,7 +7,7 @@ import logging
 import re
 import warnings
 from collections import defaultdict
-from typing import Optional, Union, List, Dict
+from typing import Dict, List, Optional, Union
 
 import requests
 

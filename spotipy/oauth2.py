@@ -16,7 +16,7 @@ import urllib.parse as urllibparse
 import warnings
 import webbrowser
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from typing import Optional, Union, Any
+from typing import Any, Optional, Union
 from urllib.parse import parse_qsl, urlparse
 
 import requests
@@ -24,7 +24,7 @@ import requests
 from spotipy.cache_handler import CacheFileHandler, CacheHandler
 from spotipy.exceptions import SpotifyOauthError, SpotifyStateError
 from spotipy.util import (CLIENT_CREDS_ENV_VARS, REQUESTS_SESSION,
-                          get_host_port, normalize_scope, ScopeArgType)
+                          ScopeArgType, get_host_port, normalize_scope)
 
 logger = logging.getLogger(__name__)
 
