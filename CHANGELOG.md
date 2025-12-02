@@ -11,6 +11,8 @@ Add your changes below.
 
 ### Added
 
+- Adds types to function args
+
 ### Fixed
 
 ### Removed
