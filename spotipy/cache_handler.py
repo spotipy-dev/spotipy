@@ -11,6 +11,8 @@ import errno
 import json
 import logging
 import os
+from json import JSONEncoder
+from typing import Optional
 
 from redis import RedisError
 
@@ -49,10 +51,12 @@ class CacheFileHandler(CacheHandler):
     as json files on disk.
     """
 
-    def __init__(self,
-                 cache_path=None,
-                 username=None,
-                 encoder_cls=None):
+    def __init__(
+        self,
+        cache_path: Optional[str] = None,
+        username: Optional[str] = None,
+        encoder_cls: Optional[JSONEncoder] = None,
+    ):
         """
         Parameters:
              * cache_path: May be supplied, will otherwise be generated
@@ -185,7 +189,7 @@ class RedisCacheHandler(CacheHandler):
     A cache handler that stores the token info in the Redis.
     """
 
-    def __init__(self, redis, key=None):
+    def __init__(self, redis, key: Optional[str] = None):
         """
         Parameters:
             * redis: Redis object provided by redis-py library
@@ -194,7 +198,7 @@ class RedisCacheHandler(CacheHandler):
                    (takes precedence over `token_info`)
         """
         self.redis = redis
-        self.key = key if key else 'token_info'
+        self.key: str = key if key else 'token_info'
 
     def get_cached_token(self):
         token_info = None
@@ -218,7 +222,7 @@ class MemcacheCacheHandler(CacheHandler):
     """A Cache handler that stores the token info in Memcache using the pymemcache client
     """
 
-    def __init__(self, memcache, key=None) -> None:
+    def __init__(self, memcache, key: Optional[str] = None):
         """
         Parameters:
             * memcache: memcache client object provided by pymemcache
@@ -227,7 +231,7 @@ class MemcacheCacheHandler(CacheHandler):
                    (takes precedence over `token_info`)
         """
         self.memcache = memcache
-        self.key = key if key else 'token_info'
+        self.key: str = key if key else 'token_info'
 
     def get_cached_token(self):
         from pymemcache import MemcacheError

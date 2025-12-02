@@ -34,8 +34,16 @@ class SpotifyOauthError(SpotifyBaseException):
 class SpotifyStateError(SpotifyOauthError):
     """ The state sent and state received were different """
 
-    def __init__(self, local_state=None, remote_state=None, message=None,
-                 error=None, error_description=None, *args, **kwargs):
+    def __init__(
+        self,
+        local_state=None,
+        remote_state=None,
+        message=None,
+        error=None,
+        error_description=None,
+        *args,
+        **kwargs,
+    ):
         if not message:
             message = ("Expected " + local_state + " but received "
                        + remote_state)
