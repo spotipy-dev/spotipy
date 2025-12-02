@@ -135,6 +135,7 @@ def get_host_port(netloc: str):
 
     return host, port
 
+
 ScopeArgType = Union[str, StrListOrTuple]
 
 
