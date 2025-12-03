@@ -2252,13 +2252,13 @@ class Spotify:
         # TODO change to a ValueError in v3
         raise SpotifyException(400, -1, "Unsupported URL / URI.")
 
-    def _get_uri(self, type, id: str):
+    def _get_uri(self, type, id: str) -> str:
         if self._is_uri(id):
             return id
         else:
             return "spotify:" + type + ":" + self._get_id(type, id)
 
-    def _is_uri(self, uri: str):
+    def _is_uri(self, uri: str) -> bool:
         return re.search(Spotify._regex_spotify_uri, uri) is not None
 
     def _search_multiple_markets(
