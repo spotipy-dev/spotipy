@@ -2215,7 +2215,7 @@ class Spotify:
         """
         return self._get("markets")
 
-    def _append_device_id(self, path: str, device_id: Optional[str]):
+    def _append_device_id(self, path: str, device_id: Optional[str]) -> str:
         """ Append device ID to API path.
 
             Parameters:
@@ -2228,7 +2228,7 @@ class Spotify:
                 path += f"?device_id={device_id}"
         return path
 
-    def _get_id(self, type, id: str):
+    def _get_id(self, type, id: str) -> str:
         uri_match = re.search(Spotify._regex_spotify_uri, id)
         if uri_match is not None:
             uri_match_groups = uri_match.groupdict()
