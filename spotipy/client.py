@@ -121,6 +121,8 @@ class Spotify:
     # [2] https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
     _regex_spotify_url = r'^(http[s]?:\/\/)?open.spotify.com\/(intl-\w\w\/)?(?P<type>track|artist|album|playlist|show|episode|user|audiobook)\/(?P<id>[0-9A-Za-z]+)(\?.*)?$'  # noqa: E501
 
+    _regex_base62 = r'^[0-9A-Za-z]+$'
+
     TrackOccurances = TypedDict("TrackOccurances", {"uri": str, "positions": List[int]})
 
     def __init__(
