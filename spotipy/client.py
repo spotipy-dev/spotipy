@@ -7,7 +7,7 @@ import logging
 import re
 import warnings
 from collections import defaultdict
-from typing import Dict, List, Optional, Union
+from typing import Dict, List, Optional, TypedDict, Union
 
 import requests
 
@@ -121,7 +121,7 @@ class Spotify:
     # [2] https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
     _regex_spotify_url = r'^(http[s]?:\/\/)?open.spotify.com\/(intl-\w\w\/)?(?P<type>track|artist|album|playlist|show|episode|user|audiobook)\/(?P<id>[0-9A-Za-z]+)(\?.*)?$'  # noqa: E501
 
-    _regex_base62 = r'^[0-9A-Za-z]+$'
+    TrackOccurances = TypedDict("TrackOccurances", {"uri": str, "positions": List[int]})
 
     def __init__(
         self,
@@ -1103,7 +1103,7 @@ class Spotify:
         self,
         user: str,
         playlist_id: str,
-        tracks: List[Dict],
+        tracks: List[TrackOccurances],
         snapshot_id: Optional[str] = None,
     ):
         """ This function is no longer in use, please use the recommended function in the warning!
@@ -1314,7 +1314,10 @@ class Spotify:
         )
 
     def playlist_remove_specific_occurrences_of_items(
-        self, playlist_id: str, items: List[Dict], snapshot_id: Optional[str] = None
+        self,
+        playlist_id: str,
+        items: List[TrackOccurances],
+        snapshot_id: Optional[str] = None,
     ):
         """ Removes all occurrences of the given tracks from the given playlist
 
@@ -2025,12 +2028,17 @@ class Spotify:
         data = {"device_ids": [device_id], "play": force_play}
         return self._put("me/player", payload=data)
 
+    PlaybackOffset = Union[
+        TypedDict("PlaybackOffset", {"position": int}),
+        TypedDict("PlaybackOffset", {"uri": str}),
+    ]
+
     def start_playback(
         self,
         device_id: Optional[str] = None,
         context_uri: Optional[str] = None,
         uris: Optional[List[str]] = None,
-        offset: Optional[Dict] = None,
+        offset: Optional[PlaybackOffset] = None,
         position_ms: Optional[Union[int, float]] = None,
     ):
         """ Start or resume user's playback.
