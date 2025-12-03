@@ -62,7 +62,7 @@ class SpotifyAuthBase:
         return normalize_scope(scope)
 
     @property
-    def client_id(self):
+    def client_id(self) -> str:
         return self._client_id
 
     @client_id.setter
@@ -70,7 +70,7 @@ class SpotifyAuthBase:
         self._client_id = _ensure_value(val, "client_id")
 
     @property
-    def client_secret(self):
+    def client_secret(self) -> str:
         return self._client_secret
 
     @client_secret.setter
@@ -78,7 +78,7 @@ class SpotifyAuthBase:
         self._client_secret = _ensure_value(val, "client_secret")
 
     @property
-    def redirect_uri(self):
+    def redirect_uri(self) -> str:
         return self._redirect_uri
 
     @redirect_uri.setter
