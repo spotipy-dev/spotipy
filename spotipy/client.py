@@ -405,9 +405,9 @@ class Spotify:
     def artist_albums(
         self,
         artist_id: str,
-        album_type=None,
-        include_groups=None,
-        country=None,
+        album_type: Optional[str] = None,
+        include_groups: Optional[str] = None,
+        country: Optional[str] = None,
         limit: int = 20,
         offset: int = 0,
     ):
@@ -808,7 +808,7 @@ class Spotify:
         self,
         user: str,
         playlist_id: Optional[str] = None,
-        fields=None,
+        fields: Optional[str] = None,
         market: Optional[str] = None,
     ):
         """ Gets a single playlist of a user
@@ -835,7 +835,7 @@ class Spotify:
         self,
         user: Optional[str] = None,
         playlist_id: Optional[str] = None,
-        fields=None,
+        fields: Optional[str] = None,
         limit: int = 100,
         offset: int = 0,
         market: Optional[str] = None,
