@@ -2229,28 +2229,31 @@ class Spotify:
         return path
 
     def _get_id(self, type, id: str) -> str:
-        uri_match = re.search(Spotify._regex_spotify_uri, id)
-        if uri_match is not None:
-            uri_match_groups = uri_match.groupdict()
-            if uri_match_groups['type'] != type:
-                # TODO change to a ValueError in v3
-                raise SpotifyException(400, -1, "Unexpected Spotify URI type.")
-            return uri_match_groups['id']
-
-        url_match = re.search(Spotify._regex_spotify_url, id)
-        if url_match is not None:
-            url_match_groups = url_match.groupdict()
-            if url_match_groups['type'] != type:
-                raise SpotifyException(400, -1, "Unexpected Spotify URL type.")
-            # TODO change to a ValueError in v3
-            return url_match_groups['id']
+        for regexp, error_msg in [
+            (Spotify._regex_spotify_uri, "URI"),
+            (Spotify._regex_spotify_url, "URL"),
+        ]:
+            match = re.search(regexp, id)
+            if match is not None:
+                match_groups = match.groupdict()
+                if match_groups["type"] != type:
+                    # TODO change to a ValueError in v3
+                    raise SpotifyException(
+                        400,
+                        -1,
+                        (
+                            f"Unexpected Spotify {error_msg} type."
+                            f" (expected {type}, got {match_groups['type']})"
+                        ),
+                    )
+                return match_groups["id"]
 
         # Raw identifiers might be passed, ensure they are also base-62
         if re.search(Spotify._regex_base62, id) is not None:
             return id
 
         # TODO change to a ValueError in v3
-        raise SpotifyException(400, -1, "Unsupported URL / URI.")
+        raise SpotifyException(400, -1, f"Unsupported URL / URI. ({id})")
 
     def _get_uri(self, type, id: str) -> str:
         if self._is_uri(id):
