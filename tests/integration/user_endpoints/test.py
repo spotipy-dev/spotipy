@@ -221,6 +221,11 @@ class SpotipyLibraryApiTests(unittest.TestCase):
             "spotify:episode:3OEdPEYB69pfXoBrhvQYeC",
             "spotify:episode:5LEFdZ9pYh99wSz7Go2D0g"
         ]
+        cls.audiobook_ids = [
+            "spotify:audiobook:7iHfbu1YPACw6oZPAFJtqe",
+            "spotify:audiobook:1HGw3J3NxZO1TP1BTtVhpZ",
+            "spotify:audiobook:7iHfbu1YPACw6oZPAFJtqe"
+        ]
         cls.username = os.getenv(CCEV['client_username'])
 
         scope = (
@@ -247,6 +252,19 @@ class SpotipyLibraryApiTests(unittest.TestCase):
     def test_current_user_saved_tracks(self):
         tracks = self.spotify.current_user_saved_tracks()
         self.assertGreaterEqual(len(tracks['items']), 0)
+
+    def test_current_user_saved_audiobooks(self):
+        audiobooks = self.spotify.current_user_saved_audiobooks()
+        total = audiobooks['total']
+        self.spotify.current_user_saved_audiobooks_add(self.audiobook_ids)
+
+        new_audiobooks = self.spotify.current_user_saved_audiobooks()
+        new_total = new_audiobooks['total']
+        self.assertEqual(new_total - total, len(self.audiobook_ids))
+
+        self.spotify.current_user_saved_audiobooks_delete(self.audiobook_ids)
+        new_audiobooks = self.spotify.current_user_saved_audiobooks()
+        new_total = new_audiobooks['total']
 
     def test_current_user_save_tracks(self):
         tracks = self.spotify.current_user_saved_tracks()
