@@ -2272,4 +2272,3 @@ class Spotify:
             endpoint += f'&market={market}'
 
         return self._get(endpoint)
-
