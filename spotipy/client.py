@@ -2140,6 +2140,7 @@ class Spotify:
 
     def _get_uri(self, type, id):
         if self._is_uri(id):
+            warnings.warn(f"{repr(id)} did not match the Spotify URI RegEx.", UserWarning)
             return id
         else:
             return "spotify:" + type + ":" + self._get_id(type, id)
