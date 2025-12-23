@@ -400,7 +400,7 @@ class Spotify:
         return self._get("artists/?ids=" + ",".join(tlist))
 
     def artist_albums(
-        self, artist_id, album_type=None, include_groups=None, country=None, limit=20, offset=0
+        self, artist_id, album_type=None, include_groups=None, market=None, limit=20, offset=0
     ):
         """ Get Spotify catalog information about an artist's albums
 
@@ -431,12 +431,12 @@ class Spotify:
         return self._get(
             "artists/" + trid + "/albums",
             include_groups=include_groups,
-            country=country,
+            market=market,
             limit=limit,
             offset=offset,
         )
 
-    def artist_top_tracks(self, artist_id, country="US"):
+    def artist_top_tracks(self, artist_id, market="US"):
         """ Get Spotify catalog information about an artist's top 10 tracks
             by country.
 
@@ -446,7 +446,7 @@ class Spotify:
         """
 
         trid = self._get_id("artist", artist_id)
-        return self._get("artists/" + trid + "/top-tracks", country=country)
+        return self._get("artists/" + trid + "/top-tracks", market=market)
 
     def artist_related_artists(self, artist_id):
         """ Get Spotify catalog information about artists similar to an
@@ -590,7 +590,7 @@ class Spotify:
         tlist = [self._get_id("episode", e) for e in episodes]
         return self._get("episodes/?ids=" + ",".join(tlist), market=market)
 
-    def search(self, q, limit=10, offset=0, type="track", market=None):
+    def search(self, q, limit=10, offset=0, type="track", market=None, include_external_audo=False):
         """ searches for an item
 
             Parameters:
@@ -604,7 +604,18 @@ class Spotify:
                          pass in a comma separated string; e.g., 'track,album,episode'.
                 - market - An ISO 3166-1 alpha-2 country code or the string
                            from_token.
+                - include_external_audo - if true, the response will include any relevant
+                                          audio content that is hosted externally.
         """
+        if include_external_audo:
+            return self._get("search",
+                q=q,
+                limit=limit,
+                offset=offset,
+                type=type,
+                market=market,
+                include_external="audio",
+            )
         return self._get(
             "search", q=q, limit=limit, offset=offset, type=type, market=market
         )
@@ -712,7 +723,7 @@ class Spotify:
         self,
         playlist_id,
         fields=None,
-        limit=100,
+        limit=50,
         offset=0,
         market=None,
         additional_types=("track", "episode")
@@ -1177,6 +1188,7 @@ class Spotify:
         )
 
     def playlist_replace_items(self, playlist_id, items):
+        # TODO: find out where the docs for this endpoint are
         """ Replace all tracks/episodes in a playlist
 
             Parameters:
@@ -1198,6 +1210,7 @@ class Spotify:
         range_length=1,
         snapshot_id=None,
     ):
+        # TODO: find out if it still works
         """ Reorder tracks in a playlist
 
             Parameters:
@@ -1245,6 +1258,7 @@ class Spotify:
     def playlist_remove_specific_occurrences_of_items(
         self, playlist_id, items, snapshot_id=None
     ):
+        # TODO: find out if it still works
         """ Removes all occurrences of the given tracks from the given playlist
 
             Parameters:
@@ -1287,7 +1301,7 @@ class Spotify:
         )
 
     def playlist_is_following(
-        self, playlist_id, user_ids
+        self, playlist_id, user_ids=None
     ):
         """
         Check to see if the given users are following the given playlist
@@ -1295,10 +1309,18 @@ class Spotify:
         Parameters:
             - playlist_id - the id of the playlist
             - user_ids - the ids of the users that you want to check to see
-                if they follow the playlist. Maximum: 5 ids.
+                if they follow the playlist. Maximum: 1 ID.
 
         """
-        endpoint = f"playlists/{playlist_id}/followers/contains?ids={','.join(user_ids)}"
+        endpoint = f"playlists/{playlist_id}/followers/contains"
+        if user_ids:
+            warnings.warn(
+                "You're using `playlist_is_following(..., user_ids='...')` "
+                "which will be removed in future versions. "
+                "Please adjust your code accordingly by not using the argument `user_ids`.",
+                DeprecationWarning,
+            )
+            return self._get(endpoint, ids=",".join(user_ids))
         return self._get(endpoint)
 
     def me(self):
