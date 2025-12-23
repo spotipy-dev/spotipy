@@ -404,10 +404,6 @@ class Spotify:
     ):
         """ Get Spotify catalog information about an artist's albums
 
-            .. deprecated::
-            This method is deprecated and may be removed in a future version. Use
-            `artist_albums(..., include_groups='...')` instead.
-
             Parameters:
                 - artist_id - the artist ID, URI or URL
                 - include_groups - the types of items to return. One or more of 'album', 'single',
@@ -590,7 +586,13 @@ class Spotify:
         tlist = [self._get_id("episode", e) for e in episodes]
         return self._get("episodes/?ids=" + ",".join(tlist), market=market)
 
-    def search(self, q, limit=10, offset=0, type="track", market=None, include_external_audo=False):
+    def search(self,
+               q,
+               limit=10,
+               offset=0,
+               type="track",
+               market=None,
+               include_external_audio=False):
         """ searches for an item
 
             Parameters:
@@ -607,15 +609,15 @@ class Spotify:
                 - include_external_audo - if true, the response will include any relevant
                                           audio content that is hosted externally.
         """
-        if include_external_audo:
+        if include_external_audio:
             return self._get("search",
-                q=q,
-                limit=limit,
-                offset=offset,
-                type=type,
-                market=market,
-                include_external="audio",
-            )
+                             q=q,
+                             limit=limit,
+                             offset=offset,
+                             type=type,
+                             market=market,
+                             include_external="audio",
+                             )
         return self._get(
             "search", q=q, limit=limit, offset=offset, type=type, market=market
         )
@@ -1247,6 +1249,7 @@ class Spotify:
         """
 
         plid = self._get_id("playlist", playlist_id)
+        # TODO: aren't episodes also a possible uri type?
         ftracks = [self._get_uri("track", tid) for tid in items]
         payload = {"tracks": [{"uri": track} for track in ftracks]}
         if snapshot_id:
@@ -1694,8 +1697,6 @@ class Spotify:
         """ Get a list of new album releases featured in Spotify
 
             Parameters:
-                - country - An ISO 3166-1 alpha-2 country code.
-
                 - limit - The maximum number of items to return. Default: 20.
                   Minimum: 1. Maximum: 50
 
@@ -1703,8 +1704,14 @@ class Spotify:
                   (the first object). Use with limit to get the next set of
                   items.
         """
+        if country:
+            warnings.warn(
+                "You're using `new_releases(..., country=...)`, "
+                "which was removed by Spotify and thus will be ignored.",
+                DeprecationWarning,
+            )
         return self._get(
-            "browse/new-releases", country=country, limit=limit, offset=offset
+            "browse/new-releases", limit=limit, offset=offset
         )
 
     def category(self, category_id, country=None, locale=None):
@@ -1718,9 +1725,14 @@ class Spotify:
                   language code and an ISO 3166-1 alpha-2 country code, joined
                   by an underscore.
         """
+        if country:
+            warnings.warn(
+                "You're using `new_releases(..., country=...)`, "
+                "which was removed by Spotify and thus will be ignored.",
+                DeprecationWarning,
+            )
         return self._get(
             "browse/categories/" + category_id,
-            country=country,
             locale=locale,
         )
 
@@ -1740,9 +1752,14 @@ class Spotify:
                   (the first object). Use with limit to get the next set of
                   items.
         """
+        if country:
+            warnings.warn(
+                "You're using `new_releases(..., country=...)`, "
+                "which was removed by Spotify and thus will be ignored.",
+                DeprecationWarning,
+            )
         return self._get(
             "browse/categories",
-            country=country,
             locale=locale,
             limit=limit,
             offset=offset,
@@ -1773,9 +1790,14 @@ class Spotify:
             "which is marked as deprecated by Spotify.",
             DeprecationWarning,
         )
+        if country:
+            warnings.warn(
+                "You're using `new_releases(..., country=...)`, "
+                "which was removed by Spotify and thus will be ignored.",
+                DeprecationWarning,
+            )
         return self._get(
             "browse/categories/" + category_id + "/playlists",
-            country=country,
             limit=limit,
             offset=offset,
         )
@@ -2250,3 +2272,4 @@ class Spotify:
             endpoint += f'&market={market}'
 
         return self._get(endpoint)
+
