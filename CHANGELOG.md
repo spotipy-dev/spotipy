@@ -11,6 +11,8 @@ Add your changes below.
 
 ### Added
 
+- Added a warning if the URI regex did not match the input.
+
 ### Fixed
 
 ### Removed
