@@ -13,7 +13,7 @@ Add your changes below.
 
 ### Fixed
 
--  Don't override verify attribute when requesting access token in SpotifyClientCredentials
+-  Don't override verify attribute when requesting access token in SpotifyClientCredentials.
    This made it impossible to actually disable cert verification or set a custom certificate chain (i.e. in a corporate network).
 
 ### Removed
