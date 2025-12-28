@@ -13,7 +13,7 @@ patch = mock.patch
 DEFAULT = mock.DEFAULT
 
 
-def _make_fake_token(expires_at, expires_in, scope):
+def _make_fake_token(expires_at: int, expires_in: int, scope: str):
     return dict(
         expires_at=expires_at,
         expires_in=expires_in,
