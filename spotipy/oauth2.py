@@ -16,7 +16,7 @@ import urllib.parse as urllibparse
 import warnings
 import webbrowser
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, Union
 from urllib.parse import parse_qsl, urlparse
 
 import requests
@@ -38,7 +38,7 @@ def _make_authorization_headers(client_id: str, client_secret: str):
     return {"Authorization": f"Basic {auth_header.decode('ascii')}"}
 
 
-def _ensure_value(value: Optional[str], env_key: str) -> str:
+def _ensure_value(value: str | None, env_key: str) -> str:
     env_val = CLIENT_CREDS_ENV_VARS[env_key]
     _val = value or os.getenv(env_val)
     if _val is None:
@@ -48,7 +48,7 @@ def _ensure_value(value: Optional[str], env_key: str) -> str:
 
 
 class SpotifyAuthBase:
-    def __init__(self, requests_session: Optional[Union[requests.Session, bool]] = None):
+    def __init__(self, requests_session: Union[requests.Session, bool] | None = None):
         if isinstance(requests_session, requests.Session):
             self._session = requests_session
         else:
@@ -58,7 +58,7 @@ class SpotifyAuthBase:
                 from requests import api
                 self._session = api
 
-    def _normalize_scope(self, scope: Optional[ScopeArgType]):
+    def _normalize_scope(self, scope: ScopeArgType | None):
         return normalize_scope(scope)
 
     @property
@@ -66,7 +66,7 @@ class SpotifyAuthBase:
         return self._client_id
 
     @client_id.setter
-    def client_id(self, val: Optional[str]):
+    def client_id(self, val: str | None):
         self._client_id = _ensure_value(val, "client_id")
 
     @property
@@ -74,7 +74,7 @@ class SpotifyAuthBase:
         return self._client_secret
 
     @client_secret.setter
-    def client_secret(self, val: Optional[str]):
+    def client_secret(self, val: str | None):
         self._client_secret = _ensure_value(val, "client_secret")
 
     @property
@@ -82,7 +82,7 @@ class SpotifyAuthBase:
         return self._redirect_uri
 
     @redirect_uri.setter
-    def redirect_uri(self, val: Optional[str]):
+    def redirect_uri(self, val: str | None):
         self._redirect_uri = _ensure_value(val, "redirect_uri")
 
     @staticmethod
@@ -99,7 +99,7 @@ class SpotifyAuthBase:
 
     @staticmethod
     def _is_scope_subset(
-        needle_scope: Optional[str], haystack_scope: Optional[str]
+        needle_scope: str | None, haystack_scope: str | None
     ) -> bool:
         needle_scope = set(needle_scope.split()) if needle_scope else set()
         haystack_scope = set(haystack_scope.split()) if haystack_scope else set()
@@ -136,12 +136,12 @@ class SpotifyClientCredentials(SpotifyAuthBase):
 
     def __init__(
         self,
-        client_id: Optional[str] = None,
-        client_secret: Optional[str] = None,
-        proxies: Optional[Any] = None,
+        client_id: str | None = None,
+        client_secret: str | None = None,
+        proxies: Any | None = None,
         requests_session: Union[requests.Session, bool] = True,
-        requests_timeout: Optional[int] = None,
-        cache_handler: Optional[CacheHandler] = None,
+        requests_timeout: int | None = None,
+        cache_handler: CacheHandler | None = None,
     ):
         """
         Creates a Client Credentials Flow Manager.
@@ -259,19 +259,19 @@ class SpotifyOAuth(SpotifyAuthBase):
 
     def __init__(
         self,
-        client_id: Optional[str] = None,
-        client_secret: Optional[str] = None,
-        redirect_uri: Optional[str] = None,
-        state: Optional[Any] = None,
-        scope: Optional[ScopeArgType] = None,
-        cache_path: Optional[str] = None,
-        username: Optional[str] = None,
-        proxies: Optional[Any] = None,
+        client_id: str | None = None,
+        client_secret: str | None = None,
+        redirect_uri: str | None = None,
+        state: Any | None = None,
+        scope: ScopeArgType | None = None,
+        cache_path: str | None = None,
+        username: str | None = None,
+        proxies: Any | None = None,
         show_dialog: bool = False,
         requests_session: Union[requests.Session, bool] = True,
-        requests_timeout: Optional[int] = None,
+        requests_timeout: int | None = None,
         open_browser: bool = True,
-        cache_handler: Optional[CacheHandler] = None,
+        cache_handler: CacheHandler | None = None,
     ):
         """
         Creates a SpotifyOAuth object
@@ -339,7 +339,7 @@ class SpotifyOAuth(SpotifyAuthBase):
         self.show_dialog = show_dialog
         self.open_browser = open_browser
 
-    def validate_token(self, token_info: Optional[Dict]):
+    def validate_token(self, token_info: Dict | None):
         if token_info is None:
             return None
 
@@ -356,7 +356,7 @@ class SpotifyOAuth(SpotifyAuthBase):
 
         return token_info
 
-    def get_authorize_url(self, state: Optional[Any] = None) -> str:
+    def get_authorize_url(self, state: Any | None = None) -> str:
         """ Gets the URL to use to authorize this app
         """
         payload = {
@@ -439,7 +439,7 @@ class SpotifyOAuth(SpotifyAuthBase):
         else:
             raise SpotifyOauthError("Server listening on localhost has not been accessed")
 
-    def get_auth_response(self, open_browser: Optional[bool] = None):
+    def get_auth_response(self, open_browser: bool | None = None):
         logger.info('User authentication requires interaction with your '
                     'web browser. Once you enter your credentials and '
                     'give authorization, you will be redirected to '
@@ -480,13 +480,13 @@ class SpotifyOAuth(SpotifyAuthBase):
 
         return self._get_auth_response_interactive(open_browser=open_browser)
 
-    def get_authorization_code(self, response: Optional[Any] = None):
+    def get_authorization_code(self, response: Any | None = None):
         if response:
             return self.parse_response_code(response)
         return self.get_auth_response()
 
     def get_access_token(
-        self, code: Optional[str] = None, as_dict: bool = True, check_cache: bool = True
+        self, code: str | None = None, as_dict: bool = True, check_cache: bool = True
     ):
         """ Gets the access token for the app given the code
 
@@ -627,17 +627,17 @@ class SpotifyPKCE(SpotifyAuthBase):
 
     def __init__(
         self,
-        client_id: Optional[str] = None,
-        redirect_uri: Optional[str] = None,
-        state: Optional[Any] = None,
-        scope: Optional[ScopeArgType] = None,
-        cache_path: Optional[str] = None,
-        username: Optional[str] = None,
-        proxies: Optional[Any] = None,
-        requests_timeout: Optional[int] = None,
+        client_id: str | None = None,
+        redirect_uri: str | None = None,
+        state: Any | None = None,
+        scope: ScopeArgType | None = None,
+        cache_path: str | None = None,
+        username: str | None = None,
+        proxies: Any | None = None,
+        requests_timeout: int | None = None,
         requests_session: Union[requests.Session, bool] = True,
         open_browser: bool = True,
-        cache_handler: Optional[CacheHandler] = None,
+        cache_handler: CacheHandler | None = None,
     ):
         """
         Creates Auth Manager with the PKCE Auth flow.
@@ -728,7 +728,7 @@ class SpotifyPKCE(SpotifyAuthBase):
         code_challenge = base64.urlsafe_b64encode(code_challenge_digest).decode('utf-8')
         return code_challenge.replace('=', '')
 
-    def get_authorize_url(self, state: Optional[Any] = None) -> str:
+    def get_authorize_url(self, state: Any | None = None) -> str:
         """ Gets the URL to use to authorize this app """
         if not self.code_challenge:
             self.get_pkce_handshake_parameters()
@@ -748,7 +748,7 @@ class SpotifyPKCE(SpotifyAuthBase):
         urlparams = urllibparse.urlencode(payload)
         return f"{self.OAUTH_AUTHORIZE_URL}?{urlparams}"
 
-    def _open_auth_url(self, state: Optional[Any] = None):
+    def _open_auth_url(self, state: Any | None = None):
         auth_url = self.get_authorize_url(state)
         try:
             webbrowser.open(auth_url)
@@ -756,7 +756,7 @@ class SpotifyPKCE(SpotifyAuthBase):
         except webbrowser.Error:
             logger.error(f"Please navigate here: {auth_url}")
 
-    def _get_auth_response(self, open_browser: Optional[bool] = None):
+    def _get_auth_response(self, open_browser: bool | None = None):
         logger.info('User authentication requires interaction with your '
                     'web browser. Once you enter your credentials and '
                     'give authorization, you will be redirected to '
@@ -825,7 +825,7 @@ class SpotifyPKCE(SpotifyAuthBase):
             raise SpotifyStateError(self.state, state)
         return code
 
-    def get_authorization_code(self, response: Optional[Any] = None):
+    def get_authorization_code(self, response: Any | None = None):
         if response:
             return self.parse_response_code(response)
         return self._get_auth_response()
@@ -859,7 +859,7 @@ class SpotifyPKCE(SpotifyAuthBase):
         self.code_verifier = self._get_code_verifier()
         self.code_challenge = self._get_code_challenge()
 
-    def get_access_token(self, code: Optional[Any] = None, check_cache: bool = True):
+    def get_access_token(self, code: Any | None = None, check_cache: bool = True):
         """ Gets the access token for the app
 
             If the code is not given and no cached token is used, an
@@ -1018,14 +1018,14 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
 
     def __init__(
         self,
-        client_id: Optional[str] = None,
-        redirect_uri: Optional[str] = None,
-        state: Optional[Any] = None,
-        scope: Optional[ScopeArgType] = None,
-        cache_path: Optional[str] = None,
-        username: Optional[str] = None,
+        client_id: str | None = None,
+        redirect_uri: str | None = None,
+        state: Any | None = None,
+        scope: ScopeArgType | None = None,
+        cache_path: str | None = None,
+        username: str | None = None,
         show_dialog: bool = False,
-        cache_handler: Optional[CacheHandler] = None,
+        cache_handler: CacheHandler | None = None,
     ):
         """ Creates Auth Manager using the Implicit Grant flow
 
@@ -1087,7 +1087,7 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
         self.show_dialog = show_dialog
         self._session = None  # As to not break inherited __del__
 
-    def validate_token(self, token_info: Optional[Dict]):
+    def validate_token(self, token_info: Dict | None):
         if token_info is None:
             return None
 
@@ -1104,8 +1104,8 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
 
     def get_access_token(
         self,
-        state: Optional[Any] = None,
-        response: Optional[Any] = None,
+        state: Any | None = None,
+        response: Any | None = None,
         check_cache: bool = True,
     ):
         """ Gets Auth Token from cache (preferred) or user interaction
@@ -1130,7 +1130,7 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
 
         return token_info["access_token"]
 
-    def get_authorize_url(self, state: Optional[Any] = None) -> str:
+    def get_authorize_url(self, state: Any | None = None) -> str:
         """ Gets the URL to use to authorize this app """
         payload = {
             "client_id": self.client_id,
@@ -1150,7 +1150,7 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
 
         return f"{self.OAUTH_AUTHORIZE_URL}?{urlparams}"
 
-    def parse_response_token(self, url, state: Optional[Any] = None):
+    def parse_response_token(self, url, state: Any | None = None):
         """ Parse the response code in the given response url """
         remote_state, token, t_type, exp_in = self.parse_auth_response_url(url)
         if state is None:
@@ -1175,7 +1175,7 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
         return tuple(form.get(param) for param in ["state", "access_token",
                                                    "token_type", "expires_in"])
 
-    def _open_auth_url(self, state: Optional[Any] = None):
+    def _open_auth_url(self, state: Any | None = None):
         auth_url = self.get_authorize_url(state)
         try:
             webbrowser.open(auth_url)
@@ -1183,7 +1183,7 @@ class SpotifyImplicitGrant(SpotifyAuthBase):
         except webbrowser.Error:
             logger.error(f"Please navigate here: {auth_url}")
 
-    def get_auth_response(self, state: Optional[Any] = None):
+    def get_auth_response(self, state: Any | None = None):
         """ Gets a new auth **token** with user interaction """
         logger.info('User authentication requires interaction with your '
                     'web browser. Once you enter your credentials and '

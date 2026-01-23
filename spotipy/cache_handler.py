@@ -12,7 +12,7 @@ import json
 import logging
 import os
 from json import JSONEncoder
-from typing import Dict, Optional
+from typing import Dict
 
 from redis import RedisError
 
@@ -53,9 +53,9 @@ class CacheFileHandler(CacheHandler):
 
     def __init__(
         self,
-        cache_path: Optional[str] = None,
-        username: Optional[str] = None,
-        encoder_cls: Optional[JSONEncoder] = None,
+        cache_path: str | None = None,
+        username: str | None = None,
+        encoder_cls: JSONEncoder | None = None,
     ):
         """
         Parameters:
@@ -113,7 +113,7 @@ class MemoryCacheHandler(CacheHandler):
     instance is freed.
     """
 
-    def __init__(self, token_info: Optional[Dict] = None):
+    def __init__(self, token_info: Dict | None = None):
         """
         Parameters:
             * token_info: The token info to store in memory. Can be None.
@@ -189,7 +189,7 @@ class RedisCacheHandler(CacheHandler):
     A cache handler that stores the token info in the Redis.
     """
 
-    def __init__(self, redis, key: Optional[str] = None):
+    def __init__(self, redis, key: str | None = None):
         """
         Parameters:
             * redis: Redis object provided by redis-py library
@@ -222,7 +222,7 @@ class MemcacheCacheHandler(CacheHandler):
     """A Cache handler that stores the token info in Memcache using the pymemcache client
     """
 
-    def __init__(self, memcache, key: Optional[str] = None):
+    def __init__(self, memcache, key: str | None = None):
         """
         Parameters:
             * memcache: memcache client object provided by pymemcache
