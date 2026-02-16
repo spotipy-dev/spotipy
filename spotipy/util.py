@@ -8,6 +8,7 @@ import logging
 import os
 import warnings
 from types import TracebackType
+from typing import List, Tuple, Union
 
 import requests
 import urllib3
@@ -26,17 +27,19 @@ CLIENT_CREDS_ENV_VARS = {
 # workaround for garbage collection
 REQUESTS_SESSION = requests.Session
 
+StrListOrTuple = Union[List[str], Tuple[str, ...]]
+
 
 def prompt_for_user_token(
-    username=None,
-    scope=None,
-    client_id=None,
-    client_secret=None,
-    redirect_uri=None,
-    cache_path=None,
-    oauth_manager=None,
-    show_dialog=False
-):
+    username: str | None = None,
+    scope: str | None = None,
+    client_id: str | None = None,
+    client_secret: str | None = None,
+    redirect_uri: str | None = None,
+    cache_path: str | None = None,
+    oauth_manager: spotipy.SpotifyOAuth | None = None,
+    show_dialog: bool = False,
+) -> str | None:
     """ Prompt the user to login if necessary and returns a user token
         suitable for use with the spotipy.Spotify constructor.
 
@@ -116,7 +119,7 @@ def prompt_for_user_token(
         return None
 
 
-def get_host_port(netloc):
+def get_host_port(netloc: str):
     """ Split the network location string into host and port and returns a tuple
         where the host is a string and the the port is an integer.
 
@@ -133,7 +136,10 @@ def get_host_port(netloc):
     return host, port
 
 
-def normalize_scope(scope):
+ScopeArgType = Union[str, StrListOrTuple]
+
+
+def normalize_scope(scope: ScopeArgType | None) -> str | None:
     """Normalize the scope to verify that it is a list or tuple. A string
     input will split the string by commas to create a list of scopes.
     A list or tuple input is used directly.
@@ -163,13 +169,13 @@ class Retry(urllib3.Retry):
     """
 
     def increment(
-            self,
-            method: str | None = None,
-            url: str | None = None,
-            response: urllib3.BaseHTTPResponse | None = None,
-            error: Exception | None = None,
-            _pool: urllib3.connectionpool.ConnectionPool | None = None,
-            _stacktrace: TracebackType | None = None,
+        self,
+        method: str | None = None,
+        url: str | None = None,
+        response: urllib3.BaseHTTPResponse | None = None,
+        error: Exception | None = None,
+        _pool: urllib3.connectionpool.ConnectionPool | None = None,
+        _stacktrace: TracebackType | None = None,
     ) -> urllib3.Retry:
         if response:
             retry_header = response.headers.get("Retry-After")
