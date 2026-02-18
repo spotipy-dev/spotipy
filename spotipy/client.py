@@ -446,10 +446,10 @@ class Spotify:
         """
 
         warnings.warn(
-                "You're using `artist_top_tracks(...)`, "
-                "which is marked as deprecated by Spotify.",
-                DeprecationWarning,
-            )
+            "You're using `artist_top_tracks(...)`, "
+            "which is marked as deprecated by Spotify.",
+            DeprecationWarning,
+        )
         trid = self._get_id("artist", artist_id)
         return self._get("artists/" + trid + "/top-tracks", country=country)
 
@@ -1341,10 +1341,10 @@ class Spotify:
             "current_user_follow_playlist(...) instead.",
             DeprecationWarning,
         )
-            
+
         endpoint = f"playlists/{playlist_id}/followers/contains?ids={','.join(user_ids)}"
         return self._get(endpoint)
-    
+
     def current_user_saved_items(self, uris):
         """
         Check if the current user is following the given artists, users, or playlists

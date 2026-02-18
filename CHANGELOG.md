@@ -10,8 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Add your changes below.
 
 ### Added
+- Created generic methods to get user saved items
 
 ### Fixed
+- Updated `/tracks` endpoints to `/items`
+- Switching IDs to URIs to use `/me/library` endpoint
+- Fixed playlist limit to 50 (according to API)
+- Added warnings for deprecated methods
 
 ### Removed
 
