@@ -1313,7 +1313,7 @@ class Spotify:
             f"playlists/{plid}/items", payload=payload
         )
 
-    def current_user_follow_playlist(self, playlist_id, public=True):
+    def current_user_follow_playlist(self, playlist_id):
         """
         Add the current authenticated user as a follower of a playlist.
 
@@ -1321,7 +1321,7 @@ class Spotify:
             - playlist_id - the id of the playlist
 
         """
-        return self._put("me/library?uris=" + self._get_uri("playlist", playlist_id))
+        return self._put("me/library", uris=self._get_uri("playlist", playlist_id))
 
     def playlist_is_following(
         self, playlist_id, user_ids
@@ -1354,8 +1354,7 @@ class Spotify:
 
         """
         valid_uris = [uri for uri in uris if self._is_uri(uri)]
-        endpoint = f"me/library/contains?uris={','.join(valid_uris)}"
-        return self._get(endpoint)
+        return self._get("me/library/contains", uris=",".join(valid_uris))
 
     def me(self):
         """ Get detailed profile information about the current user.
@@ -1404,7 +1403,7 @@ class Spotify:
         """
 
         alist = [self._get_uri("album", a) for a in albums]
-        return self._put("me/library?uris=" + ",".join(alist))
+        return self._put("me/library", uris=",".join(alist))
 
     def current_user_saved_albums_delete(self, albums=[]):
         """ Remove one or more albums from the current user's
@@ -1414,7 +1413,7 @@ class Spotify:
                 - albums - a list of album URIs, URLs or IDs
         """
         alist = [self._get_uri("album", a) for a in albums]
-        return self._delete("me/library?uris=" + ",".join(alist))
+        return self._delete("me/library", uris=",".join(alist))
 
     def current_user_saved_albums_contains(self, albums=[]):
         """ Check if one or more albums is already saved in
@@ -1424,7 +1423,7 @@ class Spotify:
                 - albums - a list of album URIs, URLs or IDs
         """
         alist = [self._get_uri("album", a) for a in albums]
-        return self._get("me/library/contains?uris=" + ",".join(alist))
+        return self._get("me/library/contains", uris=",".join(alist))
 
     def current_user_saved_tracks(self, limit=20, offset=0, market=None):
         """ Gets a list of the tracks saved in the current authorized user's
@@ -1448,7 +1447,7 @@ class Spotify:
         tlist = []
         if tracks is not None:
             tlist = [self._get_uri("track", t) for t in tracks]
-        return self._put("me/library?uris=" + ",".join(tlist))
+        return self._put("me/library", uris=",".join(tlist))
 
     def current_user_saved_tracks_delete(self, tracks=None):
         """ Remove one or more tracks from the current user's
@@ -1460,7 +1459,7 @@ class Spotify:
         tlist = []
         if tracks is not None:
             tlist = [self._get_uri("track", t) for t in tracks]
-        return self._delete("me/library/?uris=" + ",".join(tlist))
+        return self._delete("me/library", uris=",".join(tlist))
 
     def current_user_saved_tracks_contains(self, tracks=None):
         """ Check if one or more tracks is already saved in
@@ -1472,7 +1471,7 @@ class Spotify:
         tlist = []
         if tracks is not None:
             tlist = [self._get_uri("track", t) for t in tracks]
-        return self._get("me/library/contains?uris=" + ",".join(tlist))
+        return self._get("me/library/contains", uris=",".join(tlist))
 
     def current_user_saved_episodes(self, limit=20, offset=0, market=None):
         """ Gets a list of the episodes saved in the current authorized user's
@@ -1496,7 +1495,7 @@ class Spotify:
         elist = []
         if episodes is not None:
             elist = [self._get_uri("episode", e) for e in episodes]
-        return self._put("me/library?uris=" + ",".join(elist))
+        return self._put("me/library", uris=",".join(elist))
 
     def current_user_saved_episodes_delete(self, episodes=None):
         """ Remove one or more episodes from the current user's
@@ -1508,7 +1507,7 @@ class Spotify:
         elist = []
         if episodes is not None:
             elist = [self._get_uri("episode", e) for e in episodes]
-        return self._delete("me/library?uris=" + ",".join(elist))
+        return self._delete("me/library", uris=",".join(elist))
 
     def current_user_saved_episodes_contains(self, episodes=None):
         """ Check if one or more episodes is already saved in
@@ -1541,7 +1540,7 @@ class Spotify:
                 - shows - a list of show URIs, URLs or IDs
         """
         slist = [self._get_uri("show", s) for s in shows]
-        return self._put("me/library?uris=" + ",".join(slist))
+        return self._put("me/library", uris=",".join(slist))
 
     def current_user_saved_shows_delete(self, shows=[]):
         """ Remove one or more shows from the current user's
@@ -1551,7 +1550,7 @@ class Spotify:
                 - shows - a list of show URIs, URLs or IDs
         """
         slist = [self._get_uri("show", s) for s in shows]
-        return self._delete("me/library?uris=" + ",".join(slist))
+        return self._delete("me/library", uris=",".join(slist))
 
     def current_user_saved_shows_contains(self, shows=[]):
         """ Check if one or more shows is already saved in
@@ -1561,7 +1560,7 @@ class Spotify:
                 - shows - a list of show URIs, URLs or IDs
         """
         slist = [self._get_uri("show", s) for s in shows]
-        return self._get("me/library/contains?uris=" + ",".join(slist))
+        return self._get("me/library/contains", uris=",".join(slist))
 
     def current_user_followed_artists(self, limit=20, after=None):
         """ Gets a list of the artists followed by the current authorized user
