@@ -33,6 +33,8 @@ class Spotify:
     """
     max_retries = 3
     default_retry_codes = (429, 500, 502, 503, 504)
+    # Spotify rejects search queries longer than this many characters.
+    max_search_query_length = 100
     country_codes = [
         "AD",
         "AR",
@@ -610,6 +612,7 @@ class Spotify:
                 - market - An ISO 3166-1 alpha-2 country code or the string
                            from_token.
         """
+        self._warn_if_query_too_long(q)
         return self._get(
             "search", q=q, limit=limit, offset=offset, type=type, market=market
         )
@@ -644,7 +647,21 @@ class Spotify:
             "Searching multiple markets is poorly performing.",
             UserWarning,
         )
+        self._warn_if_query_too_long(q)
         return self._search_multiple_markets(q, limit, offset, type, markets, total)
+
+    def _warn_if_query_too_long(self, q):
+        """ Warn, without blocking, when a search query is longer than the
+            Spotify API allows. Spotify returns an error for queries over
+            ``max_search_query_length`` characters, so this points at the
+            likely cause instead of letting the request fail silently.
+        """
+        if isinstance(q, str) and len(q) > self.max_search_query_length:
+            logger.warning(
+                f"Search query is {len(q)} characters long, which is over the "
+                f"{self.max_search_query_length} character limit that Spotify "
+                f"allows. The request may be rejected."
+            )
 
     def user(self, user):
         """ Gets basic profile information about a Spotify User
