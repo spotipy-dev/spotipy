@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Add your changes below.
 
 ### Added
+- Added a warning when a search query is longer than the 100 character limit Spotify allows
 
 ### Fixed
 
